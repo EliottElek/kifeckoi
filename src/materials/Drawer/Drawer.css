@@ -1,0 +1,22 @@
+@import "../constants.css";
+
+.drawer_container {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  /* grid-template-columns: 30% 70%; */
+}
+.drawer_container_secondary {
+  margin: 0;
+  background-color: var(--second-bg-color);
+  width: 100%;
+  height: 100%;
+}
+.drawer_container_main {
+  margin: 0;
+  background: transparent;
+  width: 100%;
+  height: 100%;
+}
+

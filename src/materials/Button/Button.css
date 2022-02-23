@@ -1,0 +1,45 @@
+@import "../constants.css";
+
+.button__versed {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  background-color: var(--main-bg-color);
+  color: var(--main-color);
+  border: solid 1px var(--main-bg-color);
+  outline: none;
+  min-width: 140px;
+  min-height: 40px;
+  border-radius: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.button__reversed {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  background-color: var(--main-color);
+  color: var(--main-bg-color);
+  border: solid 1px var(--main-color);
+  outline: none;
+  min-width: 140px;
+  min-height: 40px;
+  border-radius: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
+  cursor: pointer;
+  transition: 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.button__versed:active {
+  box-shadow: none;
+  transition: 0.5s ease;
+}
+.button__reversed:active {
+  box-shadow: none;
+  transition: 0.5s ease;
+}

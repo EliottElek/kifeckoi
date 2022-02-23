@@ -1,0 +1,53 @@
+@import "../constants.css";
+
+.checkbox_rounded {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: solid 2px var(--main-color);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.checkbox_container_rounded {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.checkbox_inner_rounded {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--main-color);
+}
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: solid 2px var(--main-color);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.checkbox_container {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.checkbox_inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background-color: var(--main-color);
+}
+.gg-check {
+  color: white;
+  margin-left: -2px;
+  padding: 0;
+  font-size: 12px;
+}
