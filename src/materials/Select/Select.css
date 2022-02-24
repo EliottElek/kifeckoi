@@ -37,3 +37,8 @@
 .gg-chevron-up {
   color: var(--main-color);
 }
+.disabled {
+  opacity: 0.7;
+  color: gray;
+  cursor: default!important;
+}

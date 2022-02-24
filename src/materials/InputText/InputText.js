@@ -9,16 +9,18 @@ const InputText = ({
   number,
   max,
   min,
+  disabled,
 }) => {
   if (number)
     return (
       <div className="input__text__container">
         <p className="input__text__label">{label}</p>
         <input
+          disabled={disabled}
           type="number"
           max={max}
           min={min}
-          className="input__text"
+          className={disabled ? "input__text disabled__input" : "input__text"}
           value={value}
           onChange={onChange}
           placeholder={placeHolder}
@@ -30,7 +32,8 @@ const InputText = ({
     <div className="input__text__container">
       <p className="input__text__label">{label}</p>
       <input
-        className="input__text"
+        disabled={disabled}
+        className={disabled ? "input__text disabled__input" : "input__text"}
         value={value}
         onChange={onChange}
         placeholder={placeHolder}

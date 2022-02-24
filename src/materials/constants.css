@@ -1,9 +1,9 @@
 * {
-  --main-bg-color: #e6e7e9;
+  --main-bg-color: #ffffff;
   --second-bg-color: #fefefe31;
   --main-color: #a51a1aa2;
   --speed: 400ms;
-  --nav-size: 80px;
+  --nav-size: 60px;
   font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
   /* margin: 0; */

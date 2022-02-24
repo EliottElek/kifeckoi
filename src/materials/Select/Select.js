@@ -9,6 +9,7 @@ const Select = ({
   setIsActive,
   isActive,
   style,
+  disabled,
 }) => {
   const componentRef = React.useRef();
 
@@ -32,19 +33,24 @@ const Select = ({
     >
       <div
         style={{ height: height }}
-        className="select_button_label"
+        className={
+          !disabled ? "select_button_label" : "select_button_label disabled"
+        }
         onClick={() => {
-          setIsActive(!isActive);
+          !disabled && setIsActive(!isActive);
         }}
       >
-        {label ? label : defaultLabel}{" "}
-        {!isActive ? (
+        {label ? label : defaultLabel}
+        {!isActive && !disabled ? (
           <i className="gg-chevron-down"></i>
         ) : (
-          <i className="gg-chevron-up"></i>
+          !disabled && <i className="gg-chevron-up"></i>
         )}
+        {disabled && <i className="gg-chevron-down disabled"></i>}
       </div>
-      {isActive && <div className="select_content">{children}</div>}
+      {isActive && !disabled && (
+        <div className="select_content">{children}</div>
+      )}
     </div>
   );
 };
