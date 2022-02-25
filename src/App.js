@@ -2,11 +2,11 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Project from "./components/Project/Project";
 import Home from "./components/Home/Home";
-import NavBar from "./materials/NavBar/NavBar";
+import Layout from "./components/Layout/Layout";
 const App = () => {
   return (
-    <div style={{ width: "100%", height: "200vh", backgroundColor: "white" }}>
-      <NavBar />
+    <div style={{ width: "100%", height: "100vh", backgroundColor: "white" }}>
+      <Layout>
       <Routes>
         <Route
           exact
@@ -27,6 +27,7 @@ const App = () => {
           }
         />
       </Routes>
+      </Layout>
     </div>
   );
 };

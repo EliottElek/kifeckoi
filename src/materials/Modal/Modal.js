@@ -17,15 +17,15 @@ const Modal = ({ children, open, setOpen }) => {
     }
   }, [setOpen, open]);
 
-  React.useEffect(() => {
-    if (!open) {
-      document.documentElement.style.overflow = "auto"; // firefox, chrome
-      document.body.scroll = "yes"; // ie only
-    } else {
-      document.documentElement.style.overflow = "hidden"; // firefox, chrome
-      document.body.scroll = "no"; // ie only
-    }
-  }, [open]);
+  // React.useEffect(() => {
+  //   if (!open) {
+  //     document.documentElement.style.overflow = "auto"; // firefox, chrome
+  //     document.body.scroll = "yes"; // ie only
+  //   } else {
+  //     document.documentElement.style.overflow = "hidden"; // firefox, chrome
+  //     document.body.scroll = "no"; // ie only
+  //   }
+  // }, [open]);
   if (!open) return null;
   return (
     <>

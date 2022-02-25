@@ -1,7 +1,7 @@
 * {
   --main-bg-color: #ffffff;
   --second-bg-color: #fefefe31;
-  --main-color: #a51a1aa2;
+  --main-color: #0171e2;
   --speed: 400ms;
   --nav-size: 60px;
   font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial,
@@ -45,10 +45,10 @@ ul li a {
   color: var(--main-color);
 }
 .logo {
-  height: 60px;
-  width: 60px;
+  height: 50px;
+  width: 50px;
   background-color: var(--main-color);
-  border-radius: 50%;
+  border-radius: 20%;
   display: grid;
   place-items: center;
 }

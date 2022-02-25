@@ -6,10 +6,9 @@ const Home = () => {
   const { projects } = useContext(Context);
   const navigate = useNavigate();
   return (
-    <div>
-      <h1>Home KIFECKOI</h1>
-      {projects?.map((project) => (
-        <Button onClick={() => navigate(`/project/${project.id}`)}>
+    <div style={{ display: "flex", marginTop: "120px" }}>
+      {projects?.map((project, i) => (
+        <Button key={i} onClick={() => navigate(`/project/${project.id}`)}>
           {project?.name}
         </Button>
       ))}

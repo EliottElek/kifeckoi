@@ -19,11 +19,21 @@ const projectsData = [
     goLive: "23 juin 2022",
   },
 ];
+const userData = {
+  firstname: "Xavier",
+  lastname: "Moquin",
+  admin: true,
+  email: "xmoquin@gmail.com",
+};
 export const ContextProvider = ({ children }) => {
   const [projects, setProjects] = React.useState(projectsData);
+  const [user, setUser] = React.useState(userData);
+
   return (
     <Context.Provider
       value={{
+        user: user,
+        setUser: setUser,
         projects: projects,
         setProjects: setProjects,
       }}

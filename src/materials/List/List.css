@@ -6,14 +6,15 @@
   align-items: center;
   justify-content: center;
   list-style: none;
-  padding: 5px;
+  padding: 0px;
   width: 100%;
 }
 .list-item {
   height: 35px;
   padding: 5px;
   border-radius: 4px;
-  width: 100%;
+  width: 90%;
+  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: left;
