@@ -7,16 +7,19 @@ const projectsData = [
     name: "Royal Canin",
     id: uuid(),
     goLive: "06 juin 2022",
+    cop: "23 juin 2022",
   },
   {
     name: "Hermes",
     id: uuid(),
     goLive: "12 juin 2022",
+    cop: "03 avril 2022",
   },
   {
     name: "Silinen",
     id: uuid(),
     goLive: "23 juin 2022",
+    cop: "29 mai 2022",
   },
 ];
 const userData = {

@@ -70,7 +70,7 @@ const Layout = ({ children }) => {
             href="#"
             onClick={() => navigate("/account")}
           >
-            <i class="gg-profile"></i>
+            <i className="gg-profile"></i>
           </button>
         </div>
       </div>

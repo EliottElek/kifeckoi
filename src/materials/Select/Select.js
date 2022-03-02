@@ -36,7 +36,8 @@ const Select = ({
         className={
           !disabled ? "select_button_label" : "select_button_label disabled"
         }
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           !disabled && setIsActive(!isActive);
         }}
       >

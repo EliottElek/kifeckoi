@@ -32,6 +32,9 @@ const InputText = ({
     <div className="input__text__container">
       <p className="input__text__label">{label}</p>
       <input
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
         disabled={disabled}
         className={disabled ? "input__text disabled__input" : "input__text"}
         value={value}

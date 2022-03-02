@@ -5,6 +5,12 @@ import Select from "../../materials/Select/Select";
 import SelectItem from "../../materials/Select/SelectItem/SelectItem";
 import List from "../../materials/List/List";
 import ListItem from "../../materials/List/ListItem";
+import Actions from "./Actions";
+import Decisions from "./Decisions";
+import Infos from "./Infos";
+import Livrables from "./Livrables";
+import Problemes from "./Problemes";
+import Risques from "./Risques";
 
 import { useLocation } from "react-router-dom";
 
@@ -41,12 +47,12 @@ const statusOptions = [
   { name: "Gestion de crise" },
 ];
 const navElements = [
-  { id: "part1", name: "Partie 1" },
-  { id: "part2", name: "Partie 2" },
-  { id: "part3", name: "Partie 3" },
-  { id: "part4", name: "Partie 4" },
-  { id: "part5", name: "Partie 5" },
-  { id: "part6", name: "Partie 6" },
+  { id: "actions", name: "Actions" },
+  { id: "infos", name: "Infos" },
+  { id: "decisions", name: "Décisions" },
+  { id: "risques", name: "Risques" },
+  { id: "problemes", name: "Problèmes" },
+  { id: "livrables", name: "Livrables" },
 ];
 const Form = ({ project }) => {
   const [selectedProjectManagerOption, setSelectedProjectManagerOption] =
@@ -66,215 +72,227 @@ const Form = ({ project }) => {
 
   const MainContent = () => {
     return (
-      <div className="form__container">
-        <div className="form__line__container">
-          <Select
-            disabled
-            defaultLabel="Client*"
-            style={{ margin: "4px" }}
-            width={200}
-            height={10}
-          >
-            {clientOptions.map((item, i) => (
-              <SelectItem key={i}>{item}</SelectItem>
-            ))}
-          </Select>
-          <Select
-            disabled
-            defaultLabel={project ? project.name : "Projet*"}
-            style={{ margin: "4px" }}
-            width={200}
-            height={10}
-          >
-            {projectOptions.map((item, i) => (
-              <SelectItem key={i}>{item}</SelectItem>
-            ))}
-          </Select>
-          <Select
-            defaultLabel="Chef de projet*"
-            style={{ margin: "4px" }}
-            label={selectedProjectManagerOption?.name}
-            width={200}
-            height={10}
-            isActive={isActiveManager}
-            setIsActive={setIsActiveManager}
-          >
-            {projectManagerOptions.map((item, i) => (
-              <SelectItem
-                key={i}
-                onClick={() => {
-                  setSelectedProjectManagerOption(item);
-                  setIsActiveManager(false);
-                }}
+      <>
+        <div className="form__container">
+          <div className="form__line__container">
+            <Select
+              disabled
+              defaultLabel="Client*"
+              style={{ margin: "4px" }}
+              width={200}
+              height={10}
+            >
+              {clientOptions.map((item, i) => (
+                <SelectItem key={i}>{item}</SelectItem>
+              ))}
+            </Select>
+            <Select
+              disabled
+              defaultLabel={project ? project.name : "Projet*"}
+              style={{ margin: "4px" }}
+              width={200}
+              height={10}
+            >
+              {projectOptions.map((item, i) => (
+                <SelectItem key={i}>{item}</SelectItem>
+              ))}
+            </Select>
+            <Select
+              defaultLabel="Chef de projet*"
+              style={{ margin: "4px" }}
+              label={selectedProjectManagerOption?.name}
+              width={200}
+              height={10}
+              isActive={isActiveManager}
+              setIsActive={setIsActiveManager}
+            >
+              {projectManagerOptions.map((item, i) => (
+                <SelectItem
+                  key={i}
+                  onClick={() => {
+                    setSelectedProjectManagerOption(item);
+                    setIsActiveManager(false);
+                  }}
+                >
+                  {item.name}
+                </SelectItem>
+              ))}
+            </Select>
+            <Select
+              defaultLabel="Période*"
+              style={{ margin: "4px" }}
+              label={selectedPeriodOption?.name}
+              width={200}
+              height={10}
+              isActive={isActivePeriod}
+              setIsActive={setIsActivePeriod}
+            >
+              {periodOptions.map((item, i) => (
+                <SelectItem
+                  key={i}
+                  onClick={() => {
+                    setSelectedPeriodOption(item);
+                    setIsActivePeriod(false);
+                  }}
+                >
+                  {item.name}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
+          <div className="form__line__container">
+            <div className="form__line__label__container">
+              <p>Statut global du projet*</p>
+              <Select
+                defaultLabel={statusOptions[0].name}
+                style={{ margin: "4px" }}
+                label={selectedStatusOption?.name}
+                width={200}
+                height={10}
+                isActive={isActiveStatus}
+                setIsActive={setIsActiveStatus}
               >
-                {item.name}
-              </SelectItem>
-            ))}
-          </Select>
-          <Select
-            defaultLabel="Période*"
-            style={{ margin: "4px" }}
-            label={selectedPeriodOption?.name}
-            width={200}
-            height={10}
-            isActive={isActivePeriod}
-            setIsActive={setIsActivePeriod}
-          >
-            {periodOptions.map((item, i) => (
-              <SelectItem
-                key={i}
-                onClick={() => {
-                  setSelectedPeriodOption(item);
-                  setIsActivePeriod(false);
-                }}
+                {statusOptions.map((item, i) => (
+                  <SelectItem
+                    key={i}
+                    onClick={() => {
+                      setSelectedStatusOption(item);
+                      setIsActiveStatus(false);
+                    }}
+                  >
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+            <textarea
+              onClick={(e) => e.stopPropagation()}
+              className="form__textarea large__textarea"
+              placeholder={"Statut global du projet..."}
+            />
+          </div>
+          <div className="form__line__container">
+            <div className="form__line__label__container">
+              <p>Statut planning*</p>
+              <Select
+                defaultLabel={statusOptions[0].name}
+                style={{ margin: "4px" }}
+                label={selectedStatusOption2?.name}
+                width={200}
+                height={10}
+                isActive={isActiveStatus2}
+                setIsActive={setIsActiveStatus2}
               >
-                {item.name}
-              </SelectItem>
-            ))}
-          </Select>
-        </div>
-        <div className="form__line__container">
-          <div className="form__line__label__container">
-            <p>Statut global du projet*</p>
-            <Select
-              defaultLabel={statusOptions[0].name}
-              style={{ margin: "4px" }}
-              label={selectedStatusOption?.name}
-              width={200}
-              height={10}
-              isActive={isActiveStatus}
-              setIsActive={setIsActiveStatus}
-            >
-              {statusOptions.map((item, i) => (
-                <SelectItem
-                  key={i}
-                  onClick={() => {
-                    setSelectedStatusOption(item);
-                    setIsActiveStatus(false);
-                  }}
-                >
-                  {item.name}
-                </SelectItem>
-              ))}
-            </Select>
+                {statusOptions.map((item, i) => (
+                  <SelectItem
+                    key={i}
+                    onClick={() => {
+                      setSelectedStatusOption2(item);
+                      setIsActiveStatus2(false);
+                    }}
+                  >
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+            <textarea
+              onClick={(e) => e.stopPropagation()}
+              className="form__textarea"
+              placeholder={"Statut global du projet..."}
+            />
           </div>
-          <textarea
-            className="form__textarea large__textarea"
-            placeholder={"Statut global du projet..."}
-          />
-        </div>
-        <div className="form__line__container">
-          <div className="form__line__label__container">
-            <p>Statut planning*</p>
-            <Select
-              defaultLabel={statusOptions[0].name}
-              style={{ margin: "4px" }}
-              label={selectedStatusOption2?.name}
-              width={200}
-              height={10}
-              isActive={isActiveStatus2}
-              setIsActive={setIsActiveStatus2}
-            >
-              {statusOptions.map((item, i) => (
-                <SelectItem
-                  key={i}
-                  onClick={() => {
-                    setSelectedStatusOption2(item);
-                    setIsActiveStatus2(false);
-                  }}
-                >
-                  {item.name}
-                </SelectItem>
-              ))}
-            </Select>
+          <div className="form__line__container">
+            <div className="form__line__label__container">
+              <p>Statut périmètre*</p>
+              <Select
+                defaultLabel={statusOptions[0].name}
+                style={{ margin: "4px" }}
+                label={selectedStatusOption3?.name}
+                width={200}
+                height={10}
+                isActive={isActiveStatus3}
+                setIsActive={setIsActiveStatus3}
+              >
+                {statusOptions.map((item, i) => (
+                  <SelectItem
+                    key={i}
+                    onClick={() => {
+                      setSelectedStatusOption3(item);
+                      setIsActiveStatus3(false);
+                    }}
+                  >
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+            <textarea
+              onClick={(e) => e.stopPropagation()}
+              className="form__textarea"
+              placeholder={"Statut global du projet..."}
+            />
           </div>
-          <textarea
-            className="form__textarea"
-            placeholder={"Statut global du projet..."}
-          />
-        </div>
-        <div className="form__line__container">
-          <div className="form__line__label__container">
-            <p>Statut périmètre*</p>
-            <Select
-              defaultLabel={statusOptions[0].name}
-              style={{ margin: "4px" }}
-              label={selectedStatusOption3?.name}
-              width={200}
-              height={10}
-              isActive={isActiveStatus3}
-              setIsActive={setIsActiveStatus3}
-            >
-              {statusOptions.map((item, i) => (
-                <SelectItem
-                  key={i}
-                  onClick={() => {
-                    setSelectedStatusOption3(item);
-                    setIsActiveStatus3(false);
-                  }}
-                >
-                  {item.name}
-                </SelectItem>
-              ))}
-            </Select>
+          <div className="form__line__container">
+            <div className="form__line__label__container">
+              <p>Statut moyens*</p>
+              <Select
+                defaultLabel={statusOptions[0].name}
+                style={{ margin: "4px" }}
+                label={selectedStatusOption4?.name}
+                width={200}
+                height={10}
+                isActive={isActiveStatus4}
+                setIsActive={setIsActiveStatus4}
+              >
+                {statusOptions.map((item, i) => (
+                  <SelectItem
+                    key={i}
+                    onClick={() => {
+                      setSelectedStatusOption4(item);
+                      setIsActiveStatus4(false);
+                    }}
+                  >
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
+            <textarea
+              onClick={(e) => e.stopPropagation()}
+              className="form__textarea"
+              placeholder={"Statut global du projet..."}
+            />
           </div>
-          <textarea
-            className="form__textarea"
-            placeholder={"Statut global du projet..."}
-          />
-        </div>
-        <div className="form__line__container">
-          <div className="form__line__label__container">
-            <p>Statut moyens*</p>
-            <Select
-              defaultLabel={statusOptions[0].name}
-              style={{ margin: "4px" }}
-              label={selectedStatusOption4?.name}
-              width={200}
-              height={10}
-              isActive={isActiveStatus4}
-              setIsActive={setIsActiveStatus4}
-            >
-              {statusOptions.map((item, i) => (
-                <SelectItem
-                  key={i}
-                  onClick={() => {
-                    setSelectedStatusOption4(item);
-                    setIsActiveStatus4(false);
-                  }}
-                >
-                  {item.name}
-                </SelectItem>
-              ))}
-            </Select>
+          <div
+            style={{
+              display: "flex",
+              gap: "20px",
+              marginTop: "20px",
+              flexWrap: "wrap",
+            }}
+          >
+            <InputText
+              label={"Date de Go live : "}
+              style={{ margin: "0px" }}
+              value={project?.goLive}
+              disabled
+            />
+            <InputText
+              label={"Date de Cop II : "}
+              style={{ margin: "0px" }}
+              value={project?.cop}
+              disabled
+            />
           </div>
-          <textarea
-            className="form__textarea"
-            placeholder={"Statut global du projet..."}
-          />
         </div>
-        <div
-          style={{
-            display: "flex",
-            gap: "20px",
-            marginTop: "20px",
-            flexWrap: "wrap",
-          }}
-        >
-          <InputText
-            label={"Date de Go live : "}
-            style={{ margin: "0px" }}
-            value={project?.goLive}
-            disabled
-          />
-          <InputText
-            label={"Date de Go live : "}
-            style={{ margin: "0px" }}
-            value={project?.goLive}
-            disabled
-          />
-        </div>
-      </div>
+        <Actions project={project} />
+        <Infos project={project} />
+        <Decisions project={project} />
+        <Risques project={project} />
+        <Problemes project={project} />
+        <Livrables project={project} />
+      </>
     );
   };
   const NavItem = ({ comp, id }) => {
