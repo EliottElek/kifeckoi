@@ -5,28 +5,28 @@ import Home from "./components/Home/Home";
 import Layout from "./components/Layout/Layout";
 const App = () => {
   return (
-    <div style={{ width: "100%", height: "100vh", backgroundColor: "white" }}>
+    <div style={{ width: "100%", height: "100vh", backgroundColor: "#1c2128" }}>
       <Layout>
-      <Routes>
-        <Route
-          exact
-          path="/"
-          element={
-            <SecureRoute>
-              <Home />
-            </SecureRoute>
-          }
-        />
-        <Route
-          exact
-          path="/project/:id"
-          element={
-            <SecureRoute>
-              <Project />
-            </SecureRoute>
-          }
-        />
-      </Routes>
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <SecureRoute>
+                <Home />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id"
+            element={
+              <SecureRoute>
+                <Project />
+              </SecureRoute>
+            }
+          />
+        </Routes>
       </Layout>
     </div>
   );

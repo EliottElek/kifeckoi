@@ -31,7 +31,7 @@ const Actions = ({ project }) => {
       setActions(newActions);
     };
     return (
-      <div className="form__container" style={{ padding: "0px" }}>
+      <div>
         {actions.map((action, i) => (
           <Action key={i} action={action} removeAction={removeAction} i={i} />
         ))}

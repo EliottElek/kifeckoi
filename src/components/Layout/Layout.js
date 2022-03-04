@@ -47,7 +47,7 @@ const Layout = ({ children }) => {
           paddingRight: 30,
           height: "100%",
           width: "100%",
-          background: "#fefefe",
+          background: "#22272d",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -63,7 +63,14 @@ const Layout = ({ children }) => {
             <h3>KIFEKOI</h3>
           </div>
         </a>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            alignItems: "center",
+            color: "white",
+          }}
+        >
           {user?.firstname} {user?.lastname} {user.admin && "(admin)"}
           <button
             className="account__button"

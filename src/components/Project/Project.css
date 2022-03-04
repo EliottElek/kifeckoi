@@ -22,6 +22,7 @@
   align-items: center;
   gap: 10px;
   margin-left: 20px;
+  color: white;
 }
 .form__container {
   display: flex;
@@ -31,7 +32,9 @@
   padding: 20px;
   width: 90%;
   max-width: 1200px;
+  background-color: var(--main-bg-color);
   margin: auto;
+  color: white;
 }
 .form__line__label__container {
   flex-wrap: wrap;
@@ -73,7 +76,9 @@
 .sticky__side__nav {
   position: sticky !important;
   width: 240px;
+  background-color: #22272d;
   top: 0;
+  height: 100%;
   position: sticky;
   top: 100px;
 }

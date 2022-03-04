@@ -4,6 +4,7 @@ import SelectItem from "../../materials/Select/SelectItem/SelectItem";
 import Button from "../../materials/Button/Button";
 import MiniAccordion from "../../materials/MiniAcordion/MiniAccordion";
 import Modal from "../../materials/Modal/Modal";
+
 const statusOptions = [
   { name: "Conforme" },
   { name: "Vigilance" },
@@ -45,31 +46,31 @@ const Action = ({ action, removeAction, i }) => {
               </SelectItem>
             ))}
           </Select>
-          <textarea
-            onClick={(e) => e.stopPropagation()}
-            className="form__textarea"
-            spellCheck="false"
-            placeholder={"Déscription de l'item..."}
-          />
-          <textarea
-            onClick={(e) => e.stopPropagation()}
-            className="form__textarea"
-            placeholder={"Commentaire..."}
-          />
+            <textarea
+              onClick={(e) => e.stopPropagation()}
+              className="form__textarea"
+              spellCheck="false"
+              placeholder={"Déscription de l'item..."}
+            />
+            <textarea
+              onClick={(e) => e.stopPropagation()}
+              className="form__textarea"
+              placeholder={"Commentaire..."}
+            />
           <div className="text__container">
             <p>Date limite : </p>
             <p>22/02/2022</p>
           </div>
-          <textarea
-            onClick={(e) => e.stopPropagation()}
-            className="form__textarea"
-            spellCheck="false"
-            value={responsable}
-            onChange={(e) => setResponsable(e.target.value)}
-            placeholder={"Nom responsable..."}
-          />
+            <textarea
+              onClick={(e) => e.stopPropagation()}
+              className="form__textarea"
+              spellCheck="false"
+              value={responsable}
+              onChange={(e) => setResponsable(e.target.value)}
+              placeholder={"Nom responsable..."}
+            />
           <Button
-            onClick={(e) => {
+            onClick={() => {
               setOpenDelete(true);
             }}
             style={{

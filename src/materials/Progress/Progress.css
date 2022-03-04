@@ -19,7 +19,7 @@
 }
 .loader-small {
   margin: 3px;
-  border: 1.5px solid var(--second-bg-color);
+  border: 2.5px solid var(--second-bg-color);
   border-top: 1.5px solid var(--main-color);
   border-radius: 50%;
   width: 15px;
@@ -27,7 +27,7 @@
   animation: spin var(--speed) linear infinite;
 }
 .reversed {
-  border-top: 3.5px solid var(--main-bg-color);
+  border-top: 2.5px solid var(--main-bg-color);
 }
 @keyframes spin {
   0% {

@@ -1,12 +1,9 @@
 import React from "react";
 import Accordion from "../../materials/Accordion/Accordion";
+import Actions from "./Actions";
 const Problemes = () => {
   return (
-    <Accordion
-      id={"problemes"}
-      content={"Le contenu des problèmes"}
-      title={"Problèmes (5)"}
-    />
+    <Accordion id={"problemes"} content={<Actions />} title={"Problèmes (5)"} />
   );
 };
 

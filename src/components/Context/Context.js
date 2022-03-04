@@ -8,6 +8,7 @@ const projectsData = [
     id: uuid(),
     goLive: "06 juin 2022",
     cop: "23 juin 2022",
+    
   },
   {
     name: "Hermes",

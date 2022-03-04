@@ -22,9 +22,12 @@ function MiniAccordion(props) {
 
   return (
     <div className="accordion__section__mini" id={props?.id}>
-      <button className={`accordion ${setActive} mini`} onClick={toggleAccordion}>
+      <button
+        className={`accordion ${setActive} mini`}
+        onClick={toggleAccordion}
+      >
         <div className="accordion__title__mini">{props.title}</div>
-        <Chevron className={`${setRotate}`} width={10} fill={"#777"} />
+        <Chevron className={`${setRotate}`} width={10} fill={"white"} />
       </button>
       <div
         ref={content}
