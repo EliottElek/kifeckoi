@@ -1,7 +1,6 @@
 .kanban {
   display: flex;
   align-items: flex-start;
-
   &__section {
     width: 400px;
     background-color: #ebecf0;
@@ -26,6 +25,7 @@
       &__button {
         background-color: transparent;
         border-radius: 12px;
+        color: white;
         border: none;
         outline: none;
         cursor: pointer;
@@ -96,4 +96,25 @@
   height: 30px;
   object-fit: contain;
   border-radius: 50%;
+}
+.blue__back {
+  color: white;
+  background-color: #1394bb6b;
+}
+
+.violet__back {
+  color: white;
+  background-color: #e4beff81;
+}
+.red__back {
+  color: white;
+  background-color: #ff6a6a2a;
+}
+.orange__back {
+  color: white;
+  background-color: #e7833180;
+}
+.marron__back {
+  color: white;
+  background-color: #64462e88;
 }

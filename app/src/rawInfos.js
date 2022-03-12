@@ -1,21 +1,16 @@
-const rawActions = [
+const rawInfos = [
   {
     id: "1",
-    title: "Nouveau" || "nouveau",
+    title: "Formelle" || "formelle",
     tasks: [],
   },
   {
     id: "2",
-    title: "En cours" || "en cours" || "En Cours",
+    title: "Informelle" || "informelle",
     tasks: [],
   },
   {
     id: "3",
-    title: "À planifier" || "A planifier" || "a planifier" || "à planifier",
-    tasks: [],
-  },
-  {
-    id: "4",
     title:
       "Réalisé" ||
       "realisé" ||
@@ -25,11 +20,5 @@ const rawActions = [
       "realise",
     tasks: [],
   },
-  {
-    id: "5",
-    title:
-      "Décalage date" || "décalage date" || "Decalage date" || "decalage date",
-    tasks: [],
-  },
 ];
-export default rawActions;
+export default rawInfos;

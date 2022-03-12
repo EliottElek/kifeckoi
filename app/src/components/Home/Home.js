@@ -7,7 +7,8 @@ import ClientItem from "./ClientItem";
 import Button from "../../materials/Button/Button";
 import InputText from "../../materials/InputText/InputText";
 const Home = () => {
-  const { clients, setClients } = useContext(Context);
+  const { clients, setClients, setOpenAlert, setAlertContent } =
+    useContext(Context);
   const [nameInput, setNameInput] = React.useState("");
   const [message, setMessage] = React.useState("");
   const submit = async (e) => {
@@ -32,9 +33,14 @@ const Home = () => {
       clients.push(client);
       setClients([...clients]);
       setNameInput("");
+      setAlertContent({ content: "Client ajouté avec succès." });
     } catch (err) {
-      alert("Impossible d'enregistrer le client.");
+      setAlertContent({
+        content: "Impossible d'ajouter un nouveau client.",
+        type: "warning",
+      });
     }
+    setOpenAlert(true)
   };
   return (
     <div className={"home__container"}>

@@ -3,7 +3,7 @@ import Accordion from "../../materials/Accordion/Accordion";
 import Actions from "./Actions";
 const Livrables = () => {
   return (
-    <Accordion id={"livrables"} content={<Actions />} title={"Livrables (5)"} />
+    <Accordion disabled id={"livrables"} content={<Actions />} title={"Livrables (0)"} />
   );
 };
 

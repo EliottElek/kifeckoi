@@ -5,7 +5,7 @@
 }
 .card__content {
   padding: 10px;
-  padding-top: 18px;
+  padding-top: 25px;
   // width: 100%;
   min-height: 70px;
   height: auto;
@@ -46,4 +46,28 @@
   align-items: center;
   justify-content: space-between;
   border-radius: 3px;
+}
+.card__icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  top: 3px;
+  left: 3px;
+  color: #1394bb;
+  transform: scale(0.8);
+}
+.violet {
+  color: #5313bb;
+}
+.red {
+  color: #bb1313;
+}
+.orange {
+  gap: 4px;
+  color: #e78331;
+}
+.marron {
+  gap: 4px;
+  color: #64462e;
 }

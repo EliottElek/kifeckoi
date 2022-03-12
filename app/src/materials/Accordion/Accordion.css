@@ -43,7 +43,7 @@
 
 /* Style the accordion content panel. Note: hidden by default */
 .accordion__content {
-  background-color: #021217;
+  background-color: #c9e9f3;
   overflow: auto;
   transition: max-height var(--speed) ease;
 }
@@ -52,5 +52,5 @@
 .accordion__text {
   font-size: 14px;
   padding: 18px;
-  background-color: #021217;
+  background-color: rgb(56, 56, 56);
 }

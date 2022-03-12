@@ -10,6 +10,9 @@ import Modal from "../../materials/Modal/Modal";
 import { v4 as uuidv4 } from "uuid";
 import rawActions from "../../rawActions";
 import rawInfos from "../../rawInfos";
+import rawDecisions from "../../rawDecisions";
+import rawRisks from "../../rawRisks";
+import rawProblems from "../../rawProblems";
 
 const Project = () => {
   const navigate = useNavigate();
@@ -17,7 +20,14 @@ const Project = () => {
     projects,
     setCurrentProject,
     actions,
+    infos,
+    decisions,
+    setDecisions,
     setActions,
+    risks,
+    setRisks,
+    problems,
+    setProblems,
     currentProject,
     currentClient,
     setInfos,
@@ -27,6 +37,18 @@ const Project = () => {
 
   const clearActions = () => {
     actions.forEach((action) => (action.tasks = []));
+  };
+  const clearInfos = () => {
+    infos.forEach((info) => (info.tasks = []));
+  };
+  const clearDecisions = () => {
+    decisions.forEach((decision) => (decision.tasks = []));
+  };
+  const clearRisks = () => {
+    risks.forEach((risk) => (risk.tasks = []));
+  };
+  const clearProblems = () => {
+    problems.forEach((prob) => (prob.tasks = []));
   };
   const [saveButtonContent, setSaveButtonContent] =
     React.useState("Enregistrer");
@@ -62,16 +84,72 @@ const Project = () => {
         item["Item Type *"] === "3 - Info" ||
         item["Item Type*"] === "3 - Info"
     );
-    infosData?.forEach((action) => {
+    infosData?.forEach((info) => {
       const index = infosFinal.findIndex(
-        (ac) => ac.title === action["Status for the period *"]
+        (ac) => ac?.title === info["Status for the period *"]
       );
-      if (index !== -1)
-        infosFinal[index].tasks.push({ ...action, id: uuidv4() });
+      if (index !== -1) infosFinal[index].tasks.push({ ...info, id: uuidv4() });
     });
     setInfos(infosFinal);
     // eslint-disable-next-line
   }, [id, projects, setCurrentProject, setInfos, currentProject]);
+  React.useEffect(() => {
+    const decisionsFinal = [...rawDecisions];
+    const decisionsData = currentProject?.filter(
+      (item) =>
+        item["Item Type   *"] === "4 - Decision" ||
+        item["Item Type  *"] === "4 - Decision" ||
+        item["Item Type *"] === "4 - Decision" ||
+        item["Item Type*"] === "4 - Decision"
+    );
+    console.log(decisionsData);
+    decisionsData?.forEach((decision) => {
+      const index = decisionsFinal.findIndex(
+        (ac) => ac?.title === decision["Status for the period *"]
+      );
+      if (index !== -1)
+        decisionsFinal[index].tasks.push({ ...decision, id: uuidv4() });
+    });
+    setDecisions(decisionsFinal);
+    // eslint-disable-next-line
+  }, [id, projects, setCurrentProject, setDecisions, currentProject]);
+  React.useEffect(() => {
+    const risksFinal = [...rawRisks];
+    const risksData = currentProject?.filter(
+      (item) =>
+        item["Item Type   *"] === "5 - Risk" ||
+        item["Item Type  *"] === "5 - Risk" ||
+        item["Item Type *"] === "5 - Risk" ||
+        item["Item Type*"] === "5 - Risk"
+    );
+    risksData?.forEach((risk) => {
+      const index = risksFinal.findIndex(
+        (ac) => ac?.title === risk["Status for the period *"]
+      );
+      if (index !== -1) risksFinal[index].tasks.push({ ...risk, id: uuidv4() });
+    });
+    setRisks(risksFinal);
+    // eslint-disable-next-line
+  }, [id, projects, setCurrentProject, setRisks, currentProject]);
+  React.useEffect(() => {
+    const problemsFinal = [...rawProblems];
+    const problemsData = currentProject?.filter(
+      (item) =>
+        item["Item Type   *"] === "6 - Issue" ||
+        item["Item Type  *"] === "6 - Issue" ||
+        item["Item Type *"] === "6 - Issue" ||
+        item["Item Type*"] === "6 - Issue"
+    );
+    problemsData?.forEach((decision) => {
+      const index = problemsFinal.findIndex(
+        (ac) => ac?.title === decision["Status for the period *"]
+      );
+      if (index !== -1)
+        problemsFinal[index].tasks.push({ ...decision, id: uuidv4() });
+    });
+    setProblems(problemsFinal);
+    // eslint-disable-next-line
+  }, [id, projects, setCurrentProject, setRisks, currentProject]);
   console.log(currentProject);
   const save = () => {
     setSaveButtonContent(
@@ -99,6 +177,10 @@ const Project = () => {
               <Button
                 onClick={() => {
                   clearActions();
+                  clearInfos();
+                  clearDecisions();
+                  clearRisks();
+                  clearProblems();
                   navigate(`/client/${currentClient[0]?.id}`);
                 }}
               >

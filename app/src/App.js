@@ -4,7 +4,10 @@ import Project from "./components/Project/Project";
 import Home from "./components/Home/Home";
 import Layout from "./components/Layout/Layout";
 import Client from "./components/Client/Client";
+import Alert from "./materials/Alert/Alert";
+import { Context } from "./components/Context/Context";
 const App = () => {
+  const { alertContent, openAlert, setOpenAlert } = React.useContext(Context);
   return (
     <div style={{ width: "100%", height: "100%", backgroundColor: "#1c2128" }}>
       <Layout>
@@ -38,6 +41,14 @@ const App = () => {
           />
         </Routes>
       </Layout>
+      <Alert
+        delay={2200}
+        open={openAlert}
+        setOpen={setOpenAlert}
+        type={alertContent?.type}
+      >
+        {alertContent?.content}
+      </Alert>
     </div>
   );
 };

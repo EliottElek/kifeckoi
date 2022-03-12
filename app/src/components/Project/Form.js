@@ -5,11 +5,11 @@ import Select from "../../materials/Select/Select";
 import SelectItem from "../../materials/Select/SelectItem/SelectItem";
 import List from "../../materials/List/List";
 import ListItem from "../../materials/List/ListItem";
-import Decisions from "./Decisions";
+import DecisionsV2 from "./DecisionsV2";
 import InfosV2 from "./InfosV2";
-import Livrables from "./Livrables";
-import Problemes from "./Problemes";
-import Risques from "./Risques";
+// import Livrables from "./Livrables";
+import RisksV2 from "./RisksV2";
+import ProblemsV2 from "./ProblemsV2";
 
 import { useLocation } from "react-router-dom";
 import { Context } from "../Context/Context";
@@ -337,10 +337,10 @@ const Form = () => {
         </div>
         <ActionsV2 />
         <InfosV2 />
-        <Decisions />
-        <Risques />
-        <Problemes />
-        <Livrables />
+        <DecisionsV2 />
+        <RisksV2 />
+        <ProblemsV2 />
+        {/* <Livrables /> */}
       </>
     );
   };

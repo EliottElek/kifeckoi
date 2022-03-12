@@ -1,0 +1,52 @@
+.alert__container {
+  width: 300px;
+  min-height: 35px;
+  position: fixed!important;
+  border-radius: 3px;
+  bottom: 25px!important;
+  left: 25px!important;
+  padding: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  background-color: #ddffe6;
+}
+.warning {
+  background-color: #ffdddf;
+}
+.closed_alert {
+  animation: hideDiv 0.1s linear forwards;
+}
+.open_alert {
+  animation: showDiv 0.1s linear forwards;
+}
+.clear_icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: black;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.clear_icon:hover {
+  filter: brightness(0.5);
+}
+@keyframes hideDiv {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes showDiv {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

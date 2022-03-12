@@ -22,6 +22,32 @@ const Card = (props) => {
           {props.task.new && (
             <span className={"card__content__added__indicator"}>Ajoutée</span>
           )}
+          {props.type === "info" && (
+            <span className="card__icon">
+              <i className="gg-info"></i>
+              Info
+            </span>
+          )}
+          {props.type === "action" && (
+            <span className="card__icon violet">
+              <i className="gg-arrows-exchange-alt"></i> Action
+            </span>
+          )}
+          {props.type === "decision" && (
+            <span className="card__icon marron">
+              <i className="gg-alarm"></i> Décision
+            </span>
+          )}
+          {props.type === "risk" && (
+            <span className="card__icon orange">
+              <i className="gg-bell"></i> Risque
+            </span>
+          )}
+          {props.type === "problem" && (
+            <span className="card__icon red">
+              <i className="gg-danger"></i> Problème
+            </span>
+          )}
           {props.children}
         </div>
       </div>

@@ -72,7 +72,7 @@ const ActionsDnd = () => {
               {(provided) => (
                 <div
                   {...provided.droppableProps}
-                  className={`kanban__section`}
+                  className={`kanban__section blue__back`}
                   ref={provided.innerRef}
                 >
                   <h2 className={`kanban__section__title`}>
@@ -103,6 +103,7 @@ const ActionsDnd = () => {
                             }}
                           >
                             <Card
+                              type={"info"}
                               task={task}
                               dragging={snapshot.isDragging}
                               className={`card card__${i + 1}`}

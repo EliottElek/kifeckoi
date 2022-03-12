@@ -2,6 +2,9 @@ import React from "react";
 import axios from "axios";
 import rawActions from "../../rawActions";
 import rawInfos from "../../rawInfos";
+import rawDecisions from "../../rawDecisions";
+import rawRisks from "../../rawRisks";
+import rawProblems from "../../rawProblems";
 
 import gravatar from "gravatar";
 export const Context = React.createContext();
@@ -23,7 +26,14 @@ export const ContextProvider = ({ children }) => {
   const [projects, setProjects] = React.useState([]);
   const [actions, setActions] = React.useState(rawActions);
   const [infos, setInfos] = React.useState(rawInfos);
-
+  const [decisions, setDecisions] = React.useState(rawDecisions);
+  const [risks, setRisks] = React.useState(rawRisks);
+  const [problems, setProblems] = React.useState(rawProblems);
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const [alertContent, setAlertContent] = React.useState({
+    content: "Merci l'alert",
+    type: "warning",
+  });
   const [currentClient, setCurrentClient] = React.useState(null);
   const [currentProject, setCurrentProject] = React.useState(null);
 
@@ -52,6 +62,10 @@ export const ContextProvider = ({ children }) => {
       value={{
         user: user,
         setUser: setUser,
+        alertContent: alertContent,
+        setAlertContent: setAlertContent,
+        openAlert: openAlert,
+        setOpenAlert: setOpenAlert,
         clients: clients,
         setClients: setClients,
         projects: projects,
@@ -60,6 +74,12 @@ export const ContextProvider = ({ children }) => {
         setActions: setActions,
         infos: infos,
         setInfos: setInfos,
+        decisions: decisions,
+        setDecisions: setDecisions,
+        risks: risks,
+        setRisks: setRisks,
+        problems: problems,
+        setProblems: setProblems,
         currentClient: currentClient,
         setCurrentClient: setCurrentClient,
         currentProject: currentProject,
