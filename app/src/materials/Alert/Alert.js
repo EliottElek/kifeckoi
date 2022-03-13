@@ -26,6 +26,17 @@ const Alert = ({ open, setOpen, children, type, delay }) => {
         } warning`}
       >
         {children}
+        <button
+          className={"clear_icon"}
+          onClick={() => {
+            setOpen(false);
+            setTimeout(() => {
+              setShow(false);
+            }, 100);
+          }}
+        >
+          <i className="gg-close"></i>
+        </button>
       </div>
     );
   else if (show)

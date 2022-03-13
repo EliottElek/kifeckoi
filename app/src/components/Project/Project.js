@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Context } from "../Context/Context";
+import axios from "axios";
 import Button from "../../materials/Button/Button";
 import StickyNavbar from "../StickyNavbar/StickyNavbar";
 import Progress from "../../materials/Progress/Progress";
@@ -28,12 +29,16 @@ const Project = () => {
     setRisks,
     problems,
     setProblems,
+    setAlertContent,
+    setOpenAlert,
     currentProject,
     currentClient,
     setInfos,
   } = useContext(Context);
   const [openSaveModal, setOpenSaveModal] = React.useState(false);
-  const { id } = useParams();
+  const { id, id2 } = useParams();
+  console.log(id);
+  console.log(id2);
 
   const clearActions = () => {
     actions.forEach((action) => (action.tasks = []));
@@ -53,9 +58,27 @@ const Project = () => {
   const [saveButtonContent, setSaveButtonContent] =
     React.useState("Enregistrer");
 
+  //loading project from id
+
   React.useEffect(() => {
-    const foundProject = projects.find((project) => project[0].id === id);
-    setCurrentProject(foundProject);
+    const getProject = async () => {
+      try {
+        const { data: projectResponse } = await axios.get(
+          `http://localhost:3001/projects/getbyid/${id}/${id2}`
+        );
+        setCurrentProject(projectResponse);
+        console.log(projectResponse);
+      } catch {
+        setAlertContent({
+          content: "Impossible de charger ce projet.",
+          type: "warning",
+        });
+        setOpenAlert(true);
+      }
+    };
+    getProject();
+  }, [setCurrentProject, id, id2, setOpenAlert, setAlertContent]);
+  React.useEffect(() => {
     const actionsFinal = [...rawActions];
     const actionsData = currentProject?.filter(
       (item) =>

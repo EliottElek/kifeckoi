@@ -9,8 +9,15 @@ import InputText from "../../materials/InputText/InputText";
 import Button from "../../materials/Button/Button";
 
 const Client = () => {
-  const { currentClient, clients, setCurrentClient, projects, setProjects } =
-    React.useContext(Context);
+  const {
+    currentClient,
+    clients,
+    setCurrentClient,
+    projects,
+    setProjects,
+    setAlertContent,
+    setOpenAlert,
+  } = React.useContext(Context);
   const navigate = useNavigate();
   const [nameInput, setNameInput] = React.useState("");
   const [message, setMessage] = React.useState("");
@@ -25,17 +32,21 @@ const Client = () => {
     const getProjects = async () => {
       try {
         const { data: projectsData } = await axios.get(
-          `http://localhost:3001/data/getbyid/${id}`
+          `http://localhost:3001/clients/getbyid/${id}`
         );
         projectsData.shift();
         setProjects(projectsData);
       } catch {
-        console.log("Une erreur est survenue lors du chargement des projets");
+        setAlertContent({
+          content: "Impossible de charger les projets du client.",
+          type: "warning",
+        });
+        setOpenAlert(true);
       }
     };
     getProjects();
-  }, [setProjects, id]);
-  console.log(projects);
+  }, [setProjects, id, setAlertContent, setOpenAlert]);
+
   const submit = async (e) => {
     e.preventDefault();
     if (nameInput === "") {
@@ -59,7 +70,7 @@ const Client = () => {
         "Accountable (RACI)  *": null,
       };
       await axios.post(
-        `http://localhost:3001/data/addnewproject/${currentClient[0].id}`,
+        `http://localhost:3001/projects/addnewproject/${currentClient[0].id}`,
         {
           project: project,
         }

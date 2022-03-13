@@ -49,7 +49,7 @@ const db = {
     );
     return newData;
   },
-  getAllData: () => {
+  getAllClients: () => {
     const data = functions.readTextFile("../data/data.json");
     return data;
   },
@@ -66,7 +66,7 @@ const db = {
       return { success: false, message: err };
     }
   },
-  getDataById: (id) => {
+  getClientById: (id) => {
     const data = functions.readTextFile("../data/data.json");
     const dataFiltered = data.filter((dataItem) => dataItem[0].id === id);
     const finalData = functions.refactorByProperty(
@@ -95,6 +95,16 @@ const db = {
     } catch (err) {
       return { success: false, message: err };
     }
+  },
+  getProjectById: (id, name) => {
+    const data = functions.readTextFile("../data/data.json");
+    const dataFiltered = data.filter((dataItem) => dataItem[0].id === id);
+    const finalData = functions.refactorByProperty(
+      dataFiltered[0],
+      "Project Name"
+    );
+    //finalData.shift();
+    return finalData.find((data) => data[0]["Project Name"] === name);
   },
 };
 module.exports = db;

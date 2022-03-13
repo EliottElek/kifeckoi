@@ -27,7 +27,7 @@ const Home = () => {
           value: nameInput,
         },
       ];
-      await axios.post("http://localhost:3001/data/addnewclient", {
+      await axios.post("http://localhost:3001/clients/addnewclient", {
         client: client,
       });
       clients.push(client);
@@ -40,7 +40,7 @@ const Home = () => {
         type: "warning",
       });
     }
-    setOpenAlert(true)
+    setOpenAlert(true);
   };
   return (
     <div className={"home__container"}>

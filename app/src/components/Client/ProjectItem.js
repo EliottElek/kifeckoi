@@ -1,16 +1,14 @@
 import React from "react";
 import "./Client.css";
-import { useNavigate } from "react-router";
-import { Context } from "../Context/Context";
+import { useNavigate, useParams } from "react-router";
 
 const ProjectItem = ({ project }) => {
   const navigate = useNavigate();
-  const { setCurrentProject } = React.useContext(Context);
+  const { id } = useParams();
   return (
     <div
       onClick={() => {
-        setCurrentProject(project);
-        navigate(`/project/${project[0].id}`);
+        navigate(`/client/${id}/${project[0]?.value}`);
       }}
       className={"project__item"}
     >

@@ -20,24 +20,26 @@ app.get("/loadjsonfile/:weekid", (req, res) => {
   const data = db.createJsonFile(req.params.weekid);
   res.send(data);
 });
-app.get("/data", (req, res) => {
-  const data = db.getAllData();
+app.get("/clients", (req, res) => {
+  const data = db.getAllClients();
   res.send(data);
 });
-app.get("/data/getbyid/:id", (req, res) => {
-  const data = db.getDataById(req.params.id);
+app.get("/clients/getbyid/:id", (req, res) => {
+  const data = db.getClientById(req.params.id);
   res.send(data);
 });
-app.post("/data/addnewclient", (req, res) => {
+app.get("/projects/getbyid/:idClient/:name", (req, res) => {
+  const data = db.getProjectById(req.params.idClient, req.params.name);
+  res.send(data);
+});
+app.post("/clients/addnewclient", (req, res) => {
   const data = db.createNewClient(req.body.client);
   res.send(data);
-  console.log(data);
 });
-app.post("/data/addnewproject/:clientid", (req, res) => {
+app.post("/projects/addnewproject/:clientid", (req, res) => {
   console.log(req.body);
   const data = db.createNewProject(req.params.clientid, req.body.project);
   res.send(data);
-  console.log(data);
 });
 // Channels
 

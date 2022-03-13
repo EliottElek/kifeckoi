@@ -48,11 +48,15 @@ export const ContextProvider = ({ children }) => {
   React.useEffect(() => {
     const getData = async () => {
       try {
-        const { data: excel } = await axios.get(`http://localhost:3001/data`);
+        const { data: excel } = await axios.get(`http://localhost:3001/clients`);
         removeAllInstances(excel, null);
         setClients(excel);
       } catch {
-        alert("Une erreur est survenue lors de la récupération des données.");
+        setAlertContent({
+          content: "Impossible de charger les clients.",
+          type: "warning",
+        });
+        setOpenAlert(true);
       }
     };
     getData();
