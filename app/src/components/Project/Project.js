@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Context } from "../Context/Context";
-import axios from "axios";
 import Button from "../../materials/Button/Button";
 import StickyNavbar from "../StickyNavbar/StickyNavbar";
 import Progress from "../../materials/Progress/Progress";
@@ -29,8 +28,6 @@ const Project = () => {
     setRisks,
     problems,
     setProblems,
-    setAlertContent,
-    setOpenAlert,
     currentProject,
     currentClient,
     setInfos,
@@ -60,24 +57,24 @@ const Project = () => {
 
   //loading project from id
 
-  React.useEffect(() => {
-    const getProject = async () => {
-      try {
-        const { data: projectResponse } = await axios.get(
-          `http://localhost:3001/projects/getbyid/${id}/${id2}`
-        );
-        setCurrentProject(projectResponse);
-        console.log(projectResponse);
-      } catch {
-        setAlertContent({
-          content: "Impossible de charger ce projet.",
-          type: "warning",
-        });
-        setOpenAlert(true);
-      }
-    };
-    getProject();
-  }, [setCurrentProject, id, id2, setOpenAlert, setAlertContent]);
+  // React.useEffect(() => {
+  //   const getProject = async () => {
+  //     try {
+  //       const { data: projectResponse } = await axios.get(
+  //         `http://localhost:3001/projects/getbyid/${id}/${name}`
+  //       );
+  //       setCurrentProject(projectResponse);
+  //       console.log(projectResponse);
+  //     } catch {
+  //       setAlertContent({
+  //         content: "Impossible de charger ce projet.",
+  //         type: "warning",
+  //       });
+  //       setOpenAlert(true);
+  //     }
+  //   };
+  //   getProject();
+  // }, [setCurrentProject, id, id2, setOpenAlert, setAlertContent]);
   React.useEffect(() => {
     const actionsFinal = [...rawActions];
     const actionsData = currentProject?.filter(

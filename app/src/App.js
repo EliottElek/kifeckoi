@@ -1,20 +1,16 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Project from "./components/Project/Project";
 import Home from "./components/Home/Home";
 import Layout from "./components/Layout/Layout";
 import Client from "./components/Client/Client";
 import Alert from "./materials/Alert/Alert";
 import { Context } from "./components/Context/Context";
+import AccountPage from "./components/AccountPage/AccountPage";
 const App = () => {
   const { alertContent, openAlert, setOpenAlert } = React.useContext(Context);
-  const client = new ApolloClient({
-    uri: "http://localhost:3001/graphql",
-    cache: new InMemoryCache(),
-  });
+
   return (
-    <ApolloProvider client={client}>
       <div
         style={{ width: "100%", height: "100%", backgroundColor: "#1c2128" }}
       >
@@ -47,6 +43,15 @@ const App = () => {
                 </SecureRoute>
               }
             />
+            <Route
+              exact
+              path="/account"
+              element={
+                <SecureRoute>
+                  <AccountPage />
+                </SecureRoute>
+              }
+            />
           </Routes>
         </Layout>
         <Alert
@@ -58,7 +63,6 @@ const App = () => {
           {alertContent?.content}
         </Alert>
       </div>
-    </ApolloProvider>
   );
 };
 const SecureRoute = ({ children }) => {

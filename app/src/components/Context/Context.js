@@ -1,12 +1,12 @@
 import React from "react";
-import axios from "axios";
 import rawActions from "../../rawActions";
 import rawInfos from "../../rawInfos";
 import rawDecisions from "../../rawDecisions";
 import rawRisks from "../../rawRisks";
 import rawProblems from "../../rawProblems";
-
 import gravatar from "gravatar";
+
+
 export const Context = React.createContext();
 
 const userData = {
@@ -20,9 +20,9 @@ const userData = {
     true
   ),
 };
-
 export const ContextProvider = ({ children }) => {
   const [clients, setClients] = React.useState([]);
+  const [users, setUsers] = React.useState();
   const [projects, setProjects] = React.useState([]);
   const [actions, setActions] = React.useState(rawActions);
   const [infos, setInfos] = React.useState(rawInfos);
@@ -31,41 +31,21 @@ export const ContextProvider = ({ children }) => {
   const [problems, setProblems] = React.useState(rawProblems);
   const [openAlert, setOpenAlert] = React.useState(false);
   const [alertContent, setAlertContent] = React.useState({
-    content: "Merci l'alert",
-    type: "warning",
+    content: "",
+    type: "",
   });
   const [currentClient, setCurrentClient] = React.useState(null);
   const [currentProject, setCurrentProject] = React.useState(null);
 
   const [user, setUser] = React.useState(userData);
 
-  function removeAllInstances(arr, item) {
-    for (var i = arr.length; i--; ) {
-      if (arr[i] === item) arr.splice(i, 1);
-    }
-  }
-
-  React.useEffect(() => {
-    const getData = async () => {
-      try {
-        const { data: excel } = await axios.get(`http://localhost:3001/clients`);
-        removeAllInstances(excel, null);
-        setClients(excel);
-      } catch {
-        setAlertContent({
-          content: "Impossible de charger les clients.",
-          type: "warning",
-        });
-        setOpenAlert(true);
-      }
-    };
-    getData();
-  }, []);
   return (
     <Context.Provider
       value={{
         user: user,
         setUser: setUser,
+        users: users,
+        setUsers: setUsers,
         alertContent: alertContent,
         setAlertContent: setAlertContent,
         openAlert: openAlert,

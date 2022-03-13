@@ -9,6 +9,7 @@ const InputText = ({
   style,
   number,
   max,
+  type,
   min,
   disabled,
 }) => {
@@ -40,6 +41,7 @@ const InputText = ({
         onClick={(e) => {
           e.stopPropagation();
         }}
+        type={type}
         disabled={disabled}
         className={disabled ? "input__text disabled__input" : "input__text"}
         value={value}
