@@ -32,15 +32,15 @@ const navElements = [
   { id: "livrables", name: "Livrables" },
 ];
 const Form = () => {
-  const { currentProject, user } = React.useContext(Context);
+  const { user } = React.useContext(Context);
 
   const [descriptionGlobal, setDescriptionGlobal] = React.useState("");
   const [descriptionPlanning, setDescriptionPlanning] = React.useState("");
   const [descriptionPerimetre, setDescriptionPerimetre] = React.useState("");
   const [descriptionMoyens, setDescriptionMoyens] = React.useState("");
 
-  const [goLive, setGoLive] = React.useState("");
-  const [goCop, setGoCop] = React.useState("");
+  const [goLive] = React.useState("");
+  const [goCop] = React.useState("");
 
   const [selectedStatusOption, setSelectedStatusOption] = React.useState();
   const [selectedStatusOption2, setSelectedStatusOption2] = React.useState();
@@ -52,103 +52,6 @@ const Form = () => {
   const [isActiveStatus3, setIsActiveStatus3] = React.useState(false);
   const [isActiveStatus4, setIsActiveStatus4] = React.useState(false);
 
-  React.useEffect(() => {
-    const setValues = () => {
-      const descriptionData = currentProject?.filter(
-        (item) =>
-          item["Item Type   *"] === "0 - Summary" ||
-          item["Item Type  *"] === "0 - Summary" ||
-          item["Item Type *"] === "0 - Summary" ||
-          item["Item Type*"] === "0 - Summary"
-      );
-      if (descriptionData.length !== 0) {
-        setDescriptionGlobal(descriptionData[0]["Item description *"]);
-        setSelectedStatusOption(descriptionData[0]["Status for the period *"]);
-      }
-    };
-    setValues();
-  }, [currentProject]);
-
-  React.useEffect(() => {
-    const setValues = () => {
-      const descriptionData = currentProject?.filter(
-        (item) =>
-          item["Item Type   *"] === "1 - Statut - Planning" ||
-          item["Item Type  *"] === "1 - Statut - Planning" ||
-          item["Item Type *"] === "1 - Statut - Planning" ||
-          item["Item Type*"] === "1 - Statut - Planning"
-      );
-      if (descriptionData.length !== 0) {
-        setDescriptionPlanning(descriptionData[0]["Item description *"]);
-        setSelectedStatusOption2(descriptionData[0]["Status for the period *"]);
-      }
-    };
-    setValues();
-  }, [currentProject]);
-  React.useEffect(() => {
-    const setValues = () => {
-      const descriptionData = currentProject?.filter(
-        (item) =>
-          item["Item Type   *"] === "1 - Statut - Perimeter" ||
-          item["Item Type  *"] === "1 - Statut - Perimeter" ||
-          item["Item Type *"] === "1 - Statut - Perimeter" ||
-          item["Item Type*"] === "1 - Statut - Perimeter"
-      );
-      if (descriptionData.length !== 0) {
-        setDescriptionPlanning(descriptionData[0]["Item description *"]);
-        setSelectedStatusOption3(descriptionData[0]["Status for the period *"]);
-      }
-    };
-    setValues();
-  }, [currentProject]);
-  React.useEffect(() => {
-    const setValues = () => {
-      const descriptionData = currentProject?.filter(
-        (item) =>
-          item["Item Type   *"] === "1 - Statut - Means" ||
-          item["Item Type  *"] === "1 - Statut - Means" ||
-          item["Item Type *"] === "1 - Statut - Means" ||
-          item["Item Type*"] === "1 - Statut - Means"
-      );
-      if (descriptionData.length !== 0) {
-        setDescriptionMoyens(descriptionData[0]["Item description *"]);
-        setSelectedStatusOption4(descriptionData[0]["Status for the period *"]);
-      }
-    };
-    setValues();
-  }, [currentProject]);
-  React.useEffect(() => {
-    const setValues = () => {
-      const descriptionData = currentProject?.filter(
-        (item) =>
-          item["Item Type   *"] === "0 - Go Live Date" ||
-          item["Item Type  *"] === "0 - Go Live Date" ||
-          item["Item Type *"] === "0 - Go Live Date" ||
-          item["Item Type*"] === "0 - Go Live Date"
-      );
-      console.log(descriptionData);
-      if (descriptionData.length !== 0) {
-        setGoLive(descriptionData[0]["Item description *"]);
-      }
-    };
-    setValues();
-  }, [currentProject]);
-  React.useEffect(() => {
-    const setValues = () => {
-      const descriptionData = currentProject?.filter(
-        (item) =>
-          item["Item Type   *"] === "1 - Statut - Scope" ||
-          item["Item Type  *"] === "1 - Statut - Scope" ||
-          item["Item Type *"] === "1 - Statut - Scope" ||
-          item["Item Type*"] === "1 - Statut - Scope"
-      );
-      console.log(descriptionData);
-      if (descriptionData.length !== 0) {
-        setGoCop(descriptionData[0]["Item description *"]);
-      }
-    };
-    setValues();
-  }, [currentProject]);
   const MainContent = () => {
     return (
       <>

@@ -1,5 +1,5 @@
 import { UserType } from "../typedefs/User";
-import { MessageType } from "../typedefs/Messages";
+import { MessageType } from "../typedefs/Message";
 
 import { GraphQLID, GraphQLString } from "graphql";
 import { Users } from '../../entities/Users'

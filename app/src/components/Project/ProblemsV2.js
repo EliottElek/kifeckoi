@@ -15,8 +15,6 @@ const ProblemesV2 = () => {
   }, [problems, setLength]);
 
   const Content = () => {
-    if (length === 0)
-      return <h5 className="white__info">Aucun problème sur ce projet.</h5>;
     return <ProblemsDnd />;
   };
   return (

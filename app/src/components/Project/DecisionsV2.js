@@ -14,8 +14,6 @@ const DecisionsV2 = () => {
   }, [decisions, setLength]);
 
   const Content = () => {
-    if (length === 0)
-      return <h5 className="white__info">Aucune décision sur ce projet.</h5>;
     return <DecisionsDnd />;
   };
   return (

@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { Context } from "../Context/Context";
 import { useParams } from "react-router";
 import Progress from "../../materials/Progress/Progress";
@@ -7,81 +6,45 @@ import ProjectItem from "./ProjectItem";
 import { useNavigate } from "react-router";
 import InputText from "../../materials/InputText/InputText";
 import Button from "../../materials/Button/Button";
+import { FIND_CLIENT_BY_ID } from "../../graphql/queries";
+import { CREATE_PROJECT } from "../../graphql/mutations";
+import { useQuery, useMutation } from "@apollo/client";
 
 const Client = () => {
-  const {
-    currentClient,
-    clients,
-    setCurrentClient,
-    projects,
-    setProjects,
-    setAlertContent,
-    setOpenAlert,
-  } = React.useContext(Context);
+  const { currentClient, setCurrentClient, projects, setProjects } =
+    React.useContext(Context);
   const navigate = useNavigate();
   const [nameInput, setNameInput] = React.useState("");
   const [message, setMessage] = React.useState("");
 
   const { id } = useParams();
-  React.useEffect(() => {
-    if (clients.length) {
-      setCurrentClient({ ...clients.find((client) => client[0].id === id) });
-    }
-  }, [id, clients, setCurrentClient]);
-  React.useEffect(() => {
-    const getProjects = async () => {
-      try {
-        const { data: projectsData } = await axios.get(
-          `http://localhost:3001/clients/getbyid/${id}`
-        );
-        projectsData.shift();
-        setProjects(projectsData);
-      } catch {
-        setAlertContent({
-          content: "Impossible de charger les projets du client.",
-          type: "warning",
-        });
-        setOpenAlert(true);
-      }
-    };
-    getProjects();
-  }, [setProjects, id, setAlertContent, setOpenAlert]);
+  const dataClient = useQuery(FIND_CLIENT_BY_ID, { variables: { id: id } });
 
+  const [createProject] = useMutation(CREATE_PROJECT);
+
+  React.useEffect(() => {
+    if (dataClient?.data) {
+      setCurrentClient(dataClient?.data?.findClientById);
+    }
+  }, [setCurrentClient, dataClient?.data]);
+  React.useEffect(() => {
+    if (currentClient) {
+      console.log(currentClient);
+      setProjects(currentClient?.projects);
+    }
+  }, [setProjects, currentClient, dataClient?.projects]);
   const submit = async (e) => {
+    const idParams = id;
     e.preventDefault();
     if (nameInput === "") {
       setMessage("Vous devez indiquer un nom.");
       return null;
     }
-    try {
-      var project = {
-        "Chef de projet*": "",
-        "Chef de projet Client *": "",
-        "Client Name*": currentClient[0]?.value,
-        "Project Name": nameInput,
-        "Ref ERP": "",
-        "Projectg phase": "",
-        "Périod  *": "Y22W07",
-        "Item Type  *": "",
-        "Item description *": "",
-        Comments: "",
-        "Status for the period *": "",
-        "Target Date": null,
-        "Accountable (RACI)  *": null,
-      };
-      await axios.post(
-        `http://localhost:3001/projects/addnewproject/${currentClient[0].id}`,
-        {
-          project: project,
-        }
-      );
-      projects.push([project]);
-      // setProjects([...projects]);
-      window.location.reload();
-      setNameInput("");
-    } catch (err) {
-      alert("Impossible d'enregistrer le projet.");
-    }
+    await createProject({
+      variables: { name: nameInput, clientId: idParams },
+    });
+    window.location.reload();
+    setNameInput("");
   };
   if (!currentClient)
     return (
@@ -89,7 +52,7 @@ const Client = () => {
         <Progress size="large" />
       </div>
     );
-  if (!projects.length === 0)
+  if (!projects)
     return (
       <div className={"home__container"}>
         <div className={"home__project__container"}>
@@ -105,7 +68,7 @@ const Client = () => {
               <i className="gg-chevron-left"></i>
             </button>
             <h1 className={"home__project__container__title"}>
-              {currentClient && currentClient[0]?.value}
+              {currentClient && currentClient.name}
             </h1>
           </div>
           <div className={"home__project__container__spacer"} />
@@ -128,7 +91,7 @@ const Client = () => {
             <i className="gg-chevron-left"></i>
           </button>
           <h1 className={"home__project__container__title"}>
-            {currentClient[0]?.value}
+            {currentClient.name}
           </h1>
         </div>
         <div className={"home__project__container__spacer"} />

@@ -7,14 +7,6 @@ const { v4: uuid } = require("uuid");
 
 const Actions = () => {
   const [actions, setActions] = React.useState([]);
-  // const { currentProject } = React.useContext(Context);
-  // React.useEffect(() => {
-  //   const actionsData = currentProject.filter(
-  //     (item) => item["Item Type  *"] === "2 - Action"
-  //   );
-  //   setActions(actionsData);
-  //   console.log(actionsData);
-  // }, [currentProject, setActions]);
 
   const Content = () => {
     const addAction = () => {

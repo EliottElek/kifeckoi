@@ -27,7 +27,7 @@ const App = () => {
             />
             <Route
               exact
-              path="/client/:id/:name"
+              path="/project/:id/"
               element={
                 <SecureRoute>
                   <Project />

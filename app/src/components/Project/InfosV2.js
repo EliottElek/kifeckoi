@@ -15,8 +15,6 @@ const ActionsV2 = () => {
   }, [infos, setLength]);
 
   const Content = () => {
-    if (length === 0)
-      return <h5 className="white__info">Aucune info sur ce projet.</h5>;
     return <InfosDnd />;
   };
   return (

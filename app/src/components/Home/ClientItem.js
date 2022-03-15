@@ -9,15 +9,15 @@ const ClientItem = ({ client }) => {
 
   return (
     <div
-      onClick={() => navigate(`/client/${client[0]?.id}`)}
+      onClick={() => navigate(`/client/${client.id}`)}
       className={"client__item"}
     >
       <div className={"client__item__name__container"}>
-        <p>{client[0]?.value}</p>
+        <p>{client.name}</p>
         <img
           className={"client__item__logo"}
           src={logo}
-          alt={`logo${client[0]?.id}`}
+          alt={`logo${client.id}`}
         />
       </div>
       <i className="gg-chevron-right"></i>

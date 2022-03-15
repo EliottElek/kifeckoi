@@ -7,36 +7,31 @@ import Progress from "../../materials/Progress/Progress";
 import "./Project.css";
 import Form from "./Form";
 import Modal from "../../materials/Modal/Modal";
-import { v4 as uuidv4 } from "uuid";
-import rawActions from "../../rawActions";
-import rawInfos from "../../rawInfos";
-import rawDecisions from "../../rawDecisions";
-import rawRisks from "../../rawRisks";
-import rawProblems from "../../rawProblems";
+import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
+import { useQuery } from "@apollo/client";
 
 const Project = () => {
   const navigate = useNavigate();
   const {
-    projects,
-    setCurrentProject,
     actions,
     infos,
     decisions,
-    setDecisions,
-    setActions,
     risks,
-    setRisks,
     problems,
-    setProblems,
     currentProject,
-    currentClient,
-    setInfos,
+    setCurrentProject,
   } = useContext(Context);
   const [openSaveModal, setOpenSaveModal] = React.useState(false);
-  const { id, id2 } = useParams();
-  console.log(id);
-  console.log(id2);
+  const { id } = useParams();
 
+  const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
+    variables: { id: id },
+  });
+  React.useEffect(() => {
+    if (dataProject?.data) {
+      setCurrentProject(dataProject?.data?.findProjectByProjectId);
+    }
+  }, [setCurrentProject, dataProject?.data]);
   const clearActions = () => {
     actions.forEach((action) => (action.tasks = []));
   };
@@ -55,122 +50,6 @@ const Project = () => {
   const [saveButtonContent, setSaveButtonContent] =
     React.useState("Enregistrer");
 
-  //loading project from id
-
-  // React.useEffect(() => {
-  //   const getProject = async () => {
-  //     try {
-  //       const { data: projectResponse } = await axios.get(
-  //         `http://localhost:3001/projects/getbyid/${id}/${name}`
-  //       );
-  //       setCurrentProject(projectResponse);
-  //       console.log(projectResponse);
-  //     } catch {
-  //       setAlertContent({
-  //         content: "Impossible de charger ce projet.",
-  //         type: "warning",
-  //       });
-  //       setOpenAlert(true);
-  //     }
-  //   };
-  //   getProject();
-  // }, [setCurrentProject, id, id2, setOpenAlert, setAlertContent]);
-  React.useEffect(() => {
-    const actionsFinal = [...rawActions];
-    const actionsData = currentProject?.filter(
-      (item) =>
-        item["Item Type   *"] === "2 - Action" ||
-        item["Item Type  *"] === "2 - Action" ||
-        item["Item Type *"] === "2 - Action" ||
-        item["Item Type*"] === "2 - Action"
-    );
-    console.log(actionsData);
-    actionsData?.forEach((action) => {
-      const index = actionsFinal.findIndex(
-        (ac) => ac.title === action["Status for the period *"]
-      );
-      if (index !== -1)
-        actionsFinal[index].tasks.push({ ...action, id: uuidv4() });
-    });
-    setActions(actionsFinal);
-    // eslint-disable-next-line
-  }, [id, projects, setCurrentProject, setActions, currentProject]);
-  React.useEffect(() => {
-    const infosFinal = [...rawInfos];
-    const infosData = currentProject?.filter(
-      (item) =>
-        item["Item Type   *"] === "3 - Info" ||
-        item["Item Type  *"] === "3 - Info" ||
-        item["Item Type *"] === "3 - Info" ||
-        item["Item Type*"] === "3 - Info"
-    );
-    infosData?.forEach((info) => {
-      const index = infosFinal.findIndex(
-        (ac) => ac?.title === info["Status for the period *"]
-      );
-      if (index !== -1) infosFinal[index].tasks.push({ ...info, id: uuidv4() });
-    });
-    setInfos(infosFinal);
-    // eslint-disable-next-line
-  }, [id, projects, setCurrentProject, setInfos, currentProject]);
-  React.useEffect(() => {
-    const decisionsFinal = [...rawDecisions];
-    const decisionsData = currentProject?.filter(
-      (item) =>
-        item["Item Type   *"] === "4 - Decision" ||
-        item["Item Type  *"] === "4 - Decision" ||
-        item["Item Type *"] === "4 - Decision" ||
-        item["Item Type*"] === "4 - Decision"
-    );
-    console.log(decisionsData);
-    decisionsData?.forEach((decision) => {
-      const index = decisionsFinal.findIndex(
-        (ac) => ac?.title === decision["Status for the period *"]
-      );
-      if (index !== -1)
-        decisionsFinal[index].tasks.push({ ...decision, id: uuidv4() });
-    });
-    setDecisions(decisionsFinal);
-    // eslint-disable-next-line
-  }, [id, projects, setCurrentProject, setDecisions, currentProject]);
-  React.useEffect(() => {
-    const risksFinal = [...rawRisks];
-    const risksData = currentProject?.filter(
-      (item) =>
-        item["Item Type   *"] === "5 - Risk" ||
-        item["Item Type  *"] === "5 - Risk" ||
-        item["Item Type *"] === "5 - Risk" ||
-        item["Item Type*"] === "5 - Risk"
-    );
-    risksData?.forEach((risk) => {
-      const index = risksFinal.findIndex(
-        (ac) => ac?.title === risk["Status for the period *"]
-      );
-      if (index !== -1) risksFinal[index].tasks.push({ ...risk, id: uuidv4() });
-    });
-    setRisks(risksFinal);
-    // eslint-disable-next-line
-  }, [id, projects, setCurrentProject, setRisks, currentProject]);
-  React.useEffect(() => {
-    const problemsFinal = [...rawProblems];
-    const problemsData = currentProject?.filter(
-      (item) =>
-        item["Item Type   *"] === "6 - Issue" ||
-        item["Item Type  *"] === "6 - Issue" ||
-        item["Item Type *"] === "6 - Issue" ||
-        item["Item Type*"] === "6 - Issue"
-    );
-    problemsData?.forEach((decision) => {
-      const index = problemsFinal.findIndex(
-        (ac) => ac?.title === decision["Status for the period *"]
-      );
-      if (index !== -1)
-        problemsFinal[index].tasks.push({ ...decision, id: uuidv4() });
-    });
-    setProblems(problemsFinal);
-    // eslint-disable-next-line
-  }, [id, projects, setCurrentProject, setRisks, currentProject]);
-  console.log(currentProject);
   const save = () => {
     setSaveButtonContent(
       <>
@@ -201,15 +80,12 @@ const Project = () => {
                   clearDecisions();
                   clearRisks();
                   clearProblems();
-                  navigate(`/client/${currentClient[0]?.id}`);
+                  navigate(`/client/${currentProject.client.id}`);
                 }}
               >
                 <i className="gg-chevron-left"></i>Retour
               </Button>
-              <h2 className="name__container__title">
-                {" "}
-                {currentProject[0]?.value}
-              </h2>
+              <h2 className="name__container__title"> {currentProject.name}</h2>
             </div>
             <div className="actions__container">
               <Button reversed onClick={save}>

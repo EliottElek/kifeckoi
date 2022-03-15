@@ -4,9 +4,11 @@
   --main-color: #dbdbdb;
   --speed: 400ms;
   --nav-size: 60px;
-  font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+  /* font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial,
+    sans-serif; */
   /* margin: 0; */
+  font-family: Inter, sans-serif;
+
   padding: 0;
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;

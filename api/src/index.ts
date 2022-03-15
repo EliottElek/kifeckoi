@@ -4,6 +4,8 @@ import { schema } from './schema'
 import cors from 'cors'
 import { createConnection } from 'typeorm'
 import { Users } from './entities/Users'
+import { Client } from './entities/Client'
+import { Project } from './entities/Project'
 
 const PORT = 3001
 
@@ -15,8 +17,8 @@ const main = async () => {
         username: "root",
         password: "elektra1",
         logging: true,
-        synchronize: false,
-        entities: [Users]
+        synchronize: true,
+        entities: [Users, Client, Project]
     })
     const app = express()
     app.use(cors())
