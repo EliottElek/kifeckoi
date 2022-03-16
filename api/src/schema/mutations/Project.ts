@@ -16,13 +16,11 @@ export const CREATE_PROJECT = {
         if (!client) {
             throw new Error("Cannot find client.")
         } else {
-            const newProject = Project.create({ name, id: uuid(), client: client })
-            //const pro = [...client.projects, newProject]
-            console.log(client.projects)
+            const newProject = Project.create({ name, id: uuid(), client: client, actions: [] })
             await Project.save(newProject)
             await Client.save(client)
 
         }
-        return client
+        return args
     }
 }

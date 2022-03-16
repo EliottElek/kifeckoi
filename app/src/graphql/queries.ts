@@ -38,6 +38,13 @@ query findProjectByProjectId($id: String!){
         client {
           id 
         }
+        actions{
+          id
+          name
+          description
+          accountable
+          status
+        }
     }
 }
 `

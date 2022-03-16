@@ -3,9 +3,10 @@ import { graphqlHTTP } from 'express-graphql'
 import { schema } from './schema'
 import cors from 'cors'
 import { createConnection } from 'typeorm'
-import { Users } from './entities/Users'
+import { User } from './entities/User'
 import { Client } from './entities/Client'
 import { Project } from './entities/Project'
+import { Action } from './entities/Action'
 
 const PORT = 3001
 
@@ -18,7 +19,7 @@ const main = async () => {
         password: "elektra1",
         logging: true,
         synchronize: true,
-        entities: [Users, Client, Project]
+        entities: [User, Client, Project, Action]
     })
     const app = express()
     app.use(cors())

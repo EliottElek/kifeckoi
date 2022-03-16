@@ -1,4 +1,5 @@
-import { BaseEntity, Entity, PrimaryColumn, Column, ManyToOne } from "typeorm";
+import { BaseEntity, Entity, PrimaryColumn, Column, ManyToOne, OneToMany } from "typeorm";
+import { Action } from "./Action";
 import { Client } from "./Client";
 @Entity()
 export class Project extends BaseEntity {
@@ -7,4 +8,5 @@ export class Project extends BaseEntity {
     @Column()
     name!: string;
     @ManyToOne(() => Client, client => client.projects, { onDelete: 'CASCADE' }) client!: Client;
+    @OneToMany(() => Action, action => action.project) actions!: Action[];
 }

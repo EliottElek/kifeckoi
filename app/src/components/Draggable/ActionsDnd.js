@@ -7,17 +7,22 @@ import Modal from "../../materials/Modal/Modal";
 import Button from "../../materials/Button/Button";
 import Select from "../../materials/Select/Select";
 import SelectItem from "../../materials/Select/SelectItem/SelectItem";
-import { v4 as uuidv4 } from "uuid";
-
+import { useMutation } from "@apollo/client";
+import { CREATE_ACTION, CHANGE_ACTION_STATE } from "../../graphql/mutations";
+import { useParams } from "react-router";
 const ActionsDnd = () => {
-  const { actions, setActions } = React.useContext(Context);
+  const { actions, setActions, setOpenAlert, setAlertContent } =
+    React.useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [actionSelected, setActionSelected] = useState();
   const [isActiveAction, setIsActiveAction] = useState(false);
   const [input, setInput] = useState("");
   const [inputName, setInputName] = useState("");
+  const [createAction] = useMutation(CREATE_ACTION);
+  const [changeActionState] = useMutation(CHANGE_ACTION_STATE);
 
-  const onDragEnd = (result) => {
+  const { id } = useParams();
+  const onDragEnd = async (result) => {
     if (!result.destination) return;
     const { source, destination } = result;
 
@@ -40,7 +45,19 @@ const ActionsDnd = () => {
 
       actions[sourceColIndex].tasks = sourceTask;
       actions[destinationColIndex].tasks = destinationTask;
+      console.log(result.draggableId);
+      console.log(destinationCol?.title);
 
+      try {
+        await changeActionState({
+          variables: {
+            actionId: result?.draggableId,
+            newStatus: destinationCol?.title,
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
       setActions(actions);
     } else {
       const index = actions.findIndex((e) => e.id === source.droppableId);
@@ -51,17 +68,32 @@ const ActionsDnd = () => {
       setActions(actions);
     }
   };
-  const add = () => {
-    const newAction = {
-      id: uuidv4(),
-      new: true,
-    };
-    newAction["Item description *"] = input;
-    newAction["Accountable (RACI)  *"] = inputName;
-    actions[actionSelected.id - 1].tasks.push(newAction);
-    setInput("");
-    setInputName("");
-    setActions(actions);
+  const add = async () => {
+    try {
+      const newAction = await createAction({
+        variables: {
+          name: "Action",
+          projectId: id,
+          description: input,
+          accountable: inputName,
+          status: actionSelected.title,
+        },
+      });
+      actions[actionSelected.id - 1].tasks.push({
+        ...newAction?.data?.createAction,
+        new: true,
+      });
+      setInput("");
+      setInputName("");
+      setActions(actions);
+    } catch (err) {
+      setAlertContent({
+        type: "warning",
+        content: "Impossible d'ajouter l'action.",
+      });
+      console.log(err);
+      setOpenAlert(true);
+    }
   };
   return (
     <>
@@ -108,10 +140,10 @@ const ActionsDnd = () => {
                               dragging={snapshot.isDragging}
                               className={`card card__${i + 1}`}
                             >
-                              {task["Item description *"]}
-                              {task["Accountable (RACI)  *"] ? (
+                              {task.description}
+                              {task.accountable ? (
                                 <span className="kanban__section__content__name__container">
-                                  {task["Accountable (RACI)  *"]}{" "}
+                                  {task.accountable}{" "}
                                   <img
                                     alt="avatar"
                                     src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
@@ -136,7 +168,7 @@ const ActionsDnd = () => {
         </div>
       </DragDropContext>
       <Modal open={openModal} setOpen={setOpenModal}>
-        <div className="modal__content__container">
+        <form className="modal__content__container" onSubmit={add}>
           <h3>Ajouter une action</h3>
           <p>Entrez la description de l'action à ajouter</p>
           <textarea
@@ -187,15 +219,17 @@ const ActionsDnd = () => {
               Ajouter
             </Button>
             <Button
+              type="submit"
               onClick={(e) => {
                 e.stopPropagation();
+                add();
                 setOpenModal(false);
               }}
             >
               Annuler
             </Button>
           </div>
-        </div>
+        </form>
       </Modal>
     </>
   );

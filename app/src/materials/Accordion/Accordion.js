@@ -4,7 +4,7 @@ import Chevron from "./Chevron";
 import "./Accordion.css";
 
 function Accordion(props) {
-  const [setActive, setActiveState] = useState("");
+  const [setActive, setActiveState] = useState("active");
   const [setHeight, setHeightState] = useState("0px");
   const [setRotate, setRotateState] = useState("accordion__icon");
 

@@ -14,7 +14,7 @@
 
     &__title {
       position: absolute;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
       // margin: 10px 0 20px;
       transform: translateY(-40px);
@@ -117,4 +117,9 @@
 .marron__back {
   color: white;
   background-color: #64462e88;
+}
+@media screen and (max-width: 1000px) {
+  .kanban__section__title {
+    font-size: 0.8rem;
+  }
 }

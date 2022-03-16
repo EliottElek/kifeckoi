@@ -9,7 +9,7 @@ import Form from "./Form";
 import Modal from "../../materials/Modal/Modal";
 import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
-
+import rawActions from "../../rawActions";
 const Project = () => {
   const navigate = useNavigate();
   const {
@@ -17,6 +17,7 @@ const Project = () => {
     infos,
     decisions,
     risks,
+    setActions,
     problems,
     currentProject,
     setCurrentProject,
@@ -49,7 +50,6 @@ const Project = () => {
   };
   const [saveButtonContent, setSaveButtonContent] =
     React.useState("Enregistrer");
-
   const save = () => {
     setSaveButtonContent(
       <>
@@ -63,6 +63,15 @@ const Project = () => {
       setSaveButtonContent("Enregistrer");
     }, 3000);
   };
+  React.useEffect(() => {
+    const actionsFinal = [...rawActions];
+    const actionsData = currentProject?.actions;
+    actionsData?.forEach((action) => {
+      const index = actionsFinal.findIndex((ac) => ac.title === action.status);
+      if (index !== -1) actionsFinal[index].tasks.push(action);
+    });
+    setActions(actionsFinal);
+  }, [currentProject?.actions, setActions]);
   return (
     <>
       {!currentProject ? (

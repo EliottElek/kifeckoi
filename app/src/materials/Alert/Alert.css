@@ -8,6 +8,7 @@
   padding: 12px;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   position: relative;
   background-color: #ddffe6;
@@ -22,9 +23,6 @@
   animation: showDiv 0.1s linear forwards;
 }
 .clear_icon {
-  position: absolute;
-  top: 5px;
-  right: 5px;
   color: black;
   outline: none;
   border: none;

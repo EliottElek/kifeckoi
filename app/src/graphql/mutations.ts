@@ -25,3 +25,22 @@ mutation createProject($name: String! $clientId: String!){
     }
 }
 `
+export const CREATE_ACTION = gql`
+mutation createAction($name: String! $projectId: String! $description : String! $accountable : String! $status : String!){
+    createAction(name: $name  projectId: $projectId description : $description accountable : $accountable status : $status){
+        name
+        id
+        description
+        status
+        accountable
+    }
+}
+`
+
+export const CHANGE_ACTION_STATE = gql`
+mutation changeActionState($actionId: String! $newStatus: String!){
+    changeActionState(actionId: $actionId  newStatus: $newStatus){
+        message
+    }
+}
+`

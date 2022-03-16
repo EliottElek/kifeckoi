@@ -1,9 +1,9 @@
 import { GraphQLList } from "graphql"
 import { UserType } from "../typedefs/User"
-import { Users } from '../../entities/Users'
+import { User } from '../../entities/User'
 export const GET_ALL_USERS = {
     type: new GraphQLList(UserType),
     resolve() {
-        return Users.find();
+        return User.find();
     }
 }
