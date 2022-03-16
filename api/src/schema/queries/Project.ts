@@ -6,7 +6,7 @@ import { Client } from "../../entities/Client";
 export const GET_ALL_PROJECTS = {
     type: new GraphQLList(ProjectType),
     resolve() {
-        return Project.find({ relations: ["client", "actions"] });
+        return Project.find({ relations: ["client", "actions", "infos"] });
     }
 }
 
@@ -17,7 +17,7 @@ export const FIND_PROJECT_BY_PROJECT_ID = {
     },
     async resolve(parent: any, args: any) {
         const { id } = args
-        const project = await Project.findOne({ id: id }, { relations: ["client", "actions"] })
+        const project = await Project.findOne({ id: id }, { relations: ["client", "actions", "infos"] })
         if (!project) throw new Error("Cannot find project.")
         return project
     }
@@ -29,7 +29,7 @@ export const FIND_PROJECTS_BY_CLIENT_ID = {
     },
     async resolve(parent: any, args: any) {
         const { id } = args
-        const client = await Client.findOne({ id: id }, { relations: ["client", "actions"] })
+        const client = await Client.findOne({ id: id }, { relations: ["client", "actions", "infos"] })
         return client?.projects;
     }
 }

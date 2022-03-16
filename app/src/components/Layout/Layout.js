@@ -7,7 +7,6 @@ import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
 import List from "../../materials/List/List";
 import ListItem from "../../materials/List/ListItem";
-import Avatar from "../../materials/Avatar/Avatar";
 const Layout = ({ children }) => {
   const { clients, user } = useContext(Context);
   const navigate = useNavigate();
@@ -72,7 +71,7 @@ const Layout = ({ children }) => {
             href="#"
             onClick={() => navigate("/account")}
           >
-            <Avatar src={user.avatarUrl} />
+            <i className = "gg-profile"></i>
           </button>
         </div>
       </div>

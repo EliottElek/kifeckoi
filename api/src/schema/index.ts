@@ -7,7 +7,8 @@ import { CREATE_PROJECT } from './mutations/Project'
 import { FIND_PROJECT_BY_PROJECT_ID, FIND_PROJECTS_BY_CLIENT_ID, GET_ALL_PROJECTS } from "./queries/Project";
 import { GET_ALL_ACTIONS, FIND_ACTIONS_BY_PROJECT_ID } from "./queries/Action";
 import { CREATE_ACTION, CHANGE_ACTION_STATE } from "./mutations/Action";
-
+import { GET_ALL_INFOS, FIND_INFOS_BY_PROJECT_ID } from "./queries/Info";
+import { CREATE_INFO, CHANGE_INFO_STATE } from "./mutations/Info";
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
     fields: {
@@ -18,7 +19,9 @@ const RootQuery = new GraphQLObjectType({
         findProjectByProjectId: FIND_PROJECT_BY_PROJECT_ID,
         getAllProjects: GET_ALL_PROJECTS,
         getAllActions: GET_ALL_ACTIONS,
-        findActionsByProjectId: FIND_ACTIONS_BY_PROJECT_ID
+        findActionsByProjectId: FIND_ACTIONS_BY_PROJECT_ID,
+        getAllInfos: GET_ALL_INFOS,
+        findInfosByProjectId: FIND_INFOS_BY_PROJECT_ID
     }
 })
 const Mutation = new GraphQLObjectType({
@@ -30,7 +33,9 @@ const Mutation = new GraphQLObjectType({
         createClient: CREATE_CLIENT,
         createProject: CREATE_PROJECT,
         createAction: CREATE_ACTION,
-        changeActionState: CHANGE_ACTION_STATE
+        changeActionState: CHANGE_ACTION_STATE,
+        createInfo : CREATE_INFO,
+        changeInfoState : CHANGE_INFO_STATE
     }
 })
 

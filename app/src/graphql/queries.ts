@@ -45,6 +45,13 @@ query findProjectByProjectId($id: String!){
           accountable
           status
         }
+        infos{
+          id
+          name
+          description
+          accountable
+          status
+        }
     }
 }
 `

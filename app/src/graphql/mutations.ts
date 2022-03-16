@@ -44,3 +44,22 @@ mutation changeActionState($actionId: String! $newStatus: String!){
     }
 }
 `
+export const CREATE_INFO = gql`
+mutation createInfo($name: String! $projectId: String! $description : String! $accountable : String! $status : String!){
+    createInfo(name: $name  projectId: $projectId description : $description accountable : $accountable status : $status){
+        name
+        id
+        description
+        status
+        accountable
+    }
+}
+`
+
+export const CHANGE_INFO_STATE = gql`
+mutation changeInfoState($infoId: String! $newStatus: String!){
+    changeInfoState(infoId: $infoId newStatus: $newStatus){
+        message
+    }
+}
+`

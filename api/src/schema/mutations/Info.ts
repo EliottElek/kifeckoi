@@ -1,12 +1,12 @@
 const { v4: uuid } = require("uuid");
 import { GraphQLString } from "graphql";
-import { Project } from '../../entities/Project'
-import { Action } from '../../entities/Action'
-import { ActionType } from '../typedefs/Action'
+import { Info } from '../../entities/Info'
+import { InfoType } from '../typedefs/Info'
 import { MessageType } from '../typedefs/Message'
+import { Project } from '../../entities/Project'
 
-export const CREATE_ACTION = {
-    type: ActionType,
+export const CREATE_INFO = {
+    type: InfoType,
     args: {
         name: { type: GraphQLString },
         projectId: { type: GraphQLString },
@@ -22,24 +22,24 @@ export const CREATE_ACTION = {
         if (!project) {
             throw new Error("Cannot find project.")
         } else {
-            const newAction = Action.create({ name: name, id: newuuid, project: project, accountable: accountable, description: description, status: status })
-            await Action.save(newAction)
+            const newInfo = Info.create({ name: name, id: newuuid, project: project, accountable: accountable, description: description, status: status })
+            await Info.save(newInfo)
             await Project.save(project)
         }
         return { ...args, id: newuuid }
     }
 }
-export const CHANGE_ACTION_STATE = {
+export const CHANGE_INFO_STATE = {
     type: MessageType,
     args: {
-        actionId: { type: GraphQLString },
+        infoId: { type: GraphQLString },
         newStatus: { type: GraphQLString }
     },
     async resolve(parent: any, args: any) {
-        const { actionId, newStatus } = args
-        const action = await Action.findOne({ id: actionId })
-        if (!action) throw new Error("Cannot find action.")
-        await Action.update({ id: actionId }, { status: newStatus })
-        return { successful: true, message: "Action's state was successfully updated." }
+        const { infoId, newStatus } = args
+        const info = await Info.findOne({ id: infoId })
+        if (!info) throw new Error("Cannot find info.")
+        await Info.update({ id: infoId }, { status: newStatus })
+        return { successful: true, message: "Info's state was successfully updated." }
     }
 }

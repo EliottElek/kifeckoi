@@ -10,14 +10,16 @@ import Modal from "../../materials/Modal/Modal";
 import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
 import rawActions from "../../rawActions";
+import rawInfos from "../../rawInfos";
 const Project = () => {
   const navigate = useNavigate();
   const {
     actions,
+    setActions,
     infos,
+    setInfos,
     decisions,
     risks,
-    setActions,
     problems,
     currentProject,
     setCurrentProject,
@@ -63,6 +65,7 @@ const Project = () => {
       setSaveButtonContent("Enregistrer");
     }, 3000);
   };
+
   React.useEffect(() => {
     const actionsFinal = [...rawActions];
     const actionsData = currentProject?.actions;
@@ -72,6 +75,15 @@ const Project = () => {
     });
     setActions(actionsFinal);
   }, [currentProject?.actions, setActions]);
+  React.useEffect(() => {
+    const infosFinal = [...rawInfos];
+    const infosData = currentProject?.infos;
+    infosData?.forEach((action) => {
+      const index = infosFinal.findIndex((ac) => ac.title === action.status);
+      if (index !== -1) infosFinal[index].tasks.push(action);
+    });
+    setInfos(infosFinal);
+  }, [currentProject?.infos, setInfos]);
   return (
     <>
       {!currentProject ? (

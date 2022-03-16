@@ -7,17 +7,22 @@ import Modal from "../../materials/Modal/Modal";
 import Button from "../../materials/Button/Button";
 import Select from "../../materials/Select/Select";
 import SelectItem from "../../materials/Select/SelectItem/SelectItem";
-import { v4 as uuidv4 } from "uuid";
-
-const ActionsDnd = () => {
-  const { infos, setInfos } = React.useContext(Context);
+import { useMutation } from "@apollo/client";
+import { CREATE_INFO, CHANGE_INFO_STATE } from "../../graphql/mutations";
+import { useParams } from "react-router";
+const InfosDnd = () => {
+  const { infos, setInfos, setOpenAlert, setAlertContent } =
+    React.useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [infoSelected, setInfoSelected] = useState();
   const [isActiveInfo, setIsActiveInfo] = useState(false);
   const [input, setInput] = useState("");
   const [inputName, setInputName] = useState("");
+  const [createInfo] = useMutation(CREATE_INFO);
+  const [changeInfoState] = useMutation(CHANGE_INFO_STATE);
 
-  const onDragEnd = (result) => {
+  const { id } = useParams();
+  const onDragEnd = async (result) => {
     if (!result.destination) return;
     const { source, destination } = result;
 
@@ -40,7 +45,19 @@ const ActionsDnd = () => {
 
       infos[sourceColIndex].tasks = sourceTask;
       infos[destinationColIndex].tasks = destinationTask;
+      console.log(result.draggableId);
+      console.log(destinationCol?.title);
 
+      try {
+        await changeInfoState({
+          variables: {
+            infoId: result?.draggableId,
+            newStatus: destinationCol?.title,
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
       setInfos(infos);
     } else {
       const index = infos.findIndex((e) => e.id === source.droppableId);
@@ -51,17 +68,32 @@ const ActionsDnd = () => {
       setInfos(infos);
     }
   };
-  const add = () => {
-    const newInfo = {
-      id: uuidv4(),
-      new: true,
-    };
-    newInfo["Item description *"] = input;
-    newInfo["Accountable (RACI)  *"] = inputName;
-    infos[infoSelected.id - 1].tasks.push(newInfo);
-    setInput("");
-    setInputName("");
-    setInfos(infos);
+  const add = async () => {
+    try {
+      const newInfo = await createInfo({
+        variables: {
+          name: "Info",
+          projectId: id,
+          description: input,
+          accountable: inputName,
+          status: infoSelected.title,
+        },
+      });
+      infos[infoSelected.id - 1].tasks.push({
+        ...newInfo?.data?.createInfo,
+        new: true,
+      });
+      setInput("");
+      setInputName("");
+      setInfos(infos);
+    } catch (err) {
+      setAlertContent({
+        type: "warning",
+        content: "Impossible d'ajouter l'info.",
+      });
+      console.log(err);
+      setOpenAlert(true);
+    }
   };
   return (
     <>
@@ -72,7 +104,7 @@ const ActionsDnd = () => {
               {(provided) => (
                 <div
                   {...provided.droppableProps}
-                  className={`kanban__section blue__back`}
+                  className={`kanban__section violet__back`}
                   ref={provided.innerRef}
                 >
                   <h2 className={`kanban__section__title`}>
@@ -108,10 +140,10 @@ const ActionsDnd = () => {
                               dragging={snapshot.isDragging}
                               className={`card card__${i + 1}`}
                             >
-                              {task["Item description *"]}
-                              {task["Accountable (RACI)  *"] ? (
+                              {task.description}
+                              {task.accountable ? (
                                 <span className="kanban__section__content__name__container">
-                                  {task["Accountable (RACI)  *"]}{" "}
+                                  {task.accountable}{" "}
                                   <img
                                     alt="avatar"
                                     src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
@@ -136,7 +168,7 @@ const ActionsDnd = () => {
         </div>
       </DragDropContext>
       <Modal open={openModal} setOpen={setOpenModal}>
-        <div className="modal__content__container">
+        <form className="modal__content__container" onSubmit={add}>
           <h3>Ajouter une info</h3>
           <p>Entrez la description de l'info à ajouter</p>
           <textarea
@@ -187,18 +219,20 @@ const ActionsDnd = () => {
               Ajouter
             </Button>
             <Button
+              type="submit"
               onClick={(e) => {
                 e.stopPropagation();
+                add();
                 setOpenModal(false);
               }}
             >
               Annuler
             </Button>
           </div>
-        </div>
+        </form>
       </Modal>
     </>
   );
 };
 
-export default ActionsDnd;
+export default InfosDnd;
