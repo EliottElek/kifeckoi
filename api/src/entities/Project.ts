@@ -2,6 +2,7 @@ import { BaseEntity, Entity, PrimaryColumn, Column, ManyToOne, OneToMany } from 
 import { Action } from "./Action";
 import { Info } from "./Info";
 import { Client } from "./Client";
+import { Decision } from "./Decision";
 @Entity()
 export class Project extends BaseEntity {
     @PrimaryColumn()
@@ -11,5 +12,5 @@ export class Project extends BaseEntity {
     @ManyToOne(() => Client, client => client.projects, { onDelete: 'CASCADE' }) client!: Client;
     @OneToMany(() => Action, action => action.project) actions!: Action[];
     @OneToMany(() => Info, info => info.project) infos!: Info[];
-
+    @OneToMany(() => Decision, decision => decision.project) decisions!: Decision[];
 }

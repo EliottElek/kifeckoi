@@ -60,10 +60,25 @@ const Card = (props) => {
                 key={key}
                 className="modal__content__container_scrollable_item_container"
               >
-                <span>{key} : </span>
-                <span className="modal__content__span__value">
-                  {props.task[key]}
-                </span>
+                {key !== "accountables" ? (
+                  <>
+                    <span>{key} : </span>
+                    <span className="modal__content__span__value">
+                      {props.task[key]}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span>accoutables : </span>
+                    <span className="modal__content__span__value">
+                      {props.task.accountables.map((accountable, i) => {
+                        if (i !== props.task.accountables.length - 1)
+                          return accountable.username + ", ";
+                        else return accountable.username;
+                      })}
+                    </span>
+                  </>
+                )}
               </div>
             );
           })}

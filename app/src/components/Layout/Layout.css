@@ -30,3 +30,14 @@
   height: 80px;
   width: auto;
 }
+.admin_span {
+  background-color: #f2ffdd;
+  color: rgb(102, 102, 102);
+  padding: 3px;
+  border-radius: 3px;
+  font-size: 12px;
+  margin: 0;
+}
+.bell {
+  transform: scale(0.7);
+}

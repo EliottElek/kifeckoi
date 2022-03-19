@@ -75,7 +75,6 @@
 
 /* Style the accordion content panel. Note: hidden by default */
 .accordion__content {
-  background-color: #021217;
   overflow: auto;
   transition: max-height var(--speed) ease;
 }

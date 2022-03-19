@@ -12,7 +12,7 @@ export const Context = React.createContext();
 const userData = {
   firstname: "Eliott",
   lastname: "Morcillo",
-  admin: false,
+  admin: true,
   email: "eliott.morcillo@gmail.com",
   avatarUrl: gravatar.url(
     "eliott.morcillo@gmail.com",

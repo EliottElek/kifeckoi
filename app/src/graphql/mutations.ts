@@ -1,11 +1,14 @@
 import { gql } from "@apollo/client"
 
 export const CREATE_USER = gql`
-mutation createUser($name: String! $username : String! $password : String!){
-    createUser(name : $name username : $username password : $password){
-        id
-        name
-        username
+mutation createUser($firstname: String! $lastname : String! $email : String! $avatarUrl : String! $username : String! $password : String!){
+    createUser(firstname : $firstname lastname : $lastname email : $email avatarUrl : $avatarUrl username : $username password : $password){
+      id
+      firstname
+      lastname
+      email
+      avatarUrl
+      username
     }
 }
 `
@@ -22,17 +25,28 @@ mutation createProject($name: String! $clientId: String!){
     createProject(name: $name clientId: $clientId){
         name
         id
+        client{
+            id 
+            name
+        }
     }
 }
 `
 export const CREATE_ACTION = gql`
-mutation createAction($name: String! $projectId: String! $description : String! $accountable : String! $status : String!){
-    createAction(name: $name  projectId: $projectId description : $description accountable : $accountable status : $status){
+mutation createAction($name: String! $projectId: String! $description : String! $accountables : [String!] $status : String!){
+    createAction(name: $name  projectId: $projectId description : $description accountables : $accountables status : $status){
         name
         id
         description
         status
-        accountable
+        accountables{
+            id
+            firstname
+            lastname
+            email
+            avatarUrl
+            username
+        }
     }
 }
 `
@@ -40,25 +54,6 @@ mutation createAction($name: String! $projectId: String! $description : String! 
 export const CHANGE_ACTION_STATE = gql`
 mutation changeActionState($actionId: String! $newStatus: String!){
     changeActionState(actionId: $actionId  newStatus: $newStatus){
-        message
-    }
-}
-`
-export const CREATE_INFO = gql`
-mutation createInfo($name: String! $projectId: String! $description : String! $accountable : String! $status : String!){
-    createInfo(name: $name  projectId: $projectId description : $description accountable : $accountable status : $status){
-        name
-        id
-        description
-        status
-        accountable
-    }
-}
-`
-
-export const CHANGE_INFO_STATE = gql`
-mutation changeInfoState($infoId: String! $newStatus: String!){
-    changeInfoState(infoId: $infoId newStatus: $newStatus){
         message
     }
 }

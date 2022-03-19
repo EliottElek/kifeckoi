@@ -9,18 +9,10 @@ import Form from "./Form";
 import Modal from "../../materials/Modal/Modal";
 import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
-import rawActions from "../../rawActions";
-import rawInfos from "../../rawInfos";
 const Project = () => {
   const navigate = useNavigate();
   const {
     actions,
-    setActions,
-    infos,
-    setInfos,
-    decisions,
-    risks,
-    problems,
     currentProject,
     setCurrentProject,
   } = useContext(Context);
@@ -32,23 +24,11 @@ const Project = () => {
   });
   React.useEffect(() => {
     if (dataProject?.data) {
-      setCurrentProject(dataProject?.data?.findProjectByProjectId);
+      setCurrentProject({ ...dataProject?.data?.findProjectByProjectId });
     }
   }, [setCurrentProject, dataProject?.data]);
   const clearActions = () => {
     actions.forEach((action) => (action.tasks = []));
-  };
-  const clearInfos = () => {
-    infos.forEach((info) => (info.tasks = []));
-  };
-  const clearDecisions = () => {
-    decisions.forEach((decision) => (decision.tasks = []));
-  };
-  const clearRisks = () => {
-    risks.forEach((risk) => (risk.tasks = []));
-  };
-  const clearProblems = () => {
-    problems.forEach((prob) => (prob.tasks = []));
   };
   const [saveButtonContent, setSaveButtonContent] =
     React.useState("Enregistrer");
@@ -66,24 +46,6 @@ const Project = () => {
     }, 3000);
   };
 
-  React.useEffect(() => {
-    const actionsFinal = [...rawActions];
-    const actionsData = currentProject?.actions;
-    actionsData?.forEach((action) => {
-      const index = actionsFinal.findIndex((ac) => ac.title === action.status);
-      if (index !== -1) actionsFinal[index].tasks.push(action);
-    });
-    setActions(actionsFinal);
-  }, [currentProject?.actions, setActions]);
-  React.useEffect(() => {
-    const infosFinal = [...rawInfos];
-    const infosData = currentProject?.infos;
-    infosData?.forEach((action) => {
-      const index = infosFinal.findIndex((ac) => ac.title === action.status);
-      if (index !== -1) infosFinal[index].tasks.push(action);
-    });
-    setInfos(infosFinal);
-  }, [currentProject?.infos, setInfos]);
   return (
     <>
       {!currentProject ? (
@@ -97,16 +59,14 @@ const Project = () => {
               <Button
                 onClick={() => {
                   clearActions();
-                  clearInfos();
-                  clearDecisions();
-                  clearRisks();
-                  clearProblems();
                   navigate(`/client/${currentProject.client.id}`);
                 }}
               >
                 <i className="gg-chevron-left"></i>Retour
               </Button>
-              <h2 className="name__container__title"> {currentProject.name}</h2>
+              <h2 className="name__container__title">
+                {currentProject?.client?.name} - {currentProject?.name}
+              </h2>
             </div>
             <div className="actions__container">
               <Button reversed onClick={save}>

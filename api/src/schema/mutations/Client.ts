@@ -2,7 +2,7 @@ import { ClientType } from "../typedefs/Client";
 import { ProjectType } from "../typedefs/Project";
 
 const { v4: uuid } = require("uuid");
-import { GraphQLString, GraphQLList } from "graphql";
+import { GraphQLString } from "graphql";
 import { Client } from '../../entities/Client'
 
 export const CREATE_CLIENT = {
@@ -11,9 +11,11 @@ export const CREATE_CLIENT = {
         name: { type: GraphQLString },
         id: { type: GraphQLString },
     },
+
     async resolve(parent: any, args: any) {
+        const newid = uuid();
         const { name } = args
-        await Client.insert({ name: name, projects: [], id: uuid() })
-        return args
+        await Client.insert({ name: name, projects: [], id: newid })
+        return { ...args, id: newid }
     }
 }

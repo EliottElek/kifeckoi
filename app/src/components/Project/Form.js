@@ -5,11 +5,6 @@ import Select from "../../materials/Select/Select";
 import SelectItem from "../../materials/Select/SelectItem/SelectItem";
 import List from "../../materials/List/List";
 import ListItem from "../../materials/List/ListItem";
-import DecisionsV2 from "./DecisionsV2";
-import InfosV2 from "./InfosV2";
-// import Livrables from "./Livrables";
-import RisksV2 from "./RisksV2";
-import ProblemsV2 from "./ProblemsV2";
 
 import { useLocation } from "react-router-dom";
 import { Context } from "../Context/Context";
@@ -82,10 +77,6 @@ const Form = () => {
               </Select>
             </div>
             <textarea
-              onInput={() => {
-                this.style.height = "";
-                this.style.height = this.scrollHeight + "px";
-              }}
               disabled={user.admin ? false : true}
               onClick={(e) => e.stopPropagation()}
               className="form__textarea large__textarea"
@@ -120,10 +111,6 @@ const Form = () => {
               </Select>
             </div>
             <textarea
-              onInput={() => {
-                this.style.height = "";
-                this.style.height = this.scrollHeight + "px";
-              }}
               disabled={user.admin ? false : true}
               onClick={(e) => e.stopPropagation()}
               className="form__textarea"
@@ -158,10 +145,6 @@ const Form = () => {
               </Select>
             </div>
             <textarea
-              onInput={() => {
-                this.style.height = "";
-                this.style.height = this.scrollHeight + "px";
-              }}
               disabled={user.admin ? false : true}
               onClick={(e) => e.stopPropagation()}
               className="form__textarea"
@@ -196,10 +179,6 @@ const Form = () => {
               </Select>
             </div>
             <textarea
-              onInput={() => {
-                this.style.height = "";
-                this.style.height = this.scrollHeight + "px";
-              }}
               disabled={user.admin ? false : true}
               onClick={(e) => e.stopPropagation()}
               className="form__textarea"
@@ -239,11 +218,6 @@ const Form = () => {
           </div>
         </div>
         <ActionsV2 />
-        <InfosV2 />
-        <DecisionsV2 />
-        <RisksV2 />
-        <ProblemsV2 />
-        {/* <Livrables /> */}
       </>
     );
   };

@@ -71,3 +71,12 @@
   gap: 4px;
   color: #64462e;
 }
+.kanban__section__content__name__container__avatars__container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.default_avatar {
+  margin-right: -15px;
+}

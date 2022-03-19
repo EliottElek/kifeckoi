@@ -3,9 +3,12 @@ import { gql } from "@apollo/client"
 export const GET_ALL_USERS = gql`
 query{
     getAllUsers{
-      username
-      name
       id
+      firstname
+      lastname
+      email
+      avatarUrl
+      username
     }
   }
 `
@@ -37,20 +40,7 @@ query findProjectByProjectId($id: String!){
         name
         client {
           id 
-        }
-        actions{
-          id
           name
-          description
-          accountable
-          status
-        }
-        infos{
-          id
-          name
-          description
-          accountable
-          status
         }
     }
 }
@@ -63,3 +53,22 @@ query{
     }
   }
 `
+export const FIND_ACTIONS_BY_PROJECT_ID = gql`
+query findActionsByProjectId($id: String!){
+  findActionsByProjectId(id : $id){
+    name
+    id
+    description
+    status
+    accountables{
+      id
+      firstname
+      lastname
+      email
+      avatarUrl
+      username
+    }
+  }
+}
+`
+

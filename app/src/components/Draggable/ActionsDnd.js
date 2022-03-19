@@ -7,21 +7,52 @@ import Modal from "../../materials/Modal/Modal";
 import Button from "../../materials/Button/Button";
 import Select from "../../materials/Select/Select";
 import SelectItem from "../../materials/Select/SelectItem/SelectItem";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { FIND_ACTIONS_BY_PROJECT_ID } from "../../graphql/queries";
 import { CREATE_ACTION, CHANGE_ACTION_STATE } from "../../graphql/mutations";
+import rawActions from "../../rawActions";
 import { useParams } from "react-router";
-const ActionsDnd = () => {
-  const { actions, setActions, setOpenAlert, setAlertContent } =
-    React.useContext(Context);
+import AutoCompleteUsers from "./AutoCompleteUsers";
+import Avatars from "./Card/Avatars";
+const ActionsDnd = ({ setLength, length }) => {
+  const {
+    actions,
+    currentProject,
+    setCurrentProject,
+    setActions,
+    setOpenAlert,
+    setAlertContent,
+  } = React.useContext(Context);
   const [openModal, setOpenModal] = useState(false);
+  const [selectedAcountables, setSelectedAccountables] = React.useState([]);
   const [actionSelected, setActionSelected] = useState();
+  const [actionData, setActionData] = React.useState([]);
   const [isActiveAction, setIsActiveAction] = useState(false);
   const [input, setInput] = useState("");
-  const [inputName, setInputName] = useState("");
   const [createAction] = useMutation(CREATE_ACTION);
   const [changeActionState] = useMutation(CHANGE_ACTION_STATE);
-
   const { id } = useParams();
+
+  const dataActions = useQuery(FIND_ACTIONS_BY_PROJECT_ID, {
+    variables: { id: id },
+  });
+  React.useEffect(() => {
+    if (dataActions?.data) {
+      setActionData([...dataActions?.data?.findActionsByProjectId]);
+    }
+  }, [setActionData, dataActions?.data]);
+
+  React.useEffect(() => {
+    const actionsFinal = [...rawActions];
+    const actionsData = [...actionData];
+    actionsData?.forEach((action) => {
+      const index = actionsFinal.findIndex((ac) => ac.title === action.status);
+      if (index !== -1) actionsFinal[index].tasks.push(action);
+    });
+    setActions(actionsFinal);
+    console.log(actionsFinal);
+  }, [actionData, setActions]);
+
   const onDragEnd = async (result) => {
     if (!result.destination) return;
     const { source, destination } = result;
@@ -45,9 +76,6 @@ const ActionsDnd = () => {
 
       actions[sourceColIndex].tasks = sourceTask;
       actions[destinationColIndex].tasks = destinationTask;
-      console.log(result.draggableId);
-      console.log(destinationCol?.title);
-
       try {
         await changeActionState({
           variables: {
@@ -58,24 +86,30 @@ const ActionsDnd = () => {
       } catch (err) {
         console.log(err);
       }
-      setActions(actions);
+      setActions([...actions]);
+      currentProject.actions = [...actions];
+      setCurrentProject(currentProject);
     } else {
       const index = actions.findIndex((e) => e.id === source.droppableId);
       const items = Array.from(actions[index].tasks);
       const [reorderedItem] = items.splice(source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
       actions[index].tasks = items;
-      setActions(actions);
+      setActions([...actions]);
+      currentProject.actions = [...actions];
+      setCurrentProject(currentProject);
     }
   };
   const add = async () => {
+    const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
+    console.log(ArrayOfIds);
     try {
       const newAction = await createAction({
         variables: {
           name: "Action",
           projectId: id,
           description: input,
-          accountable: inputName,
+          accountables: ArrayOfIds,
           status: actionSelected.title,
         },
       });
@@ -84,8 +118,10 @@ const ActionsDnd = () => {
         new: true,
       });
       setInput("");
-      setInputName("");
-      setActions(actions);
+      setActions([...actions]);
+      currentProject.actions = [...actions];
+      setCurrentProject(currentProject);
+      setLength(length + 1);
     } catch (err) {
       setAlertContent({
         type: "warning",
@@ -99,7 +135,7 @@ const ActionsDnd = () => {
     <>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="kanban">
-          {actions.map((section, i) => (
+          {actions?.map((section, i) => (
             <Droppable key={section.id} droppableId={section.id}>
               {(provided) => (
                 <div
@@ -141,19 +177,7 @@ const ActionsDnd = () => {
                               className={`card card__${i + 1}`}
                             >
                               {task.description}
-                              {task.accountable ? (
-                                <span className="kanban__section__content__name__container">
-                                  {task.accountable}{" "}
-                                  <img
-                                    alt="avatar"
-                                    src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
-                                  />
-                                </span>
-                              ) : (
-                                <span className="kanban__section__content__name__container__not__attributed">
-                                  Non attribuée
-                                </span>
-                              )}
+                              <Avatars users={task.accountables} />
                             </Card>
                           </div>
                         )}
@@ -167,7 +191,7 @@ const ActionsDnd = () => {
           ))}
         </div>
       </DragDropContext>
-      <Modal open={openModal} setOpen={setOpenModal}>
+      <Modal open={openModal}>
         <form className="modal__content__container" onSubmit={add}>
           <h3>Ajouter une action</h3>
           <p>Entrez la description de l'action à ajouter</p>
@@ -200,18 +224,16 @@ const ActionsDnd = () => {
             ))}
           </Select>
           <p>Indiquez la personne à laquelle vous voulez attribuer l'action</p>
-          <textarea
-            onClick={(e) => e.stopPropagation()}
-            value={inputName}
-            onChange={(e) => setInputName(e.target.value)}
-            className="form__textarea"
-            placeholder={"Saisir un nom..."}
+          <AutoCompleteUsers
+            setSelectedAccountables={setSelectedAccountables}
           />
           <div style={{ display: "flex", gap: "12px" }}>
             <Button
+              type="submit"
               disabled={!actionSelected || input === "" ? true : false}
               reversed
               onClick={(e) => {
+                e.stopPropagation();
                 add();
                 setOpenModal(false);
               }}
@@ -219,10 +241,8 @@ const ActionsDnd = () => {
               Ajouter
             </Button>
             <Button
-              type="submit"
               onClick={(e) => {
                 e.stopPropagation();
-                add();
                 setOpenModal(false);
               }}
             >

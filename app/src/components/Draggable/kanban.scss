@@ -3,6 +3,7 @@
   align-items: flex-start;
   &__section {
     width: 400px;
+    min-width: 180px;
     background-color: #ebecf0;
     padding: 10px;
     border-radius: 2px;
@@ -76,7 +77,6 @@
   align-items: center;
   justify-content: space-between;
   border-radius: 3px;
-  margin-top: 20px;
 }
 .card__content__added__indicator {
   padding: 3px;
@@ -92,7 +92,7 @@
   top: 0;
   right: 0;
 }
-.kanban__section__content__name__container > img {
+.kanban__section__content__name__container__img {
   height: 30px;
   object-fit: contain;
   border-radius: 50%;

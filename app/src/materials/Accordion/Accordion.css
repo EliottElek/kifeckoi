@@ -44,9 +44,9 @@
 
 /* Style the accordion content panel. Note: hidden by default */
 .accordion__content {
-  background-color: #c9e9f3;
   overflow: auto;
   transition: max-height var(--speed) ease;
+  background-color: rgb(56, 56, 56);
 }
 
 /* Style the accordion content text */

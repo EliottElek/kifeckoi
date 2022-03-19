@@ -1,7 +1,8 @@
-import React from "react";
 import "./Avatar.css";
-const Avatar = ({ src }) => {
-  return <img className="avatar" src={src} alt="avatar" />;
+const Avatar = ({ src, mini }) => {
+  return (
+    <img className={mini ? "avatar_mini" : "avatar"} src={src} alt="avatar" />
+  );
 };
 
 export default Avatar;

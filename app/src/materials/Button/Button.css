@@ -67,11 +67,7 @@
   filter: brightness(1);
   white-space: nowrap;
 }
-.button__versed:active {
-  box-shadow: none;
-  transition: 0.5s ease;
-}
-.button__reversed:active {
-  box-shadow: none;
-  transition: 0.5s ease;
+.button__versed:hover,
+.button__reversed:hover {
+  filter: brightness(1.2);
 }

@@ -1,7 +1,8 @@
 const { v4: uuid } = require("uuid");
-import { GraphQLString } from "graphql";
+import { GraphQLList, GraphQLString } from "graphql";
 import { Project } from '../../entities/Project'
 import { Action } from '../../entities/Action'
+import { User } from '../../entities/User'
 import { ActionType } from '../typedefs/Action'
 import { MessageType } from '../typedefs/Message'
 
@@ -11,22 +12,30 @@ export const CREATE_ACTION = {
         name: { type: GraphQLString },
         projectId: { type: GraphQLString },
         description: { type: GraphQLString },
-        accountable: { type: GraphQLString },
+        accountables: { type: new GraphQLList(GraphQLString) },
         status: { type: GraphQLString },
     },
     async resolve(parent: any, args: any) {
-        const { name, projectId, description, accountable, status } = args
+        const { name, projectId, description, accountables, status } = args
         const newuuid = uuid()
         const project = await Project.findOne({ id: projectId })
-
+        const accountablesFound: User[] = []
         if (!project) {
             throw new Error("Cannot find project.")
         } else {
-            const newAction = Action.create({ name: name, id: newuuid, project: project, accountable: accountable, description: description, status: status })
+            const newAction = Action.create({ name: name, id: newuuid, projectId: projectId, accountables: [], project: project, description: description, status: status })
+            await Action.save(newAction)
+            accountables.map(async (accountable: any) => {
+                const acc = await User.findOne({ id: accountable })
+                if (acc) {
+                    newAction.accountables.push(acc)
+                    accountablesFound.push(acc)
+                }
+            })
             await Action.save(newAction)
             await Project.save(project)
         }
-        return { ...args, id: newuuid }
+        return { ...args, id: newuuid, accountables: accountablesFound }
     }
 }
 export const CHANGE_ACTION_STATE = {

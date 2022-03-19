@@ -13,14 +13,16 @@ export const CREATE_PROJECT = {
     async resolve(parent: any, args: any) {
         const { name, clientId } = args
         const client = await Client.findOne({ id: clientId })
+        const newid = uuid();
+
         if (!client) {
             throw new Error("Cannot find client.")
         } else {
-            const newProject = Project.create({ name, id: uuid(), client: client, actions: [] })
+            const newProject = Project.create({ name, id: newid, client: client })
             await Project.save(newProject)
             await Client.save(client)
 
         }
-        return args
+        return { ...args, client: client, id: newid }
     }
 }

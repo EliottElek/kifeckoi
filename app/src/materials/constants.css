@@ -1,5 +1,5 @@
 * {
-  --main-bg-color: #236c83;;
+  --main-bg-color: #236c83;
   --second-bg-color: #021217;
   --main-color: #dbdbdb;
   --speed: 400ms;
@@ -15,6 +15,7 @@
 }
 body,
 .App {
+  color: black;
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;

@@ -6,6 +6,7 @@ import logo from "../../assets/images/logo.png";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router-dom";
 import List from "../../materials/List/List";
+import Avatar from "../../materials/Avatar/Avatar";
 import ListItem from "../../materials/List/ListItem";
 const Layout = ({ children }) => {
   const { clients, user } = useContext(Context);
@@ -65,13 +66,21 @@ const Layout = ({ children }) => {
             color: "var(--main-color)",
           }}
         >
-          {user?.firstname} {user?.lastname} {user.admin && "(admin)"}
+          {user?.firstname} {user?.lastname}
+          {user.admin && <span className="admin_span">admin</span>}
           <button
             className="account__button"
             href="#"
             onClick={() => navigate("/account")}
           >
-            <i className = "gg-profile"></i>
+            <Avatar src={user?.avatarUrl} />
+          </button>
+          <button
+            className="account__button bell"
+            href="#"
+            onClick={() => navigate("/account")}
+          >
+            <i className="gg-bell"></i>
           </button>
         </div>
       </div>

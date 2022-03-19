@@ -8,6 +8,7 @@ import { Client } from './entities/Client'
 import { Project } from './entities/Project'
 import { Action } from './entities/Action'
 import { Info } from './entities/Info'
+import { Decision } from './entities/Decision'
 
 const PORT = 3001
 
@@ -20,7 +21,7 @@ const main = async () => {
         password: "elektra1",
         logging: true,
         synchronize: true,
-        entities: [User, Client, Project, Action, Info]
+        entities: [User, Client, Project, Action, Info, Decision]
     })
     const app = express()
     app.use(cors())

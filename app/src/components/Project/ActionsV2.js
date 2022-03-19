@@ -15,7 +15,7 @@ const ActionsV2 = () => {
   }, [actions, setLength]);
 
   const Content = () => {
-    return <ActionsDnd />;
+    return <ActionsDnd setLength={setLength} length={length} />;
   };
   return (
     <Accordion

@@ -11,7 +11,7 @@ const Modal = ({ children, open, setOpen }) => {
       if (componentRef && componentRef.current) {
         const ref = componentRef.current;
         if (!ref.contains(e.target) && open) {
-          setOpen(false);
+          setOpen && setOpen(false);
         }
       }
     }

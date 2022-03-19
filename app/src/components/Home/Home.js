@@ -8,8 +8,7 @@ import InputText from "../../materials/InputText/InputText";
 import { CREATE_CLIENT } from "../../graphql/mutations";
 import { GET_ALL_CLIENTS } from "../../graphql/queries";
 const Home = () => {
-  const { clients, setClients, setOpenAlert, setAlertContent } =
-    useContext(Context);
+  const { clients, setClients } = useContext(Context);
   const { data } = useQuery(GET_ALL_CLIENTS);
   const [createClient] = useMutation(CREATE_CLIENT);
 
@@ -26,12 +25,14 @@ const Home = () => {
       setMessage("Vous devez saisir un nom.");
       return null;
     }
-    await createClient({
-      variables: { name: nameInput },
-    });
-    setAlertContent({ content: "Client ajouté avec succès." });
-    setOpenAlert(true);
-    window.location.reload();
+    try {
+      await createClient({
+        variables: { name: nameInput },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    //window.location.reload();
     setNameInput("");
   };
   return (
@@ -40,9 +41,7 @@ const Home = () => {
         <h1 className={"home__project__container__title"}>Clients</h1>
         <div className={"home__project__container__spacer"} />
         {clients.length === 0 && (
-          <h4 className={"home__project__container__title"}>
-            Aucun client.
-          </h4>
+          <h4 className={"home__project__container__title"}>Aucun client.</h4>
         )}
         {clients.length !== 0 &&
           clients?.map((client, i) => <ClientItem key={i} client={client} />)}
@@ -57,8 +56,10 @@ const Home = () => {
           </span>
           <InputText
             value={nameInput}
-            style={{ marginTop: "10px", width: "90%" }}
-            className="new_client_textarea"
+            style={{
+              widht: "98%!important",
+              paddingRight: 0,
+            }}
             onChange={(e) => setNameInput(e.target.value)}
             placeholder={"Nom du nouveau client..."}
           />
