@@ -6,7 +6,7 @@
 }
 .card__content {
   padding: 10px;
-  padding-top: 25px;
+  padding-top: 34px;
   // width: 100%;
   min-height: 70px;
   height: auto;
@@ -15,6 +15,7 @@
   color: black;
   display: flex;
   position: relative;
+  font-size: 1rem;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -59,13 +60,16 @@
   display: flex;
   align-items: center;
   gap: 2px;
-  top: 3px;
-  left: 3px;
+  top: 4px;
+  left: 0px;
   color: #1394bb;
   transform: scale(0.8);
 }
 .violet {
   color: #5313bb;
+  background-color: #5313bb31;
+  padding: 4px;
+  border-radius: 3px;
 }
 .red {
   color: #bb1313;
@@ -100,6 +104,11 @@
   border-radius: 3px;
   transition: 0.1s ease;
 }
+.bottom__button {
+  top: unset !important;
+  bottom: 0;
+  left: 0;
+}
 .kanban__section__content__name__container__edit__button:hover {
   background-color: rgb(236, 236, 236);
   color: rgba(0, 0, 0, 0.8);
@@ -126,6 +135,7 @@
 }
 .modif__description__textarea {
   width: 97% !important;
+  font-size: 1rem;
   margin: auto;
   resize: none;
   height: 80px;
@@ -136,6 +146,18 @@
   transition: 0.2s ease;
 }
 .validate:hover {
-  color: green;
+  color: rgb(3, 158, 3);
+  background-color: rgba(0, 128, 0, 0.472);
   transition: 0.1s ease;
+}
+.delete__button {
+  font-size: 16px;
+}
+.delete__button:hover {
+  color: rgb(158, 21, 3);
+  background-color: rgba(128, 30, 0, 0.144);
+  transition: 0.1s ease;
+}
+.more__button {
+  left: 30px;
 }

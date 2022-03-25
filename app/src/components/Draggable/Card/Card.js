@@ -2,7 +2,10 @@ import { useContext, useState } from "react";
 import "./card.scss";
 import { FiEdit2 } from "react-icons/fi";
 import { MdOutlineClear } from "react-icons/md";
+import { BsFillTrashFill } from "react-icons/bs";
 import { AiOutlineCheck } from "react-icons/ai";
+import { FiMoreVertical } from "react-icons/fi";
+
 import Modal from "../../../materials/Modal/Modal";
 import Chip from "../../../materials/Chip/Chip";
 import Avatars from "./Avatars";
@@ -42,6 +45,12 @@ const Card = (props) => {
       console.log(err);
     }
   };
+  const handleDeleteAction = (e) => {
+    e.stopPropagation();
+  };
+  const handleMoreAction = (e) => {
+    e.stopPropagation();
+  };
   return (
     <>
       <div
@@ -56,7 +65,23 @@ const Card = (props) => {
             props.dragging ? "card__content dragging" : "card__content"
           }
         >
-          <span className={"card__content__added__indicator validate"}>
+          <div className="card__content__added__indicator bottom__button">
+            <button
+              onClick={handleDeleteAction}
+              className="kanban__section__content__name__container__edit__button delete__button"
+            >
+              <BsFillTrashFill />
+            </button>
+          </div>
+          <div className="card__content__added__indicator more__button bottom__button">
+            <button
+              onClick={handleMoreAction}
+              className="kanban__section__content__name__container__edit__button more__button"
+            >
+              <FiMoreVertical />
+            </button>
+          </div>
+          <div className={"card__content__added__indicator"}>
             {modifMode ? (
               <>
                 <button
@@ -86,7 +111,7 @@ const Card = (props) => {
                 <FiEdit2 />
               </button>
             )}
-          </span>
+          </div>
           {props.type === "info" && (
             <span className="card__icon">
               <i className="gg-info"></i>
