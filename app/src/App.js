@@ -7,62 +7,70 @@ import Client from "./components/Client/Client";
 import Alert from "./materials/Alert/Alert";
 import { Context } from "./components/Context/Context";
 import AccountPage from "./components/AccountPage/AccountPage";
+import ActionsWide from "./components/DndWide/DndWide";
 const App = () => {
   const { alertContent, openAlert, setOpenAlert } = React.useContext(Context);
 
   return (
-      <div
-        style={{ width: "100%", height: "100%", backgroundColor: "#1c2128" }}
+    <div style={{ width: "100%", height: "100%", backgroundColor: "#1c2128" }}>
+      <Layout>
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <SecureRoute>
+                <Home />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/"
+            element={
+              <SecureRoute>
+                <Project />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/actions"
+            element={
+              <SecureRoute>
+                <ActionsWide />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/client/:id"
+            element={
+              <SecureRoute>
+                <Client />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/account"
+            element={
+              <SecureRoute>
+                <AccountPage />
+              </SecureRoute>
+            }
+          />
+        </Routes>
+      </Layout>
+      <Alert
+        delay={2200}
+        open={openAlert}
+        setOpen={setOpenAlert}
+        type={alertContent?.type}
       >
-        <Layout>
-          <Routes>
-            <Route
-              exact
-              path="/"
-              element={
-                <SecureRoute>
-                  <Home />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/project/:id/"
-              element={
-                <SecureRoute>
-                  <Project />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/client/:id"
-              element={
-                <SecureRoute>
-                  <Client />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/account"
-              element={
-                <SecureRoute>
-                  <AccountPage />
-                </SecureRoute>
-              }
-            />
-          </Routes>
-        </Layout>
-        <Alert
-          delay={2200}
-          open={openAlert}
-          setOpen={setOpenAlert}
-          type={alertContent?.type}
-        >
-          {alertContent?.content}
-        </Alert>
-      </div>
+        {alertContent?.content}
+      </Alert>
+    </div>
   );
 };
 const SecureRoute = ({ children }) => {

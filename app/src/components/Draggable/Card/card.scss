@@ -1,7 +1,8 @@
 .card {
-  padding: 5px;
+  padding: 4px;
   background-color: transparent;
   color: white;
+  transition: 0.3s ease;
 }
 .card__content {
   padding: 10px;
@@ -17,9 +18,15 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.card__content:hover > .card__content__added__indicator {
+  opacity: 1;
+  transition: 0.1s ease;
+}
 .dragging {
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.3);
-  border: solid 2px rgba(0, 0, 0, 0.493);
+  // outline: solid 2px rgba(0, 0, 0, 0.493);
+  transition: 0.3s ease;
+  transform: rotate(3deg);
 }
 .modal__content__container_scrollable {
   overflow-y: auto;
@@ -79,4 +86,56 @@
 }
 .default_avatar {
   margin-right: -15px;
+}
+.kanban__section__content__name__container__edit__button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  height: 100%;
+  width: auto;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 4px;
+  border-radius: 3px;
+  transition: 0.1s ease;
+}
+.kanban__section__content__name__container__edit__button:hover {
+  background-color: rgb(236, 236, 236);
+  color: rgba(0, 0, 0, 0.8);
+  transition: 0.1s ease;
+}
+.card__content__added__indicator {
+  opacity: 0;
+  transition: 0.2s ease;
+  padding: 3px;
+  font-size: 0.7rem;
+  background-color: transparent;
+  width: auto;
+  color: rgba(0, 0, 0, 0.2);
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 3px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.modif__description__form {
+  margin-top: 10px;
+}
+.modif__description__textarea {
+  width: 97% !important;
+  margin: auto;
+  resize: none;
+  height: 80px;
+  background-color: rgb(236, 236, 236);
+  border: none;
+  border-radius: 1px;
+  padding: 4px;
+  transition: 0.2s ease;
+}
+.validate:hover {
+  color: green;
+  transition: 0.1s ease;
 }

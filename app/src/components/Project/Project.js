@@ -35,7 +35,7 @@ const Project = () => {
   const save = () => {
     setSaveButtonContent(
       <>
-        Enregistrement... <Progress size={"small"} />
+        Enregistrement... <Progress reversed size={"small"} />
       </>
     );
     setTimeout(() => {

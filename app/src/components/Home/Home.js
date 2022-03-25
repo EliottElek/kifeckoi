@@ -32,7 +32,7 @@ const Home = () => {
     } catch (err) {
       console.log(err);
     }
-    //window.location.reload();
+    window.location.reload();
     setNameInput("");
   };
   return (

@@ -53,6 +53,52 @@ query{
     }
   }
 `
+export const GET_ALL_ACTIONS = gql`
+query{
+    getAllActions{
+    name
+    id
+    creation
+    project{
+      id
+      name
+    }
+    description
+    status
+    accountables{
+      id
+      firstname
+      lastname
+      email
+      avatarUrl
+      username
+    }
+    }
+  }
+`
+export const GET_LATEST_ACTIONS = gql`
+query{
+    getLatestActions{
+    name
+    id
+    creation
+    project{
+      id
+      name
+    }
+    description
+    status
+    accountables{
+      id
+      firstname
+      lastname
+      email
+      avatarUrl
+      username
+    }
+    }
+  }
+`
 export const FIND_ACTIONS_BY_PROJECT_ID = gql`
 query findActionsByProjectId($id: String!){
   findActionsByProjectId(id : $id){

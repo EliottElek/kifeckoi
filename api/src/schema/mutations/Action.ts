@@ -23,7 +23,8 @@ export const CREATE_ACTION = {
         if (!project) {
             throw new Error("Cannot find project.")
         } else {
-            const newAction = Action.create({ name: name, id: newuuid, projectId: projectId, accountables: [], project: project, description: description, status: status })
+            const creationDate = new Date();
+            const newAction = Action.create({ name: name, id: newuuid, projectId: projectId, accountables: [], project: project, description: description, status: status, creation: creationDate.toString() })
             await Action.save(newAction)
             accountables.map(async (accountable: any) => {
                 const acc = await User.findOne({ id: accountable })
@@ -50,5 +51,19 @@ export const CHANGE_ACTION_STATE = {
         if (!action) throw new Error("Cannot find action.")
         await Action.update({ id: actionId }, { status: newStatus })
         return { successful: true, message: "Action's state was successfully updated." }
+    }
+}
+export const CHANGE_ACTION_DESCRIPTION = {
+    type: MessageType,
+    args: {
+        actionId: { type: GraphQLString },
+        newDescription: { type: GraphQLString }
+    },
+    async resolve(parent: any, args: any) {
+        const { actionId, newDescription } = args
+        const action = await Action.findOne({ id: actionId })
+        if (!action) throw new Error("Cannot find action.")
+        await Action.update({ id: actionId }, { description: newDescription })
+        return { successful: true, message: "Action's description was successfully updated." }
     }
 }

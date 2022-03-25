@@ -39,6 +39,7 @@ mutation createAction($name: String! $projectId: String! $description : String! 
         id
         description
         status
+        creation
         accountables{
             id
             firstname
@@ -54,6 +55,13 @@ mutation createAction($name: String! $projectId: String! $description : String! 
 export const CHANGE_ACTION_STATE = gql`
 mutation changeActionState($actionId: String! $newStatus: String!){
     changeActionState(actionId: $actionId  newStatus: $newStatus){
+        message
+    }
+}
+`
+export const CHANGE_ACTION_DESCRIPTION = gql`
+mutation changeActionDescription($actionId: String! $newDescription: String!){
+    changeActionDescription(actionId: $actionId  newDescription: $newDescription){
         message
     }
 }

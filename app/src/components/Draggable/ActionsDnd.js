@@ -6,14 +6,17 @@ import { Context } from "../Context/Context";
 import Modal from "../../materials/Modal/Modal";
 import Button from "../../materials/Button/Button";
 import Select from "../../materials/Select/Select";
+import { BiPlus } from "react-icons/bi";
 import SelectItem from "../../materials/Select/SelectItem/SelectItem";
 import { useMutation, useQuery } from "@apollo/client";
-import { FIND_ACTIONS_BY_PROJECT_ID } from "../../graphql/queries";
+import {
+  FIND_ACTIONS_BY_PROJECT_ID,
+  FIND_PROJECT_BY_PROJECT_ID,
+} from "../../graphql/queries";
 import { CREATE_ACTION, CHANGE_ACTION_STATE } from "../../graphql/mutations";
 import rawActions from "../../rawActions";
 import { useParams } from "react-router";
 import AutoCompleteUsers from "./AutoCompleteUsers";
-import Avatars from "./Card/Avatars";
 const ActionsDnd = ({ setLength, length }) => {
   const {
     actions,
@@ -31,26 +34,34 @@ const ActionsDnd = ({ setLength, length }) => {
   const [input, setInput] = useState("");
   const [createAction] = useMutation(CREATE_ACTION);
   const [changeActionState] = useMutation(CHANGE_ACTION_STATE);
-  const { id } = useParams();
 
+  const { id } = useParams();
+  const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
+    variables: { id: id },
+  });
+  React.useEffect(() => {
+    if (dataProject?.data) {
+      setCurrentProject({ ...dataProject?.data?.findProjectByProjectId });
+    }
+  }, [setCurrentProject, dataProject?.data]);
   const dataActions = useQuery(FIND_ACTIONS_BY_PROJECT_ID, {
     variables: { id: id },
   });
   React.useEffect(() => {
-    if (dataActions?.data) {
+    if (dataActions?.data && actionData.length === 0) {
       setActionData([...dataActions?.data?.findActionsByProjectId]);
     }
-  }, [setActionData, dataActions?.data]);
+  }, [setActionData, dataActions?.data, actionData.length]);
 
   React.useEffect(() => {
+    rawActions.forEach((item) => (item.tasks = []));
     const actionsFinal = [...rawActions];
-    const actionsData = [...actionData];
-    actionsData?.forEach((action) => {
+    const actionsDataF = [...actionData];
+    actionsDataF?.forEach((action) => {
       const index = actionsFinal.findIndex((ac) => ac.title === action.status);
       if (index !== -1) actionsFinal[index].tasks.push(action);
     });
     setActions(actionsFinal);
-    console.log(actionsFinal);
   }, [actionData, setActions]);
 
   const onDragEnd = async (result) => {
@@ -121,7 +132,7 @@ const ActionsDnd = ({ setLength, length }) => {
       setActions([...actions]);
       currentProject.actions = [...actions];
       setCurrentProject(currentProject);
-      setLength(length + 1);
+      setLength && setLength(length + 1);
     } catch (err) {
       setAlertContent({
         type: "warning",
@@ -145,14 +156,6 @@ const ActionsDnd = ({ setLength, length }) => {
                 >
                   <h2 className={`kanban__section__title`}>
                     {section.title} ({section.tasks.length})
-                    {i === 0 && (
-                      <button
-                        onClick={() => setOpenModal(true)}
-                        className={`kanban__section__title__button`}
-                      >
-                        <i className="gg-add"></i>
-                      </button>
-                    )}
                   </h2>
                   <div className="kanban__section__content">
                     {section.tasks.map((task, index) => (
@@ -175,23 +178,29 @@ const ActionsDnd = ({ setLength, length }) => {
                               task={task}
                               dragging={snapshot.isDragging}
                               className={`card card__${i + 1}`}
-                            >
-                              {task.description}
-                              <Avatars users={task.accountables} />
-                            </Card>
+                            />
                           </div>
                         )}
                       </Draggable>
                     ))}
                     {provided.placeholder}
                   </div>
+                  <button
+                    onClick={() => {
+                      setOpenModal(true);
+                      setActionSelected(section);
+                    }}
+                    className={`kanban__section__title__button`}
+                  >
+                    <BiPlus /> Ajouter une carte
+                  </button>
                 </div>
               )}
             </Droppable>
           ))}
         </div>
       </DragDropContext>
-      <Modal open={openModal}>
+      <Modal open={openModal} style={{ padding: 0 }}>
         <form className="modal__content__container" onSubmit={add}>
           <h3>Ajouter une action</h3>
           <p>Entrez la description de l'action à ajouter</p>
@@ -199,12 +208,13 @@ const ActionsDnd = ({ setLength, length }) => {
             onClick={(e) => e.stopPropagation()}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="form__textarea"
+            className="form__textarea large__textarea"
             placeholder={"Description de l'action..."}
           />
+          <p>Statut</p>
           <Select
             defaultLabel={actions[0].title}
-            style={{ margin: "4px" }}
+            style={{ margin: "1px" }}
             label={actionSelected?.title}
             width={200}
             height={10}

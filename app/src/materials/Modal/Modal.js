@@ -1,7 +1,7 @@
 import React from "react";
 import Backdrop from "../Backdrop/Backdrop";
 import "./Modal.css";
-const Modal = ({ children, open, setOpen }) => {
+const Modal = ({ children, open, setOpen, style }) => {
   const componentRef = React.useRef();
 
   React.useEffect(() => {
@@ -16,21 +16,11 @@ const Modal = ({ children, open, setOpen }) => {
       }
     }
   }, [setOpen, open]);
-
-  // React.useEffect(() => {
-  //   if (!open) {
-  //     document.documentElement.style.overflow = "auto"; // firefox, chrome
-  //     document.body.scroll = "yes"; // ie only
-  //   } else {
-  //     document.documentElement.style.overflow = "hidden"; // firefox, chrome
-  //     document.body.scroll = "no"; // ie only
-  //   }
-  // }, [open]);
   if (!open) return null;
   return (
     <>
       <Backdrop />
-      <div ref={componentRef} className="modal">
+      <div style={style} ref={componentRef} className="modal">
         {children}
       </div>
     </>

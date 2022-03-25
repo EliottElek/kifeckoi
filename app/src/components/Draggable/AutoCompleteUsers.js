@@ -37,6 +37,7 @@ const AutoCompleteUsers = ({ setSelectedAccountables }) => {
     <Select
       closeMenuOnSelect={false}
       isMulti
+      placeholder="Selectionnez le(s) responsable(s)..."
       styles={customStyles}
       openMenuOnClick={(e) => e.stopPropagation()}
       onChange={(selectedOptions) => {

@@ -11,6 +11,7 @@ export const ActionType: any = new GraphQLObjectType({
         status: { type: GraphQLString },
         project: { type: ProjectType },
         projectId: { type: GraphQLString },
+        creation: { type: GraphQLString },
         accountables: { type: new GraphQLList(UserType) }
     })
 })

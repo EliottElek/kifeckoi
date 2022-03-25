@@ -14,6 +14,8 @@ export class Action extends BaseEntity {
     status!: string;
     @Column()
     projectId!: string;
+    @Column()
+    creation!: string;
     @ManyToOne(() => Project, project => project.actions, { onDelete: 'CASCADE' }) project!: Project;
     @ManyToMany(() => User, accountable => accountable.actions)
     @JoinTable()

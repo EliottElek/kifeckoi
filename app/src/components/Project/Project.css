@@ -118,3 +118,33 @@
 .white__info {
   color: white;
 }
+.title__container__acc {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.full__screen__button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  height: 100%;
+  width: auto;
+  font-size: 18px;
+  color: white;
+  padding: 4px;
+  border-radius: 3px;
+  margin: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: brightness(0.3);
+  transition: 0.1s ease;
+}
+.full__screen__button:hover {
+  filter: brightness(1);
+  transition: 0.1s ease;
+}
+.actions__wide__container {
+  padding: 20px;
+}

@@ -13,9 +13,11 @@ function Accordion(props) {
   function toggleAccordion(e) {
     e.stopPropagation();
     setActiveState(setActive === "" ? "active" : "");
-    setHeightState(
-      setActive === "active" ? "0px" : `${content.current.scrollHeight}px`
-    );
+    if (props.kanban) setHeightState(setActive === "active" ? "0px" : `80vh`);
+    else
+      setHeightState(
+        setActive === "active" ? "0px" : `${content.current.scrollHeight}px`
+      );
     setRotateState(
       setActive === "active" ? "accordion__icon" : "accordion__icon rotate"
     );
