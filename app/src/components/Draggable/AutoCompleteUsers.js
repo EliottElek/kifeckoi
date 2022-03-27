@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../graphql/queries";
 import Select from "react-select";
 
-const AutoCompleteUsers = ({ setSelectedAccountables }) => {
+const AutoCompleteUsers = ({ setSelectedAccountables, placeholder }) => {
   const customStyles = {
     option: (base, state) => ({
       ...base,
@@ -37,7 +37,7 @@ const AutoCompleteUsers = ({ setSelectedAccountables }) => {
     <Select
       closeMenuOnSelect={false}
       isMulti
-      placeholder="Selectionnez le(s) responsable(s)..."
+      placeholder={placeholder}
       styles={customStyles}
       openMenuOnClick={(e) => e.stopPropagation()}
       onChange={(selectedOptions) => {

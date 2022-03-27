@@ -3,13 +3,9 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import Card from "./Card/Card";
 import { Context } from "../Context/Context";
-import Modal from "../../materials/Modal/Modal";
 import Button from "../../materials/Button/Button";
-import Select from "../../materials/Select/Select";
 import { BiPlus } from "react-icons/bi";
 import { FiMoreHorizontal } from "react-icons/fi";
-
-import SelectItem from "../../materials/Select/SelectItem/SelectItem";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   FIND_ACTIONS_BY_PROJECT_ID,
@@ -19,6 +15,7 @@ import { CREATE_ACTION, CHANGE_ACTION_STATE } from "../../graphql/mutations";
 import rawActions from "../../rawActions";
 import { useParams } from "react-router";
 import AutoCompleteUsers from "./AutoCompleteUsers";
+
 const ActionsDnd = ({ setLength, length }) => {
   const {
     actions,
@@ -28,11 +25,10 @@ const ActionsDnd = ({ setLength, length }) => {
     setOpenAlert,
     setAlertContent,
   } = React.useContext(Context);
-  const [openActionModal, setOpenActionModal] = useState(false);
+  const [addCard, setAddCard] = useState(false);
   const [selectedAcountables, setSelectedAccountables] = React.useState([]);
   const [actionSelected, setActionSelected] = useState();
   const [actionData, setActionData] = React.useState([]);
-  const [isActiveAction, setIsActiveAction] = useState(false);
   const [input, setInput] = useState("");
   const [createAction] = useMutation(CREATE_ACTION);
   const [changeActionState] = useMutation(CHANGE_ACTION_STATE);
@@ -113,7 +109,8 @@ const ActionsDnd = ({ setLength, length }) => {
       setCurrentProject(currentProject);
     }
   };
-  const add = async () => {
+  const add = async (e) => {
+    e.preventDefault();
     const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
     console.log(ArrayOfIds);
     try {
@@ -189,12 +186,55 @@ const ActionsDnd = ({ setLength, length }) => {
                         )}
                       </Draggable>
                     ))}
+                    {addCard && actionSelected.id === section.id && (
+                      <Card add type={"action"} task={""} className={`card`}>
+                        <form className="add__card__form" onSubmit={add}>
+                          <textarea
+                            onChange={(e) => setInput(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            value={input}
+                            autoFocus
+                            className="modif__description__textarea"
+                          ></textarea>
+                          <AutoCompleteUsers
+                            placeholder="Responsable..."
+                            setSelectedAccountables={setSelectedAccountables}
+                          />
+                          <div className="add__card__button__container">
+                            <Button
+                              style={{ width: "100%" }}
+                              type="submit"
+                              disabled={
+                                !actionSelected || input === "" ? true : false
+                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                add(e);
+                                setAddCard(false);
+                              }}
+                            >
+                              Ajouter
+                            </Button>
+                            <Button
+                            reversed
+                              style={{ width: "100%" }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setAddCard(false);
+                              }}
+                            >
+                              Annuler
+                            </Button>
+                          </div>
+                        </form>
+                      </Card>
+                    )}
                     {provided.placeholder}
                   </div>
                   <button
                     onClick={() => {
-                      setOpenActionModal(true);
                       setActionSelected(section);
+                      setAddCard(true);
                     }}
                     className={`kanban__section__title__button`}
                   >
@@ -206,67 +246,6 @@ const ActionsDnd = ({ setLength, length }) => {
           ))}
         </div>
       </DragDropContext>
-      <Modal open={openActionModal} style={{ padding: 0 }}>
-        <form className="modal__content__container" onSubmit={add}>
-          <h3>Ajouter une action</h3>
-          <p>Entrez la description de l'action à ajouter</p>
-          <textarea
-            onClick={(e) => e.stopPropagation()}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="form__textarea large__textarea"
-            placeholder={"Description de l'action..."}
-          />
-          <p>Statut</p>
-          <Select
-            defaultLabel={actions[0].title}
-            style={{ margin: "1px" }}
-            label={actionSelected?.title}
-            width={200}
-            height={10}
-            isActive={isActiveAction}
-            setIsActive={setIsActiveAction}
-          >
-            {actions.map((item) => (
-              <SelectItem
-                key={item.id}
-                onClick={() => {
-                  setActionSelected(item);
-                  setIsActiveAction(false);
-                }}
-              >
-                {item.title}
-              </SelectItem>
-            ))}
-          </Select>
-          <p>Indiquez la personne à laquelle vous voulez attribuer l'action</p>
-          <AutoCompleteUsers
-            setSelectedAccountables={setSelectedAccountables}
-          />
-          <div style={{ display: "flex", gap: "12px" }}>
-            <Button
-              type="submit"
-              disabled={!actionSelected || input === "" ? true : false}
-              reversed
-              onClick={(e) => {
-                e.stopPropagation();
-                add();
-                setOpenActionModal(false);
-              }}
-            >
-              Ajouter
-            </Button>
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenActionModal(false);
-              }}
-            >
-              Annuler
-            </Button>
-          </div>
-        </form>
-      </Modal>
     </>
   );
 };

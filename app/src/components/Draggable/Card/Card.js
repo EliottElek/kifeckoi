@@ -139,6 +139,7 @@ const Card = (props) => {
     e.stopPropagation();
     setOpenPopUp(true);
   };
+  if (props.add) return <div className="card">{props.children}</div>;
   return (
     <>
       <div
@@ -172,7 +173,7 @@ const Card = (props) => {
           </div>
           <div className={"card__content__added__indicator"}>
             {modifMode ? (
-              <>
+              <div className="kanban__section__content__name__container__button__container">
                 <button
                   onClick={handleModifyDescription}
                   className="kanban__section__content__name__container__edit__button validate"
@@ -188,7 +189,7 @@ const Card = (props) => {
                 >
                   <MdOutlineClear />
                 </button>
-              </>
+              </div>
             ) : (
               <button
                 onClick={(e) => {
@@ -233,6 +234,7 @@ const Card = (props) => {
               onSubmit={handleModifyDescription}
             >
               <textarea
+                autoFocus
                 onChange={(e) => setDescription(e.target.value)}
                 onClick={(e) => e.stopPropagation()}
                 value={description}

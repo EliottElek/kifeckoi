@@ -143,3 +143,16 @@
   opacity: 1;
   transition: 0.1s ease;
 }
+.add__card__button__container {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+.add__card__form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: #ffffff;
+}

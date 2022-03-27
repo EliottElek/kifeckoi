@@ -2,9 +2,9 @@ import Avatar from "../../../materials/Avatar/Avatar";
 const Avatars = ({ users }) => {
   return (
     <span className="kanban__section__content__name__container">
-      {users.length !== 0 && (
+      {users?.length !== 0 && (
         <span className="kanban__section__content__name__container__avatars__container">
-          {users.map((user, i) => {
+          {users?.map((user, i) => {
             return user.avatarUrl ? (
               <div
                 key={i}

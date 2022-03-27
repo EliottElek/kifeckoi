@@ -103,6 +103,10 @@
   padding: 4px;
   border-radius: 3px;
   transition: 0.1s ease;
+  display: flex;
+}
+.kanban__section__content__name__container__button__container {
+  display: flex;
 }
 .bottom__button {
   top: unset !important;
