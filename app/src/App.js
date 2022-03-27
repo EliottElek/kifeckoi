@@ -8,6 +8,14 @@ import Alert from "./materials/Alert/Alert";
 import { Context } from "./components/Context/Context";
 import AccountPage from "./components/AccountPage/AccountPage";
 import ActionsWide from "./components/DndWide/DndWide";
+import icon from "../src/assets/images/icon.png";
+var link = document.querySelector("link[rel~='icon']");
+if (!link) {
+  link = document.createElement("link");
+  link.rel = "icon";
+  document.getElementsByTagName("head")[0].appendChild(link);
+}
+link.href = icon;
 const App = () => {
   const { alertContent, openAlert, setOpenAlert } = React.useContext(Context);
 

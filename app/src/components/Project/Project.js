@@ -4,6 +4,9 @@ import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
 import StickyNavbar from "../StickyNavbar/StickyNavbar";
 import Progress from "../../materials/Progress/Progress";
+import { FiEdit2 } from "react-icons/fi";
+import { BsCheckLg } from "react-icons/bs";
+import { MdClear } from "react-icons/md";
 import "./Project.css";
 import Form from "./Form";
 import Modal from "../../materials/Modal/Modal";
@@ -11,12 +14,11 @@ import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
 const Project = () => {
   const navigate = useNavigate();
-  const {
-    actions,
-    currentProject,
-    setCurrentProject,
-  } = useContext(Context);
+  const { actions, currentProject, setCurrentProject } = useContext(Context);
   const [openSaveModal, setOpenSaveModal] = React.useState(false);
+  const [modifMode, setModifMode] = React.useState(false);
+  const [title, setTitle] = React.useState("");
+
   const { id } = useParams();
 
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
@@ -27,6 +29,17 @@ const Project = () => {
       setCurrentProject({ ...dataProject?.data?.findProjectByProjectId });
     }
   }, [setCurrentProject, dataProject?.data]);
+  React.useEffect(() => {
+    if (currentProject) {
+      const title = document.getElementById("title");
+      title.innerHTML = `${currentProject?.name} | Kifekoi`;
+    }
+  }, [currentProject?.name, currentProject]);
+  React.useEffect(() => {
+    if (currentProject) {
+      setTitle(currentProject?.name);
+    }
+  }, [currentProject?.name, setTitle, currentProject]);
   const clearActions = () => {
     actions.forEach((action) => (action.tasks = []));
   };
@@ -64,9 +77,51 @@ const Project = () => {
               >
                 <i className="gg-chevron-left"></i>Retour
               </Button>
-              <h2 className="name__container__title">
-                {currentProject?.client?.name} - {currentProject?.name}
-              </h2>
+              {!modifMode ? (
+                <>
+                  <h2 className="name__container__title">
+                    {currentProject?.client?.name} - {currentProject?.name}
+                  </h2>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModifMode(true);
+                    }}
+                    className="name__container__title__editbutton"
+                  >
+                    <FiEdit2 />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <h2 className="name__container__title">
+                    {currentProject?.client?.name} -
+                  </h2>
+                  <input
+                    className="name__container__input"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModifMode(false);
+                    }}
+                    className="name__container__title__editbutton"
+                  >
+                    <BsCheckLg />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModifMode(false);
+                    }}
+                    className="name__container__title__editbutton"
+                  >
+                    <MdClear />
+                  </button>
+                </>
+              )}
             </div>
             <div className="actions__container">
               <Button reversed onClick={save}>

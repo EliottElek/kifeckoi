@@ -6,7 +6,7 @@ import { FIND_CLIENT_BY_ID, GET_ALL_CLIENTS } from './queries/Client'
 import { CREATE_PROJECT } from './mutations/Project'
 import { FIND_PROJECT_BY_PROJECT_ID, FIND_PROJECTS_BY_CLIENT_ID, GET_ALL_PROJECTS } from "./queries/Project";
 import { GET_ALL_ACTIONS, GET_LATEST_ACTIONS, FIND_ACTIONS_BY_PROJECT_ID } from "./queries/Action";
-import { CREATE_ACTION, CHANGE_ACTION_STATE, CHANGE_ACTION_DESCRIPTION } from "./mutations/Action";
+import { CREATE_ACTION, CHANGE_ACTION_STATE, CHANGE_ACTION_DESCRIPTION, DELETE_ACTION } from "./mutations/Action";
 import { GET_ALL_INFOS, FIND_INFOS_BY_PROJECT_ID } from "./queries/Info";
 import { CREATE_INFO, CHANGE_INFO_STATE } from "./mutations/Info";
 import { GET_ALL_DECISIONS, FIND_DECISIONS_BY_PROJECT_ID } from "./queries/Decision";
@@ -45,6 +45,7 @@ const Mutation = new GraphQLObjectType({
         createDecision: CREATE_DECISION,
         changeDecisionState: CHANGE_DECISION_STATE,
         changeActionDescription: CHANGE_ACTION_DESCRIPTION,
+        deleteAction: DELETE_ACTION
     }
 })
 

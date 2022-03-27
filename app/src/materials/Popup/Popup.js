@@ -1,6 +1,6 @@
 import React from "react";
 import "./Popup.css";
-const Popup = ({ children, open, setOpen }) => {
+const Popup = ({ children, open, setOpen, bottom }) => {
   const componentRef = React.useRef();
 
   React.useEffect(() => {
@@ -16,9 +16,13 @@ const Popup = ({ children, open, setOpen }) => {
     }
   }, [setOpen, open]);
   return (
-    <div ref={componentRef} className={`popup ${open ? "open" : "close"}`}>
-      {children}
-    </div>
+    <>
+      {open && (
+        <div ref={componentRef} className={`popup ${bottom && "bottom"}`}>
+          {children}
+        </div>
+      )}
+    </>
   );
 };
 

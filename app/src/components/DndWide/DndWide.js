@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Context } from "../Context/Context";
 import ActionsDnd from "../Draggable/ActionsDnd";
@@ -7,6 +7,12 @@ import Button from "../../materials/Button/Button";
 const DndWide = () => {
   const { currentProject } = useContext(Context);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (currentProject) {
+      const title = document.getElementById("title");
+      title.innerHTML = `${currentProject?.name}-Actions | Kifekoi`;
+    }
+  }, [currentProject?.name, currentProject]);
   return (
     <>
       <StickyNavbar>

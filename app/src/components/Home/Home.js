@@ -19,6 +19,8 @@ const Home = () => {
   }, [setClients, data]);
   const [nameInput, setNameInput] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const title = document.getElementById("title");
+  title.innerHTML = `Clients | Kifekoi`;
   const submit = async (e) => {
     e.preventDefault();
     if (nameInput === "") {

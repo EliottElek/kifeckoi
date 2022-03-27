@@ -66,3 +66,10 @@ mutation changeActionDescription($actionId: String! $newDescription: String!){
     }
 }
 `
+export const DELETE_ACTION = gql`
+mutation deleteAction($actionId: String!){
+    deleteAction(actionId: $actionId){
+        message
+    }
+}
+`

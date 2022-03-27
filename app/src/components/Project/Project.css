@@ -4,6 +4,20 @@
   margin-right: 20px;
   width: auto;
 }
+.name__container__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.name__container__input {
+  font-size: 1.5rem;
+  border: none;
+  padding: 4px;
+  width: auto;
+  border-radius: 4px;
+  background-color: gray;
+  color: white;
+  font-weight: bold;
+}
 @media screen and (max-width: 950px) {
   .actions__container {
     display: none;
@@ -147,4 +161,23 @@
 }
 .actions__wide__container {
   padding: 20px;
+}
+.name__container__title__editbutton {
+  background-color: transparent;
+  filter: brightness(0.4);
+  border: none;
+  outline: none;
+  color: var(--main-color);
+  font-size: 1.1rem;
+  border: solid 1px var(--main-color);
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.name__container:hover > .name__container__title__editbutton {
+  filter: brightness(1);
 }

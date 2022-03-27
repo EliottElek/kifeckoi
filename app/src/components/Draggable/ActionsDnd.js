@@ -7,6 +7,8 @@ import Modal from "../../materials/Modal/Modal";
 import Button from "../../materials/Button/Button";
 import Select from "../../materials/Select/Select";
 import { BiPlus } from "react-icons/bi";
+import { FiMoreHorizontal } from "react-icons/fi";
+
 import SelectItem from "../../materials/Select/SelectItem/SelectItem";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -26,7 +28,7 @@ const ActionsDnd = ({ setLength, length }) => {
     setOpenAlert,
     setAlertContent,
   } = React.useContext(Context);
-  const [openModal, setOpenModal] = useState(false);
+  const [openActionModal, setOpenActionModal] = useState(false);
   const [selectedAcountables, setSelectedAccountables] = React.useState([]);
   const [actionSelected, setActionSelected] = useState();
   const [actionData, setActionData] = React.useState([]);
@@ -133,6 +135,7 @@ const ActionsDnd = ({ setLength, length }) => {
       currentProject.actions = [...actions];
       setCurrentProject(currentProject);
       setLength && setLength(length + 1);
+      setSelectedAccountables([]);
     } catch (err) {
       setAlertContent({
         type: "warning",
@@ -157,6 +160,9 @@ const ActionsDnd = ({ setLength, length }) => {
                   <h2 className={`kanban__section__title`}>
                     {section.title} ({section.tasks.length})
                   </h2>
+                  <button className="kanban__section__title__more__button">
+                    <FiMoreHorizontal />
+                  </button>
                   <div className="kanban__section__content">
                     {section.tasks.map((task, index) => (
                       <Draggable
@@ -187,7 +193,7 @@ const ActionsDnd = ({ setLength, length }) => {
                   </div>
                   <button
                     onClick={() => {
-                      setOpenModal(true);
+                      setOpenActionModal(true);
                       setActionSelected(section);
                     }}
                     className={`kanban__section__title__button`}
@@ -200,7 +206,7 @@ const ActionsDnd = ({ setLength, length }) => {
           ))}
         </div>
       </DragDropContext>
-      <Modal open={openModal} style={{ padding: 0 }}>
+      <Modal open={openActionModal} style={{ padding: 0 }}>
         <form className="modal__content__container" onSubmit={add}>
           <h3>Ajouter une action</h3>
           <p>Entrez la description de l'action à ajouter</p>
@@ -245,7 +251,7 @@ const ActionsDnd = ({ setLength, length }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 add();
-                setOpenModal(false);
+                setOpenActionModal(false);
               }}
             >
               Ajouter
@@ -253,7 +259,7 @@ const ActionsDnd = ({ setLength, length }) => {
             <Button
               onClick={(e) => {
                 e.stopPropagation();
-                setOpenModal(false);
+                setOpenActionModal(false);
               }}
             >
               Annuler

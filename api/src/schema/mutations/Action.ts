@@ -67,3 +67,14 @@ export const CHANGE_ACTION_DESCRIPTION = {
         return { successful: true, message: "Action's description was successfully updated." }
     }
 }
+export const DELETE_ACTION = {
+    type: MessageType,
+    args: {
+        actionId: { type: GraphQLString },
+    },
+    async resolve(parent: any, args: any) {
+        const { actionId } = args
+        await Action.delete({ id: actionId })
+        return { successful: true, message: "Action was successfully deleted." }
+    }
+}

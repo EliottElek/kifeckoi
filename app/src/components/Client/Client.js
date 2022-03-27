@@ -30,7 +30,12 @@ const Client = () => {
   }, [setCurrentClient, dataClient?.data]);
   React.useEffect(() => {
     if (currentClient) {
-      console.log(currentClient);
+      const title = document.getElementById("title");
+      title.innerHTML = `${currentClient?.name} | Kifekoi`;
+    }
+  }, [currentClient?.name, currentClient]);
+  React.useEffect(() => {
+    if (currentClient) {
       setProjects(currentClient?.projects);
     }
   }, [setProjects, currentClient, dataClient?.projects]);

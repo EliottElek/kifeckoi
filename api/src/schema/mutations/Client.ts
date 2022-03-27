@@ -1,5 +1,4 @@
 import { ClientType } from "../typedefs/Client";
-import { ProjectType } from "../typedefs/Project";
 
 const { v4: uuid } = require("uuid");
 import { GraphQLString } from "graphql";
