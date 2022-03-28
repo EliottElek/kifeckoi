@@ -2,17 +2,20 @@ import { useContext, useState } from "react";
 import "./card.scss";
 import { FiEdit2 } from "react-icons/fi";
 import { MdOutlineClear } from "react-icons/md";
-import { BsArchiveFill } from "react-icons/bs";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 import { AiOutlineCheck } from "react-icons/ai";
 import { FiMoreVertical } from "react-icons/fi";
-
+import { HiOutlineDuplicate } from "react-icons/hi";
 import Modal from "../../../materials/Modal/Modal";
 import Chip from "../../../materials/Chip/Chip";
+import { Flip } from "react-toastify";
+
 import Avatars from "./Avatars";
 import {
   CHANGE_ACTION_DESCRIPTION,
   CHANGE_ACTION_STATE,
   DELETE_ACTION,
+  CREATE_ACTION,
 } from "../../../graphql/mutations";
 import { Context } from "../../Context/Context";
 import { useMutation } from "@apollo/client";
@@ -20,24 +23,22 @@ import Popup from "../../../materials/Popup/Popup";
 import List from "../../../materials/List/List";
 import ListItem from "../../../materials/List/ListItem";
 
+import { toast } from "react-toastify";
+import { useParams } from "react-router";
+
 const Card = (props) => {
-  const {
-    setActions,
-    actions,
-    currentProject,
-    setCurrentProject,
-    setAlertContent,
-    setOpenAlert,
-  } = useContext(Context);
+  const { setActions, actions, currentProject, setCurrentProject } =
+    useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [modifMode, setModifMode] = useState(false);
   const [openPopUp, setOpenPopUp] = useState(false);
   const [changeActionDescription] = useMutation(CHANGE_ACTION_DESCRIPTION);
   const [changeActionState] = useMutation(CHANGE_ACTION_STATE);
   const [deleteAction] = useMutation(DELETE_ACTION);
+  const [createAction] = useMutation(CREATE_ACTION);
 
   const [description, setDescription] = useState(props.task.description);
-
+  const { id } = useParams();
   const handleModifyDescription = async (e) => {
     e.stopPropagation();
     try {
@@ -64,37 +65,49 @@ const Card = (props) => {
   };
 
   const handleMoveTo = async (category) => {
-    const sourceColIndex = actions.findIndex(
-      (e) => e.title === props.task.status
-    );
-    const destinationColIndex = actions.findIndex((e) => e.id === category.id);
-
-    const sourceCol = actions[sourceColIndex];
-    const destinationCol = actions[destinationColIndex];
-
-    const sourceTask = [...sourceCol.tasks];
-    const destinationTask = [...destinationCol.tasks];
-
-    const index = sourceTask.findIndex((task) => task.id === props.task.id);
-    const [removed] = sourceTask.splice(index, 1);
-    destinationTask.splice(0, 0, removed);
-
-    actions[sourceColIndex].tasks = sourceTask;
-    actions[destinationColIndex].tasks = destinationTask;
     try {
+      const sourceColIndex = actions.findIndex(
+        (e) => e.title === props.task.status
+      );
+      const destinationColIndex = actions.findIndex(
+        (e) => e.id === category.id
+      );
+      const sourceCol = actions[sourceColIndex];
+      const destinationCol = actions[destinationColIndex];
+      const sourceTask = [...sourceCol.tasks];
+      const destinationTask = [...destinationCol.tasks];
+      const index = sourceTask.findIndex((task) => task.id === props.task.id);
+      const [removed] = sourceTask.splice(index, 1);
+      destinationTask.splice(0, 0, removed);
+
+      actions[sourceColIndex].tasks = sourceTask;
+      actions[destinationColIndex].tasks = destinationTask;
       await changeActionState({
         variables: {
           actionId: props.task.id,
           newStatus: category?.title,
         },
       });
+      toast(
+        <Msg>
+          {props.task.name} déplacée dans {category?.title}
+        </Msg>,
+        {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+        }
+      );
       setOpenPopUp(false);
     } catch (err) {
-      setAlertContent({
-        content: "Une erreur est survenue. L'action n'a pas pu être déplacée.",
-        type: "warning",
+      toast.error("Error Notification !", {
+        position: toast.POSITION.TOP_LEFT,
+        transition: Flip,
       });
-      setOpenAlert(true);
       console.log(err);
     }
     setActions([...actions]);
@@ -113,33 +126,99 @@ const Card = (props) => {
       const index = actions.findIndex((e) => e.title === props.task.status);
       const items = [...actions[index].tasks];
       const itemsD = JSON.parse(JSON.stringify(items));
-      console.log(itemsD);
       const newArray = itemsD.filter((item) => item.id !== props.task.id);
       actions[index].tasks = [...newArray];
       setActions([...actions]);
       currentProject.actions = [...actions];
       setCurrentProject(currentProject);
       setModifMode(false);
-      setModifMode(false);
-      setAlertContent({
-        content: "L'action est maintenant dans les archives.",
-        type: "",
+      toast("Action archivée avec succès.", {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
       });
-      setOpenAlert(true);
     } catch (err) {
-      setAlertContent({
-        content: "Une erreur est survenue. L'action n'a pas pu être archivée.",
-        type: "warning",
+      console.log(err);
+      toast.waning("Impossible de supprimer l'action. Réessayez plus tard.", {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        transition: Flip,
       });
-      setOpenAlert(true);
+    }
+  };
+  const duplicate = async (e) => {
+    e.stopPropagation();
+    try {
+      const ArrayOfIds = props.task.accountables.map((acc) => acc.id);
+
+      const newAction = await createAction({
+        variables: {
+          name: "Action",
+          projectId: id,
+          description: props.task.description,
+          accountables: ArrayOfIds,
+          status: props.task.status,
+        },
+      });
+      const index = actions.findIndex(
+        (action) => action.title === props.task.status
+      );
+      actions[index].tasks.splice(actions[index] + 1, 0, {
+        ...newAction?.data?.createAction,
+        new: true,
+      });
+      setActions([...actions]);
+      currentProject.actions = [...actions];
+      setCurrentProject(currentProject);
+
+      props.setLength && props.setLength(props.length + 1);
+      toast(
+        `${
+          newAction?.data?.createAction
+            ? newAction?.data?.createAction.name
+            : "Évenement"
+        } dupliqué(e) avec succès.`,
+        {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          transition: Flip,
+        }
+      );
+    } catch (err) {
+      toast.warning(`Impossible de créer l'évènement.`, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        transition: Flip,
+      });
       console.log(err);
     }
   };
+
   const handleMoreAction = (e) => {
     e.stopPropagation();
     setOpenPopUp(true);
   };
   if (props.add) return <div className="card">{props.children}</div>;
+  const Msg = ({ children }) => <div>{children}</div>;
   return (
     <>
       <div
@@ -155,20 +234,25 @@ const Card = (props) => {
             props.dragging ? "card__content dragging" : "card__content"
           }
         >
-          <div className="card__content__added__indicator bottom__button">
+          <div className="card__content__actions__container">
             <button
               onClick={handleDeleteAction}
-              className="kanban__section__content__name__container__edit__button delete__button"
+              className="kanban__section__content__name__container__edit__button"
             >
-              <BsArchiveFill />
+              <MdOutlineDeleteOutline />
             </button>
-          </div>
-          <div className="card__content__added__indicator more__button bottom__button">
+
             <button
               onClick={handleMoreAction}
               className="kanban__section__content__name__container__edit__button more__button"
             >
               <FiMoreVertical />
+            </button>
+            <button
+              onClick={duplicate}
+              className="kanban__section__content__name__container__edit__button more__button"
+            >
+              <HiOutlineDuplicate />
             </button>
           </div>
           <div className={"card__content__added__indicator"}>
@@ -305,6 +389,14 @@ const Card = (props) => {
             }}
           >
             <p>Archiver...</p>
+          </ListItem>
+          <ListItem
+            onClick={(e) => {
+              duplicate(e);
+              setOpenPopUp(false);
+            }}
+          >
+            <p>Dupliquer...</p>
           </ListItem>
         </List>
       </Popup>

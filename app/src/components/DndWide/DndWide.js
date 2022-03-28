@@ -14,7 +14,7 @@ const DndWide = () => {
     }
   }, [currentProject?.name, currentProject]);
   return (
-    <>
+    <div style={{ width: "100vw", height: "100vh" }}>
       <StickyNavbar>
         <div className="name__container">
           <Button
@@ -29,10 +29,10 @@ const DndWide = () => {
           </h2>
         </div>
       </StickyNavbar>
-      <div style={{ padding: "20px" }}>
+      <div style={{ padding: "20px", overflowX: "auto", height: "100%" }}>
         <ActionsDnd />
       </div>
-    </>
+    </div>
   );
 };
 

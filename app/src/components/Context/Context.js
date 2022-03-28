@@ -6,7 +6,6 @@ import rawRisks from "../../rawRisks";
 import rawProblems from "../../rawProblems";
 import gravatar from "gravatar";
 
-
 export const Context = React.createContext();
 
 const userData = {
@@ -29,11 +28,6 @@ export const ContextProvider = ({ children }) => {
   const [decisions, setDecisions] = React.useState(rawDecisions);
   const [risks, setRisks] = React.useState(rawRisks);
   const [problems, setProblems] = React.useState(rawProblems);
-  const [openAlert, setOpenAlert] = React.useState(false);
-  const [alertContent, setAlertContent] = React.useState({
-    content: "",
-    type: "",
-  });
   const [currentClient, setCurrentClient] = React.useState(null);
   const [currentProject, setCurrentProject] = React.useState(null);
 
@@ -46,10 +40,6 @@ export const ContextProvider = ({ children }) => {
         setUser: setUser,
         users: users,
         setUsers: setUsers,
-        alertContent: alertContent,
-        setAlertContent: setAlertContent,
-        openAlert: openAlert,
-        setOpenAlert: setOpenAlert,
         clients: clients,
         setClients: setClients,
         projects: projects,

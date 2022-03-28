@@ -4,11 +4,11 @@ import Project from "./components/Project/Project";
 import Home from "./components/Home/Home";
 import Layout from "./components/Layout/Layout";
 import Client from "./components/Client/Client";
-import Alert from "./materials/Alert/Alert";
-import { Context } from "./components/Context/Context";
 import AccountPage from "./components/AccountPage/AccountPage";
 import ActionsWide from "./components/DndWide/DndWide";
 import icon from "../src/assets/images/icon.png";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 var link = document.querySelector("link[rel~='icon']");
 if (!link) {
   link = document.createElement("link");
@@ -17,8 +17,6 @@ if (!link) {
 }
 link.href = icon;
 const App = () => {
-  const { alertContent, openAlert, setOpenAlert } = React.useContext(Context);
-
   return (
     <div style={{ width: "100%", height: "100%", backgroundColor: "#1c2128" }}>
       <Layout>
@@ -70,14 +68,7 @@ const App = () => {
           />
         </Routes>
       </Layout>
-      <Alert
-        delay={2200}
-        open={openAlert}
-        setOpen={setOpenAlert}
-        type={alertContent?.type}
-      >
-        {alertContent?.content}
-      </Alert>
+      <ToastContainer theme="dark" />
     </div>
   );
 };

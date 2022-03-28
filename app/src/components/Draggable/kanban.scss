@@ -1,9 +1,10 @@
 .kanban {
   display: flex;
   align-items: flex-start;
+  min-height: 70vh !important;
   &__section {
     width: 500px;
-    min-width: 180px;
+    min-width: 200px;
     background-color: #ebecf0;
     padding: 4px;
     border-radius: 2px;
@@ -108,6 +109,10 @@
   color: white;
   background-color: #64462e88;
 }
+.kanban__section__title {
+  width: auto;
+}
+
 @media screen and (max-width: 1000px) {
   .kanban__section__title {
     font-size: 0.8rem;
@@ -143,6 +148,7 @@
   opacity: 1;
   transition: 0.1s ease;
 }
+
 .add__card__button__container {
   display: flex;
   gap: 4px;
@@ -155,4 +161,9 @@
   padding: 10px;
   border-radius: 3px;
   background-color: #ffffff;
+}
+@media screen and (max-width: 950px) {
+  .add__card__button__container {
+    flex-direction: column;
+  }
 }

@@ -25,18 +25,18 @@ function Accordion(props) {
 
   return (
     <div className="accordion__section" id={props?.id}>
-      <button
+      <div
         disabled={props.disabled}
         className={`accordion ${setActive}`}
         onClick={toggleAccordion}
       >
-        <p className="accordion__title">{props.title}</p>
+        <div className="accordion__title">{props.title}</div>
         <Chevron
           className={`${setRotate}`}
           width={10}
           fill={"var(--main-color)"}
         />
-      </button>
+      </div>
       <div
         ref={content}
         style={{ maxHeight: `${setHeight}` }}

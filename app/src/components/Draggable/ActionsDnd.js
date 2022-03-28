@@ -1,30 +1,26 @@
 import "./kanban.scss";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import Card from "./Card/Card";
 import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
 import { BiPlus } from "react-icons/bi";
-import { FiMoreHorizontal } from "react-icons/fi";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   FIND_ACTIONS_BY_PROJECT_ID,
   FIND_PROJECT_BY_PROJECT_ID,
 } from "../../graphql/queries";
 import { CREATE_ACTION, CHANGE_ACTION_STATE } from "../../graphql/mutations";
+import { toast } from "react-toastify";
 import rawActions from "../../rawActions";
 import { useParams } from "react-router";
 import AutoCompleteUsers from "./AutoCompleteUsers";
+import { Flip } from "react-toastify";
+import Column from "./Column";
 
 const ActionsDnd = ({ setLength, length }) => {
-  const {
-    actions,
-    currentProject,
-    setCurrentProject,
-    setActions,
-    setOpenAlert,
-    setAlertContent,
-  } = React.useContext(Context);
+  const { actions, currentProject, setCurrentProject, setActions } =
+    React.useContext(Context);
   const [addCard, setAddCard] = useState(false);
   const [selectedAcountables, setSelectedAccountables] = React.useState([]);
   const [actionSelected, setActionSelected] = useState();
@@ -133,13 +129,35 @@ const ActionsDnd = ({ setLength, length }) => {
       setCurrentProject(currentProject);
       setLength && setLength(length + 1);
       setSelectedAccountables([]);
+      toast(
+        `${
+          newAction?.data?.createAction
+            ? newAction?.data?.createAction.name
+            : "Évenement"
+        } ajouté(e) avec succès.`,
+        {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          transition: Flip,
+        }
+      );
     } catch (err) {
-      setAlertContent({
-        type: "warning",
-        content: "Impossible d'ajouter l'action.",
+      toast.warning(`Impossible de créer l'évènement.`, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        transition: Flip,
       });
       console.log(err);
-      setOpenAlert(true);
     }
   };
   return (
@@ -147,19 +165,15 @@ const ActionsDnd = ({ setLength, length }) => {
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="kanban">
           {actions?.map((section, i) => (
-            <Droppable key={section.id} droppableId={section.id}>
+            <Column key={section.id} droppableId={section.id}>
               {(provided) => (
                 <div
                   {...provided.droppableProps}
-                  className={`kanban__section violet__back`}
                   ref={provided.innerRef}
                 >
                   <h2 className={`kanban__section__title`}>
                     {section.title} ({section.tasks.length})
                   </h2>
-                  <button className="kanban__section__title__more__button">
-                    <FiMoreHorizontal />
-                  </button>
                   <div className="kanban__section__content">
                     {section.tasks.map((task, index) => (
                       <Draggable
@@ -179,6 +193,8 @@ const ActionsDnd = ({ setLength, length }) => {
                             <Card
                               type={"action"}
                               task={task}
+                              setLength={setLength}
+                              length={length}
                               dragging={snapshot.isDragging}
                               className={`card card__${i + 1}`}
                             />
@@ -216,7 +232,7 @@ const ActionsDnd = ({ setLength, length }) => {
                               Ajouter
                             </Button>
                             <Button
-                            reversed
+                              reversed
                               style={{ width: "100%" }}
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -242,7 +258,7 @@ const ActionsDnd = ({ setLength, length }) => {
                   </button>
                 </div>
               )}
-            </Droppable>
+            </Column>
           ))}
         </div>
       </DragDropContext>

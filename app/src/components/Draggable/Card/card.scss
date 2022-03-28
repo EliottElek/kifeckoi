@@ -19,7 +19,8 @@
   flex-direction: column;
   justify-content: space-between;
 }
-.card__content:hover > .card__content__added__indicator {
+.card__content:hover > .card__content__added__indicator,
+.card__content:hover > .card__content__actions__container {
   opacity: 1;
   transition: 0.1s ease;
 }
@@ -98,7 +99,7 @@
   cursor: pointer;
   height: 100%;
   width: auto;
-  font-size: 16px;
+  font-size: 1.2rem;
   color: rgba(0, 0, 0, 0.5);
   padding: 4px;
   border-radius: 3px;
@@ -108,10 +109,15 @@
 .kanban__section__content__name__container__button__container {
   display: flex;
 }
-.bottom__button {
+.card__content__actions__container {
+  position: absolute;
+  margin: 2px;
   top: unset !important;
   bottom: 0;
   left: 0;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
 }
 .kanban__section__content__name__container__edit__button:hover {
   background-color: rgb(236, 236, 236);
@@ -122,7 +128,6 @@
   opacity: 0;
   transition: 0.2s ease;
   padding: 3px;
-  font-size: 0.7rem;
   background-color: transparent;
   width: auto;
   color: rgba(0, 0, 0, 0.2);

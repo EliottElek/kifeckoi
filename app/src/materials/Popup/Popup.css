@@ -8,10 +8,12 @@
   position: absolute;
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
   border-radius: 4px;
-  transform: translate(60%, -100%);
+  top: 0;
+  right: 0;
+  transform: translate(60%, 30%);
   background-color: rgb(255, 255, 255);
   z-index: 233232323;
-  color : black;
+  color: black;
   font-size: 0.8rem;
   padding: 4px;
   display: flex;
@@ -20,7 +22,9 @@
   justify-content: center;
 }
 .bottom {
-  transform: translate(10%,-5%);
+  top: unset !important;
+  right: unset !important;
+  transform: translate(10%, -0%);
 }
 @keyframes hideDiv {
   0% {

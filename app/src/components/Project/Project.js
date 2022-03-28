@@ -5,7 +5,7 @@ import Button from "../../materials/Button/Button";
 import StickyNavbar from "../StickyNavbar/StickyNavbar";
 import Progress from "../../materials/Progress/Progress";
 import { FiEdit2 } from "react-icons/fi";
-import { BsCheckLg } from "react-icons/bs";
+import { MdCheck } from "react-icons/md";
 import { MdClear } from "react-icons/md";
 import "./Project.css";
 import Form from "./Form";
@@ -14,7 +14,8 @@ import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
 const Project = () => {
   const navigate = useNavigate();
-  const { actions, currentProject, setCurrentProject } = useContext(Context);
+  const { actions, currentProject, setCurrentProject, user } =
+    useContext(Context);
   const [openSaveModal, setOpenSaveModal] = React.useState(false);
   const [modifMode, setModifMode] = React.useState(false);
   const [title, setTitle] = React.useState("");
@@ -77,49 +78,59 @@ const Project = () => {
               >
                 <i className="gg-chevron-left"></i>Retour
               </Button>
-              {!modifMode ? (
+              {user.admin ? (
                 <>
-                  <h2 className="name__container__title">
-                    {currentProject?.client?.name} - {currentProject?.name}
-                  </h2>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setModifMode(true);
-                    }}
-                    className="name__container__title__editbutton"
-                  >
-                    <FiEdit2 />
-                  </button>
+                  {!modifMode ? (
+                    <>
+                      <h2 className="name__container__title">
+                        {currentProject?.client?.name} - {currentProject?.name}
+                      </h2>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setModifMode(true);
+                        }}
+                        className="name__container__title__editbutton"
+                      >
+                        <FiEdit2 />
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <h2 className="name__container__title">
+                        {currentProject?.client?.name} -
+                      </h2>
+                      <input
+                        className="name__container__input"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setModifMode(false);
+                        }}
+                        className="name__container__title__btn"
+                      >
+                        <MdCheck />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setModifMode(false);
+                        }}
+                        className="name__container__title__btn"
+                      >
+                        <MdClear />
+                      </button>
+                    </>
+                  )}
                 </>
               ) : (
                 <>
                   <h2 className="name__container__title">
-                    {currentProject?.client?.name} -
+                    {currentProject?.client?.name} - {currentProject?.name}
                   </h2>
-                  <input
-                    className="name__container__input"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setModifMode(false);
-                    }}
-                    className="name__container__title__editbutton"
-                  >
-                    <BsCheckLg />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setModifMode(false);
-                    }}
-                    className="name__container__title__editbutton"
-                  >
-                    <MdClear />
-                  </button>
                 </>
               )}
             </div>

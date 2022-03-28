@@ -20,5 +20,4 @@ export class Action extends BaseEntity {
     @ManyToMany(() => User, accountable => accountable.actions)
     @JoinTable()
     accountables!: User[];
-
 }
