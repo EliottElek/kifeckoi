@@ -30,6 +30,7 @@ export const ContextProvider = ({ children }) => {
   const [problems, setProblems] = React.useState(rawProblems);
   const [currentClient, setCurrentClient] = React.useState(null);
   const [currentProject, setCurrentProject] = React.useState(null);
+  const [listStyle, setListStyle] = React.useState(false);
 
   const [user, setUser] = React.useState(userData);
 
@@ -58,6 +59,9 @@ export const ContextProvider = ({ children }) => {
         setCurrentClient: setCurrentClient,
         currentProject: currentProject,
         setCurrentProject: setCurrentProject,
+        //defines if the view is in cards or table
+        listStyle: listStyle,
+        setListStyle: setListStyle,
       }}
     >
       {children}

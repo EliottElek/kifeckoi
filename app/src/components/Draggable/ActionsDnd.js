@@ -5,6 +5,7 @@ import Card from "./Card/Card";
 import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
 import { BiPlus } from "react-icons/bi";
+import { MdOutlineClear } from "react-icons/md";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   FIND_ACTIONS_BY_PROJECT_ID,
@@ -17,6 +18,9 @@ import { useParams } from "react-router";
 import AutoCompleteUsers from "./AutoCompleteUsers";
 import { Flip } from "react-toastify";
 import Column from "./Column";
+import AutoTextArea from "../../materials/AutoSizeTextArea/AutoSizeTextArea";
+import Progress from "../../materials/Progress/Progress";
+import isEmoji from "../../assets/functions/isEmoji";
 
 const ActionsDnd = ({ setLength, length }) => {
   const { actions, currentProject, setCurrentProject, setActions } =
@@ -42,10 +46,10 @@ const ActionsDnd = ({ setLength, length }) => {
     variables: { id: id },
   });
   React.useEffect(() => {
-    if (dataActions?.data && actionData.length === 0) {
+    if (dataActions?.data) {
       setActionData([...dataActions?.data?.findActionsByProjectId]);
     }
-  }, [setActionData, dataActions?.data, actionData.length]);
+  }, [setActionData, dataActions?.data]);
 
   React.useEffect(() => {
     rawActions.forEach((item) => (item.tasks = []));
@@ -109,12 +113,14 @@ const ActionsDnd = ({ setLength, length }) => {
     e.preventDefault();
     const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
     console.log(ArrayOfIds);
+    const description =
+      input.length === 3 && isEmoji(input) ? `# ${input}` : input;
     try {
       const newAction = await createAction({
         variables: {
           name: "Action",
           projectId: id,
-          description: input,
+          description: description,
           accountables: ArrayOfIds,
           status: actionSelected.title,
         },
@@ -129,23 +135,6 @@ const ActionsDnd = ({ setLength, length }) => {
       setCurrentProject(currentProject);
       setLength && setLength(length + 1);
       setSelectedAccountables([]);
-      toast(
-        `${
-          newAction?.data?.createAction
-            ? newAction?.data?.createAction.name
-            : "Évenement"
-        } ajouté(e) avec succès.`,
-        {
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          transition: Flip,
-        }
-      );
     } catch (err) {
       toast.warning(`Impossible de créer l'évènement.`, {
         position: "bottom-left",
@@ -160,108 +149,122 @@ const ActionsDnd = ({ setLength, length }) => {
       console.log(err);
     }
   };
+  const commentEnterSubmit = (e) => {
+    if (e.key === "Enter" && e.shiftKey === false) {
+      return add(e);
+    }
+  };
   return (
     <>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="kanban">
-          {actions?.map((section, i) => (
-            <Column key={section.id} droppableId={section.id}>
-              {(provided) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  <h2 className={`kanban__section__title`}>
-                    {section.title} ({section.tasks.length})
-                  </h2>
-                  <div className="kanban__section__content">
-                    {section.tasks.map((task, index) => (
-                      <Draggable
-                        key={task.id}
-                        draggableId={task.id}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={{
-                              ...provided.draggableProps.style,
-                            }}
-                          >
-                            <Card
-                              type={"action"}
-                              task={task}
-                              setLength={setLength}
-                              length={length}
-                              dragging={snapshot.isDragging}
-                              className={`card card__${i + 1}`}
+      {!actions ? (
+        <Progress />
+      ) : (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="kanban">
+            {actions?.map((section, i) => (
+              <Column
+                addCard={addCard}
+                setAddCard={setAddCard}
+                section={section}
+                setActionSelected={setActionSelected}
+                key={section.id}
+                droppableId={section.id}
+              >
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    <h2 className={`kanban__section__title`}>
+                      {section?.title} ({section?.tasks?.length})
+                    </h2>
+                    <div className="kanban__section__content">
+                      {section?.tasks?.map((task, index) => (
+                        <Draggable
+                          key={task.id}
+                          draggableId={task.id}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={{
+                                ...provided.draggableProps.style,
+                              }}
+                            >
+                              <Card
+                                type={"action"}
+                                task={task}
+                                setLength={setLength}
+                                length={length}
+                                dragging={snapshot.isDragging}
+                                className={`card card__${i + 1}`}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {addCard && actionSelected.id === section.id && (
+                        <Card add type={"action"} task={""} className={`card`}>
+                          <form className="add__card__form" onSubmit={add}>
+                            <AutoTextArea
+                              onKeyPress={commentEnterSubmit}
+                              placeholder={"Titre de l'action..."}
+                              onChange={(e) => setInput(e.target.value)}
+                              onClick={(e) => e.stopPropagation()}
+                              value={input}
+                              autoFocus
+                              className="modif__description__textarea"
+                            ></AutoTextArea>
+                            <AutoCompleteUsers
+                              placeholder="Responsable..."
+                              setSelectedAccountables={setSelectedAccountables}
                             />
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {addCard && actionSelected.id === section.id && (
-                      <Card add type={"action"} task={""} className={`card`}>
-                        <form className="add__card__form" onSubmit={add}>
-                          <textarea
-                            onChange={(e) => setInput(e.target.value)}
-                            onClick={(e) => e.stopPropagation()}
-                            value={input}
-                            autoFocus
-                            className="modif__description__textarea"
-                          ></textarea>
-                          <AutoCompleteUsers
-                            placeholder="Responsable..."
-                            setSelectedAccountables={setSelectedAccountables}
-                          />
-                          <div className="add__card__button__container">
-                            <Button
-                              style={{ width: "100%" }}
-                              type="submit"
-                              disabled={
-                                !actionSelected || input === "" ? true : false
-                              }
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                add(e);
-                                setAddCard(false);
-                              }}
-                            >
-                              Ajouter
-                            </Button>
-                            <Button
-                              reversed
-                              style={{ width: "100%" }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setAddCard(false);
-                              }}
-                            >
-                              Annuler
-                            </Button>
-                          </div>
-                        </form>
-                      </Card>
-                    )}
-                    {provided.placeholder}
+                            <div className="add__card__button__container">
+                              <Button
+                                style={{ width: "100%" }}
+                                type="submit"
+                                disabled={
+                                  !actionSelected || input === "" ? true : false
+                                }
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  add(e);
+                                  setAddCard(false);
+                                }}
+                              >
+                                Ajouter
+                              </Button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setAddCard(false);
+                                }}
+                                className="clear__button"
+                              >
+                                <MdOutlineClear />
+                              </button>
+                            </div>
+                          </form>
+                        </Card>
+                      )}
+                      {provided.placeholder}
+                    </div>
+                    <button
+                      onClick={() => {
+                        setActionSelected(section);
+                        setAddCard(true);
+                      }}
+                      className={`kanban__section__title__button`}
+                    >
+                      <BiPlus /> Ajouter une carte
+                    </button>
                   </div>
-                  <button
-                    onClick={() => {
-                      setActionSelected(section);
-                      setAddCard(true);
-                    }}
-                    className={`kanban__section__title__button`}
-                  >
-                    <BiPlus /> Ajouter une carte
-                  </button>
-                </div>
-              )}
-            </Column>
-          ))}
-        </div>
-      </DragDropContext>
+                )}
+              </Column>
+            ))}
+          </div>
+        </DragDropContext>
+      )}
     </>
   );
 };

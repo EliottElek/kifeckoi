@@ -28,7 +28,7 @@
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.3);
   // outline: solid 2px rgba(0, 0, 0, 0.493);
   transition: 0.3s ease;
-  transform: rotate(3deg);
+  //transform: rotate(3deg);
 }
 .modal__content__container_scrollable {
   overflow-y: auto;
@@ -90,7 +90,7 @@
   align-items: center;
 }
 .default_avatar {
-  margin-right: -15px;
+  margin-right: -5px;
 }
 .kanban__section__content__name__container__edit__button {
   border: none;
@@ -146,12 +146,12 @@
   width: 97% !important;
   font-size: 1rem;
   margin: auto;
-  resize: none;
-  height: 80px;
+  height: auto;
   background-color: rgb(236, 236, 236);
   border: none;
+  min-height: 30px;
   border-radius: 1px;
-  padding: 4px;
+  padding: 5px;
   transition: 0.2s ease;
 }
 .validate:hover {
@@ -173,4 +173,13 @@
 .underlined {
   margin: 0;
   text-decoration: underline;
+}
+.divider {
+  height: 1px;
+  width: 90%;
+  margin: auto;
+  background-color: rgba(128, 128, 128, 0.267);
+}
+.card__description {
+  overflow-wrap: break-word;
 }

@@ -3,9 +3,12 @@ import { useQuery } from "@apollo/client";
 import { GET_LATEST_ACTIONS } from "../../../graphql/queries";
 import RecentActionsItem from "./RecentActionsItem";
 import "./RecentActions.css";
+import { useParams } from "react-router";
 const RecentActions = () => {
+  const { id } = useParams();
   const [recentActions, setRecentActions] = React.useState([]);
-  const dataActions = useQuery(GET_LATEST_ACTIONS);
+  const dataActions = useQuery(GET_LATEST_ACTIONS, { variables: { id: id } });
+
   React.useEffect(() => {
     if (dataActions?.data) {
       setRecentActions([...dataActions?.data?.getLatestActions]);

@@ -6,10 +6,12 @@
   flex-wrap: nowrap;
   height: 40px;
   width: auto;
+  max-width: 140px;
   gap: 16px;
   border-radius: 30px;
   background-color: rgb(180, 180, 180);
-  padding: 4px;
+  padding: 1px;
+  margin: 4px;
   padding-left: 8px;
 }
 .chip__container__image {

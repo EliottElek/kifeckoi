@@ -18,7 +18,7 @@ const Popup = ({ children, open, setOpen, bottom }) => {
   return (
     <>
       {open && (
-        <div ref={componentRef} className={`popup ${bottom && "bottom"}`}>
+        <div ref={componentRef} className={`popup ${bottom ? "bottom" : ""}`}>
           {children}
         </div>
       )}

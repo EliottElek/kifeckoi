@@ -1,7 +1,7 @@
 .kanban {
   display: flex;
   align-items: flex-start;
-  min-height: 70vh !important;
+  background-color: transparent;
   &__section {
     width: 500px;
     min-width: 200px;
@@ -10,6 +10,9 @@
     border-radius: 2px;
     padding-top: 50px;
     position: relative;
+    // max-height: 70vh !important;
+    // overflow-y: auto;
+    // overflow-x: hidden;
     & ~ & {
       margin-left: 10px;
     }
@@ -153,6 +156,7 @@
   display: flex;
   gap: 4px;
   width: 100%;
+  align-items: center;
 }
 .add__card__form {
   display: flex;
@@ -162,8 +166,20 @@
   border-radius: 3px;
   background-color: #ffffff;
 }
-@media screen and (max-width: 950px) {
-  .add__card__button__container {
-    flex-direction: column;
-  }
+.clear__button {
+  background-color: transparent;
+  height: 35px !important;
+  width: 40px !important;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.clear__button:hover {
+  background-color: rgba(128, 128, 128, 0.246);
 }

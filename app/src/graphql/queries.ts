@@ -77,8 +77,8 @@ query{
   }
 `
 export const GET_LATEST_ACTIONS = gql`
-query{
-    getLatestActions{
+query getLatestActions($id: String!){
+  getLatestActions(id : $id){
     name
     id
     creation

@@ -140,16 +140,16 @@
   align-items: center;
   gap: 20px;
 }
-.full__screen__button {
+.full__screen__button,
+.list__style__button {
   border: none;
   outline: none;
   background-color: transparent;
   cursor: pointer;
-  height: 100%;
-  width: auto;
-  font-size: 18px;
+  /* height: 100%; */
+  /* width: auto; */
+  font-size: 1.1rem;
   color: white;
-  padding: 4px;
   border-radius: 3px;
   margin: none;
   display: flex;
@@ -158,9 +158,19 @@
   filter: brightness(0.3);
   transition: 0.1s ease;
 }
+.list__style__button {
+  font-size: 1.5rem;
+}
+.list__style__button:hover {
+  filter: brightness(.8);
+  transition: 0.1s ease;
+}
 .full__screen__button:hover {
   filter: brightness(1);
   transition: 0.1s ease;
+}
+.active__list__style {
+  filter: brightness(1);
 }
 .actions__wide__container {
   padding: 20px;
