@@ -19,6 +19,10 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.card__content > * > ul > li {
+  list-style: disc;
+  margin-left: 12px;
+}
 .card__content:hover > .card__content__added__indicator,
 .card__content:hover > .card__content__actions__container {
   opacity: 1;

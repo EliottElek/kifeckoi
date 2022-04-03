@@ -31,6 +31,7 @@ export const ContextProvider = ({ children }) => {
   const [currentClient, setCurrentClient] = React.useState(null);
   const [currentProject, setCurrentProject] = React.useState(null);
   const [listStyle, setListStyle] = React.useState(false);
+  const [markdown, setMarkdown] = React.useState(true);
 
   const [user, setUser] = React.useState(userData);
 
@@ -62,6 +63,8 @@ export const ContextProvider = ({ children }) => {
         //defines if the view is in cards or table
         listStyle: listStyle,
         setListStyle: setListStyle,
+        markdown: markdown,
+        setMarkdown: setMarkdown,
       }}
     >
       {children}

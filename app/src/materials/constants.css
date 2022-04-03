@@ -28,7 +28,7 @@ body,
 }
 ul li {
   list-style:disc;
-  margin-left: 12px;
+  /* margin-left: 12px; */
 }
 ul li a {
   text-decoration: none;

@@ -5,7 +5,10 @@ import Chip from "../Chip/Chip";
 import "../../components/Client/RecentActions/RecentActions.css";
 import AutoTextArea from "../AutoSizeTextArea/AutoSizeTextArea";
 import ReactMarkdownSnippet from "../../assets/ReactMarkdown";
+import shortString from "../../assets/functions/shortString";
+import { Context } from "../../components/Context/Context";
 const TableRow = ({ item }) => {
+  const { markdown } = React.useContext(Context);
   const [openModal, setOpenModal] = React.useState(false);
   const [status, setStatus] = React.useState("");
 
@@ -17,13 +20,7 @@ const TableRow = ({ item }) => {
   }, [item.status, setStatus]);
   if (!item) return <Progress />;
   const data = Object.keys(item).map(function (key) {
-    if (
-      key !== "accountables" &&
-      key !== "__typename" &&
-      key !== "id" &&
-      key !== "name"
-    )
-      return key;
+    if (key !== "__typename" && key !== "id" && key !== "name") return key;
     else return null;
   });
   return (
@@ -41,6 +38,32 @@ const TableRow = ({ item }) => {
                 <span className={status}>{item.status}</span>
               </td>
             );
+          if (it === "accountables")
+            return (
+              <td key={i}>
+                {item.accountables.length !== 0 ? (
+                  <div style={{ display: "flex" }}>
+                    {item.accountables.map((acc) => (
+                      <Chip
+                        key={acc.id}
+                        text={acc.username}
+                        src={acc.avatarUrl}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <span
+                    style={{
+                      fontStyle: "italic",
+                      opacity: 0.5,
+                      fontSize: "0.7rem",
+                    }}
+                  >
+                    Non attribuée.
+                  </span>
+                )}
+              </td>
+            );
           if (it === "creation")
             return (
               <td key={i}>
@@ -55,7 +78,13 @@ const TableRow = ({ item }) => {
             );
           return (
             <td key={i}>
-              <ReactMarkdownSnippet>{item[it]}</ReactMarkdownSnippet>
+              {markdown ? (
+                <ReactMarkdownSnippet>
+                  {shortString(item[it], 100)}
+                </ReactMarkdownSnippet>
+              ) : (
+                <span>{shortString(item[it], 100)}</span>
+              )}
             </td>
           );
         })}

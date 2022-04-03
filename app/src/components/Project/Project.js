@@ -14,8 +14,14 @@ import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
 const Project = () => {
   const navigate = useNavigate();
-  const { actions, currentProject, setCurrentProject, user } =
-    useContext(Context);
+  const {
+    actions,
+    currentProject,
+    setCurrentProject,
+    user,
+    listStyle,
+    setActions,
+  } = useContext(Context);
   const [openSaveModal, setOpenSaveModal] = React.useState(false);
   const [modifMode, setModifMode] = React.useState(false);
   const [title, setTitle] = React.useState("");
@@ -42,7 +48,10 @@ const Project = () => {
     }
   }, [currentProject?.name, setTitle, currentProject]);
   const clearActions = () => {
-    actions.forEach((action) => (action.tasks = []));
+    if (!listStyle) actions?.forEach((action) => (action.tasks = []));
+    else {
+      setActions(null);
+    }
   };
   const [saveButtonContent, setSaveButtonContent] =
     React.useState("Enregistrer");
@@ -135,12 +144,12 @@ const Project = () => {
               )}
             </div>
             <div className="actions__container">
-              <Button reversed onClick={save}>
-                {saveButtonContent}
+              <Button onClick={save}>{saveButtonContent}</Button>
+              <Button reversed onClick={() => setOpenSaveModal(true)}>
+                Valider
               </Button>
-              <Button onClick={() => setOpenSaveModal(true)}>Valider</Button>
-              <Button>Libérer</Button>
-              <Button>Annuler</Button>
+              <Button reversed>Libérer</Button>
+              <Button reversed>Annuler</Button>
             </div>
           </StickyNavbar>
           <Form

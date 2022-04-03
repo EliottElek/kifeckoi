@@ -162,7 +162,7 @@
   font-size: 1.5rem;
 }
 .list__style__button:hover {
-  filter: brightness(.8);
+  filter: brightness(0.8);
   transition: 0.1s ease;
 }
 .full__screen__button:hover {
@@ -217,4 +217,7 @@
   filter: brightness(1);
   transition: 0.2s ease;
   background-color: gray;
+}
+.markdown__btn {
+  font-size: 1.8rem;
 }

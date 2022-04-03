@@ -28,7 +28,7 @@ import Menu from "../../../materials/Menu/Menu";
 import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import ReactMarkdown from "../../../assets/ReactMarkdown";
 const Card = (props) => {
-  const { setActions, actions, currentProject, setCurrentProject } =
+  const { setActions, actions, currentProject, setCurrentProject, markdown } =
     useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [status, setStatus] = useState(false);
@@ -382,7 +382,11 @@ const Card = (props) => {
             </form>
           ) : (
             <div className="card__description">
-              <ReactMarkdown>{props.task.description}</ReactMarkdown>
+              {markdown ? (
+                <ReactMarkdown>{props.task.description}</ReactMarkdown>
+              ) : (
+                <p>{props.task.description}</p>
+              )}
             </div>
           )}
           <Avatars users={props.task.accountables} />

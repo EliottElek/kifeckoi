@@ -36,7 +36,6 @@ const Example = () => {
   const theadData = Object.keys(actions[0]).map(function (key) {
     if (
       key !== "__typename" &&
-      key !== "accountables" &&
       key !== "id" &&
       key !== "name"
     )

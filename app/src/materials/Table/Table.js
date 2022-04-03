@@ -1,4 +1,3 @@
-import React from "react";
 import TableRow from "./TableRow";
 import TableHeadItem from "./TableHeadItem";
 import Progress from "../Progress/Progress";
