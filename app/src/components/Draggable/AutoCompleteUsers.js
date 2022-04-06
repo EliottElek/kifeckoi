@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../graphql/queries";
 import Select from "react-select";
 
-const AutoCompleteUsers = ({ setSelectedAccountables, placeholder }) => {
+const AutoCompleteUsers = ({ setSelectedcontributors, placeholder }) => {
   const customStyles = {
     option: (base, state) => ({
       ...base,
@@ -19,7 +19,7 @@ const AutoCompleteUsers = ({ setSelectedAccountables, placeholder }) => {
     },
   };
   const { data } = useQuery(GET_ALL_USERS);
-  const [accountables, setAccountables] = React.useState([]);
+  const [contributors, setcontributors] = React.useState([]);
 
   React.useEffect(() => {
     if (data?.getAllUsers) {
@@ -30,9 +30,9 @@ const AutoCompleteUsers = ({ setSelectedAccountables, placeholder }) => {
         value: user.username,
       }));
       console.log(finalUsers);
-      setAccountables(finalUsers);
+      setcontributors(finalUsers);
     }
-  }, [setAccountables, data?.getAllUsers]);
+  }, [setcontributors, data?.getAllUsers]);
   return (
     <Select
       closeMenuOnSelect={false}
@@ -41,9 +41,9 @@ const AutoCompleteUsers = ({ setSelectedAccountables, placeholder }) => {
       styles={customStyles}
       openMenuOnClick={(e) => e.stopPropagation()}
       onChange={(selectedOptions) => {
-        setSelectedAccountables(selectedOptions);
+        setSelectedcontributors(selectedOptions);
       }}
-      options={accountables}
+      options={contributors}
     />
   );
 };

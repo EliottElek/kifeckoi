@@ -5,7 +5,7 @@
   &__section {
     width: 500px;
     min-width: 200px;
-    background-color: #ebecf0;
+    background-color: #ecebeb;
     padding: 4px;
     border-radius: 2px;
     padding-top: 50px;
@@ -30,7 +30,7 @@
       &__button {
         background-color: transparent;
         border-radius: 4px;
-        color: rgba(255, 255, 255, 0.568);
+        color: rgba(136, 136, 136, 0.568);
         border: none;
         outline: none;
         cursor: pointer;
@@ -60,7 +60,8 @@
   justify-content: flex-start;
   gap: 12px;
   padding: 12px;
-  background-color: rgb(160, 160, 160);
+  background-color: white;
+  color: #172b4d;
   border-radius: 4px;
 }
 .kanban__section__content__name__container {
@@ -98,7 +99,7 @@
 
 .violet__back {
   color: white;
-  background-color: #f8efff81;
+  background-color: #f3f3f3;
 }
 .red__back {
   color: white;
@@ -114,6 +115,7 @@
 }
 .kanban__section__title {
   width: auto;
+  color: rgba(0, 0, 0, 0.637);
 }
 
 @media screen and (max-width: 1000px) {
@@ -133,7 +135,7 @@
   height: auto;
   padding: 4px;
   font-size: 1.4rem;
-  color: white;
+  color: black;
   transition: 0.2s ease;
   cursor: pointer;
   height: 30px;

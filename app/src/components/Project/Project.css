@@ -1,4 +1,4 @@
-.actions__container {
+.events__container {
   display: flex;
   gap: 10px;
   margin-right: 20px;
@@ -19,7 +19,7 @@
   font-weight: bold;
 }
 @media screen and (max-width: 950px) {
-  .actions__container {
+  .events__container {
     display: none;
   }
   .form__line__label__container {
@@ -121,7 +121,7 @@
   flex-direction: column;
   gap: 23px;
 }
-.modal__content__actions__container {
+.modal__content__events__container {
   display: flex;
   gap: 12px;
   align-self: flex-end;
@@ -172,7 +172,7 @@
 .active__list__style {
   filter: brightness(1);
 }
-.actions__wide__container {
+.events__wide__container {
   padding: 20px;
 }
 .name__container__title__editbutton {

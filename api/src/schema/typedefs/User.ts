@@ -1,5 +1,6 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } from 'graphql'
-import { ActionType } from './Action'
+import { CommentType } from './Comment'
+import { EventType } from './Event'
 
 export const UserType = new GraphQLObjectType({
     name: "User",
@@ -11,6 +12,7 @@ export const UserType = new GraphQLObjectType({
         avatarUrl: { type: GraphQLString },
         password: { type: GraphQLString },
         username: { type: GraphQLString },
-        actions: { type: new GraphQLList(ActionType) }
+        events: { type: new GraphQLList(EventType) },
+        comments: { type: new GraphQLList(CommentType) }
     })
 })

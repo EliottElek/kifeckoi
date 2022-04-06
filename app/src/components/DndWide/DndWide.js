@@ -1,19 +1,19 @@
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Context } from "../Context/Context";
-import ActionsDnd from "../Draggable/ActionsDnd";
+import EventKanban from "../Draggable/EventKanban";
 import StickyNavbar from "../StickyNavbar/StickyNavbar";
 import Button from "../../materials/Button/Button";
 import TableEvents from "../Project/TableEvents/TableEvents";
 import { BsListTask } from "react-icons/bs";
 import { CgFormatUppercase } from "react-icons/cg";
 import ReactTooltip from "react-tooltip";
-const DndWide = () => {
+const DndWide = ({ type }) => {
   const {
     currentProject,
     listStyle,
     setListStyle,
-    setActions,
+    setEvents,
     setMarkdown,
     markdown,
   } = useContext(Context);
@@ -21,9 +21,9 @@ const DndWide = () => {
   useEffect(() => {
     if (currentProject) {
       const title = document.getElementById("title");
-      title.innerHTML = `${currentProject?.name}-Actions | Kifekoi`;
+      title.innerHTML = `${currentProject?.name}-${type}s | Kifekoi`;
     }
-  }, [currentProject?.name, currentProject]);
+  }, [currentProject?.name, currentProject, type]);
   return (
     <div
       style={{
@@ -41,13 +41,13 @@ const DndWide = () => {
             <i className="gg-chevron-left"></i>Retour
           </Button>
           <h2 className="name__container__title">
-            {currentProject?.name} - Actions
+            {currentProject?.name} - {type}s
           </h2>
           <button
             data-tip
             onClick={(e) => {
               e.stopPropagation();
-              setActions(null);
+              setEvents(null);
               setListStyle(!listStyle);
             }}
             data-for="ListTooltip"
@@ -71,7 +71,7 @@ const DndWide = () => {
             <CgFormatUppercase />
           </button>
         </div>
-        <div className="actions__container">
+        <div className="events__container">
           <Button>Sauvegarder</Button>
           <Button reversed>Valider</Button>
           <Button reversed>Libérer</Button>
@@ -85,7 +85,7 @@ const DndWide = () => {
           height: "100%",
         }}
       >
-        {listStyle ? <TableEvents /> : <ActionsDnd />}
+        {listStyle ? <TableEvents type={type} /> : <EventKanban type={type} />}
       </div>
       <ReactTooltip delayShow={500} id="ListTooltip" effect="solid">
         {!listStyle ? (

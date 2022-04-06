@@ -32,15 +32,15 @@ mutation createProject($name: String! $clientId: String!){
     }
 }
 `
-export const CREATE_ACTION = gql`
-mutation createAction($name: String! $projectId: String! $description : String! $accountables : [String!] $status : String!){
-    createAction(name: $name  projectId: $projectId description : $description accountables : $accountables status : $status){
-        name
+export const CREATE_EVENT = gql`
+mutation createEvent($type: String! $projectId: String! $description : String! $contributors : [String!] $status : String!){
+    createEvent(type: $type  projectId: $projectId description : $description contributors : $contributors status : $status){
+        type
         id
         description
         status
         creation
-        accountables{
+        contributors{
             id
             firstname
             lastname
@@ -52,24 +52,39 @@ mutation createAction($name: String! $projectId: String! $description : String! 
 }
 `
 
-export const CHANGE_ACTION_STATE = gql`
-mutation changeActionState($actionId: String! $newStatus: String!){
-    changeActionState(actionId: $actionId  newStatus: $newStatus){
+export const CHANGE_EVENT_STATE = gql`
+mutation changeEventState($eventId: String! $newStatus: String!){
+    changeEventState(eventId: $eventId  newStatus: $newStatus){
         message
     }
 }
 `
-export const CHANGE_ACTION_DESCRIPTION = gql`
-mutation changeActionDescription($actionId: String! $newDescription: String!){
-    changeActionDescription(actionId: $actionId  newDescription: $newDescription){
+export const CHANGE_EVENT_DESCRIPTION = gql`
+mutation changeEventDescription($eventId: String! $newDescription: String!){
+    changeEventDescription(eventId: $eventId  newDescription: $newDescription){
         message
     }
 }
 `
-export const DELETE_ACTION = gql`
-mutation deleteAction($actionId: String!){
-    deleteAction(actionId: $actionId){
+export const DELETE_EVENT = gql`
+mutation deleteEvent($eventId: String!){
+    deleteEvent(eventId: $eventId){
         message
     }
 }
 `
+export const CREATE_COMMENT = gql`
+mutation createComment($eventId: String! $authorId : String! $content : String!){
+    createComment(eventId: $eventId authorId: $authorId content: $content){
+        id
+        content
+        creation
+        author{
+          id
+          email
+          firstname
+          lastname
+          avatarUrl
+        }
+    }
+}`

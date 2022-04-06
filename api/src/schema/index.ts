@@ -5,12 +5,11 @@ import { CREATE_CLIENT } from "./mutations/Client"
 import { FIND_CLIENT_BY_ID, GET_ALL_CLIENTS } from './queries/Client'
 import { CREATE_PROJECT } from './mutations/Project'
 import { FIND_PROJECT_BY_PROJECT_ID, FIND_PROJECTS_BY_CLIENT_ID, GET_ALL_PROJECTS } from "./queries/Project";
-import { GET_ALL_ACTIONS, GET_LATEST_ACTIONS, FIND_ACTIONS_BY_PROJECT_ID } from "./queries/Action";
-import { CREATE_ACTION, CHANGE_ACTION_STATE, CHANGE_ACTION_DESCRIPTION, DELETE_ACTION } from "./mutations/Action";
-import { GET_ALL_INFOS, FIND_INFOS_BY_PROJECT_ID } from "./queries/Info";
-import { CREATE_INFO, CHANGE_INFO_STATE } from "./mutations/Info";
-import { GET_ALL_DECISIONS, FIND_DECISIONS_BY_PROJECT_ID } from "./queries/Decision";
-import { CREATE_DECISION, CHANGE_DECISION_STATE } from "./mutations/Decision";
+import { GET_ALL_EVENTS, GET_LATEST_EVENTS, FIND_EVENTS_BY_PROJECT_ID } from "./queries/Event";
+import { CREATE_EVENT, CHANGE_EVENT_STATE, CHANGE_EVENT_DESCRIPTION, DELETE_EVENT } from "./mutations/Event";
+import { GET_ALL_COMMENTS_BY_EVENT_ID, GET_NUMBER_OF_COMMENTS } from "./queries/Comment";
+import { CREATE_COMMENT } from "./mutations/Comment";
+
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
     fields: {
@@ -20,13 +19,11 @@ const RootQuery = new GraphQLObjectType({
         findProjectsByClientId: FIND_PROJECTS_BY_CLIENT_ID,
         findProjectByProjectId: FIND_PROJECT_BY_PROJECT_ID,
         getAllProjects: GET_ALL_PROJECTS,
-        getAllActions: GET_ALL_ACTIONS,
-        findActionsByProjectId: FIND_ACTIONS_BY_PROJECT_ID,
-        getAllInfos: GET_ALL_INFOS,
-        findInfosByProjectId: FIND_INFOS_BY_PROJECT_ID,
-        getAllDecisions: GET_ALL_DECISIONS,
-        findDecisionsByProjectId: FIND_DECISIONS_BY_PROJECT_ID,
-        getLatestActions: GET_LATEST_ACTIONS
+        getAllEvents: GET_ALL_EVENTS,
+        findEventsByProjectId: FIND_EVENTS_BY_PROJECT_ID,
+        getLatestEvents: GET_LATEST_EVENTS,
+        getAllCommentsByEventId: GET_ALL_COMMENTS_BY_EVENT_ID,
+        getNumberOfComments: GET_NUMBER_OF_COMMENTS
     }
 })
 const Mutation = new GraphQLObjectType({
@@ -38,14 +35,11 @@ const Mutation = new GraphQLObjectType({
         updateAvatar: UPDATE_AVATAR,
         createClient: CREATE_CLIENT,
         createProject: CREATE_PROJECT,
-        createAction: CREATE_ACTION,
-        changeActionState: CHANGE_ACTION_STATE,
-        createInfo: CREATE_INFO,
-        changeInfoState: CHANGE_INFO_STATE,
-        createDecision: CREATE_DECISION,
-        changeDecisionState: CHANGE_DECISION_STATE,
-        changeActionDescription: CHANGE_ACTION_DESCRIPTION,
-        deleteAction: DELETE_ACTION
+        createEvent: CREATE_EVENT,
+        changeEventState: CHANGE_EVENT_STATE,
+        changeEventDescription: CHANGE_EVENT_DESCRIPTION,
+        deleteEvent: DELETE_EVENT,
+        createComment: CREATE_COMMENT
     }
 })
 

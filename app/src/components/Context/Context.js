@@ -1,17 +1,14 @@
 import React from "react";
-import rawActions from "../../rawActions";
-import rawInfos from "../../rawInfos";
-import rawDecisions from "../../rawDecisions";
-import rawRisks from "../../rawRisks";
-import rawProblems from "../../rawProblems";
+import rawEvents from "../../rawEvents";
 import gravatar from "gravatar";
 
 export const Context = React.createContext();
 
 const userData = {
+  id: "1",
   firstname: "Eliott",
   lastname: "Morcillo",
-  admin: true,
+  admin: false,
   email: "eliott.morcillo@gmail.com",
   avatarUrl: gravatar.url(
     "eliott.morcillo@gmail.com",
@@ -23,11 +20,7 @@ export const ContextProvider = ({ children }) => {
   const [clients, setClients] = React.useState([]);
   const [users, setUsers] = React.useState();
   const [projects, setProjects] = React.useState([]);
-  const [actions, setActions] = React.useState(rawActions);
-  const [infos, setInfos] = React.useState(rawInfos);
-  const [decisions, setDecisions] = React.useState(rawDecisions);
-  const [risks, setRisks] = React.useState(rawRisks);
-  const [problems, setProblems] = React.useState(rawProblems);
+  const [events, setEvents] = React.useState(rawEvents);
   const [currentClient, setCurrentClient] = React.useState(null);
   const [currentProject, setCurrentProject] = React.useState(null);
   const [listStyle, setListStyle] = React.useState(false);
@@ -46,16 +39,8 @@ export const ContextProvider = ({ children }) => {
         setClients: setClients,
         projects: projects,
         setProjects: setProjects,
-        actions: actions,
-        setActions: setActions,
-        infos: infos,
-        setInfos: setInfos,
-        decisions: decisions,
-        setDecisions: setDecisions,
-        risks: risks,
-        setRisks: setRisks,
-        problems: problems,
-        setProblems: setProblems,
+        events: events,
+        setEvents: setEvents,
         currentClient: currentClient,
         setCurrentClient: setCurrentClient,
         currentProject: currentProject,

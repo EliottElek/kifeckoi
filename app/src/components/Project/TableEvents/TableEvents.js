@@ -4,15 +4,15 @@ import { Context } from "../../Context/Context";
 import { useQuery } from "@apollo/client";
 import "./TableEvents.css";
 import {
-  FIND_ACTIONS_BY_PROJECT_ID,
+  FIND_EVENTS_BY_PROJECT_ID,
   FIND_PROJECT_BY_PROJECT_ID,
 } from "../../../graphql/queries";
 import { useParams } from "react-router";
 import Progress from "../../../materials/Progress/Progress";
 
-const Example = () => {
+const TableEvents = ({ type }) => {
   const { id } = useParams();
-  const { actions, setCurrentProject, setActions } = React.useContext(Context);
+  const { events, setCurrentProject, setEvents } = React.useContext(Context);
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
     variables: { id: id },
   });
@@ -21,25 +21,20 @@ const Example = () => {
       setCurrentProject({ ...dataProject?.data?.findProjectByProjectId });
     }
   }, [setCurrentProject, dataProject?.data]);
-  const dataActions = useQuery(FIND_ACTIONS_BY_PROJECT_ID, {
-    variables: { id: id },
+  const dataevents = useQuery(FIND_EVENTS_BY_PROJECT_ID, {
+    variables: { id: id, type: type },
   });
   React.useEffect(() => {
-    if (dataActions?.data) {
-      setActions([...dataActions?.data?.findActionsByProjectId]);
+    if (dataevents?.data) {
+      setEvents([...dataevents?.data?.findEventsByProjectId]);
     }
-  }, [setActions, dataActions?.data]);
-  if (!actions) return <Progress />;
-  if (actions.length === 0)
-    return <h4 style={{ color: "white" }}>Aucune action.</h4>;
+  }, [setEvents, dataevents?.data]);
+  if (!events) return <Progress />;
+  if (events.length === 0)
+    return <h4 style={{ color: "white" }}>Aucun(e) {type}.</h4>;
 
-  const theadData = Object.keys(actions[0]).map(function (key) {
-    if (
-      key !== "__typename" &&
-      key !== "id" &&
-      key !== "name"
-    )
-      return key;
+  const theadData = Object.keys(events[0]).map(function (key) {
+    if (key !== "__typename" && key !== "id" && key !== "name") return key;
     else {
       return null;
     }
@@ -49,10 +44,10 @@ const Example = () => {
       <Table
         customClass={"table__events"}
         theadData={theadData}
-        data={actions}
+        data={events}
       />
     </div>
   );
 };
 
-export default Example;
+export default TableEvents;

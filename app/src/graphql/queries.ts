@@ -53,10 +53,10 @@ query{
     }
   }
 `
-export const GET_ALL_ACTIONS = gql`
+export const GET_ALL_EVENTS = gql`
 query{
-    getAllActions{
-    name
+    getAllEvents{
+    type
     id
     creation
     project{
@@ -65,7 +65,7 @@ query{
     }
     description
     status
-    accountables{
+    contributors{
       id
       firstname
       lastname
@@ -76,10 +76,10 @@ query{
     }
   }
 `
-export const GET_LATEST_ACTIONS = gql`
-query getLatestActions($id: String!){
-  getLatestActions(id : $id){
-    name
+export const GET_LATEST_EVENTS = gql`
+query getLatestEvents($id: String! $type : String!){
+  getLatestEvents(id : $id type : $type){
+    type
     id
     creation
     project{
@@ -88,7 +88,7 @@ query getLatestActions($id: String!){
     }
     description
     status
-    accountables{
+    contributors{
       id
       firstname
       lastname
@@ -99,15 +99,15 @@ query getLatestActions($id: String!){
     }
   }
 `
-export const FIND_ACTIONS_BY_PROJECT_ID = gql`
-query findActionsByProjectId($id: String!){
-  findActionsByProjectId(id : $id){
-    name
+export const FIND_EVENTS_BY_PROJECT_ID = gql`
+query findEventsByProjectId($id: String! $type : String!){
+  findEventsByProjectId(id : $id type : $type){
+    type
     id
     description
     status
     creation
-    accountables{
+    contributors{
       id
       firstname
       lastname
@@ -119,3 +119,27 @@ query findActionsByProjectId($id: String!){
 }
 `
 
+export const GET_ALL_COMMENTS_BY_EVENT_ID = gql`
+query getAllCommentsByEventId($eventId: String!){
+  getAllCommentsByEventId(eventId : $eventId){
+    id
+    content
+    creation
+    author {
+      id
+      username
+      avatarUrl
+      firstname
+      lastname
+      email
+    }
+    }
+  }
+`
+export const GET_NUMBER_OF_COMMENTS = gql`
+query getNumberOfComments($eventId: String!){
+  getNumberOfComments(eventId : $eventId){
+    message
+  }
+}
+`

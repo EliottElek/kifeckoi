@@ -1,11 +1,12 @@
 import { useContext, useState, useEffect } from "react";
 import "./card.scss";
-import "../../Client/RecentActions/RecentActions.css";
+import "../../Client/RecentEvents/RecentEvents.css";
 import { FiEdit2 } from "react-icons/fi";
 import { MdOutlineClear } from "react-icons/md";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { AiOutlineCheck } from "react-icons/ai";
 import { FiMoreVertical, FiMoreHorizontal } from "react-icons/fi";
+import { FaRegComments } from "react-icons/fa";
 import { HiOutlineDuplicate } from "react-icons/hi";
 import Modal from "../../../materials/Modal/Modal";
 import Chip from "../../../materials/Chip/Chip";
@@ -13,13 +14,14 @@ import { Flip } from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
 import {
-  CHANGE_ACTION_DESCRIPTION,
-  CHANGE_ACTION_STATE,
-  DELETE_ACTION,
-  CREATE_ACTION,
+  CHANGE_EVENT_DESCRIPTION,
+  CHANGE_EVENT_STATE,
+  DELETE_EVENT,
+  CREATE_EVENT,
 } from "../../../graphql/mutations";
+import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
 import { Context } from "../../Context/Context";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Popup from "../../../materials/Popup/Popup";
 import { toast } from "react-toastify";
 import { useParams } from "react-router";
@@ -27,73 +29,85 @@ import MenuItem from "../../../materials/Menu/MenuItem";
 import Menu from "../../../materials/Menu/Menu";
 import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import ReactMarkdown from "../../../assets/ReactMarkdown";
+import Progress from "../../../materials/Progress/Progress";
+import Comments from "./Comments/Comments";
 const Card = (props) => {
-  const { setActions, actions, currentProject, setCurrentProject, markdown } =
+  const { setEvents, events, currentProject, setCurrentProject, markdown } =
     useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [status, setStatus] = useState(false);
   const [modifMode, setModifMode] = useState(false);
   const [openPopUp, setOpenPopUp] = useState(false);
+  const [comments, setComments] = useState([]);
   const [openEditPopUp, setOpenEditPopUp] = useState(false);
   const [submitOnEnterMode, setSubmitOnEnterMode] = useState(false);
-  const [changeActionDescription] = useMutation(CHANGE_ACTION_DESCRIPTION);
-  const [changeActionState] = useMutation(CHANGE_ACTION_STATE);
-  const [deleteAction] = useMutation(DELETE_ACTION);
-  const [createAction] = useMutation(CREATE_ACTION);
-
+  const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
+  const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
+  const [deleteEvent] = useMutation(DELETE_EVENT);
+  const [createEvent] = useMutation(CREATE_EVENT);
   const [description, setDescription] = useState(props.task.description);
+
   const { id } = useParams();
+  const commentsData = useQuery(GET_ALL_COMMENTS_BY_EVENT_ID, {
+    variables: { eventId: props.task.id },
+  });
+  useEffect(() => {
+    if (commentsData?.data) {
+      setComments(commentsData?.data?.getAllCommentsByEventId);
+    }
+  }, [setComments, commentsData?.data]);
   const handleModifyDescription = async (e) => {
     e.stopPropagation();
     try {
-      await changeActionDescription({
+      await changeEventDescription({
         variables: {
-          actionId: props.task.id,
+          eventId: props.task.id,
           newDescription: description,
         },
       });
-      const index = actions.findIndex((e) => e.title === props.task.status);
-      const items = [...actions[index].tasks];
+      const index = events.findIndex((e) => e.title === props.task.status);
+      const items = [...events[index].tasks];
       const itemsD = JSON.parse(JSON.stringify(items));
 
       const item = itemsD.find((item) => item.id === props.task.id);
       item.description = description;
-      actions[index].tasks = itemsD;
-      setActions([...actions]);
-      currentProject.actions = [...actions];
+      events[index].tasks = itemsD;
+      setEvents([...events]);
+      currentProject.events = [...events];
       setCurrentProject(currentProject);
       setModifMode(false);
     } catch (err) {
+      toast.error("Impossible de modifier la description.", {
+        position: toast.POSITION.BOTTOM_LEFT,
+      });
       console.log(err);
     }
   };
   useEffect(() => {
-    if (props.task.status === "Réalisé") setStatus("action__green");
-    else if (props.task.status === "En cours") setStatus("action__marron");
-    else if (props.task.status === "Nouveau") setStatus("action__blue");
-    else if (props.task.status === "À planifier") setStatus("action__orange");
+    if (props.task.status === "Réalisé") setStatus("event__green");
+    else if (props.task.status === "En cours") setStatus("event__marron");
+    else if (props.task.status === "Nouveau") setStatus("event__blue");
+    else if (props.task.status === "À planifier") setStatus("event__orange");
   }, [props.task.status, setStatus]);
   const handleMoveTo = async (category) => {
     try {
-      const sourceColIndex = actions.findIndex(
+      const sourceColIndex = events.findIndex(
         (e) => e.title === props.task.status
       );
-      const destinationColIndex = actions.findIndex(
-        (e) => e.id === category.id
-      );
-      const sourceCol = actions[sourceColIndex];
-      const destinationCol = actions[destinationColIndex];
+      const destinationColIndex = events.findIndex((e) => e.id === category.id);
+      const sourceCol = events[sourceColIndex];
+      const destinationCol = events[destinationColIndex];
       const sourceTask = [...sourceCol.tasks];
       const destinationTask = [...destinationCol.tasks];
       const index = sourceTask.findIndex((task) => task.id === props.task.id);
       const [removed] = sourceTask.splice(index, 1);
       destinationTask.splice(0, 0, removed);
 
-      actions[sourceColIndex].tasks = sourceTask;
-      actions[destinationColIndex].tasks = destinationTask;
-      await changeActionState({
+      events[sourceColIndex].tasks = sourceTask;
+      events[destinationColIndex].tasks = destinationTask;
+      await changeEventState({
         variables: {
-          actionId: props.task.id,
+          eventId: props.task.id,
           newStatus: category?.title,
         },
       });
@@ -113,35 +127,35 @@ const Card = (props) => {
       );
       setOpenPopUp(false);
     } catch (err) {
-      toast.error("Impossible de déplacer l'action.", {
+      toast.error("Impossible de déplacer l'évènement.", {
         position: toast.POSITION.BOTTOM_LEFT,
         transition: Flip,
       });
       console.log(err);
     }
-    setActions([...actions]);
-    currentProject.actions = [...actions];
+    setEvents([...events]);
+    currentProject.events = [...events];
     setCurrentProject(currentProject);
   };
 
-  const handleDeleteAction = async (e) => {
+  const handledeleteEvent = async (e) => {
     e.stopPropagation();
     try {
-      await deleteAction({
+      await deleteEvent({
         variables: {
-          actionId: props.task.id,
+          eventId: props.task.id,
         },
       });
-      const index = actions.findIndex((e) => e.title === props.task.status);
-      const items = [...actions[index].tasks];
+      const index = events.findIndex((e) => e.title === props.task.status);
+      const items = [...events[index].tasks];
       const itemsD = JSON.parse(JSON.stringify(items));
       const newArray = itemsD.filter((item) => item.id !== props.task.id);
-      actions[index].tasks = [...newArray];
-      setActions([...actions]);
-      currentProject.actions = [...actions];
+      events[index].tasks = [...newArray];
+      setEvents([...events]);
+      currentProject.events = [...events];
       setCurrentProject(currentProject);
       setModifMode(false);
-      toast("Action archivée avec succès.", {
+      toast(`${props.type} archivé(e) avec succès.`, {
         position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,
@@ -152,48 +166,51 @@ const Card = (props) => {
       });
     } catch (err) {
       console.log(err);
-      toast.waning("Impossible de supprimer l'action. Réessayez plus tard.", {
-        position: "bottom-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        transition: Flip,
-      });
+      toast.warning(
+        "Impossible de supprimer cette carte. Réessayez plus tard.",
+        {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          transition: Flip,
+        }
+      );
     }
   };
   const duplicate = async (e) => {
     e.stopPropagation();
     try {
-      const ArrayOfIds = props.task.accountables.map((acc) => acc.id);
+      const ArrayOfIds = props.task.contributors.map((acc) => acc.id);
 
-      const newAction = await createAction({
+      const newEvent = await createEvent({
         variables: {
-          name: "Action",
+          type: props.type,
           projectId: id,
           description: props.task.description,
-          accountables: ArrayOfIds,
+          contributors: ArrayOfIds,
           status: props.task.status,
         },
       });
-      const index = actions.findIndex(
-        (action) => action.title === props.task.status
+      const index = events.findIndex(
+        (event) => event.title === props.task.status
       );
-      actions[index].tasks.splice(actions[index] + 1, 0, {
-        ...newAction?.data?.createAction,
+      events[index].tasks.splice(events[index] + 1, 0, {
+        ...newEvent?.data?.createEvent,
         new: true,
       });
-      setActions([...actions]);
-      currentProject.actions = [...actions];
+      setEvents([...events]);
+      currentProject.events = [...events];
       setCurrentProject(currentProject);
 
       props.setLength && props.setLength(props.length + 1);
       toast(
         `${
-          newAction?.data?.createAction
-            ? newAction?.data?.createAction.name
+          newEvent?.data?.createEvent
+            ? newEvent?.data?.createEvent.type
             : "Évenement"
         } dupliqué(e) avec succès.`,
         {
@@ -238,8 +255,9 @@ const Card = (props) => {
       <div
         onClick={(e) => {
           e.stopPropagation();
-          if (!openPopUp) setOpenModal(true);
-          else setOpenPopUp(false);
+          if (!openPopUp) {
+            setOpenModal(true);
+          } else setOpenPopUp(false);
         }}
         className={"card"}
       >
@@ -248,11 +266,11 @@ const Card = (props) => {
             props.dragging ? "card__content dragging" : "card__content"
           }
         >
-          <div className="card__content__actions__container">
+          <div className="card__content__events__container">
             <button
               data-tip
               data-for="archiveTooltip"
-              onClick={handleDeleteAction}
+              onClick={handledeleteEvent}
               className="kanban__section__content__name__container__edit__button"
             >
               <MdOutlineDeleteOutline />
@@ -273,6 +291,12 @@ const Card = (props) => {
             >
               <FiMoreVertical />
             </button>
+            <span className="kanban__section__content__name__container__comments__indicator">
+              <span className="kanban__section__content__name__container__comments__indicator__number">
+                {comments?.length}
+              </span>
+              <FaRegComments />
+            </span>
           </div>
           <div className={"card__content__added__indicator"}>
             {modifMode ? (
@@ -339,28 +363,28 @@ const Card = (props) => {
               </button>
             )}
           </div>
-          {props.type === "info" && (
+          {props.type === "Info" && (
             <span className="card__icon">
               <i className="gg-info"></i>
               Info
             </span>
           )}
-          {props.type === "action" && (
+          {props.type === "Action" && (
             <span className="card__icon violet">
               <i className="gg-arrows-exchange-alt"></i> Action
             </span>
           )}
-          {props.type === "decision" && (
+          {props.type === "Decision" && (
             <span className="card__icon marron">
               <i className="gg-alarm"></i> Décision
             </span>
           )}
-          {props.type === "risk" && (
+          {props.type === "Risk" && (
             <span className="card__icon orange">
               <i className="gg-bell"></i> Risque
             </span>
           )}
-          {props.type === "problem" && (
+          {props.type === "Problem" && (
             <span className="card__icon red">
               <i className="gg-danger"></i> Problème
             </span>
@@ -389,7 +413,7 @@ const Card = (props) => {
               )}
             </div>
           )}
-          <Avatars users={props.task.accountables} />
+          <Avatars users={props.task.contributors} />
         </div>
       </div>
       <Modal open={openModal} setOpen={setOpenModal}>
@@ -406,11 +430,11 @@ const Card = (props) => {
           <span>
             Status : <span className={status}>{props.task.status}</span>
           </span>
-          {props.task.accountables.length !== 0 && (
+          {props.task.contributors.length !== 0 && (
             <div className="kanban__section__content__name__container__avatars__container">
               <span>Responsables : </span>
               <div className="kanban__section__content__name__container__avatars__container">
-                {props.task.accountables.map((acc) => (
+                {props.task.contributors.map((acc) => (
                   <Chip key={acc.id} text={acc.username} src={acc.avatarUrl} />
                 ))}
               </div>
@@ -429,6 +453,15 @@ const Card = (props) => {
               {":"}
               {new Date(props.task.creation).getMinutes()}
             </span>
+            {!comments ? (
+              <Progress />
+            ) : (
+              <Comments
+                comments={comments}
+                event={props.task}
+                setComments={setComments}
+              />
+            )}{" "}
           </span>
         </div>
       </Modal>
@@ -460,7 +493,7 @@ const Card = (props) => {
             <p>Éditer...</p>
           </MenuItem>
           <span className={"divider"} />
-          {actions.map((category) => {
+          {events.map((category) => {
             if (category.title !== props.task.status)
               return (
                 <MenuItem
@@ -478,7 +511,7 @@ const Card = (props) => {
           <span className={"divider"} />
           <MenuItem
             onClick={(e) => {
-              handleDeleteAction(e);
+              handledeleteEvent(e);
               setOpenPopUp(false);
             }}
           >
@@ -495,7 +528,7 @@ const Card = (props) => {
             <span>Archiver</span>
           </ReactTooltip>
           <ReactTooltip delayShow={500} id="moreTooltip" effect="solid">
-            <span>Plus d'actions</span>
+            <span>Plus d'events</span>
           </ReactTooltip>
           <ReactTooltip delayShow={500} id="editTooltip" effect="solid">
             <span>Éditer</span>

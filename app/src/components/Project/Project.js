@@ -15,12 +15,12 @@ import { useQuery } from "@apollo/client";
 const Project = () => {
   const navigate = useNavigate();
   const {
-    actions,
+    events,
     currentProject,
     setCurrentProject,
     user,
     listStyle,
-    setActions,
+    setEvents,
   } = useContext(Context);
   const [openSaveModal, setOpenSaveModal] = React.useState(false);
   const [modifMode, setModifMode] = React.useState(false);
@@ -47,10 +47,10 @@ const Project = () => {
       setTitle(currentProject?.name);
     }
   }, [currentProject?.name, setTitle, currentProject]);
-  const clearActions = () => {
-    if (!listStyle) actions?.forEach((action) => (action.tasks = []));
+  const clearEvents = () => {
+    if (!listStyle) events?.forEach((action) => (action.tasks = []));
     else {
-      setActions(null);
+      setEvents(null);
     }
   };
   const [saveButtonContent, setSaveButtonContent] =
@@ -81,7 +81,7 @@ const Project = () => {
             <div className="name__container">
               <Button
                 onClick={() => {
-                  clearActions();
+                  clearEvents();
                   navigate(`/client/${currentProject.client.id}`);
                 }}
               >
@@ -143,7 +143,7 @@ const Project = () => {
                 </>
               )}
             </div>
-            <div className="actions__container">
+            <div className="events__container">
               <Button onClick={save}>{saveButtonContent}</Button>
               <Button reversed onClick={() => setOpenSaveModal(true)}>
                 Valider
@@ -160,7 +160,7 @@ const Project = () => {
             <div className="modal__content__container">
               <h3>Êtes-vous sûr(e) de vouloir valider ?</h3>
               <p>Vous pourrez faire des modifications après enregistrement.</p>
-              <div className="modal__content__actions__container">
+              <div className="modal__content__events__container">
                 <Button reversed onClick={save}>
                   Valider
                 </Button>

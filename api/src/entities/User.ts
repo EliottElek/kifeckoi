@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
-import { Action } from "./Action";
+import { Event } from "./Event";
+import { Comment } from './Comment';
 @Entity()
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -16,5 +17,6 @@ export class User extends BaseEntity {
     password!: string;
     @Column()
     avatarUrl!: string;
-    @ManyToMany(() => Action, (actions: { accountables: any; }) => actions.accountables, { cascade: true }) actions!: Action[];
+    @ManyToMany(() => Event, (events: { contributors: any; }) => events.contributors, { cascade: true }) events!: Event[];
+    @OneToMany(() => Comment, comment => comment.author) comments!: Comment[];
 }

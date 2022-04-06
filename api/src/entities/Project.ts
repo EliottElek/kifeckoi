@@ -1,8 +1,6 @@
 import { BaseEntity, Entity, PrimaryColumn, Column, ManyToOne, OneToMany } from "typeorm";
-import { Action } from "./Action";
-import { Info } from "./Info";
+import { Event } from "./Event";
 import { Client } from "./Client";
-import { Decision } from "./Decision";
 @Entity()
 export class Project extends BaseEntity {
     @PrimaryColumn()
@@ -10,7 +8,5 @@ export class Project extends BaseEntity {
     @Column()
     name!: string;
     @ManyToOne(() => Client, client => client.projects, { onDelete: 'CASCADE' }) client!: Client;
-    @OneToMany(() => Action, action => action.project) actions!: Action[];
-    @OneToMany(() => Info, info => info.project) infos!: Info[];
-    @OneToMany(() => Decision, decision => decision.project) decisions!: Decision[];
+    @OneToMany(() => Event, event => event.project) events!: Event[];
 }

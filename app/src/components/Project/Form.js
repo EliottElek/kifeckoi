@@ -8,7 +8,7 @@ import ListItem from "../../materials/List/ListItem";
 
 import { useLocation } from "react-router-dom";
 import { Context } from "../Context/Context";
-import ActionsV2 from "./ActionsV2";
+import Events from "./Events";
 
 const statusOptions = [
   { name: "Conforme" },
@@ -217,7 +217,10 @@ const Form = () => {
             />
           </div>
         </div>
-        <ActionsV2 />
+        <Events type={"Action"} />
+        <Events type={"Info"} />
+        <Events type={"Risk"} />
+        <Events type={"Decision"} />
       </>
     );
   };

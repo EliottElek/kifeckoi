@@ -18,13 +18,14 @@
   font-size: 1rem;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: 0 2px 4px #d8e1e8;
 }
 .card__content > * > ul > li {
   list-style: disc;
   margin-left: 12px;
 }
 .card__content:hover > .card__content__added__indicator,
-.card__content:hover > .card__content__actions__container {
+.card__content:hover > .card__content__events__container {
   opacity: 1;
   transition: 0.1s ease;
 }
@@ -40,6 +41,7 @@
   flex-direction: column;
   gap: 12px;
   max-height: 100%;
+  background-color: red!important;
 }
 .modal__content__container_scrollable_item_container {
   display: flex;
@@ -110,10 +112,27 @@
   transition: 0.1s ease;
   display: flex;
 }
+.kanban__section__content__name__container__comments__indicator {
+  background-color: transparent;
+  height: 100%;
+  width: auto;
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 4px;
+  border-radius: 3px;
+  transition: 0.1s ease;
+  display: flex;
+  transform: translateX(25px);
+  align-items: center;
+  &__number {
+    font-size: 0.8rem;
+    margin-right: 3px;
+  }
+}
 .kanban__section__content__name__container__button__container {
   display: flex;
 }
-.card__content__actions__container {
+.card__content__events__container {
   position: absolute;
   margin: 2px;
   top: unset !important;

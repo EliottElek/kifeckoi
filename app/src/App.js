@@ -44,7 +44,34 @@ const App = () => {
             path="/project/:id/actions"
             element={
               <SecureRoute>
-                <ActionsWide />
+                <ActionsWide type={"Action"} />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/infos"
+            element={
+              <SecureRoute>
+                <ActionsWide type={"Info"} />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/decisions"
+            element={
+              <SecureRoute>
+                <ActionsWide type={"Decision"} />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/risks"
+            element={
+              <SecureRoute>
+                <ActionsWide type={"Risk"} />
               </SecureRoute>
             }
           />

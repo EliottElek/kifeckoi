@@ -11,7 +11,7 @@ const Column = ({
   children,
   setAddCard,
   section,
-  setActionSelected,
+  setEventSelected,
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
   return (
@@ -31,7 +31,7 @@ const Column = ({
             onClick={(e) => {
               e.stopPropagation();
               setOpenMenu(false);
-              setActionSelected(section);
+              setEventSelected(section);
               setAddCard(true);
             }}
           >

@@ -2,7 +2,7 @@ import React from "react";
 import Progress from "../Progress/Progress";
 import Modal from "../Modal/Modal";
 import Chip from "../Chip/Chip";
-import "../../components/Client/RecentActions/RecentActions.css";
+import "../../components/Client/RecentEvents/RecentEvents.css";
 import AutoTextArea from "../AutoSizeTextArea/AutoSizeTextArea";
 import ReactMarkdownSnippet from "../../assets/ReactMarkdown";
 import shortString from "../../assets/functions/shortString";
@@ -35,15 +35,15 @@ const TableRow = ({ item }) => {
           if (it === "status")
             return (
               <td key={i}>
-                <span className={status}>{item.status}</span>
+                <span className={"status"}>{item.status}</span>
               </td>
             );
-          if (it === "accountables")
+          if (it === "contributors")
             return (
               <td key={i}>
-                {item.accountables.length !== 0 ? (
+                {item.contributors.length !== 0 ? (
                   <div style={{ display: "flex" }}>
-                    {item.accountables.map((acc) => (
+                    {item.contributors.map((acc) => (
                       <Chip
                         key={acc.id}
                         text={acc.username}
@@ -103,11 +103,11 @@ const TableRow = ({ item }) => {
           <span>
             Status : <span className={status}>{item.status}</span>
           </span>
-          {item.accountables.length !== 0 && (
+          {item.contributors.length !== 0 && (
             <div className="kanban__section__content__name__container__avatars__container">
               <span>Responsables : </span>
               <div className="kanban__section__content__name__container__avatars__container">
-                {item.accountables.map((acc) => (
+                {item.contributors.map((acc) => (
                   <Chip key={acc.id} text={acc.username} src={acc.avatarUrl} />
                 ))}
               </div>

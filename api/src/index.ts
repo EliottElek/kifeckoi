@@ -6,9 +6,8 @@ import { createConnection } from 'typeorm'
 import { User } from './entities/User'
 import { Client } from './entities/Client'
 import { Project } from './entities/Project'
-import { Action } from './entities/Action'
-import { Info } from './entities/Info'
-import { Decision } from './entities/Decision'
+import { Event } from './entities/Event'
+import { Comment } from './entities/Comment'
 
 const PORT = 3001
 
@@ -21,7 +20,7 @@ const main = async () => {
         password: "elektra1",
         logging: true,
         synchronize: true,
-        entities: [User, Client, Project, Action, Info, Decision]
+        entities: [User, Client, Project, Event, Comment]
     })
     const app = express()
     app.use(cors())

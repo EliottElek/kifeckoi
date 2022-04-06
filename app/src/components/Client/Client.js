@@ -9,7 +9,7 @@ import Button from "../../materials/Button/Button";
 import { FIND_CLIENT_BY_ID } from "../../graphql/queries";
 import { CREATE_PROJECT } from "../../graphql/mutations";
 import { useQuery, useMutation } from "@apollo/client";
-import RecentActions from "./RecentActions/RecentActions";
+import RecentsEvents from "./RecentEvents/RecentsEvents";
 
 const Client = () => {
   const { currentClient, setCurrentClient, projects, setProjects } =
@@ -138,7 +138,7 @@ const Client = () => {
           </form>
         </div>
       </div>
-      <RecentActions />
+      <RecentsEvents />
     </>
   );
 };
