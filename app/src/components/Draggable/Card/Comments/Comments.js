@@ -6,6 +6,7 @@ import "./Comments.css";
 const Comments = ({ comments, setComments, event }) => {
   return (
     <div className="comments__container">
+      <h3>Commentaires</h3>
       {comments.map((comment, i) => (
         <Comment key={i} comment={comment} />
       ))}

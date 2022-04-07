@@ -42,10 +42,21 @@
   justify-content: space-between;
 }
 .form__comment__container__textarea {
-  width: 300px;
-  min-height: 32px !important;
-  border-radius: 4px;
-  margin-top: 3px;
-  font-size: 14px;
-  padding: 2px;
+  background-color: white;
+  border: 1px solid rgb(223, 225, 230);
+  border-radius: 3px;
+  box-sizing: border-box;
+  height: 40px;
+  padding-left: 20px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 0.875rem;
+  width: 100%;
+  font-weight: 400;
+  min-width: 400px;
+  line-height: 1.42857;
+  letter-spacing: -0.005em;
+  color: rgb(94, 108, 132);
+  position: sticky!important;
+  bottom: 10px;
 }

@@ -31,6 +31,7 @@ import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import ReactMarkdown from "../../../assets/ReactMarkdown";
 import Progress from "../../../materials/Progress/Progress";
 import Comments from "./Comments/Comments";
+import ReactMarkdownSnippet from "../../../assets/ReactMarkdown";
 const Card = (props) => {
   const { setEvents, events, currentProject, setCurrentProject, markdown } =
     useContext(Context);
@@ -418,7 +419,7 @@ const Card = (props) => {
       </div>
       <Modal open={openModal} setOpen={setOpenModal}>
         <div className="modal__content__container">
-          <AutoTextArea
+          {/* <AutoTextArea
             disabled
             className="modif__description__textarea"
             value={props.task.description}
@@ -426,7 +427,12 @@ const Card = (props) => {
               width: "100%",
               fontSize: "2rem!important",
             }}
-          />
+          /> */}
+          <span className={"modal__card__content"}>
+            <ReactMarkdownSnippet>
+              {props.task.description}
+            </ReactMarkdownSnippet>
+          </span>
           <span>
             Status : <span className={status}>{props.task.status}</span>
           </span>
@@ -453,16 +459,16 @@ const Card = (props) => {
               {":"}
               {new Date(props.task.creation).getMinutes()}
             </span>
-            {!comments ? (
-              <Progress />
-            ) : (
-              <Comments
-                comments={comments}
-                event={props.task}
-                setComments={setComments}
-              />
-            )}{" "}
           </span>
+          {!comments ? (
+            <Progress />
+          ) : (
+            <Comments
+              comments={comments}
+              event={props.task}
+              setComments={setComments}
+            />
+          )}{" "}
         </div>
       </Modal>
       <Popup open={openPopUp} setOpen={setOpenPopUp} bottom>

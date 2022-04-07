@@ -25,6 +25,9 @@ const AutoTextArea = (props) => {
     <div
       style={{
         minHeight: parentHeight,
+        padding: "2px",
+        display: "flex",
+        alignItems: "center",
       }}
     >
       <textarea
@@ -33,6 +36,7 @@ const AutoTextArea = (props) => {
         rows={1}
         style={{
           ...props.style,
+          margin: 0,
           height: textAreaHeight,
         }}
         onChange={onChangeHandler}

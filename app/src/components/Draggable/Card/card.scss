@@ -7,6 +7,8 @@
 .card__content {
   padding: 10px;
   padding-top: 34px;
+  padding-bottom: 30px;
+
   // width: 100%;
   min-height: 70px;
   height: auto;
@@ -41,7 +43,7 @@
   flex-direction: column;
   gap: 12px;
   max-height: 100%;
-  background-color: red!important;
+  background-color: red !important;
 }
 .modal__content__container_scrollable_item_container {
   display: flex;
@@ -205,4 +207,8 @@
 }
 .card__description {
   overflow-wrap: break-word;
+}
+.modal__card__content {
+  font-size: larger;
+  margin: 20px;
 }

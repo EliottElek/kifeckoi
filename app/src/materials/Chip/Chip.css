@@ -9,7 +9,7 @@
   max-width: 140px;
   gap: 16px;
   border-radius: 30px;
-  background-color: rgb(180, 180, 180);
+  background-color: rgb(245, 245, 245);
   padding: 1px;
   margin: 4px;
   padding-left: 8px;
@@ -17,6 +17,6 @@
 .chip__container__image {
   height: 37px;
   width: 37px;
-  border: solid 1px rgb(133, 133, 133);
+  border: solid 1px rgb(221, 221, 221);
   border-radius: 50%;
 }
