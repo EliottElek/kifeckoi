@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AdvancedNavBar.css";
+import "./AdvancedNavBar.scss";
 import { CSSTransition } from "react-transition-group";
 import DropDownMenuItem from "./DropDownMenuItem";
 import { ReactComponent as ChevronIcon } from "../../assets/icons/chevron.svg";

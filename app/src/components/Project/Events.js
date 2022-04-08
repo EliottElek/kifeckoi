@@ -11,8 +11,9 @@ import "./Project.css";
 
 const Events = ({ type }) => {
   const navigate = useNavigate();
-  const { events, setEvents, listStyle, setListStyle, setMarkdown, markdown } =
+  const { listStyle, setListStyle, setMarkdown, markdown } =
     React.useContext(Context);
+  const [events, setEvents] = React.useState([]);
   const [length, setLength] = React.useState(0);
 
   React.useEffect(() => {

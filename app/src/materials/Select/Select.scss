@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .select {
   position: relative;
@@ -10,9 +10,9 @@
   padding: 15px 20px;
   cursor: pointer;
   border-radius: 4px;
-  background-color: var(--main-color);
+  background-color: var(--background-color-2);
   border: solid 1px rgba(0, 0, 0, 0.2);
-  color: #333;
+  color: var(--font-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,7 +27,7 @@
   top: 110%;
   left: 0;
   padding: 10px;
-  background: #fff;
+  background-color: var(--background-color-2);
   font-weight: 500;
   width: 95%;
   color: #333;

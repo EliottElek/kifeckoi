@@ -1,4 +1,4 @@
-import "./Button.css";
+import "./Button.scss";
 const Button = ({
   children,
   reversed,
@@ -7,9 +7,11 @@ const Button = ({
   disabled,
   type,
   className,
+  props,
 }) => {
   return (
     <button
+      {...props}
       type={type}
       disabled={disabled}
       onClick={onClick}

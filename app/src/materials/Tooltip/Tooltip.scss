@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .tooltip {
   width: auto;
@@ -6,7 +6,7 @@
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
   border-radius: 4px;
   transform: translate(60%, -100%);
-  background-color: var(--second-bg-color);
+  background-color: var(--color-background-2);
   z-index: 0;
   padding: 8px;
   display: flex;

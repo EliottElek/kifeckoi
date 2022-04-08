@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 
-import "./Carousel.css";
+import "./Carousel.scss";
 
 export const CarouselItem = ({ children, width }) => {
   return (

@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .input__text__container {
   max-width: 200px;
@@ -13,6 +13,6 @@
   border: solid 1px rgba(128, 128, 128, 0.794);
   padding: 10px;
   border-radius: 4px;
-  background-color: var(--main-bg-color);
+  background-color: var(--main-color);
   font-size: 1rem;
 }

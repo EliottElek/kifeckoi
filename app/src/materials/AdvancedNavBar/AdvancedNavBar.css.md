@@ -1,10 +1,10 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .button__versed {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  background-color: var(--main-bg-color);
+  background-color: var(--main-color);
   color: var(--main-color);
-  border: solid 1px var(--main-bg-color);
+  border: solid 1px var(--main-color);
   outline: none;
   min-width: 140px;
   min-height: 40px;
@@ -21,7 +21,7 @@
 .button__reversed {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   background-color: var(--main-color);
-  color: var(--main-bg-color);
+  color: var(--main-color);
   border: solid 1px var(--main-color);
   outline: none;
   min-width: 140px;
@@ -40,6 +40,6 @@
   transition: 0.2s ease-in;
 }
 .button__reversed:hover {
-  border: solid 1px var(--main-bg-color);
+  border: solid 1px var(--main-color);
   transition: 0.2s ease-out;
 }

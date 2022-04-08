@@ -1,16 +1,15 @@
-@import "../../materials/constants.css";
-
+/* @import "../../materials/constants.scss"; */
 .stickynavbar__container {
   z-index: 1;
   position: sticky;
   padding: 0;
   margin: 0;
-  top: 0;
+  top: 0px;
   width: 100%;
-  height: 60px;
-  background-color: #2d333b;
+  height: 50px;
+  background-color: var(--color-background-2);
   display: flex;
-  box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 4px var(--shadow-color);
   flex-direction: row;
   align-items: center;
   justify-content: space-between;

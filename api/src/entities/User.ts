@@ -19,4 +19,5 @@ export class User extends BaseEntity {
     avatarUrl!: string;
     @ManyToMany(() => Event, (events: { contributors: any; }) => events.contributors, { cascade: true }) events!: Event[];
     @OneToMany(() => Comment, comment => comment.author) comments!: Comment[];
+    @OneToMany(() => Comment, comment => comment.author) createdEvents!: Event[];
 }

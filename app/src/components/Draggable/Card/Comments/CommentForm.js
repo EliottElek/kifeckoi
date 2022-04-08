@@ -31,9 +31,10 @@ const CommentForm = ({ setComments, comments, event }) => {
   return (
     <div className={"form__comment__container"}>
       <AutoTextArea
+        oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
         className={"form__comment__container__textarea"}
         value={content}
-        placeholder={`Votre commentaire en tant que ${user.firstname}`}
+        placeholder={`${user.firstname}, un commentaire ?...`}
         onChange={(e) => setContent(e.target.value)}
       />
       <Button onClick={onSumbitComment}>Envoyer</Button>

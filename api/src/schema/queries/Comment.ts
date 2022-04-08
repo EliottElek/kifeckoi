@@ -1,4 +1,4 @@
-import { GraphQLInt, GraphQLList, GraphQLString } from "graphql"
+import { GraphQLList, GraphQLString } from "graphql"
 import { CommentType } from "../typedefs/Comment"
 import { Comment } from "../../entities/Comment"
 import { MessageType } from "../typedefs/Message";
@@ -10,19 +10,12 @@ export const GET_ALL_COMMENTS_BY_EVENT_ID = {
     type: new GraphQLList(CommentType),
     async resolve(parent: any, args: any) {
         const { eventId } = args;
-        return await Comment.find({ relations: ["author"], where: { eventId: eventId } });
-    }
-}
-export const GET_NUMBER_OF_COMMENTS = {
-    type: MessageType,
-    args: {
-        eventId: { type: GraphQLString }
-    },
-    async resolve(parent: any, args: any) {
-        const { eventId } = args;
-        const comments = await Comment.find({ where: { eventId: eventId } });
-        const length = comments.length
-        console.log(comments)
-        return { message : length }
+        const comments = await Comment.find({ relations: ["author"], where: { eventId: eventId } });
+        var sorted_comments = comments.sort((a, b) => {
+            return new Date(a.creation).getTime() -
+                new Date(b.creation).getTime()
+        });
+        return sorted_comments
+
     }
 }

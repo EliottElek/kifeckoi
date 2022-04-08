@@ -86,6 +86,11 @@ query getLatestEvents($id: String! $type : String!){
       id
       name
     }
+    creator {
+      id
+      firstname
+      lastname
+    }
     description
     status
     contributors{
@@ -107,6 +112,11 @@ query findEventsByProjectId($id: String! $type : String!){
     description
     status
     creation
+    creator {
+      id
+      firstname
+      lastname
+    }
     contributors{
       id
       firstname
@@ -135,11 +145,4 @@ query getAllCommentsByEventId($eventId: String!){
     }
     }
   }
-`
-export const GET_NUMBER_OF_COMMENTS = gql`
-query getNumberOfComments($eventId: String!){
-  getNumberOfComments(eventId : $eventId){
-    message
-  }
-}
 `

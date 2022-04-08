@@ -13,7 +13,7 @@ export const GET_ALL_EVENTS = {
         const { type } = args
 
         return await Event.find({
-            relations: ["project", "contributors", "comments"], where: { type: type }
+            relations: ["project", "contributors", "comments", "creator"], where: { type: type }
         });
     }
 }
@@ -26,7 +26,7 @@ export const GET_LATEST_EVENTS = {
     async resolve(parent: any, args: any) {
         const { id, type } = args
         var events = await Event.find({
-            relations: ["project", "contributors", "comments"], where: { type: type }
+            relations: ["project", "contributors", "comments", "creator"], where: { type: type }
         });
         var sorted_events = events.sort((a, b) => {
             console.log(a.creation)
@@ -49,7 +49,7 @@ export const FIND_EVENTS_BY_PROJECT_ID = {
     async resolve(parent: any, args: any) {
         const { id, type } = args
         const events = await Event.find({
-            relations: ["contributors", "project", "comments"],
+            relations: ["contributors", "project", "comments", "creator"],
             where: { projectId: id, type: type }
         })
         if (!events) throw new Error("Cannot find project.")

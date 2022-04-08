@@ -1,5 +1,5 @@
 import React from "react";
-import "./Alert.css";
+import "./Alert.scss";
 const Alert = ({ open, setOpen, children, type, delay }) => {
   const [show, setShow] = React.useState(false);
   const delayTime = delay || 2000;

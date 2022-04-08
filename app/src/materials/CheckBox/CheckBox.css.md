@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .checkbox_rounded {
   width: 20px;

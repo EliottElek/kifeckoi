@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .advanced-navbar {
   /* color: #fefefe; */
@@ -14,7 +14,7 @@
   left: 0;
   right: 0;
   /* box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06); */
-  /* background-color: var(--main-bg-color); */
+  /* background-color: var(--main-color); */
   background-color: whitesmoke;
 }
 .advanced-navbar-nav {
@@ -81,7 +81,7 @@ svg {
   top: calc(var(--nav-size) * 0.98);
   width: 300px;
   transform: translateX(-45%);
-  background-color: var(--main-bg-color);
+  background-color: var(--main-color);
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06);
   padding: 1rem;
   border-radius: 8px;

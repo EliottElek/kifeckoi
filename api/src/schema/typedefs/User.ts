@@ -13,6 +13,8 @@ export const UserType = new GraphQLObjectType({
         password: { type: GraphQLString },
         username: { type: GraphQLString },
         events: { type: new GraphQLList(EventType) },
-        comments: { type: new GraphQLList(CommentType) }
+        comments: { type: new GraphQLList(CommentType) },
+        createdEvents: { type: new GraphQLList(EventType) }
+
     })
 })

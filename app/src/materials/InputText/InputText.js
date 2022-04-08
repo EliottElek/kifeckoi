@@ -1,4 +1,4 @@
-import "./InputText.css";
+import "./InputText.scss";
 const InputText = ({
   value,
   className,

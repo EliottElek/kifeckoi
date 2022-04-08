@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .input__text__container {
   width: 100% !important;
@@ -14,7 +14,7 @@
   padding: 10px;
   color: white;
   border-radius: 4px;
-  background-color: var(--main-bg-color);
+  background-color: var(--main-color);
   font-size: 1rem;
 }
 .disabled__input {

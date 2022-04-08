@@ -16,10 +16,11 @@ export const CREATE_COMMENT = {
         const newuuid = uuid()
         const event = await Event.findOne({ id: eventId })
         const author = await User.findOne({ id: authorId }, { relations: ["comments"] })
+        const creationDate = new Date();
+
         if (!event) {
             throw new Error("Cannot find event.")
         } else {
-            const creationDate = new Date();
             if (!author) {
                 throw new Error("Cannot find author.")
             }
@@ -30,6 +31,31 @@ export const CREATE_COMMENT = {
             await User.save(author)
             await Comment.save(newComment)
         }
-        return { ...args, id: newuuid, author: author }
+        return { ...args, id: newuuid, author: author, creation: creationDate.toString() }
+    }
+}
+export const CHANGE_COMMENT__CONTENT = {
+    type: CommentType,
+    args: {
+        commentId: { type: GraphQLString },
+        newContent: { type: GraphQLString }
+    },
+    async resolve(parent: any, args: any) {
+        const { commentId, newContent } = args
+        const comment = await Comment.findOne({ id: commentId })
+        if (!comment) throw new Error("Cannot find comment.")
+        await Comment.update({ id: commentId }, { content: newContent })
+        return { successful: true, message: "Comment's content was successfully updated." }
+    }
+}
+export const DELETE_COMMENT = {
+    type: CommentType,
+    args: {
+        commentId: { type: GraphQLString },
+    },
+    async resolve(parent: any, args: any) {
+        const { commentId } = args
+        await Comment.delete({ id: commentId })
+        return { successful: true, message: "Comment was successfully deleted.", id: commentId }
     }
 }

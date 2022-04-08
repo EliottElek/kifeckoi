@@ -8,6 +8,7 @@ import TableEvents from "../Project/TableEvents/TableEvents";
 import { BsListTask } from "react-icons/bs";
 import { CgFormatUppercase } from "react-icons/cg";
 import ReactTooltip from "react-tooltip";
+import Switch from "../../materials/Switch/Switch";
 const DndWide = ({ type }) => {
   const {
     currentProject,
@@ -16,6 +17,8 @@ const DndWide = ({ type }) => {
     setEvents,
     setMarkdown,
     markdown,
+    toggleTheme,
+    defaultDark,
   } = useContext(Context);
   const navigate = useNavigate();
   useEffect(() => {
@@ -72,19 +75,14 @@ const DndWide = ({ type }) => {
           </button>
         </div>
         <div className="events__container">
+          <Switch onChange={toggleTheme} defaultChecked={defaultDark} />
           <Button>Sauvegarder</Button>
           <Button reversed>Valider</Button>
           <Button reversed>Libérer</Button>
           <Button reversed>Annuler</Button>
         </div>
       </StickyNavbar>
-      <div
-        style={{
-          padding: "20px",
-          overflowX: "auto",
-          height: "100%",
-        }}
-      >
+      <div style={{ padding: "20px" }} className={"dnd__wide__container"}>
         {listStyle ? <TableEvents type={type} /> : <EventKanban type={type} />}
       </div>
       <ReactTooltip delayShow={500} id="ListTooltip" effect="solid">

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import List from "../List/List";
 import ListItem from "../List/ListItem";
-import "./SearchBar.css";
+import "./SearchBar.scss";
 const SearchBar = ({ array }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [wordEntered, setWordEntered] = useState("");

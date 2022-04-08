@@ -1,4 +1,4 @@
-import "./Menu.css";
+import "./Menu.scss";
 
 const MenuItem = ({ children, active, onClick }) => {
   return (

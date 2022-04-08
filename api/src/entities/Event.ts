@@ -18,6 +18,7 @@ export class Event extends BaseEntity {
     @Column()
     creation!: string;
     @ManyToOne(() => Project, project => project.events, { onDelete: 'CASCADE' }) project!: Project;
+    @ManyToOne(() => User, user => user.createdEvents, { onDelete: 'CASCADE' }) creator!: User;
     @ManyToMany(() => User, contributor => contributor.events)
     @JoinTable()
     contributors!: User[];

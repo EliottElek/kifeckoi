@@ -1,8 +1,8 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .button__versed {
-  background-color: var(--main-bg-color);
-  color: var(--main-color);
+  background-color: var(--main-color);
+  color: white;
   border: solid 1px var(--main-color);
   outline: none;
   border-radius: 5px;
@@ -34,8 +34,8 @@
 }
 
 .button__reversed {
-  background-color: var(--main-color);
-  color: var(--main-bg-color);
+  background-color: var(--color-background-1);
+  color: var(--main-color);
   border: none;
   outline: none;
   border-radius: 5px;

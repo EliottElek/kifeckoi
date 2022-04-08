@@ -1,5 +1,5 @@
 import React from "react";
-import "./List.css";
+import "./List.scss";
 
 const ListItem = ({ children, active, onClick }) => {
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AdvancedNavBar.css";
+import "./AdvancedNavBar.scss";
 
 const AdvancedNavBarItem = ({ children, icon }) => {
   const [open, setOpen] = useState(false);

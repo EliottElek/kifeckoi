@@ -1,5 +1,5 @@
 import React from "react";
-import "./AdvancedNavBar.css";
+import "./AdvancedNavBar.scss";
 
 const DropDownMenuItem = ({
   children,

@@ -1,5 +1,5 @@
 import React from "react";
-import "./Popup.css";
+import "./Popup.scss";
 const Popup = ({ children, open, setOpen, bottom }) => {
   const componentRef = React.useRef();
 

@@ -4,6 +4,7 @@ import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
 import StickyNavbar from "../StickyNavbar/StickyNavbar";
 import Progress from "../../materials/Progress/Progress";
+import Switch from "../../materials/Switch/Switch";
 import { FiEdit2 } from "react-icons/fi";
 import { MdCheck } from "react-icons/md";
 import { MdClear } from "react-icons/md";
@@ -21,7 +22,10 @@ const Project = () => {
     user,
     listStyle,
     setEvents,
+    defaultDark,
+    toggleTheme,
   } = useContext(Context);
+
   const [openSaveModal, setOpenSaveModal] = React.useState(false);
   const [modifMode, setModifMode] = React.useState(false);
   const [title, setTitle] = React.useState("");
@@ -144,6 +148,7 @@ const Project = () => {
               )}
             </div>
             <div className="events__container">
+              <Switch onChange={toggleTheme} defaultChecked={defaultDark} />
               <Button onClick={save}>{saveButtonContent}</Button>
               <Button reversed onClick={() => setOpenSaveModal(true)}>
                 Valider

@@ -1,5 +1,5 @@
 import React from "react";
-import "./Drawer.css";
+import "./Drawer.scss";
 import useWindowDimensions from "../../hooks/useWindowsDimensions";
 
 const Drawer = ({

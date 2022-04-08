@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .tabs-container {
   width: 100%;

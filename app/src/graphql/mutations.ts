@@ -33,8 +33,8 @@ mutation createProject($name: String! $clientId: String!){
 }
 `
 export const CREATE_EVENT = gql`
-mutation createEvent($type: String! $projectId: String! $description : String! $contributors : [String!] $status : String!){
-    createEvent(type: $type  projectId: $projectId description : $description contributors : $contributors status : $status){
+mutation createEvent($type: String! $projectId: String! $description : String! $contributors : [String!] $status : String! $creatorId: String!){
+    createEvent(type: $type  projectId: $projectId description : $description contributors : $contributors status : $status creatorId : $creatorId){
         type
         id
         description
@@ -47,7 +47,14 @@ mutation createEvent($type: String! $projectId: String! $description : String! $
             email
             avatarUrl
             username
-        }
+        } 
+        creator {
+                id
+                firstname
+                lastname
+                avatarUrl
+                email
+            }
     }
 }
 `
@@ -73,6 +80,13 @@ mutation deleteEvent($eventId: String!){
     }
 }
 `
+export const DELETE_COMMENT = gql`
+mutation deleteComment($commentId: String!){
+    deleteComment(commentId: $commentId){
+        id
+    }
+}
+`
 export const CREATE_COMMENT = gql`
 mutation createComment($eventId: String! $authorId : String! $content : String!){
     createComment(eventId: $eventId authorId: $authorId content: $content){
@@ -88,3 +102,10 @@ mutation createComment($eventId: String! $authorId : String! $content : String!)
         }
     }
 }`
+export const CHANGE_COMMENT__CONTENT = gql`
+mutation changeCommentContent($commentId: String! $newContent: String!){
+    changeCommentContent(commentId : $commentId newContent : $newContent){
+        id
+    }
+}
+`

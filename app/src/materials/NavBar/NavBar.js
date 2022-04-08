@@ -1,5 +1,5 @@
 import React from "react";
-import "./NavBar.css";
+import "./NavBar.scss";
 import useWindowsDimensions from "../../hooks/useWindowsDimensions";
 import Backdrop from "../Backdrop/Backdrop";
 

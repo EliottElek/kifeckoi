@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Tabs.css";
+import "./Tabs.scss";
 import Button from "../Button/Button";
 const Tabs = ({ children, style }) => {
   const [currentTab, setCurrentTab] = useState(children[0]);

@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .searchInputs {
   display: flex;
@@ -15,7 +15,7 @@
   border-bottom-right-radius: 0px;
   font-size: 18px;
   padding: 10px;
-  background-color: var(--main-bg-color);
+  background-color: var(--main-color);
   border-radius: 6px;
   height: 22px;
   width: 100%;
@@ -37,7 +37,7 @@ input:focus {
   min-width: 270px !important;
   max-height: 320px !important;
   border-radius: 4px;
-  background-color: var(--main-bg-color);
+  background-color: var(--main-color);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin-top: 3px;
   overflow: hidden;

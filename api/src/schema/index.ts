@@ -7,8 +7,8 @@ import { CREATE_PROJECT } from './mutations/Project'
 import { FIND_PROJECT_BY_PROJECT_ID, FIND_PROJECTS_BY_CLIENT_ID, GET_ALL_PROJECTS } from "./queries/Project";
 import { GET_ALL_EVENTS, GET_LATEST_EVENTS, FIND_EVENTS_BY_PROJECT_ID } from "./queries/Event";
 import { CREATE_EVENT, CHANGE_EVENT_STATE, CHANGE_EVENT_DESCRIPTION, DELETE_EVENT } from "./mutations/Event";
-import { GET_ALL_COMMENTS_BY_EVENT_ID, GET_NUMBER_OF_COMMENTS } from "./queries/Comment";
-import { CREATE_COMMENT } from "./mutations/Comment";
+import { GET_ALL_COMMENTS_BY_EVENT_ID } from "./queries/Comment";
+import { CREATE_COMMENT, CHANGE_COMMENT__CONTENT, DELETE_COMMENT } from "./mutations/Comment";
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
@@ -23,7 +23,6 @@ const RootQuery = new GraphQLObjectType({
         findEventsByProjectId: FIND_EVENTS_BY_PROJECT_ID,
         getLatestEvents: GET_LATEST_EVENTS,
         getAllCommentsByEventId: GET_ALL_COMMENTS_BY_EVENT_ID,
-        getNumberOfComments: GET_NUMBER_OF_COMMENTS
     }
 })
 const Mutation = new GraphQLObjectType({
@@ -39,7 +38,9 @@ const Mutation = new GraphQLObjectType({
         changeEventState: CHANGE_EVENT_STATE,
         changeEventDescription: CHANGE_EVENT_DESCRIPTION,
         deleteEvent: DELETE_EVENT,
-        createComment: CREATE_COMMENT
+        createComment: CREATE_COMMENT,
+        changeCommentContent: CHANGE_COMMENT__CONTENT,
+        deleteComment: DELETE_COMMENT
     }
 })
 

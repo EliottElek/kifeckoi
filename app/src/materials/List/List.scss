@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .list {
   display: flex;
@@ -25,6 +25,7 @@
   width: 100%;
   display: flex;
   align-items: left;
+  color: var(--font-color);
   justify-content: space-between;
 }
 .list-item:hover {

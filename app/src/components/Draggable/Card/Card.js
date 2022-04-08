@@ -32,9 +32,16 @@ import ReactMarkdown from "../../../assets/ReactMarkdown";
 import Progress from "../../../materials/Progress/Progress";
 import Comments from "./Comments/Comments";
 import ReactMarkdownSnippet from "../../../assets/ReactMarkdown";
+import Button from "../../../materials/Button/Button";
 const Card = (props) => {
-  const { setEvents, events, currentProject, setCurrentProject, markdown } =
-    useContext(Context);
+  const {
+    setEvents,
+    events,
+    currentProject,
+    setCurrentProject,
+    markdown,
+    user,
+  } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [status, setStatus] = useState(false);
   const [modifMode, setModifMode] = useState(false);
@@ -83,6 +90,10 @@ const Card = (props) => {
       });
       console.log(err);
     }
+  };
+  const handleCloseModal = () => {
+    setModifMode(false);
+    setOpenModal(false);
   };
   useEffect(() => {
     if (props.task.status === "Réalisé") setStatus("event__green");
@@ -167,19 +178,16 @@ const Card = (props) => {
       });
     } catch (err) {
       console.log(err);
-      toast.warning(
-        "Impossible de supprimer cette carte. Réessayez plus tard.",
-        {
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          transition: Flip,
-        }
-      );
+      toast.error("Impossible de supprimer cette carte. Réessayez plus tard.", {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        transition: Flip,
+      });
     }
   };
   const duplicate = async (e) => {
@@ -193,6 +201,7 @@ const Card = (props) => {
           projectId: id,
           description: props.task.description,
           contributors: ArrayOfIds,
+          creatorId: user.id,
           status: props.task.status,
         },
       });
@@ -226,7 +235,7 @@ const Card = (props) => {
         }
       );
     } catch (err) {
-      toast.warning(`Impossible de créer l'évènement.`, {
+      toast.error(`Impossible de créer l'évènement.`, {
         position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,
@@ -417,28 +426,76 @@ const Card = (props) => {
           <Avatars users={props.task.contributors} />
         </div>
       </div>
-      <Modal open={openModal} setOpen={setOpenModal}>
+      <Modal open={openModal} setOpen={handleCloseModal}>
         <div className="modal__content__container">
-          {/* <AutoTextArea
-            disabled
-            className="modif__description__textarea"
-            value={props.task.description}
-            style={{
-              width: "100%",
-              fontSize: "2rem!important",
+          <button
+            data-tip
+            data-for="closeTooltip"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCloseModal();
+              setModifMode(false);
             }}
-          /> */}
-          <span className={"modal__card__content"}>
-            <ReactMarkdownSnippet>
-              {props.task.description}
-            </ReactMarkdownSnippet>
-          </span>
-          <span>
-            Status : <span className={status}>{props.task.status}</span>
-          </span>
+            className="close__modal__button"
+          >
+            <MdOutlineClear />
+          </button>
+          {modifMode ? (
+            <div>
+              <AutoTextArea
+                autoFocus
+                onKeyPress={commentEnterSubmit}
+                oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
+                onChange={(e) => setDescription(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "100%",
+                  fontSize: "2rem!important",
+                }}
+                value={description}
+                className="modif__description__textarea open__card__textarea"
+              ></AutoTextArea>
+              <div className={"action__container__modif__mode"}>
+                <Button
+                  reversed
+                  data-tip
+                  data-for="cancelTooltip"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setModifMode(false);
+                  }}
+                >
+                  Annuler
+                </Button>
+                <Button
+                  data-for="validateTooltip"
+                  onClick={handleModifyDescription}
+                >
+                  Valider
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <span
+              className={"modal__card__content"}
+              onClick={(e) => {
+                e.stopPropagation();
+                setModifMode(true);
+              }}
+            >
+              <ReactMarkdownSnippet>
+                {props.task.description}
+              </ReactMarkdownSnippet>
+            </span>
+          )}
+          <div>
+            <span className={"status__container"}>
+              Status : <span className={status}>{props.task.status}</span>
+            </span>
+          </div>
           {props.task.contributors.length !== 0 && (
             <div className="kanban__section__content__name__container__avatars__container">
-              <span>Responsables : </span>
+              <span>Contributeurs : </span>
               <div className="kanban__section__content__name__container__avatars__container">
                 {props.task.contributors.map((acc) => (
                   <Chip key={acc.id} text={acc.username} src={acc.avatarUrl} />
@@ -459,6 +516,12 @@ const Card = (props) => {
               {":"}
               {new Date(props.task.creation).getMinutes()}
             </span>
+            {props.task.creator && (
+              <span>
+                {" "}
+                par {props.task.creator.firstname} {props.task.creator.lastname}
+              </span>
+            )}
           </span>
           {!comments ? (
             <Progress />
@@ -489,6 +552,7 @@ const Card = (props) => {
           >
             <p>Dupliquer...</p>
           </MenuItem>
+          <span className={"divider"} />
           <MenuItem
             onClick={(e) => {
               e.stopPropagation();
@@ -496,7 +560,17 @@ const Card = (props) => {
               setOpenPopUp(false);
             }}
           >
-            <p>Éditer...</p>
+            <p>Édition rapide...</p>
+          </MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenPopUp(false);
+              setOpenModal(true);
+              setModifMode(true);
+            }}
+          >
+            <p>Édition avancée...</p>
           </MenuItem>
           <span className={"divider"} />
           {events.map((category) => {
@@ -534,7 +608,7 @@ const Card = (props) => {
             <span>Archiver</span>
           </ReactTooltip>
           <ReactTooltip delayShow={500} id="moreTooltip" effect="solid">
-            <span>Plus d'events</span>
+            <span>Plus d'actions</span>
           </ReactTooltip>
           <ReactTooltip delayShow={500} id="editTooltip" effect="solid">
             <span>Éditer</span>

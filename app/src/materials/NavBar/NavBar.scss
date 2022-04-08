@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .navbar {
   height: var(--nav-size);
@@ -12,7 +12,7 @@
   left: 0;
   right: 0;
   z-index: 2 !important;
-  background-color: var(--main-bg-color);
+  background-color: var(--main-color);
   /* border-bottom: solid 1px rgba(128, 128, 128, 0.301); */
 }
 .navbar_fixed {
@@ -28,7 +28,7 @@
   right: 0;
   z-index: 2 !important;
   /* box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.06); */
-  background-color: var(--main-bg-color);
+  background-color: var(--main-color);
 }
 .hamburger {
   height: 25px;

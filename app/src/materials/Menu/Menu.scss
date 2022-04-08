@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .menu {
   display: flex;
@@ -23,7 +23,7 @@
 }
 .menu-item > * {
   font-size: 0.9rem;
-  color: #172b4d;
+  color: var(--font-color);
   margin: 5px;
   margin-left: 12px;
 }

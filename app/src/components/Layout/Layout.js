@@ -73,7 +73,7 @@ const Layout = ({ children }) => {
             href="#"
             onClick={() => navigate("/account")}
           >
-            <Avatar src={user?.avatarUrl} />
+            <Avatar name={"Mon compte"} src={user?.avatarUrl} />
           </button>
           <button
             className="account__button bell"

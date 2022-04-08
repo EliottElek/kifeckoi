@@ -1,8 +1,8 @@
 .card {
   padding: 4px;
   background-color: transparent;
-  color: white;
-  transition: 0.3s ease;
+  color: var(--font-color);
+  transition: 0.2s ease;
 }
 .card__content {
   padding: 10px;
@@ -13,14 +13,14 @@
   min-height: 70px;
   height: auto;
   border-radius: 3px;
-  background-color: #ffffff;
-  color: black;
+  background-color: var(--card-background);
+  color: var(--font-color);
   display: flex;
   position: relative;
   font-size: 1rem;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 2px 4px #d8e1e8;
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 .card__content > * > ul > li {
   list-style: disc;
@@ -32,10 +32,32 @@
   transition: 0.1s ease;
 }
 .dragging {
-  box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.2);
   // outline: solid 2px rgba(0, 0, 0, 0.493);
   transition: 0.3s ease;
   //transform: rotate(3deg);
+}
+.modal__content__container {
+  width: 95%;
+  cursor: default;
+  max-height: 100%;
+  position: relative;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  // padding: 12px;
+  background-color: var(--color-background-1);
+  color: var(--font-color);
+  border-radius: 4px;
+}
+.modal__content__container > * {
+  margin: 12px;
+}
+
+.status__container {
+  margin-top: 30px;
 }
 .modal__content__container_scrollable {
   overflow-y: auto;
@@ -43,7 +65,6 @@
   flex-direction: column;
   gap: 12px;
   max-height: 100%;
-  background-color: red !important;
 }
 .modal__content__container_scrollable_item_container {
   display: flex;
@@ -55,9 +76,9 @@
 }
 .modal__content__span__value {
   padding: 6px;
-  background-color: #f2ffdd;
+  background-color: var(--color-background-2s);
   width: auto;
-  color: black;
+  color: var(--font-color);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -75,7 +96,7 @@
   transform: scale(0.8);
 }
 .violet {
-  color: #5313bb;
+  color: var(--font-color);
   background-color: #5313bb31;
   padding: 4px;
   border-radius: 3px;
@@ -108,7 +129,7 @@
   height: 100%;
   width: auto;
   font-size: 1.2rem;
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--font-color);
   padding: 4px;
   border-radius: 3px;
   transition: 0.1s ease;
@@ -119,7 +140,7 @@
   height: 100%;
   width: auto;
   font-size: 1.2rem;
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--font-color);
   padding: 4px;
   border-radius: 3px;
   transition: 0.1s ease;
@@ -145,8 +166,8 @@
   opacity: 0;
 }
 .kanban__section__content__name__container__edit__button:hover {
-  background-color: rgb(236, 236, 236);
-  color: rgba(0, 0, 0, 0.8);
+  background-color: var(--color-background-1);
+  color: var(--font-color);
   transition: 0.1s ease;
 }
 .card__content__added__indicator {
@@ -155,7 +176,7 @@
   padding: 3px;
   background-color: transparent;
   width: auto;
-  color: rgba(0, 0, 0, 0.2);
+  color: var(--font-color);
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -172,12 +193,18 @@
   font-size: 1rem;
   margin: auto;
   height: auto;
-  background-color: rgb(236, 236, 236);
+  background-color: var(--card-background);
   border: none;
   min-height: 30px;
   border-radius: 1px;
   padding: 5px;
   transition: 0.2s ease;
+  color: var(--font-color);
+}
+.open__card__textarea {
+  position: relative;
+  margin-top: 60px !important;
+  border-radius: 4px;
 }
 .validate:hover {
   color: rgb(3, 158, 3);
@@ -189,7 +216,7 @@
 }
 .delete__button:hover {
   color: rgb(158, 21, 3);
-  background-color: rgba(128, 30, 0, 0.144);
+  background-color: var(--font-color);
   transition: 0.1s ease;
 }
 .more__button {
@@ -210,5 +237,55 @@
 }
 .modal__card__content {
   font-size: larger;
-  margin: 20px;
+  margin: 10px;
+  margin-top: 60px;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  outline: solid 1px transparent;
+  padding: 10px;
+  cursor: pointer;
+}
+.modal__card__content > ul {
+  margin: 10px;
+  margin-left: 20px;
+}
+
+.modal__card__content:hover {
+  transition: all 0.2s ease;
+  outline-color: rgba(128, 128, 128, 0.233);
+}
+.close__modal__button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  height: 100%;
+  width: auto;
+  font-size: 1.2rem;
+  color: var(--font-color);
+  padding: 4px;
+  border-radius: 3px;
+  transition: 0.1s ease;
+  display: flex;
+  position: fixed;
+  top: 0;
+  right: 20px;
+  height: 30px;
+  width: 30px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.close__modal__button:hover {
+  background-color: var(--color-background-2);
+  color: var(--font-color);
+  transition: 0.1s ease;
+  border-radius: 50%;
+}
+.action__container__modif__mode {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px;
 }

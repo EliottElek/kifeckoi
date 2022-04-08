@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .select {
   position: relative;

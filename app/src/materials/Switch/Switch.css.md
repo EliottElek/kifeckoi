@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 
 .switch {
   position: relative;
@@ -43,7 +43,7 @@ input:checked + .slider {
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px var(--main-bg-color);
+  box-shadow: 0 0 1px var(--main-color);
 }
 
 input:checked + .slider:before {

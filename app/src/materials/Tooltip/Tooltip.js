@@ -1,5 +1,5 @@
 import React from "react";
-import "./Tooltip.css";
+import "./Tooltip.scss";
 const Tooltip = ({ children, content, delay }) => {
   const [open, setOpen] = React.useState(false);
 

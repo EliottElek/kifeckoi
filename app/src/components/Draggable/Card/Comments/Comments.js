@@ -6,9 +6,14 @@ import "./Comments.css";
 const Comments = ({ comments, setComments, event }) => {
   return (
     <div className="comments__container">
-      <h3>Commentaires</h3>
+      <h3>Commentaires ({comments?.length})</h3>
       {comments.map((comment, i) => (
-        <Comment key={i} comment={comment} />
+        <Comment
+          key={i}
+          comment={comment}
+          comments={comments}
+          setComments={setComments}
+        />
       ))}
       <CommentForm
         comments={comments}

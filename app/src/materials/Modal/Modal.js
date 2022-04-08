@@ -1,6 +1,6 @@
 import React from "react";
 import Backdrop from "../Backdrop/Backdrop";
-import "./Modal.css";
+import "./Modal.scss";
 const Modal = ({ children, open, setOpen, style }) => {
   const componentRef = React.useRef();
 

@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 .loader-large {
   margin: 3px;
   border: 5.5px solid var(--second-bg-color);
@@ -27,7 +27,7 @@
   animation: spin var(--speed) linear infinite;
 }
 .reversed {
-  border-top: 3.5px solid var(--main-bg-color);
+  border-top: 3.5px solid var(--main-color);
 }
 @keyframes spin {
   0% {

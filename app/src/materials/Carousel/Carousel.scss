@@ -1,4 +1,4 @@
-@import "../constants.css";
+@import "../constants.scss";
 .carousel {
   overflow: hidden;
   position: relative;
@@ -104,7 +104,7 @@
   z-index: 1;
   border-bottom-right-radius: 80%;
   border-bottom-left-radius: 80%;
-  background: var(--main-bg-color);
+  background: var(--main-color);
 }
 .bottomradius {
   height: 80px;
@@ -114,5 +114,5 @@
   z-index: 1;
   border-top-right-radius: 80%;
   border-top-left-radius: 80%;
-  background: var(--main-bg-color);
+  background: var(--main-color);
 }

@@ -18,7 +18,7 @@ const Avatars = ({ users }) => {
                   i === users.length - 1 ? "first_avatar" : "default_avatar"
                 }
               >
-                <Avatar mini src={user.avatarUrl} />
+                <Avatar name={user.firstname} mini src={user.avatarUrl} />
               </div>
             ) : (
               i < 2 && (
@@ -31,7 +31,7 @@ const Avatars = ({ users }) => {
                   <img
                     className="kanban__section__content__name__container__img"
                     alt=""
-                    src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+                    src={require("../../../assets/images/defaultAvatar.webp")}
                   />
                 </div>
               )

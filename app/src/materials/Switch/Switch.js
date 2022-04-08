@@ -1,27 +1,18 @@
-import React from "react";
-import "./Switch.css";
-const Switch = ({ onChange, on, disabled }) => {
+import "./Switch.scss";
+const Switch = ({ onChange, defaultChecked }) => {
   return (
-    <>
-      {!disabled ? (
-        <label className="switch">
-          <input type="checkbox" readOnly checked={on} onClick={() => onChange(!on)} />
-          <span className="slider round"></span>
-        </label>
-      ) : (
-        <label className="switch disabled">
-          <input
-            disabled
-            type="checkbox"
-            checked={on}
-            readOnly
-            onClick={() => onChange(!on)}
-          />
-          <span className="slider round disabled"></span>
-          <div className="switch_disabled_bar disabled" />
-        </label>
-      )}
-    </>
+    <div className="toggle-theme-wrapper">
+      <label className="toggle-theme" htmlFor="checkbox">
+        <input
+          type="checkbox"
+          id="checkbox"
+          // 6
+          onChange={onChange}
+          defaultChecked={defaultChecked}
+        />
+        <div className="slider round"></div>
+      </label>
+    </div>
   );
 };
 
