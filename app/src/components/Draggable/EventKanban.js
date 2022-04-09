@@ -205,77 +205,50 @@ const EventKanban = ({ type, setLength, length }) => {
                         </Draggable>
                       ))}
                       {addCard && eventSelected.id === section.id && (
-                        <Draggable
-                          draggableId={"111"}
-                          index={"ds"}
-                          isDragDisabled
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                              }}
-                            >
-                              <Card
-                                add
-                                type={type}
-                                task={""}
-                                className={`card`}
-                              >
-                                <form
-                                  className="add__card__form"
-                                  onSubmit={add}
-                                >
-                                  <AutoTextArea
-                                    onKeyPress={commentEnterSubmit}
-                                    placeholder={"Titre de l'évènement..."}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    onClick={(e) => e.stopPropagation()}
-                                    value={input}
-                                    autoFocus
-                                    className="modif__description__textarea"
-                                  ></AutoTextArea>
-                                  {/* <AutoCompleteUsers
+                        <Card add type={type} task={""} className={`card`}>
+                          <form className="add__card__form" onSubmit={add}>
+                            <AutoTextArea
+                              onKeyPress={commentEnterSubmit}
+                              placeholder={"Titre de l'évènement..."}
+                              onChange={(e) => setInput(e.target.value)}
+                              onClick={(e) => e.stopPropagation()}
+                              value={input}
+                              autoFocus
+                              className="modif__description__textarea"
+                            ></AutoTextArea>
+                            {/* <AutoCompleteUsers
                                     placeholder="Responsable..."
                                     setSelectedcontributors={
                                       setSelectedcontributors
                                     }
                                   /> */}
-                                  <div className="add__card__button__container">
-                                    <Button
-                                      style={{ width: "100%" }}
-                                      type="submit"
-                                      disabled={
-                                        !eventSelected || input === ""
-                                          ? true
-                                          : false
-                                      }
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        add(e);
-                                        setAddCard(false);
-                                      }}
-                                    >
-                                      Ajouter
-                                    </Button>
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        setAddCard(false);
-                                      }}
-                                      className="clear__button"
-                                    >
-                                      <MdOutlineClear />
-                                    </button>
-                                  </div>
-                                </form>
-                              </Card>
+                            <div className="add__card__button__container">
+                              <Button
+                                style={{ width: "100%" }}
+                                type="submit"
+                                disabled={
+                                  !eventSelected || input === "" ? true : false
+                                }
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  add(e);
+                                  setAddCard(false);
+                                }}
+                              >
+                                Ajouter
+                              </Button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setAddCard(false);
+                                }}
+                                className="clear__button"
+                              >
+                                <MdOutlineClear />
+                              </button>
                             </div>
-                          )}
-                        </Draggable>
+                          </form>
+                        </Card>
                       )}
                       {provided.placeholder}
                     </div>

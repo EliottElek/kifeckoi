@@ -8,7 +8,6 @@ import icon from "../src/assets/images/icon.png";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NoInternetConnection from "./components/NoInternetConnectionWrapper/NoInternetConnectionWrapper";
-import DarkMode from "./components/DarkMode/DarkMode";
 var link = document.querySelector("link[rel~='icon']");
 if (!link) {
   link = document.createElement("link");
@@ -20,82 +19,80 @@ const App = () => {
   return (
     <div className={"App"}>
       <NoInternetConnection>
-        <DarkMode>
-          <Routes>
-            <Route
-              exact
-              path="/"
-              element={
-                <SecureRoute margin>
-                  <Home />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/project/:id/"
-              element={
-                <SecureRoute margin>
-                  <Project />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/project/:id/actions"
-              element={
-                <SecureRoute>
-                  <ActionsWide type={"Action"} />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/project/:id/infos"
-              element={
-                <SecureRoute>
-                  <ActionsWide type={"Info"} />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/project/:id/decisions"
-              element={
-                <SecureRoute>
-                  <ActionsWide type={"Decision"} />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/project/:id/risks"
-              element={
-                <SecureRoute>
-                  <ActionsWide type={"Risk"} />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/client/:id"
-              element={
-                <SecureRoute>
-                  <Client />
-                </SecureRoute>
-              }
-            />
-            <Route
-              exact
-              path="/account"
-              element={
-                <SecureRoute>
-                  <AccountPage />
-                </SecureRoute>
-              }
-            />
-          </Routes>
-        </DarkMode>
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <SecureRoute margin>
+                <Home />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/"
+            element={
+              <SecureRoute margin>
+                <Project />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/actions"
+            element={
+              <SecureRoute>
+                <ActionsWide type={"Action"} />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/infos"
+            element={
+              <SecureRoute>
+                <ActionsWide type={"Info"} />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/decisions"
+            element={
+              <SecureRoute>
+                <ActionsWide type={"Decision"} />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/project/:id/risks"
+            element={
+              <SecureRoute>
+                <ActionsWide type={"Risk"} />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/client/:id"
+            element={
+              <SecureRoute>
+                <Client />
+              </SecureRoute>
+            }
+          />
+          <Route
+            exact
+            path="/account"
+            element={
+              <SecureRoute>
+                <AccountPage />
+              </SecureRoute>
+            }
+          />
+        </Routes>
       </NoInternetConnection>
       <ToastContainer theme="dark" />
     </div>

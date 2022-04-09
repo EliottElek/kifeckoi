@@ -82,7 +82,7 @@ const DndWide = ({ type }) => {
           <Button reversed>Annuler</Button>
         </div>
       </StickyNavbar>
-      <div style={{ padding: "20px" }} className={"dnd__wide__container"}>
+      <div style={{ padding: "5px" }} className={"dnd__wide__container"}>
         {listStyle ? <TableEvents type={type} /> : <EventKanban type={type} />}
       </div>
       <ReactTooltip delayShow={500} id="ListTooltip" effect="solid">
