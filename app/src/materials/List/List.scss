@@ -11,22 +11,20 @@
 }
 .list-item {
   height: 35px;
-  padding: 5px;
-  border-radius: 4px;
-  width: 95%;
+  border-radius: 0px;
+  width: 100%;
   margin: auto;
   display: flex;
   flex-direction: row;
+  cursor: pointer;
   align-items: center;
   justify-content: space-between;
 }
-.list-item a {
-  height: 100%;
+.list-item > * {
   width: 100%;
+  margin: 12px!important;
   display: flex;
-  align-items: left;
   color: var(--font-color);
-  justify-content: space-between;
 }
 .list-item:hover {
   background-color: rgba(128, 128, 128, 0.1);

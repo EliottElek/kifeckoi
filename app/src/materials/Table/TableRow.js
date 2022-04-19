@@ -76,6 +76,14 @@ const TableRow = ({ item }) => {
                 </span>
               </td>
             );
+          if (it === "creator")
+            return (
+              <td key={i}>
+                <span>
+                  <Chip text={item.firstname} src={item.avatarUrl} />
+                </span>
+              </td>
+            );
           return (
             <td key={i}>
               {markdown ? (

@@ -21,7 +21,16 @@
   align-items: center;
   cursor: pointer;
 }
-.menu-item > * {
+.menu-item-no-hover {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.menu-item > *,
+.menu-item-no-hover > * {
   font-size: 0.9rem;
   color: var(--font-color);
   margin: 5px;

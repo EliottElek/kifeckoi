@@ -1,7 +1,24 @@
 .dnd__wide__container {
   height: auto;
   min-height: 90vh;
-  background-color: var(--color-background-2);
-  overflow: auto;
-  overflow-y: hidden;
+  background-color: var(--color-background-1);
+  width: auto;
+}
+.settings__button {
+  width: 40px;
+  height: 40px;
+  font-weight: bold;
+  background-color: transparent;
+  color: var(--font-color);
+  border-radius: 25px;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+.logo__kifekoi {
+  height:55px;
+  width: auto;
 }

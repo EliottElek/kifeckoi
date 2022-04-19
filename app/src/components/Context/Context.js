@@ -3,42 +3,6 @@ import rawEvents from "../../rawEvents";
 import gravatar from "gravatar";
 
 export const Context = React.createContext();
-// 1
-const setDark = () => {
-  // 2
-  localStorage.setItem("theme", "dark");
-
-  // 3
-  document.documentElement.setAttribute("data-theme", "dark");
-};
-
-const setLight = () => {
-  localStorage.setItem("theme", "light");
-  document.documentElement.setAttribute("data-theme", "light");
-};
-
-// 4
-const storedTheme = localStorage.getItem("theme");
-
-const prefersDark =
-  window.matchMedia &&
-  window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-const defaultDark =
-  storedTheme === "dark" || (storedTheme === null && prefersDark);
-
-if (defaultDark) {
-  setDark();
-}
-
-// 5
-const toggleTheme = (e) => {
-  if (e.target.checked) {
-    setDark();
-  } else {
-    setLight();
-  }
-};
 const userData = {
   id: "1",
   firstname: "Eliott",
@@ -63,7 +27,40 @@ export const ContextProvider = ({ children }) => {
   const [dark, setDark] = React.useState(true);
 
   const [user, setUser] = React.useState(userData);
+  const setDarkTheme = () => {
+    // 2
+    localStorage.setItem("theme", "dark");
 
+    // 3
+    document.documentElement.setAttribute("data-theme", "dark");
+  };
+
+  const setLightTheme = () => {
+    localStorage.setItem("theme", "light");
+    document.documentElement.setAttribute("data-theme", "light");
+  };
+
+  // 4
+  const storedTheme = localStorage.getItem("theme");
+
+  const prefersDark =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  const defaultDark =
+    storedTheme === "dark" || (storedTheme === null && prefersDark);
+
+  if (defaultDark) {
+    setDarkTheme();
+  }
+  // 5
+  const toggleTheme = (e) => {
+    if (e.target.checked) {
+      setDarkTheme();
+    } else {
+      setLightTheme();
+    }
+  };
   return (
     <Context.Provider
       value={{

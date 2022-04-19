@@ -1,6 +1,6 @@
 import React from "react";
 import "./Popup.scss";
-const Popup = ({ children, open, setOpen, bottom }) => {
+const Popup = ({ children, open, setOpen, bottom, style }) => {
   const componentRef = React.useRef();
 
   React.useEffect(() => {
@@ -18,7 +18,11 @@ const Popup = ({ children, open, setOpen, bottom }) => {
   return (
     <>
       {open && (
-        <div ref={componentRef} className={`popup ${bottom ? "bottom" : ""}`}>
+        <div
+          ref={componentRef}
+          className={`popup ${bottom ? "bottom" : ""}`}
+          style={style}
+        >
           {children}
         </div>
       )}

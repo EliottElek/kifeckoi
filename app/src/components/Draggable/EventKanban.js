@@ -81,8 +81,9 @@ const EventKanban = ({ type, setLength, length }) => {
       const destinationTask = [...destinationCol.tasks];
 
       const [removed] = sourceTask.splice(source.index, 1);
-      destinationTask.splice(destination.index, 0, removed);
-
+      const removedCopy = { ...removed };
+      removedCopy.status = destinationCol?.title;
+      destinationTask.splice(destination.index, 0, removedCopy);
       events[sourceColIndex].tasks = sourceTask;
       events[destinationColIndex].tasks = destinationTask;
       try {
@@ -110,6 +111,7 @@ const EventKanban = ({ type, setLength, length }) => {
     }
   };
   const add = async (e) => {
+    if (input === "") return;
     e.preventDefault();
     const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
     console.log(ArrayOfIds);
@@ -151,7 +153,7 @@ const EventKanban = ({ type, setLength, length }) => {
     }
   };
   const commentEnterSubmit = (e) => {
-    if (e.key === "Enter" && e.shiftKey === false) {
+    if (e.key === "Enter" && e.shiftKey === false && input !== "") {
       return add(e);
     }
   };

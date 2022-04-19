@@ -15,7 +15,7 @@ const Column = ({
 }) => {
   const [openMenu, setOpenMenu] = useState(false);
   return (
-    <div className={`kanban__section violet__back`}>
+    <div className={`kanban__section`}>
       <button
         onClick={() => {
           setOpenMenu(true);

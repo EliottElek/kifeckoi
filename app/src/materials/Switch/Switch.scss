@@ -33,7 +33,7 @@
   height: 21px;
   left: 4px;
   position: absolute;
-  transition: 0.4s;
+  transition: 0.2s;
   width: 21px;
 }
 
@@ -51,4 +51,5 @@ input:checked + .slider {
 
 .slider.round:before {
   border-radius: 50%;
+  content: "";
 }

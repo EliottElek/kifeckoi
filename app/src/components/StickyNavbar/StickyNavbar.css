@@ -1,10 +1,11 @@
 /* @import "../../materials/constants.scss"; */
 .stickynavbar__container {
   z-index: 1;
-  position: sticky;
+  position: fixed;
   padding: 0;
   margin: 0;
   top: 0px;
+  left: 0;
   width: 100%;
   height: 50px;
   background-color: var(--color-background-2);
@@ -13,4 +14,17 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+.settings__button {
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  color: var(--font-color);
+  border-radius: 25px;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
 }

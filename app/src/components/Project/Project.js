@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
 import StickyNavbar from "../StickyNavbar/StickyNavbar";
 import Progress from "../../materials/Progress/Progress";
 import Switch from "../../materials/Switch/Switch";
 import { FiEdit2 } from "react-icons/fi";
+import { FiSettings } from "react-icons/fi";
 import { MdCheck } from "react-icons/md";
 import { MdClear } from "react-icons/md";
 import "./Project.css";
@@ -13,15 +14,12 @@ import Form from "./Form";
 import Modal from "../../materials/Modal/Modal";
 import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
+import Avatar from "../../materials/Avatar/Avatar";
 const Project = () => {
-  const navigate = useNavigate();
   const {
-    events,
     currentProject,
     setCurrentProject,
     user,
-    listStyle,
-    setEvents,
     defaultDark,
     toggleTheme,
   } = useContext(Context);
@@ -51,12 +49,6 @@ const Project = () => {
       setTitle(currentProject?.name);
     }
   }, [currentProject?.name, setTitle, currentProject]);
-  const clearEvents = () => {
-    if (!listStyle) events?.forEach((action) => (action.tasks = []));
-    else {
-      setEvents(null);
-    }
-  };
   const [saveButtonContent, setSaveButtonContent] =
     React.useState("Enregistrer");
   const save = () => {
@@ -83,14 +75,6 @@ const Project = () => {
         <div>
           <StickyNavbar saveButtonContent={saveButtonContent}>
             <div className="name__container">
-              <Button
-                onClick={() => {
-                  clearEvents();
-                  navigate(`/client/${currentProject.client.id}`);
-                }}
-              >
-                <i className="gg-chevron-left"></i>Retour
-              </Button>
               {user.admin ? (
                 <>
                   {!modifMode ? (
@@ -155,6 +139,12 @@ const Project = () => {
               </Button>
               <Button reversed>Libérer</Button>
               <Button reversed>Annuler</Button>
+              <button className="settings__button">
+                <FiSettings />
+              </button>
+              <button className="settings__button">
+                <Avatar src={user.avatarUrl} name={user.firstname} />
+              </button>
             </div>
           </StickyNavbar>
           <Form

@@ -1,7 +1,7 @@
 .kanban {
   display: flex;
+  width: auto;
   align-items: flex-start;
-  background-color: transparent;
   &__section {
     width: 500px;
     min-width: 200px;
@@ -9,7 +9,7 @@
     border-radius: 2px;
     padding-top: 50px;
     position: relative;
-    background-color: var(--color-background-2);
+    background-color: var(--color-background-1);
 
     & ~ & {
       margin-left: 10px;

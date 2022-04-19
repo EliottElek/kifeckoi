@@ -10,6 +10,7 @@ const CommentForm = ({ setComments, comments, event }) => {
   const [content, setContent] = useState("");
   const { user } = React.useContext(Context);
   const onSumbitComment = async () => {
+    if (content === "") return;
     try {
       console.log(content);
       const newComment = await createComment({
@@ -31,7 +32,6 @@ const CommentForm = ({ setComments, comments, event }) => {
   return (
     <div className={"form__comment__container"}>
       <AutoTextArea
-        oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
         className={"form__comment__container__textarea"}
         value={content}
         placeholder={`${user.firstname}, un commentaire ?...`}

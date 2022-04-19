@@ -2,14 +2,13 @@
   padding: 4px;
   background-color: transparent;
   color: var(--font-color);
-  transition: 0.2s ease;
+  transition: 0.1s all;
 }
 .card__content {
+  transition: 0.1s all;
   padding: 10px;
   padding-top: 34px;
   padding-bottom: 30px;
-
-  // width: 100%;
   min-height: 70px;
   height: auto;
   border-radius: 3px;
@@ -33,11 +32,9 @@
 }
 .dragging {
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.2);
-  // outline: solid 2px rgba(0, 0, 0, 0.493);
-  transition: 0.3s ease;
-  //transform: rotate(3deg);
 }
 .modal__content__container {
+  transition: 0.1s all;
   width: 95%;
   cursor: default;
   max-height: 100%;
@@ -47,7 +44,6 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 12px;
-  // padding: 12px;
   background-color: var(--color-background-1);
   color: var(--font-color);
   border-radius: 4px;
@@ -55,7 +51,6 @@
 .modal__content__container > * {
   margin: 12px;
 }
-
 .status__container {
   margin-top: 30px;
 }
@@ -73,8 +68,10 @@
 }
 .modal__content__container_scrollable_item_container > span {
   margin-right: 3px;
+  transition: 0.1s all;
 }
 .modal__content__span__value {
+  transition: 0.1s all;
   padding: 6px;
   background-color: var(--color-background-2s);
   width: auto;
@@ -94,10 +91,10 @@
   left: 0px;
   color: #1394bb;
   transform: scale(0.8);
+  transition: 0.1s all;
 }
 .violet {
-  color: var(--font-color);
-  background-color: #5313bb31;
+  color: var(--main-color);
   padding: 4px;
   border-radius: 3px;
 }
@@ -164,6 +161,7 @@
   display: flex;
   gap: 2px;
   opacity: 0;
+  transition: 0.1s all;
 }
 .kanban__section__content__name__container__edit__button:hover {
   background-color: var(--color-background-1);

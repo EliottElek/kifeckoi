@@ -3,6 +3,7 @@
   margin: auto;
   height: 100%;
   padding-top: 20px;
+  margin-top: 60px;
   display: grid;
   grid-template-columns: 60% 40%;
 }
@@ -44,7 +45,7 @@
 }
 .client__item:hover,
 .project__item :hover {
-  background-color: var(--color-background-1);
+  filter: brightness(1.3);
   transition: 0.1s ease-out;
 }
 .client__item__logo {

@@ -1,9 +1,9 @@
 import React from "react";
 import "./List.scss";
 
-const ListItem = ({ children, active, onClick }) => {
+const ListItem = ({ children, onClick }) => {
   return (
-    <li onClick={onClick} className={`list-item ${active && "active"}`}>
+    <li onClick={onClick} className={`list-item`}>
       {children}
     </li>
   );

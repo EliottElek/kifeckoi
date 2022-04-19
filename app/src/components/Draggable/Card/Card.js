@@ -113,7 +113,11 @@ const Card = (props) => {
       const destinationTask = [...destinationCol.tasks];
       const index = sourceTask.findIndex((task) => task.id === props.task.id);
       const [removed] = sourceTask.splice(index, 1);
-      destinationTask.splice(0, 0, removed);
+      const removedCopy = { ...removed };
+      removedCopy.status = destinationCol?.title;
+      events[sourceColIndex].tasks = sourceTask;
+      events[destinationColIndex].tasks = destinationTask;
+      destinationTask.splice(0, 0, removedCopy);
 
       events[sourceColIndex].tasks = sourceTask;
       events[destinationColIndex].tasks = destinationTask;
@@ -407,7 +411,6 @@ const Card = (props) => {
               <AutoTextArea
                 autoFocus
                 onKeyPress={commentEnterSubmit}
-                oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
                 onChange={(e) => setDescription(e.target.value)}
                 onClick={(e) => e.stopPropagation()}
                 value={description}

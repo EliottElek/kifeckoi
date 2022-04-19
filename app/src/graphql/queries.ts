@@ -42,6 +42,10 @@ query findProjectByProjectId($id: String!){
           id 
           name
         }
+        events{
+          id
+          description
+        }
     }
 }
 `
@@ -62,6 +66,14 @@ query{
     project{
       id
       name
+    }
+    creator {
+      id
+      firstname
+      lastname
+      email
+      avatarUrl
+      username
     }
     description
     status
@@ -90,6 +102,9 @@ query getLatestEvents($id: String! $type : String!){
       id
       firstname
       lastname
+      email
+      avatarUrl
+      username
     }
     description
     status
@@ -116,6 +131,9 @@ query findEventsByProjectId($id: String! $type : String!){
       id
       firstname
       lastname
+      email
+      username
+      avatarUrl
     }
     contributors{
       id

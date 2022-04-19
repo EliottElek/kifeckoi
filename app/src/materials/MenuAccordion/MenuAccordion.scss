@@ -1,0 +1,57 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap");
+
+/* Style the accordion__menu section */
+.accordion__menu__section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Style the buttons that are used to open and close the accordion__menu panel */
+.accordion__menu {
+  border: none;
+  outline: none;
+  color: var(--font-color);
+  cursor: pointer;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  transition: background-color var(--speed) ease;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+
+/* Style the accordion__menu content title */
+.accordion__menu__title {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: left;
+}
+
+/* Style the accordion__menu chevron icon */
+.accordion__menu__icon {
+  margin-left: auto;
+  transition: transform var(--speed) ease;
+}
+.active-menu__item {
+  border-bottom: solid 1px var(--main-color);
+  background-color: transparent;
+}
+/* Style to rotate icon when state is active */
+.rotate {
+  transform: rotate(90deg);
+}
+
+/* Style the accordion__menu content panel. Note: hidden by default */
+.accordion__menu__content {
+  overflow: auto;
+  transition: max-height var(--speed) ease;
+  background-color: var(--color-background-1);
+}
+
+/* Style the accordion__menu content text */
+.accordion__menu__text {
+  font-size: 14px;
+  background-color: var(--color-background-2);
+}
