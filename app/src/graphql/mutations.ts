@@ -21,8 +21,8 @@ mutation createClient($name: String!){
 }
 `
 export const CREATE_PROJECT = gql`
-mutation createProject($name: String! $clientId: String!){
-    createProject(name: $name clientId: $clientId){
+mutation createProject($name: String! $clientId: String! $contributors : [String!]){
+    createProject(name: $name clientId: $clientId contributors : $contributors){
         name
         id
         client{
@@ -105,6 +105,20 @@ mutation createComment($eventId: String! $authorId : String! $content : String!)
 export const CHANGE_COMMENT__CONTENT = gql`
 mutation changeCommentContent($commentId: String! $newContent: String!){
     changeCommentContent(commentId : $commentId newContent : $newContent){
+        id
+    }
+}
+`
+export const ADD_CONTRIBUTORS_TO_PROJECT = gql`
+mutation addContributorsToProject($projectId : String! $contributors : [String!]){
+    addContributorsToProject(projectId:$projectId contributors:$contributors){
+        id
+    }
+}
+`
+export const ADD_CONTRIBUTORS_TO_EVENT = gql`
+mutation addContributorsToEvent($eventId : String! $contributors : [String!]){
+    addContributorsToEvent(eventId:$eventId contributors:$contributors){
         id
     }
 }

@@ -22,8 +22,6 @@ const DndWide = ({ type }) => {
       <div
         style={{
           flexGrow: 1,
-          padding: "5px",
-          marginTop: "45px",
         }}
         className={"dnd__wide__container"}
       >

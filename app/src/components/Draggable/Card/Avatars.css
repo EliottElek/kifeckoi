@@ -1,6 +1,6 @@
 .persons__left__indicator {
   border: none;
-  background-color: rgb(212, 212, 212);
+  background-color: var(--color-background-1);
   border-radius: 50%;
   width: 30px !important;
   height: 30px !important;
@@ -8,4 +8,10 @@
   align-items: center;
   justify-content: center;
   font-size: 0.8rem;
+  color: var(--font-color);
+}
+.first_avatar,
+.default_avatar {
+  display: flex;
+  align-items: center;
 }

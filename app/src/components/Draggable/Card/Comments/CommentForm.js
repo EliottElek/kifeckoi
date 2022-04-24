@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { CREATE_COMMENT } from "../../../../graphql/mutations";
 import { Context } from "../../../Context/Context";
 import Button from "../../../../materials/Button/Button";
-const CommentForm = ({ setComments, comments, event }) => {
+const CommentForm = ({ event, commentsData }) => {
   const [createComment] = useMutation(CREATE_COMMENT);
   const [content, setContent] = useState("");
   const { user } = React.useContext(Context);
@@ -13,18 +13,20 @@ const CommentForm = ({ setComments, comments, event }) => {
     if (content === "") return;
     try {
       console.log(content);
-      const newComment = await createComment({
+      await createComment({
         variables: {
           eventId: event.id,
           authorId: user.id,
           content: content,
         },
       });
-      setComments([...comments, newComment.data.createComment]);
+      commentsData.refetch();
       setContent("");
     } catch (e) {
       toast.error("Impossible de créer le commentaire.", {
         position: toast.POSITION.BOTTOM_LEFT,
+        pauseOnHover: false,
+
       });
       console.log(e);
     }

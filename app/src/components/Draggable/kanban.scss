@@ -4,7 +4,7 @@
   align-items: flex-start;
   &__section {
     width: 500px;
-    min-width: 200px;
+    min-width: 240px;
     padding: 4px;
     border-radius: 2px;
     padding-top: 50px;
@@ -87,9 +87,9 @@
 }
 .kanban__section__title {
   width: auto;
+  margin-left: 10px;
   color: var(--font-color);
 }
-
 @media screen and (max-width: 1000px) {
   .kanban__section__title {
     font-size: 0.8rem;

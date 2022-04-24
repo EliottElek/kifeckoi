@@ -86,3 +86,29 @@ export const DELETE_EVENT = {
         return { successful: true, message: "Event was successfully deleted." }
     }
 }
+export const ADD_CONTRIBUTORS_TO_EVENT = {
+    type: EventType,
+    args: {
+        eventId: { type: GraphQLString },
+        contributors: { type: new GraphQLList(GraphQLString) },
+    },
+    async resolve(parent: any, args: any) {
+        const { eventId, contributors } = args
+        const event = await Event.findOne({ id: eventId }, { relations: ["contributors"] })
+        var contributorsFound: User[] = []
+        if (!event) {
+            throw new Error("Cannot find event.")
+        } else {
+            event.contributors = [];
+            contributors.map(async (contributor: any) => {
+                const acc = await User.findOne({ id: contributor })
+                if (acc) {
+                    event.contributors.push(acc)
+                }
+            })
+            contributorsFound = event.contributors;
+            Event.save(event)
+        }
+        return { ...args, contributorsFound }
+    }
+}

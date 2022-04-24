@@ -13,6 +13,7 @@ import Chip from "../../../materials/Chip/Chip";
 import { Flip } from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
+import AddContributorsEvent from "./AddContributorsEvent";
 import {
   CHANGE_EVENT_DESCRIPTION,
   CHANGE_EVENT_STATE,
@@ -43,6 +44,8 @@ const Card = (props) => {
     user,
   } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
   const [status, setStatus] = useState(false);
   const [modifMode, setModifMode] = useState(false);
   const [openPopUp, setOpenPopUp] = useState(false);
@@ -73,20 +76,12 @@ const Card = (props) => {
           newDescription: description,
         },
       });
-      const index = events.findIndex((e) => e.title === props.task.status);
-      const items = [...events[index].tasks];
-      const itemsD = JSON.parse(JSON.stringify(items));
-
-      const item = itemsD.find((item) => item.id === props.task.id);
-      item.description = description;
-      events[index].tasks = itemsD;
-      setEvents([...events]);
-      currentProject.events = [...events];
-      setCurrentProject(currentProject);
+      props.dataEvents.refetch();
       setModifMode(false);
     } catch (err) {
       toast.error("Impossible de modifier la description.", {
         position: toast.POSITION.BOTTOM_LEFT,
+        pauseOnHover: false,
       });
       console.log(err);
     }
@@ -127,6 +122,8 @@ const Card = (props) => {
           newStatus: category?.title,
         },
       });
+      props.dataEvents.refetch();
+
       toast(
         <Msg>
           {props.task.name} déplacée dans {category?.title}
@@ -145,7 +142,7 @@ const Card = (props) => {
     } catch (err) {
       toast.error("Impossible de déplacer l'évènement.", {
         position: toast.POSITION.BOTTOM_LEFT,
-        transition: Flip,
+        pauseOnHover: false,
       });
       console.log(err);
     }
@@ -153,7 +150,6 @@ const Card = (props) => {
     currentProject.events = [...events];
     setCurrentProject(currentProject);
   };
-
   const handledeleteEvent = async (e) => {
     e.stopPropagation();
     try {
@@ -162,15 +158,9 @@ const Card = (props) => {
           eventId: props.task.id,
         },
       });
-      const index = events.findIndex((e) => e.title === props.task.status);
-      const items = [...events[index].tasks];
-      const itemsD = JSON.parse(JSON.stringify(items));
-      const newArray = itemsD.filter((item) => item.id !== props.task.id);
-      events[index].tasks = [...newArray];
-      setEvents([...events]);
-      currentProject.events = [...events];
-      setCurrentProject(currentProject);
       setModifMode(false);
+      props.dataEvents.refetch();
+
       toast(`${props.type} archivé(e) avec succès.`, {
         position: "bottom-left",
         autoClose: 5000,
@@ -216,9 +206,7 @@ const Card = (props) => {
         ...newEvent?.data?.createEvent,
         new: true,
       });
-      setEvents([...events]);
-      currentProject.events = [...events];
-      setCurrentProject(currentProject);
+      props.dataEvents.refetch();
 
       props.setLength && props.setLength(props.length + 1);
       toast(
@@ -267,8 +255,7 @@ const Card = (props) => {
   return (
     <>
       <div
-        onClick={(e) => {
-          e.stopPropagation();
+        onClick={() => {
           if (!openPopUp) {
             setOpenModal(true);
           } else setOpenPopUp(false);
@@ -284,7 +271,10 @@ const Card = (props) => {
             <button
               data-tip
               data-for="archiveTooltip"
-              onClick={handledeleteEvent}
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenDeleteModal(true);
+              }}
               className="kanban__section__content__name__container__edit__button"
             >
               <MdOutlineDeleteOutline />
@@ -496,11 +486,11 @@ const Card = (props) => {
               Status : <span className={status}>{props.task.status}</span>
             </span>
           </div>
-          {props.task.contributors.length !== 0 && (
+          {props?.task?.contributors?.length !== 0 && (
             <div className="kanban__section__content__name__container__avatars__container">
               <span>Contributeurs : </span>
               <div className="kanban__section__content__name__container__avatars__container">
-                {props.task.contributors.map((acc) => (
+                {props?.task?.contributors?.map((acc) => (
                   <Chip key={acc.id} text={acc.username} src={acc.avatarUrl} />
                 ))}
               </div>
@@ -530,9 +520,10 @@ const Card = (props) => {
             <Progress />
           ) : (
             <Comments
+              commentsData={commentsData}
               comments={comments}
               event={props.task}
-              setComments={setComments}
+              s
             />
           )}{" "}
         </div>
@@ -576,6 +567,16 @@ const Card = (props) => {
             <p>Édition avancée...</p>
           </MenuItem>
           <span className={"divider"} />
+          <MenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenAddContributorModal(true);
+              setOpenPopUp(false);
+            }}
+          >
+            <p>Gérer les contributeurs...</p>
+          </MenuItem>
+          <span className={"divider"} />
           {events.map((category) => {
             if (category.title !== props.task.status)
               return (
@@ -594,7 +595,8 @@ const Card = (props) => {
           <span className={"divider"} />
           <MenuItem
             onClick={(e) => {
-              handledeleteEvent(e);
+              e.stopPropagation();
+              setOpenDeleteModal(true);
               setOpenPopUp(false);
             }}
           >
@@ -624,6 +626,37 @@ const Card = (props) => {
           </ReactTooltip>
         </>
       )}
+      <AddContributorsEvent
+        event={props.task}
+        dataEvents={props.dataEvents}
+        dataProject={props.dataProject}
+        alreadyExistingContributors={props.task.contributors}
+        open={openAddContributorModal}
+        setOpen={setOpenAddContributorModal}
+      />
+      <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
+        <div className="modal__content__container">
+          <button
+            data-tip
+            data-for="closeTooltip"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenDeleteModal(false);
+            }}
+            className="close__modal__button"
+          >
+            <MdOutlineClear />
+          </button>
+          <h3>Êtes-vous sûr de vouloir supprimer cet évènement ?</h3>
+          <p>La suppression sera définitive. </p>
+          <div className={"delete__actions__container"}>
+            <Button reversed onClick={() => setOpenDeleteModal(false)}>
+              Annuler
+            </Button>
+            <Button onClick={handledeleteEvent}>Supprimer</Button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

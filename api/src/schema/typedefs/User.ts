@@ -1,6 +1,7 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } from 'graphql'
 import { CommentType } from './Comment'
 import { EventType } from './Event'
+import { ProjectType } from './Project'
 
 export const UserType = new GraphQLObjectType({
     name: "User",
@@ -14,7 +15,7 @@ export const UserType = new GraphQLObjectType({
         username: { type: GraphQLString },
         events: { type: new GraphQLList(EventType) },
         comments: { type: new GraphQLList(CommentType) },
-        createdEvents: { type: new GraphQLList(EventType) }
-
+        createdEvents: { type: new GraphQLList(EventType) },
+        projects: { type: new GraphQLList(ProjectType) }
     })
 })

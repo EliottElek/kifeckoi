@@ -8,8 +8,14 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_CLIENTS, GET_ALL_PROJECTS } from "../../graphql/queries";
 
 const SidePanel = () => {
-  const { currentProject, clients, setClients, projects, setProjects } =
-    React.useContext(Context);
+  const {
+    currentProject,
+    clients,
+    setClients,
+    projects,
+    setProjects,
+    currentClient,
+  } = React.useContext(Context);
   const dataClients = useQuery(GET_ALL_CLIENTS);
   const dataProjects = useQuery(GET_ALL_PROJECTS);
 
@@ -19,10 +25,12 @@ const SidePanel = () => {
     }
   }, [setClients, dataClients?.data]);
   React.useEffect(() => {
-    if (dataProjects?.data) {
+    if (dataProjects?.data && currentClient) {
       setProjects(dataProjects?.data?.getAllProjects);
+    } else {
+      setProjects([]);
     }
-  }, [setProjects, dataProjects?.data]);
+  }, [setProjects, dataProjects?.data, currentClient]);
   const navElements = [
     { id: "global", name: "Status global" },
     { id: "actions", name: "Actions" },
@@ -49,7 +57,7 @@ const SidePanel = () => {
     return (
       <ListItem
         id={id}
-        onClick={() => navigate(`/project/${comp?.id}/global`)}
+        onClick={() => navigate(`/project/${comp?.id}/actions`)}
       >
         <span>{comp?.name}</span>
       </ListItem>
@@ -92,8 +100,12 @@ const SidePanel = () => {
   };
   return (
     <div className="sticky__side__nav">
-      <MenuAccordion defaultOpen title={"Évènements"} content={EventsNav()} />
-      <MenuAccordion defaultOpen title={"Projets"} content={ProjectsNav()} />
+      {currentProject && (
+        <MenuAccordion defaultOpen title={"Évènements"} content={EventsNav()} />
+      )}
+      {currentClient && (
+        <MenuAccordion defaultOpen title={"Projets"} content={ProjectsNav()} />
+      )}
       <MenuAccordion defaultOpen title={"Clients"} content={ClientsNav()} />
     </div>
   );

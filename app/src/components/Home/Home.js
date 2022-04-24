@@ -4,7 +4,6 @@ import "./Home.css";
 import { useMutation, useQuery } from "@apollo/client";
 import ClientItem from "./ClientItem";
 import Button from "../../materials/Button/Button";
-import InputText from "../../materials/InputText/InputText";
 import { CREATE_CLIENT } from "../../graphql/mutations";
 import { GET_ALL_CLIENTS } from "../../graphql/queries";
 const Home = () => {
@@ -18,13 +17,11 @@ const Home = () => {
     }
   }, [setClients, data]);
   const [nameInput, setNameInput] = React.useState("");
-  const [message, setMessage] = React.useState("");
   const title = document.getElementById("title");
   title.innerHTML = `Clients | Kifekoi`;
   const submit = async (e) => {
     e.preventDefault();
     if (nameInput === "") {
-      setMessage("Vous devez saisir un nom.");
       return null;
     }
     try {
@@ -51,24 +48,9 @@ const Home = () => {
       <div className="home__new__project__container">
         <h1 className={"home__project__container__title"}>Nouveau client</h1>
         <div className={"home__project__container__spacer"} />
-        <form onSubmit={submit} className={"home__new__client__form"}>
-          <span>Nom du nouveau client</span>
-          <span className={"home__project__container__empty__message"}>
-            {message}
-          </span>
-          <InputText
-            value={nameInput}
-            style={{
-              widht: "98%!important",
-              paddingRight: 0,
-            }}
-            onChange={(e) => setNameInput(e.target.value)}
-            placeholder={"Nom du nouveau client..."}
-          />
-          <Button onClick={submit} style={{ marginTop: "10px" }} type="submit">
-            Créer le nouveau client
-          </Button>
-        </form>
+        <Button onClick={submit} style={{ marginTop: "10px" }} type="submit">
+          Créer un nouveau client +
+        </Button>
       </div>
     </div>
   );

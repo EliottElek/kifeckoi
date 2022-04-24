@@ -31,7 +31,7 @@ function MenuAccordion(props) {
         setTimeout(() => {
           setActiveState(setActive === "" ? "active" : "");
           setHeightState(
-            setActive === "active" ? "0px" : `${content.current.scrollHeight}px`
+            setActive === "active" ? "0px" : `${content?.current?.scrollHeight}px`
           );
           setRotateState(
             setActive === "active"

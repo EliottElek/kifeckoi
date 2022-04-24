@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Project from "./components/Project/Project";
 import Home from "./components/Home/Home";
 import { Context } from "./components/Context/Context";
@@ -12,19 +12,16 @@ import { ToastContainer } from "react-toastify";
 import Drawer from "./materials/Drawer/Drawer";
 import "react-toastify/dist/ReactToastify.css";
 import Switch from "./materials/Switch/Switch";
-import { FiSettings } from "react-icons/fi";
 import Avatar from "./materials/Avatar/Avatar";
 import Menu from "./materials/Menu/Menu";
 import MenuItem from "./materials/Menu/MenuItem";
 import Popup from "./materials/Popup/Popup";
-import { BsListTask } from "react-icons/bs";
-import { CgFormatUppercase } from "react-icons/cg";
+import { CgMenuGridO } from "react-icons/cg";
 import StickyNavbar from "./components/StickyNavbar/StickyNavbar";
 import Button from "./materials/Button/Button";
 import NoInternetConnection from "./components/NoInternetConnectionWrapper/NoInternetConnectionWrapper";
 import SidePanel from "./components/DashBoard/SidePanel";
 import logo from "./assets/images/logo.png";
-
 var link = document.querySelector("link[rel~='icon']");
 if (!link) {
   link = document.createElement("link");
@@ -34,6 +31,7 @@ if (!link) {
 link.href = icon;
 
 const MainContent = () => {
+  const { dark } = useContext(Context);
   return (
     <div className={"main__content"}>
       <NoInternetConnection>
@@ -139,7 +137,7 @@ const MainContent = () => {
           />
         </Routes>
       </NoInternetConnection>
-      <ToastContainer theme="dark" />
+      <ToastContainer theme={dark ? "dark" : "light"} />
     </div>
   );
 };
@@ -150,51 +148,45 @@ const App = () => {
   const {
     currentProject,
     user,
-    listStyle,
-    setListStyle,
-    setEvents,
-    setMarkdown,
-    markdown,
     toggleTheme,
     dark,
     setDark,
     defaultDark,
+    setOpenDrawer,
+    openDrawer,
+    setCurrentProject,
+    setCurrentClient,
   } = useContext(Context);
   const [openPopUp, setOpenPopUp] = React.useState(false);
-
+  const navigate = useNavigate();
+  let urlElement = window.location.href.split("/")[5];
   return (
     <div className={"App"}>
       <StickyNavbar>
+        <button
+          className={"toggle__drawer__button"}
+          onClick={() => setOpenDrawer(!openDrawer)}
+        >
+          <CgMenuGridO />
+        </button>
         <div className="name__container">
-          <img src={logo} alt="" className="logo__kifekoi" />
-          <h2 className="name__container__title">{currentProject?.name}</h2>
-          <button
-            data-tip
-            onClick={(e) => {
-              e.stopPropagation();
-              setEvents(null);
-              setListStyle(!listStyle);
+          <img
+            onClick={() => {
+              setCurrentProject(null);
+              setCurrentClient(null);
+              navigate(`/`);
             }}
-            data-for="ListTooltip"
-            className={`list__style__button ${
-              listStyle && " active__list__style"
-            }`}
+            src={logo}
+            alt=""
+            className="logo__kifekoi"
+          />
+          <h2
+            className="name__container__title"
+            onClick={() => navigate(`/project/${currentProject?.id}/global`)}
           >
-            <BsListTask />
-          </button>
-          <button
-            data-tip
-            onClick={(e) => {
-              e.stopPropagation();
-              setMarkdown(!markdown);
-            }}
-            data-for="MarkdownTooltip"
-            className={`list__style__button markdown__btn ${
-              markdown && " active__list__style"
-            }`}
-          >
-            <CgFormatUppercase />
-          </button>
+            {currentProject?.name}
+            {urlElement && ` - ${urlElement}`}
+          </h2>
         </div>
         <div className="events__container">
           <Button>Sauvegarder</Button>
@@ -205,9 +197,9 @@ const App = () => {
             className="settings__button"
             onClick={() => setOpenPopUp(true)}
           >
-            <FiSettings />
+            <Avatar src={user.avatarUrl} name={user.firstname} />
             <Popup
-              style={{ transform: "translate(-40%, 60%)" }}
+              style={{ transform: "translate(-40%, 65%)" }}
               open={openPopUp}
               setOpen={setOpenPopUp}
               bottom
@@ -238,7 +230,7 @@ const App = () => {
                 <li className={"menu-item-no-hover"}>
                   <span>
                     Passer en mode
-                    {!dark ? " jour ☀️" : " nuit 🌙"}
+                    {dark ? " jour ☀️" : " nuit 🌙"}
                   </span>
                   <Switch
                     onChange={(e) => {
@@ -250,9 +242,6 @@ const App = () => {
                 </li>
               </Menu>
             </Popup>
-          </button>
-          <button className="settings__button">
-            <Avatar src={user.avatarUrl} name={user.firstname} />
           </button>
         </div>
       </StickyNavbar>

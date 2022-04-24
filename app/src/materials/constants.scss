@@ -11,6 +11,8 @@
   -webkit-tap-highlight-color: transparent;
   line-height: 1.42857;
   letter-spacing: -0.005em;
+  --drawer-width-open: 240px;
+  --drawer-width-closed: 0px;
 }
 /* 1 */
 :root {
@@ -45,7 +47,9 @@ a {
   color: black;
   margin: 0;
   width: 100%;
-  height: 100%;
+  flex-grow: 1;
+  max-height: calc(100% - 55px);
+  overflow-y: auto;
   background-color: var(--color-background-1);
   overflow: auto !important;
 }
@@ -110,4 +114,24 @@ input:focus {
 }
 textarea {
   resize: none;
+}
+.toggle__drawer__button {
+  width: 30px;
+  position: absolute;
+  left: 10px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  background-color: transparent;
+  cursor: pointer;
+  transition: 0.2s all;
+  padding: 4px;
+  color: var(--font-color);
+}
+.toggle__drawer__button:hover {
+  background-color: var(--color-background-1);
 }

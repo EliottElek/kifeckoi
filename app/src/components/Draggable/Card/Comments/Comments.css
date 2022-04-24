@@ -79,10 +79,10 @@
   left: 0;
   padding: 6px;
   margin: 0px !important;
-  background-color: var(--color-background-1);
+  background-color: transparent;
 }
 .form__comment__container__textarea {
-  background-color: var(--color-background-1);
+  background-color: transparent;
   border: 1px solid var(--font-color);
   border-radius: 3px;
   box-sizing: border-box;
@@ -102,7 +102,7 @@
   bottom: 10px;
 }
 .edit__comment__textarea {
-  background-color: var(--color-background-1);
+  background-color: transparent;
   border: 1px solid rgb(223, 225, 230);
   border-radius: 3px;
   box-sizing: border-box;

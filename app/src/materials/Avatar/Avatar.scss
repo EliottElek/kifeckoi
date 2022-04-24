@@ -1,4 +1,5 @@
 .avatar {
+  z-index: 3;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -7,10 +8,20 @@
   object-fit: cover;
 }
 .avatar_mini {
+  z-index: 1;
   width: 30px !important;
   height: 30px !important;
   border-radius: 50%;
   border: solid 1px rgba(128, 128, 128, 0.3);
+  /* box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.1); */
+  object-fit: cover;
+}
+.avatar_large {
+  z-index: 0;
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50%;
+  border: solid 1px white;
   /* box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.1); */
   object-fit: cover;
 }

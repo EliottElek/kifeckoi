@@ -7,10 +7,11 @@
   justify-content: space-between;
   /* padding: 10px; */
   width: 100%;
-  height: 80px;
-  background-color: var(--color-background-2);
+  height: 50px;
+  background-color: var(--color-background-1);
   color: var(--font-color);
   transition: 0.1s ease-in;
+  border-radius: 2px;
 }
 .action_item {
   font-size: 1rem;
@@ -26,7 +27,8 @@
 }
 .project__item:hover,
 .action_item:hover {
-  filter: brightness(1.3);
+  filter: brightness(1.1);
+  border-radius: 4px;
   transition: 0.1s ease-out;
 }
 .project__item__logo {
@@ -38,7 +40,6 @@
 .home__project__container > h1 {
   color: var(--font-color);
   margin: 12px;
-  margin-top: 25px;
   margin-bottom: 25px;
 }
 .project__item__name__container > p,
@@ -47,9 +48,9 @@
 }
 .home__project__container__spacer {
   height: 2px;
-  width: 95%;
+  width: 100%;
   margin: auto;
-  background-color: var(--color-background-2);
+  background-color: var(--font-color);
 }
 .home__project__container__titlecontainer {
   display: flex;

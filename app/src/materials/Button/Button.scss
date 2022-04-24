@@ -2,7 +2,7 @@
 
 .button__versed {
   background-color: var(--main-color);
-  color: white;
+  color: rgb(255, 255, 255);
   border: solid 1px var(--main-color);
   outline: none;
   border-radius: 5px;
@@ -20,12 +20,11 @@
   border: none;
   display: inline-flex;
   align-items: center;
-  box-shadow: 0 1px 2px rgb(36 57 141 / 40%);
+  // box-shadow: 0 1px 2px rgb(36 57 141 / 40%);
   border-radius: 4px;
   line-height: 1.6;
   font-family: Inter, sans-serif;
   font-weight: 700;
-  color: rgb(218, 218, 218);
   cursor: pointer;
   transition: filter 0.3s, background 0.3s, color 0.3s;
   font-size: 0.9em;
@@ -52,7 +51,7 @@
   border: none;
   display: inline-flex;
   align-items: center;
-  box-shadow: 0 1px 2px rgb(36 57 141 / 40%);
+  // box-shadow: 0 1px 2px rgb(36 57 141 / 40%);
   border-radius: 4px;
   line-height: 1.6;
   font-family: Inter, sans-serif;

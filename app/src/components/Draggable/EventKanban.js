@@ -15,7 +15,6 @@ import { CREATE_EVENT, CHANGE_EVENT_STATE } from "../../graphql/mutations";
 import { toast } from "react-toastify";
 import rawEvents from "../../rawEvents";
 import { useParams } from "react-router";
-// import AutoCompleteUsers from "./AutoCompleteUsers";
 import { Flip } from "react-toastify";
 import Column from "./Column";
 import AutoTextArea from "../../materials/AutoSizeTextArea/AutoSizeTextArea";
@@ -23,7 +22,7 @@ import Progress from "../../materials/Progress/Progress";
 import isEmoji from "../../assets/functions/isEmoji";
 
 const EventKanban = ({ type, setLength, length }) => {
-  const { events, currentProject, setCurrentProject, setEvents, user } =
+  const { events, setCurrentProject, setEvents, user } =
     React.useContext(Context);
   const [addCard, setAddCard] = useState(false);
   const [selectedAcountables, setSelectedcontributors] = React.useState([]);
@@ -37,19 +36,26 @@ const EventKanban = ({ type, setLength, length }) => {
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
     variables: { id: id },
   });
+  const dataEvents = useQuery(FIND_EVENTS_BY_PROJECT_ID, {
+    variables: { id: id, type: type },
+  });
   React.useEffect(() => {
     if (dataProject?.data) {
       setCurrentProject({ ...dataProject?.data?.findProjectByProjectId });
     }
   }, [setCurrentProject, dataProject?.data]);
-  const dataEvents = useQuery(FIND_EVENTS_BY_PROJECT_ID, {
-    variables: { id: id, type: type },
-  });
+
   React.useEffect(() => {
     if (dataEvents?.data) {
       setEventsData([...dataEvents?.data?.findEventsByProjectId]);
     }
-  }, [setEventsData, dataEvents?.data]);
+  }, [dataEvents?.data, setEventsData]);
+
+  React.useEffect(() => {
+    if (!eventsData.contributors) {
+      dataEvents.refetch();
+    }
+  }, [dataEvents, eventsData.contributors]);
 
   React.useEffect(() => {
     rawEvents.forEach((item) => (item.tasks = []));
@@ -61,7 +67,6 @@ const EventKanban = ({ type, setLength, length }) => {
     });
     setEvents(eventsFinal);
   }, [eventsData, setEvents]);
-
   const onDragEnd = async (result) => {
     if (!result.destination) return;
     const { source, destination } = result;
@@ -96,18 +101,13 @@ const EventKanban = ({ type, setLength, length }) => {
       } catch (err) {
         console.log(err);
       }
-      setEvents([...events]);
-      currentProject.events = [...events];
-      setCurrentProject(currentProject);
+      dataEvents.refetch();
     } else {
       const index = events.findIndex((e) => e.id === source.droppableId);
       const items = Array.from(events[index].tasks);
       const [reorderedItem] = items.splice(source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
-      events[index].tasks = items;
-      setEvents([...events]);
-      currentProject.events = [...events];
-      setCurrentProject(currentProject);
+      dataEvents.refetch();
     }
   };
   const add = async (e) => {
@@ -118,7 +118,7 @@ const EventKanban = ({ type, setLength, length }) => {
     const description =
       input.length === 3 && isEmoji(input) ? `# ${input}` : input;
     try {
-      const newEvent = await createEvent({
+      await createEvent({
         variables: {
           type: type,
           projectId: id,
@@ -128,14 +128,8 @@ const EventKanban = ({ type, setLength, length }) => {
           status: eventSelected.title,
         },
       });
-      events[eventSelected.id - 1].tasks.push({
-        ...newEvent?.data?.createEvent,
-        new: true,
-      });
       setInput("");
-      setEvents([...events]);
-      currentProject.events = [...events];
-      setCurrentProject(currentProject);
+      dataEvents.refetch();
       setLength && setLength(length + 1);
       setSelectedcontributors([]);
     } catch (err) {
@@ -200,6 +194,8 @@ const EventKanban = ({ type, setLength, length }) => {
                                 setLength={setLength}
                                 length={length}
                                 dragging={snapshot.isDragging}
+                                dataEvents={dataEvents}
+                                dataProject={dataProject}
                                 className={`card card__${i + 1}`}
                               />
                             </div>
@@ -218,12 +214,6 @@ const EventKanban = ({ type, setLength, length }) => {
                               autoFocus
                               className="modif__description__textarea"
                             ></AutoTextArea>
-                            {/* <AutoCompleteUsers
-                                    placeholder="Responsable..."
-                                    setSelectedcontributors={
-                                      setSelectedcontributors
-                                    }
-                                  /> */}
                             <div className="add__card__button__container">
                               <Button
                                 style={{ width: "100%" }}

@@ -3,17 +3,15 @@ import { Context } from "../Context/Context";
 import { useParams } from "react-router";
 import Progress from "../../materials/Progress/Progress";
 import ProjectItem from "./ProjectItem";
-import InputText from "../../materials/InputText/InputText";
 import Button from "../../materials/Button/Button";
 import { FIND_CLIENT_BY_ID } from "../../graphql/queries";
 import { CREATE_PROJECT } from "../../graphql/mutations";
 import { useQuery, useMutation } from "@apollo/client";
 
 const Client = () => {
-  const { currentClient, setCurrentClient, projects, setProjects } =
+  const { currentClient, setCurrentClient, projects, setProjects, user } =
     React.useContext(Context);
   const [nameInput, setNameInput] = React.useState("");
-  const [message, setMessage] = React.useState("");
 
   const { id } = useParams();
   const dataClient = useQuery(FIND_CLIENT_BY_ID, { variables: { id: id } });
@@ -40,11 +38,15 @@ const Client = () => {
     const idParams = id;
     e.preventDefault();
     if (nameInput === "") {
-      setMessage("Vous devez indiquer un nom.");
       return null;
     }
+    const contributors = [user.id];
     await createProject({
-      variables: { name: nameInput, clientId: idParams },
+      variables: {
+        name: nameInput,
+        clientId: idParams,
+        contributors: contributors,
+      },
     });
     window.location.reload();
     setNameInput("");
@@ -94,26 +96,9 @@ const Client = () => {
         <div className="home__new__project__container">
           <h1 className={"home__project__container__title"}>Nouveau projet</h1>
           <div className={"home__project__container__spacer"} />
-          <form onSubmit={submit} className={"home__new__client__form"}>
-            <span>Nom du nouveau projet</span>
-            <span className={"home__project__container__empty__message"}>
-              {message}
-            </span>
-            <InputText
-              style={{ marginTop: "10px", width: "90%" }}
-              className="new_client_textarea"
-              onChange={(e) => setNameInput(e.target.value)}
-              value={nameInput}
-              placeholder={"Nom du nouveau projet..."}
-            />
-            <Button
-              onClick={submit}
-              style={{ marginTop: "10px" }}
-              type="submit"
-            >
-              Créer le nouveau projet
-            </Button>
-          </form>
+          <Button onClick={submit} style={{ marginTop: "10px" }} type="submit">
+            Créer un nouveau projet
+          </Button>
         </div>
       </div>
     </>

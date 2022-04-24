@@ -3,23 +3,14 @@ import Comment from "./Comment";
 import CommentForm from "./CommentForm";
 import "./Comments.css";
 
-const Comments = ({ comments, setComments, event }) => {
+const Comments = ({ comments, event, commentsData }) => {
   return (
     <div className="comments__container">
       <h3>Commentaires ({comments?.length})</h3>
       {comments.map((comment, i) => (
-        <Comment
-          key={i}
-          comment={comment}
-          comments={comments}
-          setComments={setComments}
-        />
+        <Comment key={i} comment={comment} commentsData={commentsData} />
       ))}
-      <CommentForm
-        comments={comments}
-        setComments={setComments}
-        event={event}
-      />
+      <CommentForm commentsData={commentsData} event={event} />
     </div>
   );
 };

@@ -35,7 +35,7 @@
 }
 .modal__content__container {
   transition: 0.1s all;
-  width: 95%;
+  width: 100%;
   cursor: default;
   max-height: 100%;
   position: relative;
@@ -44,7 +44,7 @@
   flex-direction: column;
   justify-content: flex-start;
   gap: 12px;
-  background-color: var(--color-background-1);
+  background-color: var(--card-background);
   color: var(--font-color);
   border-radius: 4px;
 }
@@ -73,7 +73,6 @@
 .modal__content__span__value {
   transition: 0.1s all;
   padding: 6px;
-  background-color: var(--color-background-2s);
   width: auto;
   color: var(--font-color);
   display: flex;
@@ -267,7 +266,7 @@
   display: flex;
   position: fixed;
   top: 0;
-  right: 20px;
+  right: 0px;
   height: 30px;
   width: 30px;
   font-size: 1.5rem;
@@ -276,7 +275,7 @@
   justify-content: center;
 }
 .close__modal__button:hover {
-  background-color: var(--color-background-2);
+  background-color: var(--color-background-1);
   color: var(--font-color);
   transition: 0.1s ease;
   border-radius: 50%;
@@ -286,4 +285,9 @@
   align-items: center;
   gap: 6px;
   margin: 4px;
+}
+.delete__actions__container {
+  align-self: flex-end;
+  display: flex;
+  gap: 6px;
 }

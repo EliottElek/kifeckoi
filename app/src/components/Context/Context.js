@@ -18,6 +18,7 @@ const userData = {
 export const ContextProvider = ({ children }) => {
   const [clients, setClients] = React.useState([]);
   const [users, setUsers] = React.useState();
+  const [openDrawer, setOpenDrawer] = React.useState(true);
   const [projects, setProjects] = React.useState([]);
   const [events, setEvents] = React.useState(rawEvents);
   const [currentClient, setCurrentClient] = React.useState(null);
@@ -66,6 +67,8 @@ export const ContextProvider = ({ children }) => {
       value={{
         toggleTheme: toggleTheme,
         defaultDark: defaultDark,
+        setOpenDrawer: setOpenDrawer,
+        openDrawer: openDrawer,
         dark: dark,
         setDark: setDark,
         user: user,

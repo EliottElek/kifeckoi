@@ -1,6 +1,6 @@
 import React from "react";
 import "./Backdrop.scss";
-const Backdrop = () => {
-  return <div className="backdrop" />;
+const Backdrop = ({ children }) => {
+  return <div className="backdrop">{children}</div>;
 };
 export default Backdrop;

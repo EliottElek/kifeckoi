@@ -7,6 +7,7 @@
 .name__container__title {
   font-size: 1.5rem;
   font-weight: bold;
+  cursor: pointer;
 }
 .name__container__input {
   font-size: 1.5rem;
@@ -99,13 +100,11 @@
   align-self: flex-start;
 }
 .sticky__side__nav {
-  position: fixed !important;
-  width: 240px;
+  width: 100%;
   background-color: var(--background-color-2);
-  height: 85%;
+  height: calc(100vh - 70px);
   border-bottom: solid 1px rgba(128, 128, 128, 0.096);
   overflow-y: auto;
-  top: 60px;
 }
 .sticky__side__nav__title {
   position: absolute;

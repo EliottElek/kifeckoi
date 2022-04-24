@@ -13,7 +13,7 @@ import {
   CHANGE_COMMENT__CONTENT,
   DELETE_COMMENT,
 } from "../../../../graphql/mutations";
-const Comment = ({ comment, comments, setComments }) => {
+const Comment = ({ comment, commentsData }) => {
   const [changeCommentContent] = useMutation(CHANGE_COMMENT__CONTENT);
   const [deleteComment] = useMutation(DELETE_COMMENT);
 
@@ -29,12 +29,7 @@ const Comment = ({ comment, comments, setComments }) => {
           newContent: content,
         },
       });
-      var newComments = [...comments];
-      const index = newComments.findIndex((com) => com.id === comment.id);
-      const item = { ...newComments[index] };
-      item.content = content;
-      newComments[index] = item;
-      setComments(newComments);
+      commentsData.refetch();
       toast.success("Commentaire modifié avec succès.", {
         position: "bottom-left",
         autoClose: 5000,
@@ -64,8 +59,7 @@ const Comment = ({ comment, comments, setComments }) => {
           commentId: comment.id,
         },
       });
-      var newComments = comments.filter((com) => com.id !== comment.id);
-      setComments(newComments);
+      commentsData.refetch();
       toast.success("Commentaire supprimé avec succès.", {
         position: "bottom-left",
         autoClose: 5000,

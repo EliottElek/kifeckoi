@@ -3,7 +3,12 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../graphql/queries";
 import Select from "react-select";
 
-const AutoCompleteUsers = ({ setSelectedcontributors, placeholder }) => {
+const AutoCompleteUsers = ({
+  setSelectedContributors,
+  placeholder,
+  multi,
+  alreadyExistingContributors,
+}) => {
   const customStyles = {
     option: (base, state) => ({
       ...base,
@@ -19,29 +24,56 @@ const AutoCompleteUsers = ({ setSelectedcontributors, placeholder }) => {
     },
   };
   const { data } = useQuery(GET_ALL_USERS);
-  const [contributors, setcontributors] = React.useState([]);
+  const [contributors, setContributors] = React.useState([]);
 
   React.useEffect(() => {
-    if (data?.getAllUsers) {
-      var newUsers = data?.getAllUsers;
-      const finalUsers = newUsers.map((user) => ({
-        ...user,
-        label: user.username,
-        value: user.username,
-      }));
-      console.log(finalUsers);
-      setcontributors(finalUsers);
-    }
-  }, [setcontributors, data?.getAllUsers]);
+    const setData = () => {
+      function objectsEqual(o1, o2) {
+        return o1.id === o2.id;
+      }
+
+      function subtractArrays(a1, a2) {
+        var arr = [];
+        if (!a1) return a2;
+        if (!a2) return a1;
+
+        a1.forEach((o1) => {
+          var found = false;
+          a2.forEach((o2) => {
+            if (objectsEqual(o1, o2)) {
+              found = true;
+            }
+          });
+          if (!found) {
+            arr.push(o1);
+          }
+        });
+        return arr;
+      }
+      if (data?.getAllUsers) {
+        var newUsers = data?.getAllUsers;
+        const finalUsers = newUsers.map((user) => {
+          return {
+            ...user,
+            label: user.username,
+            value: user.username,
+          };
+        });
+        const diff = subtractArrays(finalUsers, alreadyExistingContributors);
+        setContributors(diff);
+      }
+    };
+    setData();
+  }, [alreadyExistingContributors, data?.getAllUsers, setContributors]);
   return (
     <Select
       closeMenuOnSelect={false}
-      isMulti
+      isMulti={multi ? true : false}
       placeholder={placeholder}
       styles={customStyles}
       openMenuOnClick={(e) => e.stopPropagation()}
       onChange={(selectedOptions) => {
-        setSelectedcontributors(selectedOptions);
+        setSelectedContributors(selectedOptions);
       }}
       options={contributors}
     />
