@@ -1,8 +1,8 @@
 .dnd__wide__container {
-  height: auto;
+  height: 100%;
   background-color: var(--color-background-1);
-  width: auto;
-  padding-bottom: 70px;
+  width: 100%;
+  overflow: auto;
 }
 .settings__button {
   width: 40px;
@@ -16,10 +16,5 @@
   align-items: center;
   justify-content: center;
   border: none;
-  cursor: pointer;
-}
-.logo__kifekoi {
-  height: 55px;
-  width: auto;
   cursor: pointer;
 }

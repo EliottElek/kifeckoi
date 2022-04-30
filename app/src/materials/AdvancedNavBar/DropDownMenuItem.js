@@ -1,4 +1,3 @@
-import React from "react";
 import "./AdvancedNavBar.scss";
 
 const DropDownMenuItem = ({

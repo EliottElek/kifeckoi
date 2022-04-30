@@ -4,13 +4,13 @@
   /* position: fixed; */
   padding: 0;
   margin: 0;
-  top: 0px;
+  top: 0;
   left: 0;
   width: 100%;
   height: 50px;
   background-color: var(--color-background-2);
   display: flex;
-  box-shadow: 0 2px 4px var(--shadow-color);
+  box-shadow: 0 1px 2px var(--shadow-color);
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -26,5 +26,14 @@
   align-items: center;
   justify-content: center;
   border: none;
+  cursor: pointer;
+}
+.period__span {
+  color: var(--main-color);
+  cursor: default;
+}
+.logo__kifekoi {
+  height: 55px;
+  width: auto;
   cursor: pointer;
 }

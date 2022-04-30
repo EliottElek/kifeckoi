@@ -2,19 +2,20 @@
 
 .input__text__container {
   width: 100% !important;
+  margin-top: 12px;
 }
 .input__text__label {
   margin: 3px;
-  color: var(--main-color) !important;
+  color: var(--font-color) !important;
 }
 .input__text {
   outline: none;
   width: 90%;
-  border: solid 1px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  color: white;
+  border: solid 1px rgba(128, 128, 128, 0.315);
+  padding: 14px;
+  color: var(--font-color);
   border-radius: 4px;
-  background-color: var(--main-color);
+  background-color: var(--card-background);
   font-size: 1rem;
 }
 .disabled__input {

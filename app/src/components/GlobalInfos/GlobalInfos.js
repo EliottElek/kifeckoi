@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../Context/Context";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
-import { useNavigate, useParams } from "react-router";
+import { MODIFY_PROJECT_GLOBAL_INFOS } from "../../graphql/mutations";
+import { Navigate, useNavigate, useParams } from "react-router";
 import { IoIosAddCircle } from "react-icons/io";
 import { FaChevronDown } from "react-icons/fa";
 import Backdrop from "../../materials/Backdrop/Backdrop";
@@ -10,85 +11,187 @@ import Progress from "../../materials/Progress/Progress";
 import "./GlobalInfos.scss";
 import UserCard from "./UserCard/UserCard";
 import AddContributorsModal from "./AddContributorsModal";
+import { FiMoreHorizontal } from "react-icons/fi";
 import EventCard from "./EventCard/EventCard";
 import Button from "../../materials/Button/Button";
 import Popup from "../../materials/Popup/Popup";
 import Menu from "../../materials/Menu/Menu";
 import MenuItem from "../../materials/Menu/MenuItem";
+import { toast } from "react-toastify";
+import ModifTextArea from "./ModifTextArea/ModifTextArea";
+import DatePicker from "./DatePicker/DatePicker";
+import AddLogoModal from "./AddLogoModal/AddLogoModal";
+import ChangeNameModal from "./ChangeNameModal/ChangeNameModal";
+const status = [
+  {
+    name: "conforme",
+    class: "conforme",
+    icon: "",
+  },
+  {
+    name: "vigilance",
+    class: "vigilance",
+    icon: "",
+  },
+  {
+    name: "à risque",
+    class: "à risque",
+    icon: "",
+  },
+  {
+    name: "alerte",
+    class: "alerte",
+    icon: "",
+  },
+  {
+    name: "issue",
+    class: "issue",
+    icon: "",
+  },
+  {
+    name: "gestion de crise",
+    class: "gestion de crise",
+    icon: "",
+  },
+];
+const events = [
+  {
+    name: "Actions",
+    url: "actions",
+  },
+  {
+    name: "Infos",
+    url: "infos",
+  },
+  {
+    name: "Problèmes",
+    url: "problems",
+  },
+  {
+    name: "Risques",
+    url: "risks",
+  },
+  {
+    name: "Décisions",
+    url: "decisions",
+  },
+  {
+    name: "Livrables",
+    url: "deliverables",
+  },
+];
 const GlobalInfos = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentProject, setCurrentProject } = useContext(Context);
+  const { currentProject, setCurrentProject, user } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
+  const [openLogoModal, setOpenLogoModal] = useState(false);
+  const [openNameModal, setOpenNameModal] = useState(false);
+  const [openTitleMenu, setOpenTitleMenu] = useState(false);
   const [openGlobalStatusPopup, setOpenGlobalStatusPopup] = useState(false);
   const [openPlanningStatusPopup, setOpenPlanningStatusPopup] = useState(false);
   const [openPerimeterStatusPopup, setOpenPerimeterStatusPopup] =
     useState(false);
-  const [goCopyDate, setGoCopyDate] = useState(null);
-  const [goLiveDate, setGoLiveDate] = useState(null);
-
-  const [actions, setActions] = useState(null);
-  const [infos, setInfos] = useState(null);
-  const [risks, setRisks] = useState(null);
-  const [decisions, setDecisions] = useState(null);
-  const [problems, setProblems] = useState(null);
-
-  const [globalStatus, setGlobalStatus] = useState("conforme");
-  const [planningStatus, setPlanningStatus] = useState("conforme");
-  const [perimeterStatus, setPerimeterStatus] = useState("conforme");
-
-  const [deliverables, setDeliverables] = useState(null);
+  const [modifyProjectInfos] = useMutation(MODIFY_PROJECT_GLOBAL_INFOS);
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
-    variables: { id: id },
+    variables: { id: id, userId: user.id },
   });
   React.useEffect(() => {
     if (dataProject?.data) {
       setCurrentProject({ ...dataProject?.data?.findProjectByProjectId });
     }
   }, [setCurrentProject, dataProject?.data]);
-  React.useEffect(() => {
-    const filteredArray = currentProject?.events?.filter(
-      (event) => event.type === "Action"
-    );
-    setActions(filteredArray);
-  }, [setActions, currentProject?.events]);
-  React.useEffect(() => {
-    const filteredArray = currentProject?.events?.filter(
-      (event) => event.type === "Info"
-    );
-    setInfos(filteredArray);
-  }, [setInfos, currentProject?.events]);
-  React.useEffect(() => {
-    const filteredArray = currentProject?.events?.filter(
-      (event) => event.type === "Problems"
-    );
-    setProblems(filteredArray);
-  }, [setProblems, currentProject?.events]);
-  React.useEffect(() => {
-    const filteredArray = currentProject?.events?.filter(
-      (event) => event.type === "Risk"
-    );
-    setRisks(filteredArray);
-  }, [setRisks, currentProject?.events]);
-  React.useEffect(() => {
-    const filteredArray = currentProject?.events?.filter(
-      (event) => event.type === "Decision"
-    );
-    setDecisions(filteredArray);
-  }, [setDecisions, currentProject?.events]);
-  React.useEffect(() => {
-    const filteredArray = currentProject?.events?.filter(
-      (event) => event.type === "Deliverable"
-    );
-    setDeliverables(filteredArray);
-  }, [setDeliverables, currentProject?.events]);
 
-  const handleChangeGoLiveDate = (e) => {
-    setGoLiveDate(e.target.value);
+  const handleModifyGlobalStatus = async (item) => {
+    try {
+      setOpenGlobalStatusPopup(false);
+      await modifyProjectInfos({
+        variables: {
+          projectId: currentProject.id,
+          globalStatus: item.name,
+          perimeterStatus: currentProject.perimeterStatus,
+          planningStatus: currentProject.planningStatus,
+          goLiveDate: currentProject.goLiveDate,
+          goCopyDate: currentProject.goCopyDate,
+          globalDescription: currentProject.globalDescription,
+          perimeterDescription: currentProject.perimeterDescription,
+          planningDescription: currentProject.planningDescription,
+          logoUrl: currentProject.logoUrl,
+        },
+      });
+      dataProject.refetch();
+      toast.success(`État global passé à "${item.name}"`, {
+        position: toast.POSITION.BOTTOM_LEFT,
+        pauseOnHover: false,
+      });
+    } catch (err) {
+      toast.error("Impossible de changer l'état du status global.", {
+        position: toast.POSITION.BOTTOM_LEFT,
+        pauseOnHover: false,
+      });
+    }
   };
-  const handleChangeGoCopyDate = (e) => {
-    setGoCopyDate(e.target.value);
+  const handleModifyPerimeterStatus = async (item) => {
+    try {
+      setOpenPerimeterStatusPopup(false);
+      await modifyProjectInfos({
+        variables: {
+          projectId: currentProject.id,
+          globalStatus: currentProject.globalStatus,
+          perimeterStatus: item.name,
+          goLiveDate: currentProject.goLiveDate,
+          goCopyDate: currentProject.goCopyDate,
+          planningStatus: currentProject.planningStatus,
+          globalDescription: currentProject.globalDescription,
+          perimeterDescription: currentProject.perimeterDescription,
+          planningDescription: currentProject.planningDescription,
+          logoUrl: currentProject.logoUrl,
+        },
+      });
+      dataProject.refetch();
+      toast.success(`État périmètre passé à "${item.name}"`, {
+        position: toast.POSITION.BOTTOM_LEFT,
+        pauseOnHover: false,
+      });
+    } catch (err) {
+      toast.error("Impossible de changer l'état du status périmètre.", {
+        position: toast.POSITION.BOTTOM_LEFT,
+        pauseOnHover: false,
+      });
+    }
   };
+  const handleModifyPlanningStatus = async (item) => {
+    try {
+      setOpenPlanningStatusPopup(false);
+      await modifyProjectInfos({
+        variables: {
+          projectId: currentProject.id,
+          globalStatus: currentProject.globalStatus,
+          perimeterStatus: currentProject.perimeterStatus,
+          planningStatus: item.name,
+          goLiveDate: currentProject.goLiveDate,
+          goCopyDate: currentProject.goCopyDate,
+          globalDescription: currentProject.globalDescription,
+          perimeterDescription: currentProject.perimeterDescription,
+          planningDescription: currentProject.planningDescription,
+          logoUrl: currentProject.logoUrl,
+        },
+      });
+      dataProject.refetch();
+      toast.success(`État planning passé à "${item.name}"`, {
+        position: toast.POSITION.BOTTOM_LEFT,
+        pauseOnHover: false,
+      });
+    } catch (err) {
+      toast.error("Impossible de changer l'état du status planning.", {
+        position: toast.POSITION.BOTTOM_LEFT,
+        pauseOnHover: false,
+      });
+    }
+  };
+  if (!dataProject.data && !dataProject.loading) {
+    return <Navigate to="/404" />;
+  }
   if (!currentProject)
     return (
       <Backdrop>
@@ -98,31 +201,69 @@ const GlobalInfos = () => {
   return (
     <div className="global__infos__container">
       <div style={{ padding: "30px" }}>
-        <h2 className="title__global__big">{currentProject?.name}</h2>
+        <h2 className="title__global__big">
+          {currentProject?.name}{" "}
+          {currentProject.logoUrl !== "" && (
+            <img
+              alt=""
+              className={"project__logo"}
+              src={currentProject.logoUrl}
+            />
+          )}
+          <div className={"title__buttons__container"}>
+            <button
+              className="title__modif__button"
+              onClick={() => setOpenTitleMenu(true)}
+            >
+              <FiMoreHorizontal />
+            </button>
+            <Popup
+              bottom
+              open={openTitleMenu}
+              setOpen={setOpenTitleMenu}
+              style={{ transform: "translate(-5px,-20px)" }}
+            >
+              <Menu>
+                <MenuItem
+                  onClick={() => {
+                    setOpenTitleMenu(false);
+                    setOpenNameModal(true);
+                  }}
+                >
+                  <span>Changer le nom</span>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setOpenTitleMenu(false);
+                    setOpenLogoModal(true);
+                  }}
+                >
+                  {currentProject.logoUrl === "" ? (
+                    <span>Ajouter un logo</span>
+                  ) : (
+                    <span>Modifier le logo</span>
+                  )}
+                </MenuItem>
+                <span className={"divider"} />
+                <MenuItem
+                  onClick={() => {
+                    setOpenTitleMenu(false);
+                  }}
+                >
+                  <span>Supprimer le projet</span>
+                </MenuItem>
+              </Menu>
+            </Popup>
+          </div>
+        </h2>
         <h4
           className={"client__link__big"}
           onClick={() => navigate(`/client/${currentProject?.client?.id}`)}
         >
           {currentProject?.client.name}
         </h4>
-        <h4 className={"date__picker__container"}>
-          {" "}
-          Go live le
-          <input
-            type={"date"}
-            value={goLiveDate}
-            onChange={handleChangeGoLiveDate}
-          />
-        </h4>
-        <h4 className={"date__picker__container"}>
-          {" "}
-          Go copy le{" "}
-          <input
-            type={"date"}
-            value={goCopyDate}
-            onChange={handleChangeGoCopyDate}
-          />
-        </h4>
+        <DatePicker type={"Go live"} dataProject={dataProject} />
+        <DatePicker type={"Go copy"} dataProject={dataProject} />
         <h1
           style={{
             marginTop: "30px",
@@ -132,17 +273,19 @@ const GlobalInfos = () => {
           }}
         >
           Status global{" "}
-          {globalStatus && (
-            <span
-              className={`status__span ${globalStatus.replace(
-                / /g,
-                "__"
-              )}__span`}
-              onClick={() => setOpenGlobalStatusPopup(true)}
-            >
-              {globalStatus} {<FaChevronDown />}
-            </span>
-          )}
+          <span
+            className={`status__span ${
+              currentProject.globalStatus
+                ? currentProject.globalStatus.replace(/ /g, "__")
+                : "conforme"
+            }__span`}
+            onClick={() => setOpenGlobalStatusPopup(true)}
+          >
+            {currentProject.globalStatus
+              ? currentProject.globalStatus
+              : "conforme"}{" "}
+            {<FaChevronDown />}
+          </span>
           <Popup
             style={{ transform: "translate(200px, 100px)" }}
             bottom
@@ -150,69 +293,22 @@ const GlobalInfos = () => {
             setOpen={setOpenGlobalStatusPopup}
           >
             <Menu>
-              <MenuItem
-                onClick={() => {
-                  setGlobalStatus("conforme");
-                  setOpenGlobalStatusPopup(false);
-                }}
-              >
-                <span className={`status__conforme__span`}>conforme</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setGlobalStatus("vigilance");
-                  setOpenGlobalStatusPopup(false);
-                }}
-              >
-                <span className={`status__vigilance__span`}>vigilance</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setGlobalStatus("à risque");
-                  setOpenGlobalStatusPopup(false);
-                }}
-              >
-                <span className={`status__risque__span`}>à risque</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setGlobalStatus("alerte");
-                  setOpenGlobalStatusPopup(false);
-                }}
-              >
-                <span className={`status__alerte__span`}>alerte</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setGlobalStatus("issue");
-                  setOpenGlobalStatusPopup(false);
-                }}
-              >
-                <span className={`status__issue__span`}>issue</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setGlobalStatus("gestion de crise");
-                  setOpenGlobalStatusPopup(false);
-                }}
-              >
-                <span className={`status__gestion__de__crise__span`}>
-                  gestion de crise
-                </span>
-              </MenuItem>
+              {status.map((item, i) => (
+                <MenuItem
+                  key={i}
+                  onClick={() => {
+                    handleModifyGlobalStatus(item);
+                  }}
+                >
+                  <span>
+                    {item.name} {item.icon}
+                  </span>
+                </MenuItem>
+              ))}
             </Menu>
           </Popup>
         </h1>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat
-          maximus ex ac tempus. Nam ac viverra ligula. Curabitur ornare in justo
-          non consequat. Nunc egestas ante nisl, eu tincidunt nisi varius eu.
-          Donec vel condimentum est. Ut sit amet purus metus. Ut a nunc velit.
-          Mauris aliquam tortor nec eros sollicitudin, sed convallis metus
-          suscipit. Etiam congue est iaculis ligula varius fermentum. Phasellus
-          fringilla rutrum mauris vitae tempor. Aliquam porttitor est ac finibus
-          convallis.
-        </p>
+        <ModifTextArea type={"global"} dataProject={dataProject} />
         <h3
           style={{
             marginTop: "30px",
@@ -223,17 +319,19 @@ const GlobalInfos = () => {
           }}
         >
           Status planning{" "}
-          {planningStatus && (
-            <span
-              className={`status__span ${planningStatus.replace(
-                / /g,
-                "__"
-              )}__span`}
-              onClick={() => setOpenPlanningStatusPopup(true)}
-            >
-              {planningStatus} {<FaChevronDown />}
-            </span>
-          )}
+          <span
+            className={`status__span ${
+              currentProject.planningStatus
+                ? currentProject.planningStatus.replace(/ /g, "__")
+                : "conforme"
+            }__span`}
+            onClick={() => setOpenPlanningStatusPopup(true)}
+          >
+            {currentProject.planningStatus
+              ? currentProject.planningStatus
+              : "conforme"}{" "}
+            {<FaChevronDown />}
+          </span>
           <Popup
             style={{ transform: "translate(145px, 100px)" }}
             bottom
@@ -241,65 +339,22 @@ const GlobalInfos = () => {
             setOpen={setOpenPlanningStatusPopup}
           >
             <Menu>
-              <MenuItem
-                onClick={() => {
-                  setPlanningStatus("conforme");
-                  setOpenPlanningStatusPopup(false);
-                }}
-              >
-                <span className={`status__conforme__span`}>conforme</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPlanningStatus("vigilance");
-                  setOpenPlanningStatusPopup(false);
-                }}
-              >
-                <span className={`status__vigilance__span`}>vigilance</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPlanningStatus("à risque");
-                  setOpenPlanningStatusPopup(false);
-                }}
-              >
-                <span className={`status__risque__span`}>à risque</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPlanningStatus("alerte");
-                  setOpenPlanningStatusPopup(false);
-                }}
-              >
-                <span className={`status__alerte__span`}>alerte</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPlanningStatus("issue");
-                  setOpenPlanningStatusPopup(false);
-                }}
-              >
-                <span className={`status__issue__span`}>issue</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPlanningStatus("gestion de crise");
-                  setOpenPlanningStatusPopup(false);
-                }}
-              >
-                <span className={`status__gestion__de__crise__span`}>
-                  gestion de crise
-                </span>
-              </MenuItem>
+              {status.map((item, i) => (
+                <MenuItem
+                  key={i}
+                  onClick={() => {
+                    handleModifyPlanningStatus(item);
+                  }}
+                >
+                  <span>
+                    {item.name} {item.icon}
+                  </span>
+                </MenuItem>
+              ))}
             </Menu>
           </Popup>{" "}
         </h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat
-          maximus ex ac tempus. Nam ac viverra ligula. Curabitur ornare in justo
-          non consequat. Nunc egestas ante nisl, eu tincidunt nisi varius eu.
-          Donec vel condimentum est.
-        </p>
+        <ModifTextArea type={"planning"} dataProject={dataProject} />
         <h3
           style={{
             marginTop: "30px",
@@ -309,17 +364,19 @@ const GlobalInfos = () => {
           }}
         >
           Status périmètre{" "}
-          {perimeterStatus && (
-            <span
-              className={`status__span ${perimeterStatus.replace(
-                / /g,
-                "__"
-              )}__span`}
-              onClick={() => setOpenPerimeterStatusPopup(true)}
-            >
-              {perimeterStatus} {<FaChevronDown />}
-            </span>
-          )}
+          <span
+            className={`status__span ${
+              currentProject.perimeterStatus
+                ? currentProject.perimeterStatus.replace(/ /g, "__")
+                : "conforme"
+            }__span`}
+            onClick={() => setOpenPerimeterStatusPopup(true)}
+          >
+            {currentProject.perimeterStatus
+              ? currentProject.perimeterStatus
+              : "conforme"}{" "}
+            {<FaChevronDown />}
+          </span>
           <Popup
             style={{ transform: "translate(156px, 100px)" }}
             bottom
@@ -327,101 +384,33 @@ const GlobalInfos = () => {
             setOpen={setOpenPerimeterStatusPopup}
           >
             <Menu>
-              <MenuItem
-                onClick={() => {
-                  setPerimeterStatus("conforme");
-                  setOpenPerimeterStatusPopup(false);
-                }}
-              >
-                <span className={`status__conforme__span`}>conforme</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPerimeterStatus("vigilance");
-                  setOpenPerimeterStatusPopup(false);
-                }}
-              >
-                <span className={`status__vigilance__span`}>vigilance</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPerimeterStatus("à risque");
-                  setOpenPerimeterStatusPopup(false);
-                }}
-              >
-                <span className={`status__risque__span`}>à risque</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPerimeterStatus("alerte");
-                  setOpenPerimeterStatusPopup(false);
-                }}
-              >
-                <span className={`status__alerte__span`}>alerte</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPerimeterStatus("issue");
-                  setOpenPerimeterStatusPopup(false);
-                }}
-              >
-                <span className={`status__issue__span`}>issue</span>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPerimeterStatus("gestion de crise");
-                  setOpenPerimeterStatusPopup(false);
-                }}
-              >
-                <span className={`status__gestion__de__crise__span`}>
-                  gestion de crise
-                </span>
-              </MenuItem>
+              {status.map((item, i) => (
+                <MenuItem
+                  key={i}
+                  onClick={() => {
+                    handleModifyPerimeterStatus(item);
+                  }}
+                >
+                  <span>
+                    {item.name} {item.icon}
+                  </span>
+                </MenuItem>
+              ))}
             </Menu>
           </Popup>
         </h3>
-        <p>
-          Mauris aliquam tortor nec eros sollicitudin, sed convallis metus
-          suscipit. Etiam congue est iaculis ligula varius fermentum. Phasellus
-          fringilla rutrum mauris vitae tempor. Aliquam porttitor est ac finibus
-          convallis.
-        </p>
-        <h3 style={{ marginTop: "30px" }}>
-          {currentProject?.events.length} Évènement(s)
-        </h3>
+        <ModifTextArea type={"perimètre"} dataProject={dataProject} />
+        <h3 style={{ marginTop: "30px" }}>Évènements</h3>
         <div className="event__cards__container">
-          <EventCard
-            type={actions?.length <= 1 ? "action" : "actions"}
-            number={actions?.length}
-            onClick={() => navigate(`/project/${currentProject?.id}/actions`)}
-          />
-          <EventCard
-            type={infos?.length <= 1 ? "info" : "infos"}
-            number={infos?.length}
-            onClick={() => navigate(`/project/${currentProject?.id}/infos`)}
-          />
-          <EventCard
-            type={decisions?.length <= 1 ? "décision" : "décisions"}
-            number={decisions?.length}
-            onClick={() => navigate(`/project/${currentProject?.id}/decisions`)}
-          />
-          <EventCard
-            type={risks?.length <= 1 ? "risque" : "risques"}
-            number={risks?.length}
-            onClick={() => navigate(`/project/${currentProject?.id}/risks`)}
-          />
-          <EventCard
-            type={problems?.length <= 1 ? "problème" : "problèmes"}
-            number={problems?.length}
-            onClick={() => navigate(`/project/${currentProject?.id}/problems`)}
-          />
-          <EventCard
-            type={deliverables?.length <= 1 ? "livrable" : "livrables"}
-            number={deliverables?.length}
-            onClick={() =>
-              navigate(`/project/${currentProject?.id}/deliverables`)
-            }
-          />
+          {events.map((event, i) => (
+            <EventCard
+              key={i}
+              type={event.name}
+              onClick={() =>
+                navigate(`/project/${currentProject?.id}/${event.url}`)
+              }
+            />
+          ))}
         </div>
         <div
           style={{
@@ -453,6 +442,16 @@ const GlobalInfos = () => {
         alreadyExistingContributors={currentProject?.contributors}
         open={openModal}
         setOpen={setOpenModal}
+      />
+      <AddLogoModal
+        open={openLogoModal}
+        setOpen={setOpenLogoModal}
+        dataProject={dataProject}
+      />
+      <ChangeNameModal
+        open={openNameModal}
+        setOpen={setOpenNameModal}
+        dataProject={dataProject}
       />
     </div>
   );

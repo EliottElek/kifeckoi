@@ -1,0 +1,12 @@
+.account__page__container {
+  display: grid;
+  margin: 30px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+@media screen and (max-width: 1000px) {
+  .account__page__container {
+    flex-direction: column;
+  }
+}

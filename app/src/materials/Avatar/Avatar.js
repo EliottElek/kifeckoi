@@ -2,7 +2,7 @@ import React from "react";
 import "./Avatar.scss";
 import defaultAvatar from "../../assets/images/defaultAvatar.webp";
 import ReactTooltip from "react-tooltip";
-const Avatar = ({ src, mini, name, large }) => {
+const Avatar = ({ src, mini, name, large, style }) => {
   // state variable holds the state of the internet connection
   const [isOnline, setOnline] = React.useState(true);
 
@@ -28,6 +28,7 @@ const Avatar = ({ src, mini, name, large }) => {
           data-for={`AvatarTip${name}`}
           className={"avatar_large"}
           src={isOnline ? src : defaultAvatar}
+          style={style}
           alt=""
         />
         <ReactTooltip delayShow={500} id={`AvatarTip${name}`} effect="solid">
@@ -43,6 +44,7 @@ const Avatar = ({ src, mini, name, large }) => {
         className={mini ? "avatar_mini" : "avatar"}
         src={isOnline ? src : defaultAvatar}
         alt=""
+        style={style}
       />
       <ReactTooltip delayShow={500} id={`AvatarTip${name}`} effect="solid">
         <span>{name}</span>

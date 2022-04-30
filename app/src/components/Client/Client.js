@@ -4,18 +4,24 @@ import { useParams } from "react-router";
 import Progress from "../../materials/Progress/Progress";
 import ProjectItem from "./ProjectItem";
 import Button from "../../materials/Button/Button";
-import { FIND_CLIENT_BY_ID } from "../../graphql/queries";
+import {
+  FIND_CLIENT_BY_ID,
+  FIND_PROJECTS_BY_CLIENT_ID,
+} from "../../graphql/queries";
 import { CREATE_PROJECT } from "../../graphql/mutations";
 import { useQuery, useMutation } from "@apollo/client";
-
+import Modal from "../../materials/Modal/Modal";
+import AutoTextArea from "../../materials/AutoSizeTextArea/AutoSizeTextArea";
 const Client = () => {
-  const { currentClient, setCurrentClient, projects, setProjects, user } =
-    React.useContext(Context);
+  const { currentClient, setCurrentClient, user } = React.useContext(Context);
   const [nameInput, setNameInput] = React.useState("");
+  const [open, setOpen] = React.useState(false);
 
   const { id } = useParams();
   const dataClient = useQuery(FIND_CLIENT_BY_ID, { variables: { id: id } });
-
+  const { data } = useQuery(FIND_PROJECTS_BY_CLIENT_ID, {
+    variables: { clientId: id, userId: user.id },
+  });
   const [createProject] = useMutation(CREATE_PROJECT);
 
   React.useEffect(() => {
@@ -29,14 +35,8 @@ const Client = () => {
       title.innerHTML = `${currentClient?.name} | Kifekoi`;
     }
   }, [currentClient?.name, currentClient]);
-  React.useEffect(() => {
-    if (currentClient) {
-      setProjects(currentClient?.projects);
-    }
-  }, [setProjects, currentClient, dataClient?.projects]);
-  const submit = async (e) => {
+  const submit = async () => {
     const idParams = id;
-    e.preventDefault();
     if (nameInput === "") {
       return null;
     }
@@ -48,30 +48,15 @@ const Client = () => {
         contributors: contributors,
       },
     });
-    window.location.reload();
+    dataClient.refetch();
     setNameInput("");
+    setOpen(false);
   };
   if (!currentClient)
     return (
       <div className="progress__container">
         <Progress size="large" />
       </div>
-    );
-  if (!projects)
-    return (
-      <>
-        <div className={"home__container"}>
-          <div className={"home__project__container"}>
-            <div className={"home__project__container__titlecontainer__button"}>
-              <h1 className={"home__project__container__title"}>
-                {currentClient && currentClient.name}
-              </h1>
-            </div>
-            <div className={"home__project__container__spacer"} />
-            <Progress style={{ margin: "30px" }} size="large" />
-          </div>
-        </div>
-      </>
     );
   return (
     <>
@@ -83,11 +68,11 @@ const Client = () => {
             </h1>
           </div>
           <div className={"home__project__container__spacer"} />
-          {projects.length !== 0 &&
-            projects.map((project, i) => (
+          {data?.findProjectsByClientId?.length !== 0 &&
+            data?.findProjectsByClientId?.map((project, i) => (
               <ProjectItem project={project} key={i} />
             ))}
-          {projects.length === 0 && (
+          {data?.findProjectsByClientId?.length === 0 && (
             <h4 className={"home__project__container__title"}>
               Aucun projet pour ce client.
             </h4>
@@ -96,11 +81,34 @@ const Client = () => {
         <div className="home__new__project__container">
           <h1 className={"home__project__container__title"}>Nouveau projet</h1>
           <div className={"home__project__container__spacer"} />
-          <Button onClick={submit} style={{ marginTop: "10px" }} type="submit">
+          <Button onClick={() => setOpen(true)} style={{ marginTop: "10px" }}>
             Créer un nouveau projet
           </Button>
         </div>
       </div>
+      <Modal open={open} setOpen={setOpen}>
+        <div className="modal__content__container">
+          <AutoTextArea
+            autoFocus
+            className="modif__textarea medium__title__textarea"
+            value={nameInput}
+            placeholder={`Comment voulez-vous appeler le projet ?`}
+            onChange={(e) => setNameInput(e.target.value)}
+          />{" "}
+          <div style={{ display: "flex", gap: "6px" }}>
+            <Button
+              style={{ height: "30px" }}
+              reversed
+              onClick={() => setOpen(false)}
+            >
+              Annuler
+            </Button>
+            <Button style={{ height: "30px" }} onClick={submit}>
+              Valider
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };

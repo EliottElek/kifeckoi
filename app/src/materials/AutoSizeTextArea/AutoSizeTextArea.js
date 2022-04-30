@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const AutoTextArea = (props) => {
   const textAreaRef = useRef(null);
@@ -25,12 +25,17 @@ const AutoTextArea = (props) => {
     <div
       style={{
         minHeight: parentHeight,
-        padding: "2px",
         display: "flex",
         alignItems: "center",
       }}
     >
       <textarea
+        onFocus={(e) =>
+          e.currentTarget.setSelectionRange(
+            e.currentTarget.value.length,
+            e.currentTarget.value.length
+          )
+        }
         {...props}
         ref={textAreaRef}
         rows={1}

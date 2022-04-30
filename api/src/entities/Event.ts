@@ -9,7 +9,7 @@ export class Event extends BaseEntity {
     id!: string;
     @Column()
     type!: string;
-    @Column()
+    @Column("longtext")
     description!: string;
     @Column()
     status!: string;
@@ -17,9 +17,11 @@ export class Event extends BaseEntity {
     projectId!: string;
     @Column()
     creation!: string;
+    @Column()
+    period!: string;
     @ManyToOne(() => Project, project => project.events, { onDelete: 'CASCADE' }) project!: Project;
-    @ManyToOne(() => User, user => user.createdEvents, { onDelete: 'CASCADE' }) creator!: User;
-    @ManyToMany(() => User, contributor => contributor.events)
+    @ManyToOne(() => User, user => user.createdEvents) creator!: User;
+    @ManyToMany(() => User, contributor => contributor.events, { onDelete: 'CASCADE' })
     @JoinTable()
     contributors!: User[];
     @OneToMany(() => Comment, comment => comment.event) comments!: Comment[];

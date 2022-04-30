@@ -50,7 +50,7 @@
   height: 2px;
   width: 100%;
   margin: auto;
-  background-color: var(--font-color);
+  background-color: var(--main-color);
 }
 .home__project__container__titlecontainer {
   display: flex;

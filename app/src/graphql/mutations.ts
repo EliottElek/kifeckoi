@@ -3,14 +3,18 @@ import { gql } from "@apollo/client"
 export const CREATE_USER = gql`
 mutation createUser($firstname: String! $lastname : String! $email : String! $avatarUrl : String! $username : String! $password : String!){
     createUser(firstname : $firstname lastname : $lastname email : $email avatarUrl : $avatarUrl username : $username password : $password){
-      id
-      firstname
-      lastname
-      email
-      avatarUrl
-      username
+        successful
+        message
     }
 }
+`
+export const LOGIN = gql`
+mutation login($email: String! $password: String!){
+  login(email : $email password : $password){
+    successful
+    message
+    } 
+  }
 `
 export const CREATE_CLIENT = gql`
 mutation createClient($name: String!){
@@ -33,13 +37,14 @@ mutation createProject($name: String! $clientId: String! $contributors : [String
 }
 `
 export const CREATE_EVENT = gql`
-mutation createEvent($type: String! $projectId: String! $description : String! $contributors : [String!] $status : String! $creatorId: String!){
-    createEvent(type: $type  projectId: $projectId description : $description contributors : $contributors status : $status creatorId : $creatorId){
+mutation createEvent($type: String! $projectId: String! $description : String! $contributors : [String!] $status : String! $creatorId: String! $period: String!){
+    createEvent(type: $type  projectId: $projectId description : $description contributors : $contributors status : $status creatorId : $creatorId period : $period){
         type
         id
         description
         status
         creation
+        period
         contributors{
             id
             firstname
@@ -119,6 +124,21 @@ mutation addContributorsToProject($projectId : String! $contributors : [String!]
 export const ADD_CONTRIBUTORS_TO_EVENT = gql`
 mutation addContributorsToEvent($eventId : String! $contributors : [String!]){
     addContributorsToEvent(eventId:$eventId contributors:$contributors){
+        id
+    }
+}
+`
+
+export const MODIFY_PROJECT_GLOBAL_INFOS = gql`
+mutation modifyProjectGlobalInfos($projectId : String!  $globalStatus: String! $planningStatus: String! $perimeterStatus: String! $globalDescription: String! $planningDescription: String! $perimeterDescription: String! $goLiveDate: String! $goCopyDate: String! $logoUrl: String!){
+    modifyProjectGlobalInfos(projectId:$projectId globalStatus:$globalStatus planningStatus:$planningStatus perimeterStatus:$perimeterStatus globalDescription:$globalDescription planningDescription:$planningDescription perimeterDescription:$perimeterDescription goLiveDate:$goLiveDate goCopyDate:$goCopyDate logoUrl:$logoUrl){
+        id
+    }
+}
+`
+export const MODIFY_PROJECT_NAME = gql`
+mutation modifyProjectName($projectId : String! $name: String!){
+    modifyProjectName(projectId:$projectId name:$name){
         id
     }
 }

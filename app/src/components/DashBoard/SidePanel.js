@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 import MenuAccordion from "../../materials/MenuAccordion/MenuAccordion";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CLIENTS, GET_ALL_PROJECTS } from "../../graphql/queries";
-
+import "./DashBoard.scss";
 const SidePanel = () => {
   const {
     currentProject,
@@ -15,9 +15,12 @@ const SidePanel = () => {
     projects,
     setProjects,
     currentClient,
+    user,
   } = React.useContext(Context);
   const dataClients = useQuery(GET_ALL_CLIENTS);
-  const dataProjects = useQuery(GET_ALL_PROJECTS);
+  const dataProjects = useQuery(GET_ALL_PROJECTS, {
+    variables: { userId: user?.id },
+  });
 
   React.useEffect(() => {
     if (dataClients?.data) {
@@ -55,10 +58,7 @@ const SidePanel = () => {
   const ProjectItem = ({ comp, id }) => {
     const navigate = useNavigate();
     return (
-      <ListItem
-        id={id}
-        onClick={() => navigate(`/project/${comp?.id}/actions`)}
-      >
+      <ListItem id={id} onClick={() => navigate(`/project/${comp?.id}/global`)}>
         <span>{comp?.name}</span>
       </ListItem>
     );

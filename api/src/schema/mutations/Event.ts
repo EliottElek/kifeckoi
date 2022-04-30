@@ -15,9 +15,11 @@ export const CREATE_EVENT = {
         description: { type: GraphQLString },
         contributors: { type: new GraphQLList(GraphQLString) },
         status: { type: GraphQLString },
+        period: { type: GraphQLString },
+
     },
     async resolve(parent: any, args: any) {
-        const { type, projectId, description, contributors, status, creatorId } = args
+        const { type, projectId, description, contributors, status, creatorId, period } = args
         const newuuid = uuid()
         const project = await Project.findOne({ id: projectId })
         const contributorsFound: User[] = []
@@ -27,7 +29,7 @@ export const CREATE_EVENT = {
         if (!project) {
             throw new Error("Cannot find project.")
         } else {
-            const newEvent = Event.create({ type: type, id: newuuid, projectId: projectId, contributors: [], project: project, description: description, status: status, creation: creationDate.toString() })
+            const newEvent = Event.create({ type: type, id: newuuid, projectId: projectId, contributors: [], project: project, description: description, status: status, creation: creationDate.toString(), period: period })
             await Event.save(newEvent)
             if (!creatorFound) {
                 throw new Error("Cannot find project.")
@@ -44,7 +46,7 @@ export const CREATE_EVENT = {
             await Event.save(newEvent)
             await Project.save(project)
         }
-        return { ...args, id: newuuid, contributors: contributorsFound, creator: creatorFound, creation: creationDate.toString() }
+        return { ...args, id: newuuid, contributors: contributorsFound, creator: creatorFound, creation: creationDate.toString(), period: period }
     }
 }
 export const CHANGE_EVENT_STATE = {

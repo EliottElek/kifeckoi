@@ -6,10 +6,13 @@ import ClientItem from "./ClientItem";
 import Button from "../../materials/Button/Button";
 import { CREATE_CLIENT } from "../../graphql/mutations";
 import { GET_ALL_CLIENTS } from "../../graphql/queries";
+import AutoTextArea from "../../materials/AutoSizeTextArea/AutoSizeTextArea";
+import Modal from "../../materials/Modal/Modal";
 const Home = () => {
   const { clients, setClients } = useContext(Context);
-  const { data } = useQuery(GET_ALL_CLIENTS);
+  const { data, refetch } = useQuery(GET_ALL_CLIENTS);
   const [createClient] = useMutation(CREATE_CLIENT);
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (data) {
@@ -20,7 +23,6 @@ const Home = () => {
   const title = document.getElementById("title");
   title.innerHTML = `Clients | Kifekoi`;
   const submit = async (e) => {
-    e.preventDefault();
     if (nameInput === "") {
       return null;
     }
@@ -31,8 +33,9 @@ const Home = () => {
     } catch (err) {
       console.log(err);
     }
-    window.location.reload();
+    refetch();
     setNameInput("");
+    setOpen(false);
   };
   return (
     <div className={"home__container"}>
@@ -48,10 +51,33 @@ const Home = () => {
       <div className="home__new__project__container">
         <h1 className={"home__project__container__title"}>Nouveau client</h1>
         <div className={"home__project__container__spacer"} />
-        <Button onClick={submit} style={{ marginTop: "10px" }} type="submit">
+        <Button onClick={() => setOpen(true)} style={{ marginTop: "10px" }}>
           Créer un nouveau client +
         </Button>
       </div>
+      <Modal open={open} setOpen={setOpen}>
+        <div className="modal__content__container">
+          <AutoTextArea
+            autoFocus
+            className="modif__textarea medium__title__textarea"
+            value={nameInput}
+            placeholder={`Comment s'appelle le client ?`}
+            onChange={(e) => setNameInput(e.target.value)}
+          />{" "}
+          <div style={{ display: "flex", gap: "6px" }}>
+            <Button
+              style={{ height: "30px" }}
+              reversed
+              onClick={() => setOpen(false)}
+            >
+              Annuler
+            </Button>
+            <Button style={{ height: "30px" }} onClick={submit}>
+              Valider
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

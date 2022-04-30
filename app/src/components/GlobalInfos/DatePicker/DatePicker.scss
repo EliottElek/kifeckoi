@@ -1,0 +1,31 @@
+.date__span {
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s all;
+  border-bottom: solid 1px transparent;
+  text-decoration: underline;
+  width: auto;
+  display: block;
+  cursor: pointer;
+}
+.edit__icon {
+  color: var(--font-color);
+  font-size: 1.1rem;
+  opacity: 0;
+  cursor: pointer;
+  transition: 0.2s all;
+  text-decoration: none !important;
+}
+.date__picker__container {
+  display: flex;
+  align-items: center;
+}
+.date__picker__container:hover > .edit__icon {
+  opacity: 1;
+  transition: 0.2s all;
+}
+.date__picker__form {
+  position: absolute;
+  border-radius: 4px;
+  background-color: var(--card-background);
+}

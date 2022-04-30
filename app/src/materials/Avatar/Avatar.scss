@@ -1,5 +1,4 @@
 .avatar {
-  z-index: 3;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -8,7 +7,6 @@
   object-fit: cover;
 }
 .avatar_mini {
-  z-index: 1;
   width: 30px !important;
   height: 30px !important;
   border-radius: 50%;

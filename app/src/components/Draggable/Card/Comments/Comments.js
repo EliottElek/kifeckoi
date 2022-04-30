@@ -1,7 +1,6 @@
-import React from "react";
 import Comment from "./Comment";
-import CommentForm from "./CommentForm";
-import "./Comments.css";
+import CommentForm from "./CommentForm/CommentForm";
+import "./Comments.scss";
 
 const Comments = ({ comments, event, commentsData }) => {
   return (

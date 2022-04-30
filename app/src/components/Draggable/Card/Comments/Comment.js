@@ -1,7 +1,7 @@
 import React from "react";
 import ReactMarkdownSnippet from "../../../../assets/ReactMarkdown";
 import Avatar from "../../../../materials/Avatar/Avatar";
-import "./Comments.css";
+import "./Comments.scss";
 import { FiMoreHorizontal } from "react-icons/fi";
 import Popup from "../../../../materials/Popup/Popup";
 import MenuItem from "../../../../materials/Menu/MenuItem";
@@ -13,6 +13,7 @@ import {
   CHANGE_COMMENT__CONTENT,
   DELETE_COMMENT,
 } from "../../../../graphql/mutations";
+import formatDate from "../../../../assets/functions/formatDate";
 const Comment = ({ comment, commentsData }) => {
   const [changeCommentContent] = useMutation(CHANGE_COMMENT__CONTENT);
   const [deleteComment] = useMutation(DELETE_COMMENT);
@@ -85,23 +86,15 @@ const Comment = ({ comment, commentsData }) => {
   return (
     <div className={editMode ? "comment__item__edit__mode" : "comment__item"}>
       <Avatar
-        name={comment.author.firstname}
+        name={comment?.author?.firstname}
         mini
-        src={comment.author.avatarUrl}
+        src={comment?.author?.avatarUrl}
       />
       <div className={"comment__item__div"}>
         <div className={"comment__item__name__content"}>
-          {comment.author.firstname} {comment.author.lastname}
+          {comment?.author?.firstname} {comment?.author?.lastname}
           <span className={"comment__item__name__date"}>
-            {new Date(comment.creation).getDate()}
-            {"/"}
-            {new Date(comment.creation).getMonth()}
-            {"/"}
-            {new Date(comment.creation).getFullYear()}
-            {" à "}
-            {new Date(comment.creation).getHours()}
-            {":"}
-            {new Date(comment.creation).getMinutes()}
+            {formatDate(comment?.creation)}
           </span>
         </div>
         <span className={"span__content"}>
@@ -136,7 +129,7 @@ const Comment = ({ comment, commentsData }) => {
               </div>
             </>
           ) : (
-            <ReactMarkdownSnippet>{comment.content}</ReactMarkdownSnippet>
+            <ReactMarkdownSnippet>{comment?.content}</ReactMarkdownSnippet>
           )}
         </span>
       </div>

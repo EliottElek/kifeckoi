@@ -1,5 +1,5 @@
 import "./kanban.scss";
-import { DragDropContext, Draggable } from "react-beautiful-dnd";
+import { DragDropContext } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import Card from "./Card/Card";
 import { Context } from "../Context/Context";
@@ -14,15 +14,16 @@ import {
 import { CREATE_EVENT, CHANGE_EVENT_STATE } from "../../graphql/mutations";
 import { toast } from "react-toastify";
 import rawEvents from "../../rawEvents";
-import { useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 import { Flip } from "react-toastify";
 import Column from "./Column";
 import AutoTextArea from "../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import Progress from "../../materials/Progress/Progress";
 import isEmoji from "../../assets/functions/isEmoji";
-
+import Backdrop from "../../materials/Backdrop/Backdrop";
+import getPeriod from "../../assets/functions/getPeriod";
 const EventKanban = ({ type, setLength, length }) => {
-  const { events, setCurrentProject, setEvents, user } =
+  const { events, setCurrentProject, setEvents, user, currentProject } =
     React.useContext(Context);
   const [addCard, setAddCard] = useState(false);
   const [selectedAcountables, setSelectedcontributors] = React.useState([]);
@@ -34,7 +35,7 @@ const EventKanban = ({ type, setLength, length }) => {
 
   const { id } = useParams();
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
-    variables: { id: id },
+    variables: { id: id, userId: user.id },
   });
   const dataEvents = useQuery(FIND_EVENTS_BY_PROJECT_ID, {
     variables: { id: id, type: type },
@@ -126,6 +127,7 @@ const EventKanban = ({ type, setLength, length }) => {
           description: description,
           contributors: ArrayOfIds,
           status: eventSelected.title,
+          period: getPeriod(),
         },
       });
       setInput("");
@@ -151,6 +153,15 @@ const EventKanban = ({ type, setLength, length }) => {
       return add(e);
     }
   };
+  if (!dataProject.data && !dataProject.loading) {
+    return <Navigate to={"/404"} />;
+  }
+  if (!currentProject)
+    return (
+      <Backdrop>
+        <Progress size="medium" reversed />
+      </Backdrop>
+    );
   return (
     <>
       {!events ? (
@@ -174,33 +185,18 @@ const EventKanban = ({ type, setLength, length }) => {
                     </h2>
                     <div className="kanban__section__content">
                       {section?.tasks?.map((task, index) => (
-                        <Draggable
+                        <Card
                           key={task.id}
                           draggableId={task.id}
                           index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                              }}
-                            >
-                              <Card
-                                type={type}
-                                task={task}
-                                setLength={setLength}
-                                length={length}
-                                dragging={snapshot.isDragging}
-                                dataEvents={dataEvents}
-                                dataProject={dataProject}
-                                className={`card card__${i + 1}`}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
+                          type={type}
+                          task={task}
+                          setLength={setLength}
+                          length={length}
+                          dataEvents={dataEvents}
+                          dataProject={dataProject}
+                          className={`card card__${i + 1}`}
+                        />
                       ))}
                       {addCard && eventSelected.id === section.id && (
                         <Card add type={type} task={""} className={`card`}>
@@ -216,7 +212,7 @@ const EventKanban = ({ type, setLength, length }) => {
                             ></AutoTextArea>
                             <div className="add__card__button__container">
                               <Button
-                                style={{ width: "100%" }}
+                                style={{ width: "80%", height: "35px" }}
                                 type="submit"
                                 disabled={
                                   !eventSelected || input === "" ? true : false

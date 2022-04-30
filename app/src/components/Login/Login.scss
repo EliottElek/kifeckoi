@@ -1,0 +1,61 @@
+.login__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  background-color: var(--color-background-1);
+  position: relative;
+  height: 100%;
+}
+.signup__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  background-color: var(--color-background-1);
+  position: relative;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.logo__container {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+}
+.login__card {
+  width: 100%;
+  padding: 30px;
+  max-width: 400px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  background-color: var(--card-background);
+  color: var(--font-color);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.forgot__password__btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin: 2px;
+  margin-top: 6px;
+  text-decoration: underline;
+  opacity: 0.5;
+  font-size: 0.9rem;
+  color: var(--font-color);
+}
+.new__account__btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin: 2px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+  text-decoration: underline;
+  opacity: 0.5;
+  font-size: 0.9rem;
+  text-align: center;
+  width: 100%;
+  color: var(--font-color);
+}

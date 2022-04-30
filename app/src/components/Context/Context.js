@@ -1,20 +1,9 @@
 import React from "react";
 import rawEvents from "../../rawEvents";
-import gravatar from "gravatar";
-
+import { GET_USER_BY_ID } from "../../graphql/queries";
+import { useQuery } from "@apollo/client";
 export const Context = React.createContext();
-const userData = {
-  id: "1",
-  firstname: "Eliott",
-  lastname: "Morcillo",
-  admin: false,
-  email: "eliott.morcillo@gmail.com",
-  avatarUrl: gravatar.url(
-    "eliott.morcillo@gmail.com",
-    { s: "100", r: "x", d: "retro" },
-    true
-  ),
-};
+
 export const ContextProvider = ({ children }) => {
   const [clients, setClients] = React.useState([]);
   const [users, setUsers] = React.useState();
@@ -26,8 +15,21 @@ export const ContextProvider = ({ children }) => {
   const [listStyle, setListStyle] = React.useState(false);
   const [markdown, setMarkdown] = React.useState(true);
   const [dark, setDark] = React.useState(true);
+  const [auth, setAuth] = React.useState(true);
+  const [user, setUser] = React.useState(null);
+  const id = localStorage.getItem("userId");
 
-  const [user, setUser] = React.useState(userData);
+  const getUserById = useQuery(GET_USER_BY_ID, {
+    variables: { userId: id },
+  });
+  React.useEffect(() => {
+    if (getUserById?.data && id) {
+      setUser(getUserById?.data.getUserById);
+      setAuth(true);
+    } else {
+      setAuth(false);
+    }
+  }, [getUserById?.data, setUser, id, setAuth]);
   const setDarkTheme = () => {
     // 2
     localStorage.setItem("theme", "dark");
@@ -62,9 +64,15 @@ export const ContextProvider = ({ children }) => {
       setLightTheme();
     }
   };
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    window.location.reload();
+  };
   return (
     <Context.Provider
       value={{
+        auth: auth,
+        setAuth: setAuth,
         toggleTheme: toggleTheme,
         defaultDark: defaultDark,
         setOpenDrawer: setOpenDrawer,
@@ -90,6 +98,8 @@ export const ContextProvider = ({ children }) => {
         setListStyle: setListStyle,
         markdown: markdown,
         setMarkdown: setMarkdown,
+        handleLogout: handleLogout,
+        getUserById: getUserById,
       }}
     >
       {children}

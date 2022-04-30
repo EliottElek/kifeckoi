@@ -1,6 +1,8 @@
 import { useContext, useState, useEffect } from "react";
-import "./card.scss";
+import "./Card.scss";
+import "../kanban.scss";
 import "../../Client/RecentEvents/RecentEvents.css";
+import "../../GlobalInfos/GlobalInfos.scss";
 import { FiEdit2 } from "react-icons/fi";
 import { MdOutlineClear } from "react-icons/md";
 import { MdOutlineDeleteOutline } from "react-icons/md";
@@ -8,8 +10,10 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { FiMoreVertical, FiMoreHorizontal } from "react-icons/fi";
 import { FaRegComments } from "react-icons/fa";
 import { HiOutlineDuplicate } from "react-icons/hi";
+import { ImWarning } from "react-icons/im";
+import { AiOutlineCheckCircle } from "react-icons/ai";
+import { BsPeopleFill } from "react-icons/bs";
 import Modal from "../../../materials/Modal/Modal";
-import Chip from "../../../materials/Chip/Chip";
 import { Flip } from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
@@ -20,6 +24,7 @@ import {
   DELETE_EVENT,
   CREATE_EVENT,
 } from "../../../graphql/mutations";
+import { Draggable } from "react-beautiful-dnd";
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
 import { Context } from "../../Context/Context";
 import { useMutation, useQuery } from "@apollo/client";
@@ -32,8 +37,12 @@ import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import ReactMarkdown from "../../../assets/ReactMarkdown";
 import Progress from "../../../materials/Progress/Progress";
 import Comments from "./Comments/Comments";
-import ReactMarkdownSnippet from "../../../assets/ReactMarkdown";
 import Button from "../../../materials/Button/Button";
+import ModifAreaCard from "./ModifAreaCard/ModifAreaCard";
+import shortString from "../../../assets/functions/shortString";
+import getPeriod from "../../../assets/functions/getPeriod";
+import Avatar from "../../../materials/Avatar/Avatar";
+import formatDate from "../../../assets/functions/formatDate";
 const Card = (props) => {
   const {
     setEvents,
@@ -46,7 +55,6 @@ const Card = (props) => {
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
-  const [status, setStatus] = useState(false);
   const [modifMode, setModifMode] = useState(false);
   const [openPopUp, setOpenPopUp] = useState(false);
   const [comments, setComments] = useState([]);
@@ -90,12 +98,6 @@ const Card = (props) => {
     setModifMode(false);
     setOpenModal(false);
   };
-  useEffect(() => {
-    if (props.task.status === "Réalisé") setStatus("event__green");
-    else if (props.task.status === "En cours") setStatus("event__marron");
-    else if (props.task.status === "Nouveau") setStatus("event__blue");
-    else if (props.task.status === "À planifier") setStatus("event__orange");
-  }, [props.task.status, setStatus]);
   const handleMoveTo = async (category) => {
     try {
       const sourceColIndex = events.findIndex(
@@ -196,6 +198,7 @@ const Card = (props) => {
           description: props.task.description,
           contributors: ArrayOfIds,
           creatorId: user.id,
+          period: getPeriod(),
           status: props.task.status,
         },
       });
@@ -253,174 +256,261 @@ const Card = (props) => {
   if (props.add) return <div className="card">{props.children}</div>;
   const Msg = ({ children }) => <div>{children}</div>;
   return (
-    <>
-      <div
-        onClick={() => {
-          if (!openPopUp) {
-            setOpenModal(true);
-          } else setOpenPopUp(false);
-        }}
-        className={"card"}
+    <div
+      className={"card"}
+      onClick={() => {
+        if (!openPopUp) {
+          setOpenModal(true);
+        } else setOpenPopUp(false);
+      }}
+    >
+      <Draggable
+        key={props.task.id}
+        draggableId={props.task.id}
+        index={props.index}
       >
-        <div
-          className={
-            props.dragging ? "card__content dragging" : "card__content"
-          }
-        >
-          <div className="card__content__events__container">
-            <button
-              data-tip
-              data-for="archiveTooltip"
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenDeleteModal(true);
-              }}
-              className="kanban__section__content__name__container__edit__button"
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={{
+              ...provided.draggableProps.style,
+            }}
+          >
+            <div
+              className={
+                snapshot.isDragging ? "card__content dragging" : "card__content"
+              }
             >
-              <MdOutlineDeleteOutline />
-            </button>
-            <button
-              data-tip
-              data-for="duplicateTooltip"
-              onClick={duplicate}
-              className="kanban__section__content__name__container__edit__button more__button"
-            >
-              <HiOutlineDuplicate />
-            </button>
-            <button
-              data-tip
-              data-for="moreTooltip"
-              onClick={handleMoreAction}
-              className="kanban__section__content__name__container__edit__button more__button"
-            >
-              <FiMoreVertical />
-            </button>
-            <span className="kanban__section__content__name__container__comments__indicator">
-              <span className="kanban__section__content__name__container__comments__indicator__number">
-                {comments?.length}
-              </span>
-              <FaRegComments />
-            </span>
-          </div>
-          <div className={"card__content__added__indicator"}>
-            {modifMode ? (
-              <div className="kanban__section__content__name__container__button__container">
+              <div className="card__content__events__container">
                 <button
                   data-tip
-                  data-for="moreTooltip"
+                  data-for="archiveTooltip"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setOpenEditPopUp(true);
-                  }}
-                  className="kanban__section__content__name__container__edit__button more__button"
-                >
-                  <FiMoreHorizontal />
-                </button>
-                <Popup open={openEditPopUp} setOpen={setOpenEditPopUp} bottom>
-                  <Menu>
-                    <MenuItem
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSubmitOnEnterMode(!submitOnEnterMode);
-                        setOpenEditPopUp(false);
-                      }}
-                    >
-                      <p>
-                        {submitOnEnterMode
-                          ? "Désactiver la soumission rapide..."
-                          : "Activer la soumission rapide..."}
-                      </p>
-                    </MenuItem>
-                  </Menu>
-                </Popup>
-                <button
-                  data-tip
-                  data-for="validateTooltip"
-                  onClick={handleModifyDescription}
-                  className="kanban__section__content__name__container__edit__button validate"
-                >
-                  <AiOutlineCheck />
-                </button>
-                <button
-                  data-tip
-                  data-for="cancelTooltip"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setModifMode(false);
+                    setOpenDeleteModal(true);
                   }}
                   className="kanban__section__content__name__container__edit__button"
                 >
-                  <MdOutlineClear />
+                  <MdOutlineDeleteOutline />
                 </button>
+                <button
+                  data-tip
+                  data-for="duplicateTooltip"
+                  onClick={duplicate}
+                  className="kanban__section__content__name__container__edit__button more__button"
+                >
+                  <HiOutlineDuplicate />
+                </button>
+                <button
+                  data-tip
+                  data-for="moreTooltip"
+                  onClick={handleMoreAction}
+                  className="kanban__section__content__name__container__edit__button more__button"
+                >
+                  <FiMoreVertical />
+                </button>
+                <span className="kanban__section__content__name__container__comments__indicator">
+                  <span className="kanban__section__content__name__container__comments__indicator__number">
+                    {comments?.length}
+                  </span>
+                  <FaRegComments />
+                </span>
               </div>
-            ) : (
-              <button
+              <div className={"card__content__added__indicator"}>
+                {modifMode ? (
+                  <div className="kanban__section__content__name__container__button__container">
+                    <button
+                      data-tip
+                      data-for="moreTooltip"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenEditPopUp(true);
+                      }}
+                      className="kanban__section__content__name__container__edit__button more__button"
+                    >
+                      <FiMoreHorizontal />
+                    </button>
+                    <Popup
+                      open={openEditPopUp}
+                      setOpen={setOpenEditPopUp}
+                      bottom
+                    >
+                      <Menu>
+                        <MenuItem
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSubmitOnEnterMode(!submitOnEnterMode);
+                            setOpenEditPopUp(false);
+                          }}
+                        >
+                          <p>
+                            {submitOnEnterMode
+                              ? "Désactiver la soumission rapide..."
+                              : "Activer la soumission rapide..."}
+                          </p>
+                        </MenuItem>
+                      </Menu>
+                    </Popup>
+                    <button
+                      data-tip
+                      data-for="validateTooltip"
+                      onClick={handleModifyDescription}
+                      className="kanban__section__content__name__container__edit__button validate"
+                    >
+                      <AiOutlineCheck />
+                    </button>
+                    <button
+                      data-tip
+                      data-for="cancelTooltip"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setModifMode(false);
+                      }}
+                      className="kanban__section__content__name__container__edit__button"
+                    >
+                      <MdOutlineClear />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    data-tip
+                    data-for="editTooltip"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setModifMode(true);
+                    }}
+                    className="kanban__section__content__name__container__edit__button"
+                  >
+                    <FiEdit2 />
+                  </button>
+                )}
+              </div>
+              <span
                 data-tip
-                data-for="editTooltip"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setModifMode(true);
-                }}
-                className="kanban__section__content__name__container__edit__button"
+                data-for="periodTooltip"
+                className={`card__icon ${
+                  props.task.period === getPeriod()
+                    ? "current__period"
+                    : "previous__period"
+                }`}
               >
-                <FiEdit2 />
-              </button>
-            )}
-          </div>
-          {props.type === "Info" && (
-            <span className="card__icon">
-              <i className="gg-info"></i>
-              Info
-            </span>
-          )}
-          {props.type === "Action" && (
-            <span className="card__icon violet">
-              <i className="gg-arrows-exchange-alt"></i> Action
-            </span>
-          )}
-          {props.type === "Decision" && (
-            <span className="card__icon marron">
-              <i className="gg-alarm"></i> Décision
-            </span>
-          )}
-          {props.type === "Risk" && (
-            <span className="card__icon orange">
-              <i className="gg-bell"></i> Risque
-            </span>
-          )}
-          {props.type === "Problem" && (
-            <span className="card__icon red">
-              <i className="gg-danger"></i> Problème
-            </span>
-          )}
-          {modifMode ? (
-            <form
-              className="modif__description__form"
-              onSubmit={handleModifyDescription}
-            >
-              <AutoTextArea
-                autoFocus
-                onKeyPress={commentEnterSubmit}
-                onChange={(e) => setDescription(e.target.value)}
-                onClick={(e) => e.stopPropagation()}
-                value={description}
-                className="modif__description__textarea"
-              ></AutoTextArea>
-            </form>
-          ) : (
-            <div className="card__description">
-              {markdown ? (
-                <ReactMarkdown>{props.task.description}</ReactMarkdown>
+                {props.task.period}
+              </span>
+              {modifMode ? (
+                <form
+                  className="modif__description__form"
+                  onSubmit={handleModifyDescription}
+                >
+                  <AutoTextArea
+                    autoFocus
+                    onKeyPress={commentEnterSubmit}
+                    onChange={(e) => setDescription(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    value={description}
+                    className="modif__description__textarea"
+                  ></AutoTextArea>
+                </form>
               ) : (
-                <p>{props.task.description}</p>
+                <div className="card__description">
+                  {markdown ? (
+                    <ReactMarkdown>
+                      {shortString(
+                        props.task.description,
+                        user.maxCaractersCard
+                      )}
+                    </ReactMarkdown>
+                  ) : (
+                    <p>{props.task.description}</p>
+                  )}
+                </div>
               )}
+              <Avatars users={props.task.contributors} />
             </div>
-          )}
-          <Avatars users={props.task.contributors} />
-        </div>
-      </div>
+          </div>
+        )}
+      </Draggable>
       <Modal open={openModal} setOpen={handleCloseModal}>
         <div className="modal__content__container">
+          <div className="period__title__modal__container">
+            <span
+              data-tip
+              data-for="periodTooltip"
+              className={`period__title__modal ${
+                props.task.period === getPeriod()
+                  ? "current__period"
+                  : "previous__period"
+              }`}
+            >
+              {props.task.period}{" "}
+            </span>
+            {props.task.period !== getPeriod() ? (
+              <span className="period__title__modal__warning__message">
+                <ImWarning color="var(--warning-color)" /> Cet évènement ne date
+                pas de cette semaine.
+              </span>
+            ) : (
+              <span className="period__title__modal__warning__message">
+                <AiOutlineCheckCircle
+                  color="var(--check-color)"
+                  fontSize={"1.2rem"}
+                />{" "}
+                Cet évènement a été créé cette semaine.
+              </span>
+            )}
+          </div>
+          <div
+            style={{
+              marginTop: "38px",
+              display: "flex",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <h2 className={"status__title__modal"}>{props.task.status}</h2>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                marginRight: "4px",
+              }}
+            >
+              <Button
+                style={{ height: "35px", display: "flex", gap: "4px" }}
+                reversed
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenAddContributorModal(true);
+                  // setOpenModal(false);
+                }}
+              >
+                Gérer les contributeurs <BsPeopleFill fontSize={"1.2rem"} />
+              </Button>
+              <Button
+                style={{ height: "35px", display: "flex", gap: "4px" }}
+                reversed
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenModal(false);
+                  setOpenDeleteModal(true);
+                }}
+              >
+                Supprimer <MdOutlineDeleteOutline fontSize={"1.2rem"} />
+              </Button>
+            </div>
+          </div>
+          <span className="date__creator__span">
+            <span>Le {formatDate(props.task.creation)}</span>
+            {props.task.creator && (
+              <span>
+                {" "}
+                par {props.task.creator.firstname} {props.task.creator.lastname}
+              </span>
+            )}
+          </span>
           <button
             data-tip
             data-for="closeTooltip"
@@ -433,89 +523,23 @@ const Card = (props) => {
           >
             <MdOutlineClear />
           </button>
-          {modifMode ? (
-            <div>
-              <AutoTextArea
-                autoFocus
-                onKeyPress={commentEnterSubmit}
-                oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
-                onChange={(e) => setDescription(e.target.value)}
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  width: "100%",
-                  fontSize: "2rem!important",
-                }}
-                value={description}
-                className="modif__description__textarea open__card__textarea"
-              ></AutoTextArea>
-              <div className={"action__container__modif__mode"}>
-                <Button
-                  reversed
-                  data-tip
-                  data-for="cancelTooltip"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setModifMode(false);
-                  }}
-                >
-                  Annuler
-                </Button>
-                <Button
-                  data-for="validateTooltip"
-                  onClick={handleModifyDescription}
-                >
-                  Valider
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <span
-              className={"modal__card__content"}
-              onClick={(e) => {
-                e.stopPropagation();
-                setModifMode(true);
-              }}
-            >
-              <ReactMarkdownSnippet>
-                {props.task.description}
-              </ReactMarkdownSnippet>
-            </span>
-          )}
-          <div>
-            <span className={"status__container"}>
-              Status : <span className={status}>{props.task.status}</span>
-            </span>
-          </div>
+          <ModifAreaCard
+            event={props.task}
+            value={description}
+            setValue={setDescription}
+            handleModifyDescription={handleModifyDescription}
+            placeholder={"La carte doit avoir une description..."}
+          />
           {props?.task?.contributors?.length !== 0 && (
-            <div className="kanban__section__content__name__container__avatars__container">
-              <span>Contributeurs : </span>
+            <div style={{ marginTop: "20px" }}>
+              <h3 style={{ marginBottom: "6px" }}>Contributeurs</h3>
               <div className="kanban__section__content__name__container__avatars__container">
-                {props?.task?.contributors?.map((acc) => (
-                  <Chip key={acc.id} text={acc.username} src={acc.avatarUrl} />
+                {props?.task?.contributors?.map((acc, i) => (
+                  <Avatar name={acc.username} src={acc.avatarUrl} key={i} />
                 ))}
               </div>
             </div>
           )}
-          <span>
-            Créé le :{" "}
-            <span>
-              {new Date(props.task.creation).getDate()}
-              {"/"}
-              {new Date(props.task.creation).getMonth()}
-              {"/"}
-              {new Date(props.task.creation).getFullYear()}
-              {" à "}
-              {new Date(props.task.creation).getHours()}
-              {":"}
-              {new Date(props.task.creation).getMinutes()}
-            </span>
-            {props.task.creator && (
-              <span>
-                {" "}
-                par {props.task.creator.firstname} {props.task.creator.lastname}
-              </span>
-            )}
-          </span>
           {!comments ? (
             <Progress />
           ) : (
@@ -523,9 +547,8 @@ const Card = (props) => {
               commentsData={commentsData}
               comments={comments}
               event={props.task}
-              s
             />
-          )}{" "}
+          )}
         </div>
       </Modal>
       <Popup open={openPopUp} setOpen={setOpenPopUp} bottom>
@@ -604,7 +627,7 @@ const Card = (props) => {
           </MenuItem>
         </Menu>
       </Popup>
-      {!props.dragging && (
+      {true && (
         <>
           <ReactTooltip delayShow={500} id="duplicateTooltip" effect="solid">
             <span>Dupliquer</span>
@@ -624,6 +647,9 @@ const Card = (props) => {
           <ReactTooltip delayShow={500} id="cancelTooltip" effect="solid">
             <span>Annuler</span>
           </ReactTooltip>
+          <ReactTooltip delayShow={500} id="periodTooltip" effect="solid">
+            <span>Période</span>
+          </ReactTooltip>
         </>
       )}
       <AddContributorsEvent
@@ -635,7 +661,7 @@ const Card = (props) => {
         setOpen={setOpenAddContributorModal}
       />
       <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
-        <div className="modal__content__container">
+        <div className="modal__content__container space__between">
           <button
             data-tip
             data-for="closeTooltip"
@@ -647,17 +673,25 @@ const Card = (props) => {
           >
             <MdOutlineClear />
           </button>
-          <h3>Êtes-vous sûr de vouloir supprimer cet évènement ?</h3>
-          <p>La suppression sera définitive. </p>
+          <div>
+            <h3>Êtes-vous sûr de vouloir supprimer cet évènement ?</h3>
+            <p>La suppression sera définitive. </p>
+          </div>
           <div className={"delete__actions__container"}>
-            <Button reversed onClick={() => setOpenDeleteModal(false)}>
+            <Button
+              reversed
+              onClick={() => {
+                setOpenDeleteModal(false);
+                setOpenModal(false);
+              }}
+            >
               Annuler
             </Button>
             <Button onClick={handledeleteEvent}>Supprimer</Button>
           </div>
         </div>
       </Modal>
-    </>
+    </div>
   );
 };
 

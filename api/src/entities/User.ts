@@ -1,12 +1,12 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import { BaseEntity, PrimaryColumn, Column, Entity, OneToMany, ManyToMany } from "typeorm";
 import { Event } from "./Event";
 import { Comment } from './Comment';
 import { Project } from './Project';
 
 @Entity()
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id!: number;
+    @PrimaryColumn()
+    id!: string;
     @Column()
     firstname!: string;
     @Column()
@@ -19,6 +19,8 @@ export class User extends BaseEntity {
     password!: string;
     @Column()
     avatarUrl!: string;
+    @Column()
+    maxCaractersCard!: number;
     @ManyToMany(() => Event, (events: { contributors: any; }) => events.contributors, { cascade: true }) events!: Event[];
     @ManyToMany(() => Project, (projects: { contributors: any; }) => projects.contributors, { cascade: true }) projects!: Project[];
     @OneToMany(() => Comment, comment => comment.author) comments!: Comment[];

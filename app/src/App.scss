@@ -1,0 +1,78 @@
+.App,
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-background-1);
+}
+.dashboard {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-background-1);
+}
+.logo__kifekoi {
+  height: 40px;
+  width: auto;
+}
+:root {
+  --font-color: #172b4dd7;
+  --color-background-1: rgb(238, 238, 238);
+  --color-background-2: white;
+  --card-background: white;
+  --main-color: #033d74c2;
+  --main-color2: #b311b3af;
+  --shadow-color: #d8e1e8;
+  --warning-color: #dfba19df;
+  --check-color: #339516df;
+}
+
+/* 2 */
+[data-theme="dark"] {
+  --font-color: rgb(224, 224, 224);
+  --color-background-1: #1c2128;
+  --color-background-2: #0f1e25;
+  --card-background: #383838;
+  --main-color: #01ffff80;
+  --main-color2: #b311b3af;
+  --shadow-color: #191a1b;
+  --warning-color: #dfba19df;
+  --check-color: #339516df;
+}
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 20px;
+  margin: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(165, 164, 164, 0.36);
+  border-radius: 20px;
+}
+.close__modal__button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  height: 100%;
+  width: auto;
+  font-size: 1.2rem;
+  color: var(--font-color);
+  padding: 4px;
+  border-radius: 3px;
+  transition: 0.1s ease;
+  display: flex;
+  position: fixed;
+  top: 4px;
+  right: 4px;
+  height: 30px;
+  width: 30px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

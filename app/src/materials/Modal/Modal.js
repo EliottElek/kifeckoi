@@ -19,8 +19,13 @@ const Modal = ({ children, open, setOpen, style }) => {
   if (!open) return null;
   return (
     <>
-      <Backdrop />
-      <div style={style} ref={componentRef} className="modal">
+      <Backdrop onClick={() => setOpen && setOpen(false)} />
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={style}
+        ref={componentRef}
+        className="modal"
+      >
         {children}
       </div>
     </>

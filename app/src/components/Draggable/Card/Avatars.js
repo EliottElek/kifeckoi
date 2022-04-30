@@ -1,7 +1,6 @@
 import Avatar from "../../../materials/Avatar/Avatar";
 import "./Avatars.css";
 const Avatars = ({ users }) => {
-  
   if (users?.length > 3) {
     const toNotShow = users.length - 2;
     return (
@@ -53,7 +52,7 @@ const Avatars = ({ users }) => {
                   i === users.length - 1 ? "first_avatar" : "default_avatar"
                 }
               >
-                <Avatar mini src={user.avatarUrl} />
+                <Avatar mini src={user.avatarUrl} name={user.firstname} />
               </div>
             )
           );

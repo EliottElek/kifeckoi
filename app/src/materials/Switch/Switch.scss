@@ -8,8 +8,8 @@
 .toggle-theme {
   position: relative;
   display: inline-block;
-  height: 29px;
-  width: 50px;
+  height: 25px;
+  width: 48px;
 }
 .toggle-theme input {
   display: none;
@@ -28,17 +28,17 @@
 
 .slider:before {
   background-color: #fff;
-  bottom: 4px;
+  bottom: 2px;
   content: "";
   height: 21px;
-  left: 4px;
+  left: 2px;
   position: absolute;
   transition: 0.2s;
   width: 21px;
 }
 
 input:checked + .slider:before {
-  transform: translateX(21px);
+  transform: translateX(23px);
 }
 
 input:checked + .slider {

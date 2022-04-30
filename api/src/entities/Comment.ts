@@ -6,7 +6,7 @@ import { User } from "./User";
 export class Comment extends BaseEntity {
     @PrimaryColumn()
     id!: string;
-    @Column()
+    @Column("longtext")
     content!: string;
     @Column()
     eventId!: string;

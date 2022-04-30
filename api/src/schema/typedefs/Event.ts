@@ -8,7 +8,7 @@ export const EventType: any = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLString },
         type: { type: GraphQLString },
-        periodId: { type: GraphQLString },
+        period: { type: GraphQLString },
         description: { type: GraphQLString },
         status: { type: GraphQLString },
         project: { type: ProjectType },

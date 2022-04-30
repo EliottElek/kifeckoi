@@ -7,7 +7,7 @@ const ProjectItem = ({ project }) => {
   return (
     <div
       onClick={() => {
-        navigate(`/project/${project?.id}/actions`);
+        navigate(`/project/${project?.id}/global`);
       }}
       className={"project__item"}
     >

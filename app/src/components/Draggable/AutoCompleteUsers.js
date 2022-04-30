@@ -8,6 +8,7 @@ const AutoCompleteUsers = ({
   placeholder,
   multi,
   alreadyExistingContributors,
+  users,
 }) => {
   const customStyles = {
     option: (base, state) => ({
@@ -51,7 +52,9 @@ const AutoCompleteUsers = ({
         return arr;
       }
       if (data?.getAllUsers) {
-        var newUsers = data?.getAllUsers;
+        var newUsers = [];
+        if (!users) newUsers = data?.getAllUsers;
+        else newUsers = users;
         const finalUsers = newUsers.map((user) => {
           return {
             ...user,
@@ -64,7 +67,7 @@ const AutoCompleteUsers = ({
       }
     };
     setData();
-  }, [alreadyExistingContributors, data?.getAllUsers, setContributors]);
+  }, [alreadyExistingContributors, data?.getAllUsers, setContributors, users]);
   return (
     <Select
       closeMenuOnSelect={false}

@@ -1,7 +1,7 @@
 .event__card {
   transition: 0.1s all;
   padding: 12px;
-  border-radius: 8px;
+  border-radius: 4px;
   background-color: var(--card-background);
   color: var(--font-color);
   display: flex;
@@ -53,32 +53,4 @@
 .livrables__background,
 .livrable__background {
   background-color: rgba(255, 255, 255, 0.582);
-}
-
-.card__icon {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  top: 4px;
-  left: 0px;
-  color: #1394bb;
-  transform: scale(0.8);
-  transition: 0.1s all;
-}
-.violet {
-  color: var(--main-color);
-  padding: 4px;
-  border-radius: 3px;
-}
-.red {
-  color: #bb1313;
-}
-.orange {
-  gap: 4px;
-  color: #e78331;
-}
-.marron {
-  gap: 4px;
-  color: #64462e;
 }

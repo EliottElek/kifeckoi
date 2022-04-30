@@ -1,0 +1,26 @@
+.active__projects__container {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  &__item {
+    min-height: 44px;
+    border-radius: 2px;
+    width: 100%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: 0.2s all;
+    cursor: pointer;
+    & > * {
+      margin: 8px;
+    }
+    &:hover {
+      background-color: var(--color-background-1);
+      transition: 0.2s all;
+    }
+  }
+  & > h3 {
+    margin-top: 20px;
+  }
+}

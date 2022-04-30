@@ -1,0 +1,52 @@
+.settings__container {
+  background-color: var(--card-background);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  padding: 20px;
+  border-radius: 6px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  & > h1 {
+    font-size: 1.6rem;
+  }
+  & > h3 {
+    margin-top: 10px;
+  }
+  &__spacer {
+    height: 2px;
+    background-color: var(--main-color);
+    margin-bottom: 20px;
+    margin-top: 8px;
+  }
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    & > span {
+      margin-right: 12px;
+    }
+    &__number-input {
+      padding: 8px;
+      width: 60px;
+      background-color: var(--color-background-1);
+      color: var(--font-color);
+      font-size: 1.2rem;
+      border: none;
+      display: flex;
+      gap: 10px;
+      border-radius: 4px;
+    }
+    &__space {
+      flex-grow: 1;
+    }
+  }
+}
+.danger__zone__title {
+  color: rgba(241, 62, 62, 0.911);
+}
+.danger__zone__action__container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}

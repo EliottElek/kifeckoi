@@ -11,18 +11,18 @@ export const CREATE_PROJECT = {
         name: { type: GraphQLString },
         clientId: { type: GraphQLString },
         contributors: { type: new GraphQLList(GraphQLString) },
-
     },
     async resolve(parent: any, args: any) {
         const { name, clientId, contributors } = args
         const client = await Client.findOne({ id: clientId })
         const newid = uuid();
         const contributorsFound: User[] = []
-
         if (!client) {
             throw new Error("Cannot find client.")
         } else {
-            const newProject = Project.create({ name, id: newid, client: client, contributors: [] })
+            const newProject = Project.create({
+                name: name, id: newid, client: client, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "", perimeterDescription: "", planningDescription: "", goCopyDate: "", goLiveDate: "", logoUrl: ""
+            })
             contributors.map(async (contributor: any) => {
                 const acc = await User.findOne({ id: contributor })
                 if (acc) {
@@ -61,6 +61,49 @@ export const ADD_CONTRIBUTORS_TO_PROJECT = {
             })
             contributorsFound = project.contributors;
             Project.save(project)
+        }
+        return { ...args }
+    }
+}
+export const MODIFY_PROJECT_GLOBAL_INFOS = {
+    type: ProjectType,
+    args: {
+        projectId: { type: GraphQLString },
+        name: { type: GraphQLString },
+        globalStatus: { type: GraphQLString },
+        perimeterStatus: { type: GraphQLString },
+        planningStatus: { type: GraphQLString },
+        globalDescription: { type: GraphQLString },
+        perimeterDescription: { type: GraphQLString },
+        planningDescription: { type: GraphQLString },
+        goLiveDate: { type: GraphQLString },
+        goCopyDate: { type: GraphQLString },
+        logoUrl: { type: GraphQLString },
+    },
+    async resolve(parent: any, args: any) {
+        const { projectId, globalStatus, perimeterStatus, planningStatus, globalDescription, perimeterDescription, planningDescription, goLiveDate, goCopyDate, logoUrl } = args
+        const project = await Project.findOne({ id: projectId })
+        if (!project) {
+            throw new Error("Cannot find project.")
+        } else {
+            await Project.update({ id: projectId }, { globalStatus: globalStatus, perimeterStatus: perimeterStatus, planningStatus: planningStatus, globalDescription: globalDescription, perimeterDescription: perimeterDescription, planningDescription: planningDescription, goCopyDate: goCopyDate, goLiveDate: goLiveDate, logoUrl: logoUrl })
+        }
+        return { ...args }
+    }
+}
+export const MODIFY_PROJECT_NAME = {
+    type: ProjectType,
+    args: {
+        projectId: { type: GraphQLString },
+        name: { type: GraphQLString },
+    },
+    async resolve(parent: any, args: any) {
+        const { projectId, name } = args
+        const project = await Project.findOne({ id: projectId })
+        if (!project) {
+            throw new Error("Cannot find project.")
+        } else {
+            await Project.update({ id: projectId }, { name: name })
         }
         return { ...args }
     }

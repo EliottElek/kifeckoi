@@ -12,6 +12,24 @@ query{
     }
   }
 `
+
+export const GET_USER_BY_ID = gql`
+query getUserById($userId: String!){
+  getUserById(userId : $userId){
+      id
+      firstname
+      lastname
+      email
+      avatarUrl
+      username
+      maxCaractersCard
+      projects{
+        id
+        name
+      }
+    } 
+  }
+`
 export const GET_ALL_CLIENTS = gql`
 query{
     getAllClients{
@@ -29,15 +47,25 @@ query findClientById($id: String!){
         projects {
           id
           name
+          logoUrl
         }
     }
 }
 `
 export const FIND_PROJECT_BY_PROJECT_ID = gql`
-query findProjectByProjectId($id: String!){
-  findProjectByProjectId(id : $id){
+query findProjectByProjectId($id: String! $userId : String!){
+  findProjectByProjectId(id : $id userId : $userId){
         id
         name
+        globalStatus
+        planningStatus
+        perimeterStatus
+        globalDescription
+        planningDescription
+        perimeterDescription
+        goLiveDate
+        goCopyDate
+        logoUrl
         client {
           id 
           name
@@ -61,9 +89,18 @@ query findProjectByProjectId($id: String!){
     }
 }
 `
+export const FIND_PROJECTS_BY_CLIENT_ID = gql`
+query findProjectsByClientId($clientId: String! $userId : String!){
+  findProjectsByClientId(clientId : $clientId userId:$userId){
+        id
+        name
+    }
+}
+`
 export const GET_ALL_PROJECTS = gql`
 query{
     getAllProjects{
+      logoUrl
       name
       id
     }
@@ -74,6 +111,7 @@ query{
     getAllEvents{
     type
     id
+    period
     creation
     project{
       id
@@ -106,6 +144,7 @@ query getLatestEvents($id: String! $type : String!){
     type
     id
     creation
+    period
     project{
       id
       name
@@ -136,6 +175,7 @@ query findEventsByProjectId($id: String! $type : String!){
   findEventsByProjectId(id : $id type : $type){
     type
     id
+    period
     description
     status
     creation

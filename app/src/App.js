@@ -1,27 +1,26 @@
-import React, { useContext } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import React, { useContext, lazy, Suspense } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Project from "./components/Project/Project";
 import Home from "./components/Home/Home";
 import { Context } from "./components/Context/Context";
-import Client from "./components/Client/Client";
-import AccountPage from "./components/AccountPage/AccountPage";
-import ActionsWide from "./components/DndWide/DndWide";
-import GlobalInfos from "./components/GlobalInfos/GlobalInfos";
-import icon from "../src/assets/images/icon.png";
 import { ToastContainer } from "react-toastify";
-import Drawer from "./materials/Drawer/Drawer";
 import "react-toastify/dist/ReactToastify.css";
-import Switch from "./materials/Switch/Switch";
-import Avatar from "./materials/Avatar/Avatar";
-import Menu from "./materials/Menu/Menu";
-import MenuItem from "./materials/Menu/MenuItem";
-import Popup from "./materials/Popup/Popup";
-import { CgMenuGridO } from "react-icons/cg";
-import StickyNavbar from "./components/StickyNavbar/StickyNavbar";
-import Button from "./materials/Button/Button";
+import "./App.scss";
+import Drawer from "./materials/Drawer/Drawer";
+import Backdrop from "./materials/Backdrop/Backdrop";
+import Progress from "./materials/Progress/Progress";
+import StickyNavDefault from "./components/StickyNavbar/StickyNavBarDefault";
 import NoInternetConnection from "./components/NoInternetConnectionWrapper/NoInternetConnectionWrapper";
-import SidePanel from "./components/DashBoard/SidePanel";
-import logo from "./assets/images/logo.png";
+const SidePanel = lazy(() => import("./components/DashBoard/SidePanel"));
+const ErrorPage = lazy(() => import("./components/ErrorPage/ErrorPage"));
+const Client = lazy(() => import("./components/Client/Client"));
+const AccountPage = lazy(() => import("./components/AccountPage/AccountPage"));
+const ActionsWide = lazy(() => import("./components/DndWide/DndWide"));
+const GlobalInfos = lazy(() => import("./components/GlobalInfos/GlobalInfos"));
+const Login = lazy(() => import("./components/Login/Login"));
+const SignUp = lazy(() => import("./components/SignUp/SignUp"));
+const icon = lazy(() => import("../src/assets/images/icon.png"));
+
 var link = document.querySelector("link[rel~='icon']");
 if (!link) {
   link = document.createElement("link");
@@ -29,245 +28,322 @@ if (!link) {
   document.getElementsByTagName("head")[0].appendChild(link);
 }
 link.href = icon;
+const renderLoader = () => (
+  <Backdrop>
+    <Progress size="medium" reversed />
+  </Backdrop>
+);
 
 const MainContent = () => {
   const { dark } = useContext(Context);
   return (
-    <div className={"main__content"}>
-      <NoInternetConnection>
-        <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              <SecureRoute margin>
-                <Home />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/project/:id/"
-            element={
-              <SecureRoute margin>
-                <Project />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/project/:id/global"
-            element={
-              <SecureRoute>
-                <GlobalInfos />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/project/:id/actions"
-            element={
-              <SecureRoute>
-                <ActionsWide type={"Action"} />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/project/:id/infos"
-            element={
-              <SecureRoute>
-                <ActionsWide type={"Info"} />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/project/:id/decisions"
-            element={
-              <SecureRoute>
-                <ActionsWide type={"Decision"} />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/project/:id/risks"
-            element={
-              <SecureRoute>
-                <ActionsWide type={"Risk"} />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/project/:id/problems"
-            element={
-              <SecureRoute>
-                <ActionsWide type={"Problems"} />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/project/:id/deliverables"
-            element={
-              <SecureRoute>
-                <ActionsWide type={"Deliverables"} />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/client/:id"
-            element={
-              <SecureRoute>
-                <Client />
-              </SecureRoute>
-            }
-          />
-          <Route
-            exact
-            path="/account"
-            element={
-              <SecureRoute>
+    <NoInternetConnection>
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <Home />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/login"
+          element={
+            <Suspense fallback={renderLoader()}>
+              <Login />
+            </Suspense>
+          }
+        />
+        <Route
+          exact
+          path="/signup"
+          element={
+            <Suspense fallback={renderLoader()}>
+              <SignUp />
+            </Suspense>
+          }
+        />
+        <Route
+          exact
+          path="/404"
+          element={
+            <Suspense fallback={renderLoader()}>
+              <ErrorPage />
+            </Suspense>
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <Project />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/global"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <GlobalInfos />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/actions"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                advanced
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <ActionsWide type="Action" />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/infos"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                advanced
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <ActionsWide type="Info" />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/decisions"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                advanced
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <ActionsWide type="Decision" />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/risks"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                advanced
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <ActionsWide type="Risk" />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/problems"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                advanced
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <ActionsWide type="Problems" />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/deliverables"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                advanced
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <ActionsWide type="Deliverables" />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/client/:id"
+          element={
+            <div className={"dashboard"}>
+              <Drawer
+                mainContent={
+                  <SecureRoute margin>
+                    <Suspense fallback={renderLoader()}>
+                      <Client />
+                    </Suspense>
+                  </SecureRoute>
+                }
+                secondaryContent={
+                  <Suspense fallback={renderLoader()}>
+                    <SecondaryContent />
+                  </Suspense>
+                }
+                drawerWidth={240}
+                breakPoint={800}
+              />
+            </div>
+          }
+        />
+        <Route
+          exact
+          path="/account"
+          element={
+            <SecureRoute margin>
+              <Suspense fallback={renderLoader()}>
+                <StickyNavDefault account />
                 <AccountPage />
-              </SecureRoute>
-            }
-          />
-        </Routes>
-      </NoInternetConnection>
+              </Suspense>
+            </SecureRoute>
+          }
+        />
+      </Routes>
       <ToastContainer theme={dark ? "dark" : "light"} />
-    </div>
+    </NoInternetConnection>
   );
 };
 const SecondaryContent = () => {
   return <SidePanel />;
 };
 const App = () => {
-  const {
-    currentProject,
-    user,
-    toggleTheme,
-    dark,
-    setDark,
-    defaultDark,
-    setOpenDrawer,
-    openDrawer,
-    setCurrentProject,
-    setCurrentClient,
-  } = useContext(Context);
-  const [openPopUp, setOpenPopUp] = React.useState(false);
-  const navigate = useNavigate();
-  let urlElement = window.location.href.split("/")[5];
   return (
-    <div className={"App"}>
-      <StickyNavbar>
-        <button
-          className={"toggle__drawer__button"}
-          onClick={() => setOpenDrawer(!openDrawer)}
-        >
-          <CgMenuGridO />
-        </button>
-        <div className="name__container">
-          <img
-            onClick={() => {
-              setCurrentProject(null);
-              setCurrentClient(null);
-              navigate(`/`);
-            }}
-            src={logo}
-            alt=""
-            className="logo__kifekoi"
-          />
-          <h2
-            className="name__container__title"
-            onClick={() => navigate(`/project/${currentProject?.id}/global`)}
-          >
-            {currentProject?.name}
-            {urlElement && ` - ${urlElement}`}
-          </h2>
-        </div>
-        <div className="events__container">
-          <Button>Sauvegarder</Button>
-          <Button reversed>Valider</Button>
-          <Button reversed>Libérer</Button>
-          <Button reversed>Annuler</Button>
-          <button
-            className="settings__button"
-            onClick={() => setOpenPopUp(true)}
-          >
-            <Avatar src={user.avatarUrl} name={user.firstname} />
-            <Popup
-              style={{ transform: "translate(-40%, 65%)" }}
-              open={openPopUp}
-              setOpen={setOpenPopUp}
-              bottom
-            >
-              <Menu>
-                <MenuItem
-                  onClick={(e) => {
-                    setOpenPopUp(false);
-                  }}
-                >
-                  <p>Mon compte</p>
-                </MenuItem>
-                <MenuItem
-                  onClick={(e) => {
-                    setOpenPopUp(false);
-                  }}
-                >
-                  <p>Paramètres</p>
-                </MenuItem>
-                <MenuItem
-                  onClick={(e) => {
-                    setOpenPopUp(false);
-                  }}
-                >
-                  <p>Déconnexion</p>
-                </MenuItem>
-                <span className={"divider"} />
-                <li className={"menu-item-no-hover"}>
-                  <span>
-                    Passer en mode
-                    {dark ? " jour ☀️" : " nuit 🌙"}
-                  </span>
-                  <Switch
-                    onChange={(e) => {
-                      toggleTheme(e);
-                      setDark(!dark);
-                    }}
-                    defaultChecked={defaultDark}
-                  />
-                </li>
-              </Menu>
-            </Popup>
-          </button>
-        </div>
-      </StickyNavbar>
-      <Drawer
-        mainContent={<MainContent />}
-        secondaryContent={<SecondaryContent />}
-        drawerWidth={240}
-        breakPoint={800}
-      />
+    <div className="App">
+      <MainContent />
     </div>
   );
 };
 const SecureRoute = ({ children }) => {
-  const auth = true;
+  const { auth } = React.useContext(Context);
   if (!auth) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
-  return (
-    <div
-      style={{
-        height: "100%",
-        width: "100%",
-      }}
-    >
-      {children}
-    </div>
-  );
+  return children;
 };
 export default App;
