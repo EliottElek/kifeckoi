@@ -31,8 +31,8 @@ query getUserById($userId: String!){
   }
 `
 export const GET_ALL_CLIENTS = gql`
-query{
-    getAllClients{
+query getAllClients($userId : String!){
+    getAllClients(userId : $userId){
       name
       id
     }
@@ -90,7 +90,7 @@ query findProjectByProjectId($id: String! $userId : String!){
 }
 `
 export const FIND_PROJECTS_BY_CLIENT_ID = gql`
-query findProjectsByClientId($clientId: String! $userId : String!){
+query findProjectsByClientId($clientId: String $userId : String!){
   findProjectsByClientId(clientId : $clientId userId:$userId){
         id
         name

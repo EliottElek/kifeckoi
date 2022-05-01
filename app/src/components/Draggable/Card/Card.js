@@ -14,7 +14,6 @@ import { ImWarning } from "react-icons/im";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { BsPeopleFill } from "react-icons/bs";
 import Modal from "../../../materials/Modal/Modal";
-import { Flip } from "react-toastify";
 import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
 import AddContributorsEvent from "./AddContributorsEvent";
@@ -182,7 +181,6 @@ const Card = (props) => {
         pauseOnHover: false,
         draggable: false,
         progress: undefined,
-        transition: Flip,
       });
     }
   };
@@ -226,7 +224,6 @@ const Card = (props) => {
           pauseOnHover: false,
           draggable: false,
           progress: undefined,
-          transition: Flip,
         }
       );
     } catch (err) {
@@ -238,7 +235,6 @@ const Card = (props) => {
         pauseOnHover: false,
         draggable: false,
         progress: undefined,
-        transition: Flip,
       });
       console.log(err);
     }

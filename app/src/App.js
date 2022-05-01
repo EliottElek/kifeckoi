@@ -165,6 +165,11 @@ const MainContent = () => {
         />
         <Route
           exact
+          path="/project/:id"
+          element={<Navigate to="/project/:id/global" />}
+        />
+        <Route
+          exact
           path="/project/:id/infos"
           element={
             <div className={"dashboard"}>
@@ -324,6 +329,7 @@ const MainContent = () => {
             </SecureRoute>
           }
         />
+        <Route exact path="*" element={<ErrorPage />} />
       </Routes>
       <ToastContainer theme={dark ? "dark" : "light"} />
     </NoInternetConnection>
@@ -335,7 +341,9 @@ const SecondaryContent = () => {
 const App = () => {
   return (
     <div className="App">
-      <MainContent />
+      <Suspense fallback={renderLoader()}>
+        <MainContent />
+      </Suspense>
     </div>
   );
 };

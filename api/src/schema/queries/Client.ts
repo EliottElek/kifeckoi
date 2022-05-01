@@ -4,8 +4,19 @@ import { Client } from '../../entities/Client'
 
 export const GET_ALL_CLIENTS = {
     type: new GraphQLList(ClientType),
-    resolve() {
-        return Client.find({ relations: ["projects"] });
+    args: {
+        userId: { type: GraphQLString },
+    },
+    async resolve(parent: any, args: any) {
+        const { userId } = args
+        const clientsToReturn: Client[] = []
+        const clients = await Client.find({
+            relations: ["contributors"],
+        })
+        clients.forEach((client) => {
+            if (client.contributors.find((contrib) => contrib.id === userId)) { clientsToReturn.push(client) }
+        })
+        return clientsToReturn;
     }
 }
 export const FIND_CLIENT_BY_ID = {

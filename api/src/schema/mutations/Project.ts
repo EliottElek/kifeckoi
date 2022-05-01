@@ -21,7 +21,7 @@ export const CREATE_PROJECT = {
             throw new Error("Cannot find client.")
         } else {
             const newProject = Project.create({
-                name: name, id: newid, client: client, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "", perimeterDescription: "", planningDescription: "", goCopyDate: "", goLiveDate: "", logoUrl: ""
+                name: name, id: newid, client: client, clientId: clientId, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "", perimeterDescription: "", planningDescription: "", goCopyDate: "", goLiveDate: "", logoUrl: ""
             })
             contributors.map(async (contributor: any) => {
                 const acc = await User.findOne({ id: contributor })
@@ -47,20 +47,27 @@ export const ADD_CONTRIBUTORS_TO_PROJECT = {
     async resolve(parent: any, args: any) {
         const { projectId, contributors } = args
         const project = await Project.findOne({ id: projectId }, { relations: ["contributors"] })
+
         let contributorsFound: User[] = []
 
         if (!project) {
             throw new Error("Cannot find project.")
         } else {
+            const client = await Client.findOne({ id: project.clientId }, { relations: ["contributors"] })
+            if (!client) throw new Error("Cannot find client.")
             project.contributors = [];
+            client.contributors = [];
             contributors.map(async (contributor: any) => {
                 const acc = await User.findOne({ id: contributor })
                 if (acc) {
                     project.contributors.push(acc)
+                    client.contributors.push(acc)
+
                 }
             })
             contributorsFound = project.contributors;
             Project.save(project)
+            Client.save(client)
         }
         return { ...args }
     }

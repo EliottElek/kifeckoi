@@ -18,8 +18,8 @@ const Button = ({
       style={style}
       className={
         reversed
-          ? `button__reversed ${className}`
-          : `button__versed ${className}`
+          ? `button__reversed`
+          : `button__versed`
       }
     >
       {children}

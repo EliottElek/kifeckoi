@@ -47,8 +47,8 @@ const Layout = ({ children }) => {
         style={{
           paddingLeft: 30,
           paddingRight: 30,
-          height: "100%",
-          width: "100%",
+          height: "auto",
+          width: "auto",
           background: "#22272d",
           display: "flex",
           alignItems: "center",
@@ -92,8 +92,8 @@ const Layout = ({ children }) => {
         style={{
           paddingLeft: 30,
           paddingRight: 30,
-          height: "100%",
-          width: "100%",
+          height: "auto",
+          width: "auto",
           background: "#22272d",
           display: "flex",
           alignItems: "center",

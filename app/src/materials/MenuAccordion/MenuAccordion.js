@@ -40,7 +40,7 @@ function MenuAccordion(props) {
               ? "accordion__menu__icon"
               : "accordion__menu__icon rotate"
           );
-        }, 100);
+        }, 300);
       }
       return () => {
         setActiveState(""); // This worked for me

@@ -273,35 +273,7 @@
   transition: all 0.2s ease;
   outline-color: rgba(128, 128, 128, 0.233);
 }
-.close__modal__button {
-  border: none;
-  outline: none;
-  background-color: transparent;
-  cursor: pointer;
-  height: 100%;
-  width: auto;
-  font-size: 1.2rem;
-  color: var(--font-color);
-  padding: 4px;
-  border-radius: 3px;
-  transition: 0.1s ease;
-  display: flex;
-  position: fixed;
-  top: 0;
-  right: 0px;
-  height: 30px;
-  width: 30px;
-  font-size: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.close__modal__button:hover {
-  background-color: var(--color-background-1);
-  color: var(--font-color);
-  transition: 0.1s ease;
-  border-radius: 50%;
-}
+
 .action__container__modif__mode {
   display: flex;
   align-items: center;

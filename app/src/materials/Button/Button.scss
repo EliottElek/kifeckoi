@@ -30,6 +30,7 @@
   font-size: 0.9em;
   filter: brightness(1);
   white-space: nowrap;
+  z-index: 0;
 }
 
 .button__reversed {
@@ -61,6 +62,7 @@
   font-size: 0.9em;
   filter: brightness(1);
   white-space: nowrap;
+  z-index: 0;
 }
 .button__versed:hover,
 .button__reversed:hover {

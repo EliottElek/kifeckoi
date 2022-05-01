@@ -14,7 +14,9 @@ import {
   DELETE_COMMENT,
 } from "../../../../graphql/mutations";
 import formatDate from "../../../../assets/functions/formatDate";
+import { Context } from "../../../Context/Context";
 const Comment = ({ comment, commentsData }) => {
+  const { user } = React.useContext(Context);
   const [changeCommentContent] = useMutation(CHANGE_COMMENT__CONTENT);
   const [deleteComment] = useMutation(DELETE_COMMENT);
 
@@ -133,37 +135,41 @@ const Comment = ({ comment, commentsData }) => {
           )}
         </span>
       </div>
-      <button
-        className="more__button__comment"
-        onClick={(e) => {
-          e.stopPropagation();
-          setOpenPopUp(true);
-        }}
-      >
-        <FiMoreHorizontal />
-      </button>
-      <Popup open={openPopUp} setOpen={setOpenPopUp}>
-        <Menu>
-          <MenuItem
+      {user.id === comment.author.id && (
+        <>
+          <button
+            className="more__button__comment"
             onClick={(e) => {
               e.stopPropagation();
-              setEditMode(true);
-              setOpenPopUp(false);
+              setOpenPopUp(true);
             }}
           >
-            <p>Modifier...</p>
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteComment();
-              setOpenPopUp(false);
-            }}
-          >
-            <p>Supprimer...</p>
-          </MenuItem>
-        </Menu>
-      </Popup>
+            <FiMoreHorizontal />
+          </button>
+          <Popup open={openPopUp} setOpen={setOpenPopUp}>
+            <Menu>
+              <MenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditMode(true);
+                  setOpenPopUp(false);
+                }}
+              >
+                <p>Modifier...</p>
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteComment();
+                  setOpenPopUp(false);
+                }}
+              >
+                <p>Supprimer...</p>
+              </MenuItem>
+            </Menu>
+          </Popup>{" "}
+        </>
+      )}
     </div>
   );
 };

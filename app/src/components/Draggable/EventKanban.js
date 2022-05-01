@@ -162,10 +162,33 @@ const EventKanban = ({ type, setLength, length }) => {
         <Progress size="medium" reversed />
       </Backdrop>
     );
+  if (!dataEvents?.data || dataEvents.loading || !events)
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexGrow: 1,
+          width: "auto",
+          height: "auto",
+        }}
+      >
+        <Progress size="medium" reversed />
+      </div>
+    );
   return (
     <>
       {!events ? (
-        <Progress />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Progress size="medium" reversed />
+        </div>
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="kanban">

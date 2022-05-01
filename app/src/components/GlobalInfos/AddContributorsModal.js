@@ -53,7 +53,7 @@ const AddContributorsModal = ({
             e.stopPropagation();
             setOpen(false);
           }}
-          className="close__add__contributor__modal__button"
+          className="close__modal__button"
         >
           <MdOutlineClear />
         </button>

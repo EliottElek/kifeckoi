@@ -1,7 +1,6 @@
 import { GraphQLList, GraphQLString } from "graphql"
 import { ProjectType } from "../typedefs/Project"
 import { Project } from '../../entities/Project'
-import { Client } from "../../entities/Client";
 import { User } from "../../entities/User";
 
 export const GET_ALL_PROJECTS = {

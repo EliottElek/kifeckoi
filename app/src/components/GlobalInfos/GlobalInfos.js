@@ -83,7 +83,7 @@ const events = [
 const GlobalInfos = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentProject, setCurrentProject, user } = useContext(Context);
+  const { currentProject, setCurrentProject } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [openLogoModal, setOpenLogoModal] = useState(false);
   const [openNameModal, setOpenNameModal] = useState(false);
@@ -92,9 +92,11 @@ const GlobalInfos = () => {
   const [openPlanningStatusPopup, setOpenPlanningStatusPopup] = useState(false);
   const [openPerimeterStatusPopup, setOpenPerimeterStatusPopup] =
     useState(false);
+  const userId = localStorage.getItem("userId");
+
   const [modifyProjectInfos] = useMutation(MODIFY_PROJECT_GLOBAL_INFOS);
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
-    variables: { id: id, userId: user.id },
+    variables: { id: id, userId: userId },
   });
   React.useEffect(() => {
     if (dataProject?.data) {
@@ -200,7 +202,7 @@ const GlobalInfos = () => {
     );
   return (
     <div className="global__infos__container">
-      <div style={{ padding: "30px" }}>
+      <div style={{ margin: "30px" }}>
         <h2 className="title__global__big">
           {currentProject?.name}{" "}
           {currentProject.logoUrl !== "" && (
@@ -210,7 +212,7 @@ const GlobalInfos = () => {
               src={currentProject.logoUrl}
             />
           )}
-          <div className={"title__buttons__container"}>
+          <div className={"title__buttons__container"} style={{ zIndex: 2 }}>
             <button
               className="title__modif__button"
               onClick={() => setOpenTitleMenu(true)}

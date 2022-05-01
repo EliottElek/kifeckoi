@@ -1,5 +1,4 @@
-import React from "react";
-import "./Client.css";
+import "./Client.scss";
 import { useNavigate } from "react-router";
 
 const ProjectItem = ({ project }) => {

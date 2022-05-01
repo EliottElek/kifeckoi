@@ -5,7 +5,10 @@ import { Context } from "../Context/Context";
 import { useNavigate } from "react-router";
 import MenuAccordion from "../../materials/MenuAccordion/MenuAccordion";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_CLIENTS, GET_ALL_PROJECTS } from "../../graphql/queries";
+import {
+  GET_ALL_CLIENTS,
+  FIND_PROJECTS_BY_CLIENT_ID,
+} from "../../graphql/queries";
 import "./DashBoard.scss";
 const SidePanel = () => {
   const {
@@ -15,13 +18,14 @@ const SidePanel = () => {
     projects,
     setProjects,
     currentClient,
-    user,
   } = React.useContext(Context);
-  const dataClients = useQuery(GET_ALL_CLIENTS);
-  const dataProjects = useQuery(GET_ALL_PROJECTS, {
-    variables: { userId: user?.id },
+  const userId = localStorage.getItem("userId");
+  const dataClients = useQuery(GET_ALL_CLIENTS, {
+    variables: { userId: userId },
   });
-
+  const dataProjects = useQuery(FIND_PROJECTS_BY_CLIENT_ID, {
+    variables: { clientId: currentClient?.id, userId: userId },
+  });
   React.useEffect(() => {
     if (dataClients?.data) {
       setClients(dataClients?.data?.getAllClients);
@@ -29,7 +33,7 @@ const SidePanel = () => {
   }, [setClients, dataClients?.data]);
   React.useEffect(() => {
     if (dataProjects?.data && currentClient) {
-      setProjects(dataProjects?.data?.getAllProjects);
+      setProjects(dataProjects?.data?.findProjectsByClientId);
     } else {
       setProjects([]);
     }

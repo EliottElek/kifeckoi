@@ -17,8 +17,8 @@ mutation login($email: String! $password: String!){
   }
 `
 export const CREATE_CLIENT = gql`
-mutation createClient($name: String!){
-    createClient(name : $name){
+mutation createClient($name: String! $userId : String!){
+    createClient(name : $name userId : $userId){
         id
         name
     }
