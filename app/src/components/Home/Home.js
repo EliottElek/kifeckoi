@@ -11,9 +11,8 @@ import Modal from "../../materials/Modal/Modal";
 import Progress from "../../materials/Progress/Progress";
 const Home = () => {
   const { user } = useContext(Context);
-  const id = localStorage.getItem("userId");
   const { data, refetch, loading } = useQuery(GET_ALL_CLIENTS, {
-    variables: { userId: id },
+    variables: { userId: user?.id },
   });
   const [createClient] = useMutation(CREATE_CLIENT);
   const [open, setOpen] = React.useState(false);
@@ -57,7 +56,6 @@ const Home = () => {
         draggable: false,
         progress: undefined,
       });
-      console.log(err);
     }
     setTimeout(() => {
       refetch();

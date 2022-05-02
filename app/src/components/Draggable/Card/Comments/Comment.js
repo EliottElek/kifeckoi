@@ -52,7 +52,6 @@ const Comment = ({ comment, commentsData }) => {
         draggable: false,
         progress: undefined,
       });
-      console.log(err);
     }
   };
   const handleDeleteComment = async () => {
@@ -82,7 +81,6 @@ const Comment = ({ comment, commentsData }) => {
         draggable: false,
         progress: undefined,
       });
-      console.log(err);
     }
   };
   return (

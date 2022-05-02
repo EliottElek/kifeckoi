@@ -5,6 +5,7 @@ export const MessageType = new GraphQLObjectType({
     fields: () => ({
         successful: { type: GraphQLBoolean },
         name: { type: GraphQLString },
-        message: { type: GraphQLString }
+        message: { type: GraphQLString },
+        token: { type: GraphQLString }
     })
 })

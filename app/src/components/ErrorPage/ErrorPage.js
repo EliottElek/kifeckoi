@@ -2,11 +2,13 @@ import { useNavigate } from "react-router";
 import Backdrop from "../../materials/Backdrop/Backdrop";
 import Button from "../../materials/Button/Button";
 import logo from "../../assets/images/icon.png";
+import LoadingAnimation from "../../materials/LoadingAnimation/LoadingAnimation";
 const ErrorPage = () => {
   const navigate = useNavigate();
   return (
     <Backdrop>
       <div style={{ display: "flex", flexDirection: "column" }}>
+        <LoadingAnimation />
         <h1
           style={{
             color: "white",

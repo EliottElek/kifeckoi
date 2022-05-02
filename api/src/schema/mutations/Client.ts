@@ -13,10 +13,13 @@ export const CREATE_CLIENT = {
         userId: { type: GraphQLString }
     },
 
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
         const newid = uuid();
         const { name, userId } = args
-        const user = await User.findOne({ id: userId })
+        if (context.user.id !== userId) throw new Error("The user who made the request is not the same as the one in the context.");
+
+        const user = await User.findOne({ id: context.user.id })
         if (!user) throw new Error("Cannot fidn user.")
         const client = Client.create({ name: name, projects: [], id: newid, contributors: [] })
         client.contributors.push(user)

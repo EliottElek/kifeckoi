@@ -35,7 +35,6 @@ const ModifTextArea = ({ type, dataProject }) => {
 
   const handleModifyDescription = async () => {
     try {
-      console.log(currentProject);
       await modifyProjectInfos({
         variables: {
           projectId: currentProject.id,

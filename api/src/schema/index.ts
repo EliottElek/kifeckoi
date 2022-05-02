@@ -6,7 +6,7 @@ import { FIND_CLIENT_BY_ID, GET_ALL_CLIENTS } from './queries/Client'
 import { CREATE_PROJECT, ADD_CONTRIBUTORS_TO_PROJECT, MODIFY_PROJECT_GLOBAL_INFOS, MODIFY_PROJECT_NAME } from './mutations/Project'
 import { FIND_PROJECT_BY_PROJECT_ID, FIND_PROJECTS_BY_CLIENT_ID, GET_ALL_PROJECTS } from "./queries/Project";
 import { GET_ALL_EVENTS, GET_LATEST_EVENTS, FIND_EVENTS_BY_PROJECT_ID } from "./queries/Event";
-import { CREATE_EVENT, CHANGE_EVENT_STATE, CHANGE_EVENT_DESCRIPTION, DELETE_EVENT, ADD_CONTRIBUTORS_TO_EVENT } from "./mutations/Event";
+import { CREATE_EVENT, CHANGE_EVENT_STATUS, CHANGE_EVENT_STATE, CHANGE_EVENT_DESCRIPTION, DELETE_EVENT, ADD_CONTRIBUTORS_TO_EVENT } from "./mutations/Event";
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "./queries/Comment";
 import { CREATE_COMMENT, CHANGE_COMMENT__CONTENT, DELETE_COMMENT } from "./mutations/Comment";
 
@@ -38,6 +38,7 @@ const Mutation = new GraphQLObjectType({
         addContributorsToProject: ADD_CONTRIBUTORS_TO_PROJECT,
         addContributorsToEvent: ADD_CONTRIBUTORS_TO_EVENT,
         createEvent: CREATE_EVENT,
+        changeEventStatus: CHANGE_EVENT_STATUS,
         changeEventState: CHANGE_EVENT_STATE,
         changeEventDescription: CHANGE_EVENT_DESCRIPTION,
         deleteEvent: DELETE_EVENT,
@@ -53,5 +54,5 @@ const Mutation = new GraphQLObjectType({
 
 export const schema = new GraphQLSchema({
     query: RootQuery,
-    mutation: Mutation
+    mutation: Mutation,
 })

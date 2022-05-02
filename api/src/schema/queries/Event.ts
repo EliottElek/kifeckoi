@@ -9,7 +9,9 @@ export const GET_ALL_EVENTS = {
         id: { type: GraphQLString },
 
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { type } = args
 
         return await Event.find({
@@ -23,14 +25,14 @@ export const GET_LATEST_EVENTS = {
         type: { type: GraphQLString },
         id: { type: GraphQLString },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { id, type } = args
         var events = await Event.find({
             where: { projectId: id, type: type }, relations: ["project", "comments", "creator", "contributors"],
         });
         var sorted_events = events.sort((a, b) => {
-            console.log(a.creation)
-            console.log(b.creation)
 
             return (
                 new Date(a.creation).getTime() - new Date(b.creation).getTime()
@@ -46,7 +48,9 @@ export const FIND_EVENTS_BY_PROJECT_ID = {
         type: { type: GraphQLString },
         id: { type: GraphQLString },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { id, type } = args
         const events = await Event.find({
             where: { projectId: id, type: type }, relations: ["project", "comments", "creator", "contributors"],

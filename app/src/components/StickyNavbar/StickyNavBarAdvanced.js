@@ -61,10 +61,18 @@ const StickyNavAdvanced = () => {
         </span>
       </div>
       <div className="events__container">
-        <Button>Sauvegarder</Button>
-        <Button reversed>Valider</Button>
-        <Button reversed>Libérer</Button>
-        <Button reversed>Annuler</Button>
+        <div className="nav__actions">
+          <Button style={{ height: "35px" }}>Sauvegarder</Button>
+          <Button style={{ height: "35px" }} reversed>
+            Valider
+          </Button>
+          <Button style={{ height: "35px" }} reversed>
+            Libérer
+          </Button>
+          <Button style={{ height: "35px" }} reversed>
+            Annuler
+          </Button>
+        </div>
         <button className="settings__button" onClick={() => setOpenPopUp(true)}>
           <Avatar src={user?.avatarUrl} name={user?.firstname} />
           <Popup

@@ -54,7 +54,6 @@ const CommentForm = ({ commentsData, event }) => {
     e.stopPropagation();
     if (content === "") return;
     try {
-      console.log(content);
       await createComment({
         variables: {
           eventId: event.id,
@@ -69,7 +68,6 @@ const CommentForm = ({ commentsData, event }) => {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
       });
-      console.log(e);
     }
   };
   if (modifMode)

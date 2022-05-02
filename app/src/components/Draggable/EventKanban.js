@@ -11,7 +11,7 @@ import {
   FIND_EVENTS_BY_PROJECT_ID,
   FIND_PROJECT_BY_PROJECT_ID,
 } from "../../graphql/queries";
-import { CREATE_EVENT, CHANGE_EVENT_STATE } from "../../graphql/mutations";
+import { CREATE_EVENT, CHANGE_EVENT_STATUS } from "../../graphql/mutations";
 import { toast } from "react-toastify";
 import rawEvents from "../../rawEvents";
 import { Navigate, useParams } from "react-router";
@@ -31,11 +31,11 @@ const EventKanban = ({ type, setLength, length }) => {
   const [eventsData, setEventsData] = React.useState([]);
   const [input, setInput] = useState("");
   const [createEvent] = useMutation(CREATE_EVENT);
-  const [changeEventDescription] = useMutation(CHANGE_EVENT_STATE);
+  const [changeEventDescription] = useMutation(CHANGE_EVENT_STATUS);
 
   const { id } = useParams();
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
-    variables: { id: id, userId: user.id },
+    variables: { id: id, userId: user?.id },
   });
   const dataEvents = useQuery(FIND_EVENTS_BY_PROJECT_ID, {
     variables: { id: id, type: type },
@@ -99,9 +99,7 @@ const EventKanban = ({ type, setLength, length }) => {
             newStatus: destinationCol?.title,
           },
         });
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
       dataEvents.refetch();
     } else {
       const index = events.findIndex((e) => e.id === source.droppableId);
@@ -115,7 +113,6 @@ const EventKanban = ({ type, setLength, length }) => {
     if (input === "") return;
     e.preventDefault();
     const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
-    console.log(ArrayOfIds);
     const description =
       input.length === 3 && isEmoji(input) ? `# ${input}` : input;
     try {
@@ -145,7 +142,6 @@ const EventKanban = ({ type, setLength, length }) => {
         progress: undefined,
         transition: Flip,
       });
-      console.log(err);
     }
   };
   const commentEnterSubmit = (e) => {
@@ -169,9 +165,8 @@ const EventKanban = ({ type, setLength, length }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          flexGrow: 1,
-          width: "auto",
-          height: "auto",
+          width: "100%",
+          height: "100%",
         }}
       >
         <Progress size="medium" reversed />

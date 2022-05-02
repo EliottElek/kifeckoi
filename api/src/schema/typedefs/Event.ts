@@ -16,6 +16,7 @@ export const EventType: any = new GraphQLObjectType({
         creation: { type: GraphQLString },
         creator: { type: UserType },
         targetDate: { type: GraphQLString },
+        state: { type: GraphQLString },
         contributors: { type: new GraphQLList(UserType) },
         comments: { type: new GraphQLList(CommentType) }
     })

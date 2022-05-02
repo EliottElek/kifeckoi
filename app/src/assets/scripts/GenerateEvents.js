@@ -19,17 +19,12 @@ const GenerateRandomEvents = () => {
     "In eget ultrices ligula, vel efficitur magna. Sed fermentum tortor vitae nisl auctor, molestie imperdiet risus aliquam. Cras vitae metus lorem. Proin rhoncus porta convallis. Proin eu elit eget massa vestibulum fermentum vel sed urna. Pellentesque enim risus, gravida ut sapien in, ullamcorper tempor augue. Integer ornare semper tempus. Sed blandit tincidunt ex eu dapibus. Ut ullamcorper eros leo, facilisis finibus risus sollicitudin at.",
   ];
   const users = [
-    "002734c5-8f48-4c39-bd74-afe08ad93ad2",
-    "3be1f1f0-0bf5-49ba-82c2-4f7a1cb7f18f",
-    "c386756e-ea3d-4ac7-9db6-cc7c57ba690a",
-    "e0b3046d-7905-44b9-b151-af04c26fd2d7",
+    "34e1699e-64da-4e84-b685-7d7d1b5993d3",
+    "86904d3e-1dfe-4041-8dc9-a1cf24edb13e",
   ];
   const projects = [
-    "1053ab1c-c654-4354-a910-33ba4a8519ec",
-    "6fc8643b-d34f-4018-b6b3-ce09aee3aa47",
-    "ab500e95-3f30-46ca-be0f-e36277280ca9",
-    "d55e77b2-6cc1-450e-9ed8-269e31016f9c",
-    "fde302c9-3d68-4bc2-9130-1c7b60aed067",
+    "2f54a70b-c445-4486-9958-4407faf6fb1d",
+    "1fab0aef-05e4-4b55-ac8b-11e1535a7f4f",
   ];
   const periods = ["Y22W18", "Y22W17", "Y22W16"];
 

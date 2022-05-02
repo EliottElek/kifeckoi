@@ -18,6 +18,8 @@ export class Event extends BaseEntity {
     @Column()
     creation!: string;
     @Column()
+    state!: string;
+    @Column()
     period!: string;
     @ManyToOne(() => Project, project => project.events, { onDelete: 'CASCADE' }) project!: Project;
     @ManyToOne(() => User, user => user.createdEvents) creator!: User;

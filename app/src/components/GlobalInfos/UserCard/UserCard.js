@@ -71,7 +71,6 @@ const UserCard = ({
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
       });
-      console.log(err);
     }
   };
   return (

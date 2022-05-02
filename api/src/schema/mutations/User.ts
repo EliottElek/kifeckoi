@@ -3,6 +3,8 @@ import gravatar from "gravatar"
 import { GraphQLID, GraphQLString } from "graphql";
 import { User } from '../../entities/User'
 const { v4: uuid } = require("uuid");
+import jwt from 'jsonwebtoken'
+const SECRET_KEY = 'secret!'
 
 export const CREATE_USER = {
     type: MessageType,
@@ -32,8 +34,12 @@ export const DELETE_USER = {
     args: {
         id: { type: GraphQLID },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const id = args.id
+        if (!context.user.id === id) throw new Error("You cannot delete another user.")
+
         await User.delete(id)
         return { successful: true, message: "User was successfully deleted." }
     }
@@ -45,8 +51,12 @@ export const UPDATE_PASSWORD = {
         oldPassword: { type: GraphQLString },
         newPassword: { type: GraphQLString }
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { email, oldPassword, newPassword } = args
+        if (!context.user.email === email) throw new Error("You cannot change the password of another user.")
+
         const user = await User.findOne({ email: email })
         const userPassword = user?.password;
         if (!user) throw new Error("Cannot find user.")
@@ -66,8 +76,12 @@ export const UPDATE_AVATAR = {
         email: { type: GraphQLString },
         avatarUrl: { type: GraphQLString }
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { email, avatarUrl } = args
+        if (context.user.email !== email) throw new Error("You cannot change the avatar of another user.")
+
         const user = await User.findOne({ email: email })
         if (!user) throw new Error("Cannot find user.")
         await User.update({ email: email }, { avatarUrl: avatarUrl })
@@ -88,7 +102,11 @@ export const LOGIN = {
 
         else {
             if (password === user.password) {
-                return { successful: true, message: user.id }
+                const token = jwt.sign(
+                    { email: user.email, id: user.id },
+                    SECRET_KEY,
+                )
+                return { successful: true, message: "User logged in.", token: token }
             }
             else return { successful: false, message: "Le mot de passe est incorrect." }
 
@@ -101,8 +119,12 @@ export const UPDATE_MAX_CARACTER_NB = {
         id: { type: GraphQLString },
         number: { type: GraphQLString },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { id, number } = args
+        if (!context.user.id === id) throw new Error("You cannot change the number of max characters of another user.")
+
         const user = await User.findOne({ id: id })
         if (!user) throw new Error("Cannot find user.")
 

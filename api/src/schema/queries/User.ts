@@ -4,17 +4,24 @@ import { User } from '../../entities/User'
 import { MessageType } from "../typedefs/Message";
 export const GET_ALL_USERS = {
     type: new GraphQLList(UserType),
-    resolve() {
+    resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         return User.find({ relations: ["events", "comments", "projects"] });
     }
 }
 export const GET_USER_BY_ID = {
-    type: UserType,
+    type: UserType || MessageType,
     args: {
         userId: { type: GraphQLString },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
         const { userId } = args
-        return await User.findOne({ relations: ["events", "comments", "projects"], where: { id: userId } });
+        const user = await User.findOne({ relations: ["events", "comments", "projects"], where: { id: userId } });
+        if (!user) {
+            return { successful: false, message: "Impossible de trouver l'utilisateur." }
+        }
+        return user;
     }
 }

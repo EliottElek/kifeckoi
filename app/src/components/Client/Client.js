@@ -20,10 +20,9 @@ const Client = () => {
   const [open, setOpen] = React.useState(false);
 
   const { id } = useParams();
-  const userId = localStorage.getItem("userId");
   const dataClient = useQuery(FIND_CLIENT_BY_ID, { variables: { id: id } });
   const { data, refetch, loading } = useQuery(FIND_PROJECTS_BY_CLIENT_ID, {
-    variables: { clientId: id, userId: userId },
+    variables: { clientId: id, userId: user?.id },
   });
   const [createProject] = useMutation(CREATE_PROJECT);
 
@@ -111,13 +110,13 @@ const Client = () => {
         </h1>
         <div className={"client__projects__container__spacer"} />
         <div className="client__projects__container__list">
-          {data.findProjectsByClientId.length === 0 && (
+          {data?.findProjectsByClientId?.length === 0 && (
             <h4 className={"client__projects__container__title"}>
               Aucun client.
             </h4>
           )}
-          {data.findProjectsByClientId.length !== 0 &&
-            data.findProjectsByClientId?.map((project, i) => (
+          {data?.findProjectsByClientId?.length !== 0 &&
+            data?.findProjectsByClientId?.map((project, i) => (
               <ProjectItem key={i} project={project} />
             ))}
         </div>

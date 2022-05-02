@@ -113,6 +113,7 @@ query{
     id
     period
     creation
+    state
     project{
       id
       name
@@ -145,6 +146,7 @@ query getLatestEvents($id: String! $type : String!){
     id
     creation
     period
+    state
     project{
       id
       name
@@ -178,6 +180,7 @@ query findEventsByProjectId($id: String! $type : String!){
     period
     description
     status
+    state
     creation
     contributors{
       id

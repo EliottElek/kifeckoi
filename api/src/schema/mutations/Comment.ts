@@ -11,8 +11,12 @@ export const CREATE_COMMENT = {
         content: { type: GraphQLString },
         authorId: { type: GraphQLString },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { eventId, content, authorId } = args
+        if (context.user.id !== authorId) throw new Error("The user who made the request is not the same as the one in the context.");
+
         const newuuid = uuid()
         const event = await Event.findOne({ id: eventId })
         const author = await User.findOne({ id: authorId }, { relations: ["comments"] })
@@ -40,10 +44,14 @@ export const CHANGE_COMMENT__CONTENT = {
         commentId: { type: GraphQLString },
         newContent: { type: GraphQLString }
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { commentId, newContent } = args
         const comment = await Comment.findOne({ id: commentId })
         if (!comment) throw new Error("Cannot find comment.")
+        if (context.user.id !== comment.author.id) throw new Error("You cannot update a comment you did not create.")
+
         await Comment.update({ id: commentId }, { content: newContent })
         return { successful: true, message: "Comment's content was successfully updated." }
     }
@@ -53,8 +61,14 @@ export const DELETE_COMMENT = {
     args: {
         commentId: { type: GraphQLString },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { commentId } = args
+        const comment = await Comment.findOne({ id: commentId });
+        if (!comment) throw new Error("Cannot find comment.")
+        if (context.user.id !== comment.author.id) throw new Error("You cannot delete a comment you did not create.")
+
         await Comment.delete({ id: commentId })
         return { successful: true, message: "Comment was successfully deleted.", id: commentId }
     }

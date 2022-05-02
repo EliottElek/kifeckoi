@@ -67,3 +67,17 @@
     margin-top: 40px;
   }
 }
+.name__input {
+  padding: 5px;
+  padding-top: 8px;
+  border-radius: 4px;
+  flex-grow: 1 !important;
+  font-size: 1.4rem;
+  padding: 12px 12px 20px 12px;
+  background-color: var(--card-background);
+  border: none;
+  color: var(--font-color);
+  margin-bottom: 10px;
+  margin: 0;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}

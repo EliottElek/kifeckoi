@@ -83,7 +83,7 @@ const events = [
 const GlobalInfos = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentProject, setCurrentProject } = useContext(Context);
+  const { currentProject, setCurrentProject, user } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [openLogoModal, setOpenLogoModal] = useState(false);
   const [openNameModal, setOpenNameModal] = useState(false);
@@ -92,11 +92,10 @@ const GlobalInfos = () => {
   const [openPlanningStatusPopup, setOpenPlanningStatusPopup] = useState(false);
   const [openPerimeterStatusPopup, setOpenPerimeterStatusPopup] =
     useState(false);
-  const userId = localStorage.getItem("userId");
 
   const [modifyProjectInfos] = useMutation(MODIFY_PROJECT_GLOBAL_INFOS);
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
-    variables: { id: id, userId: userId },
+    variables: { id: id, userId: user?.id },
   });
   React.useEffect(() => {
     if (dataProject?.data) {

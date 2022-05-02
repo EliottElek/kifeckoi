@@ -12,7 +12,9 @@ export const CREATE_PROJECT = {
         clientId: { type: GraphQLString },
         contributors: { type: new GraphQLList(GraphQLString) },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { name, clientId, contributors } = args
         const client = await Client.findOne({ id: clientId })
         const newid = uuid();
@@ -44,7 +46,8 @@ export const ADD_CONTRIBUTORS_TO_PROJECT = {
         contributors: { type: new GraphQLList(GraphQLString) },
 
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
         const { projectId, contributors } = args
         const project = await Project.findOne({ id: projectId }, { relations: ["contributors"] })
 
@@ -87,7 +90,9 @@ export const MODIFY_PROJECT_GLOBAL_INFOS = {
         goCopyDate: { type: GraphQLString },
         logoUrl: { type: GraphQLString },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { projectId, globalStatus, perimeterStatus, planningStatus, globalDescription, perimeterDescription, planningDescription, goLiveDate, goCopyDate, logoUrl } = args
         const project = await Project.findOne({ id: projectId })
         if (!project) {
@@ -104,7 +109,9 @@ export const MODIFY_PROJECT_NAME = {
         projectId: { type: GraphQLString },
         name: { type: GraphQLString },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { projectId, name } = args
         const project = await Project.findOne({ id: projectId })
         if (!project) {

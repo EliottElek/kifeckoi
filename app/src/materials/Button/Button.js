@@ -6,7 +6,6 @@ const Button = ({
   onClick,
   disabled,
   type,
-  className,
   props,
 }) => {
   return (

@@ -13,6 +13,7 @@ mutation login($email: String! $password: String!){
   login(email : $email password : $password){
     successful
     message
+    token
     } 
   }
 `
@@ -65,8 +66,16 @@ mutation createEvent($type: String! $projectId: String! $description : String! $
 `
 
 export const CHANGE_EVENT_STATE = gql`
-mutation changeEventState($eventId: String! $newStatus: String!){
-    changeEventState(eventId: $eventId  newStatus: $newStatus){
+mutation changeEventState($eventId: String! $newState: String!){
+    changeEventState(eventId: $eventId  newState: $newState){
+        message
+    }
+}
+`
+
+export const CHANGE_EVENT_STATUS = gql`
+mutation changeEventStatus($eventId: String! $newStatus: String!){
+    changeEventStatus(eventId: $eventId  newStatus: $newStatus){
         message
     }
 }

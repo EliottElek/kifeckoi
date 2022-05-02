@@ -63,8 +63,8 @@ const SignUp = () => {
         },
       });
       if (response.data.createUser.successful) {
-        localStorage.setItem("userId", response.data.createUser.message);
-        navigate("/");
+        localStorage.setItem("token", response.data.createUser.token);
+        window.location.href = "/";
       } else {
         toast.error(response.data.createUser.message, {
           position: "bottom-left",
@@ -86,7 +86,6 @@ const SignUp = () => {
         draggable: false,
         progress: undefined,
       });
-      console.log(err);
     }
   };
   return (

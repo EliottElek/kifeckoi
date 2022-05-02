@@ -18,18 +18,22 @@ export const CREATE_EVENT = {
         period: { type: GraphQLString },
 
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { type, projectId, description, contributors, status, creatorId, period } = args
+        if (context.user.id !== creatorId) throw new Error("The user who made the request is not the same as the one in the context.");
+
         const newuuid = uuid()
         const project = await Project.findOne({ id: projectId })
         const contributorsFound: User[] = []
-        const creatorFound = await User.findOne({ id: creatorId })
+        const creatorFound = await User.findOne({ id: context.user.id })
         const creationDate = new Date();
 
         if (!project) {
             throw new Error("Cannot find project.")
         } else {
-            const newEvent = Event.create({ type: type, id: newuuid, projectId: projectId, contributors: [], project: project, description: description, status: status, creation: creationDate.toString(), period: period })
+            const newEvent = Event.create({ type: type, id: newuuid, projectId: projectId, contributors: [], project: project, description: description, status: status, creation: creationDate.toString(), period: period, state: "" })
             await Event.save(newEvent)
             if (!creatorFound) {
                 throw new Error("Cannot find project.")
@@ -49,17 +53,35 @@ export const CREATE_EVENT = {
         return { ...args, id: newuuid, contributors: contributorsFound, creator: creatorFound, creation: creationDate.toString(), period: period }
     }
 }
-export const CHANGE_EVENT_STATE = {
+export const CHANGE_EVENT_STATUS = {
     type: MessageType,
     args: {
         eventId: { type: GraphQLString },
         newStatus: { type: GraphQLString }
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { eventId, newStatus } = args
         const event = await Event.findOne({ id: eventId })
         if (!event) throw new Error("Cannot find event.")
         await Event.update({ id: eventId }, { status: newStatus })
+        return { successful: true, message: "Event's status was successfully updated." }
+    }
+}
+export const CHANGE_EVENT_STATE = {
+    type: MessageType,
+    args: {
+        eventId: { type: GraphQLString },
+        newState: { type: GraphQLString }
+    },
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
+        const { eventId, newState } = args
+        const event = await Event.findOne({ id: eventId })
+        if (!event) throw new Error("Cannot find event.")
+        await Event.update({ id: eventId }, { state: newState })
         return { successful: true, message: "Event's state was successfully updated." }
     }
 }
@@ -69,7 +91,8 @@ export const CHANGE_EVENT_DESCRIPTION = {
         eventId: { type: GraphQLString },
         newDescription: { type: GraphQLString }
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
         const { eventId, newDescription } = args
         const event = await Event.findOne({ id: eventId })
         if (!event) throw new Error("Cannot find event.")
@@ -82,7 +105,8 @@ export const DELETE_EVENT = {
     args: {
         eventId: { type: GraphQLString },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
         const { eventId } = args
         await Event.delete({ id: eventId })
         return { successful: true, message: "Event was successfully deleted." }
@@ -94,7 +118,9 @@ export const ADD_CONTRIBUTORS_TO_EVENT = {
         eventId: { type: GraphQLString },
         contributors: { type: new GraphQLList(GraphQLString) },
     },
-    async resolve(parent: any, args: any) {
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
         const { eventId, contributors } = args
         const event = await Event.findOne({ id: eventId }, { relations: ["contributors"] })
         var contributorsFound: User[] = []

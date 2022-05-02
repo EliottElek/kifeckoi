@@ -18,13 +18,13 @@ const SidePanel = () => {
     projects,
     setProjects,
     currentClient,
+    user,
   } = React.useContext(Context);
-  const userId = localStorage.getItem("userId");
   const dataClients = useQuery(GET_ALL_CLIENTS, {
-    variables: { userId: userId },
+    variables: { userId: user?.id },
   });
   const dataProjects = useQuery(FIND_PROJECTS_BY_CLIENT_ID, {
-    variables: { clientId: currentClient?.id, userId: userId },
+    variables: { clientId: currentClient?.id, userId: user?.id },
   });
   React.useEffect(() => {
     if (dataClients?.data) {

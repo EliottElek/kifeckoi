@@ -2,6 +2,7 @@ import React from "react";
 import rawEvents from "../../rawEvents";
 import { GET_USER_BY_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
+import jwt from "jsonwebtoken";
 export const Context = React.createContext();
 
 export const ContextProvider = ({ children }) => {
@@ -17,19 +18,34 @@ export const ContextProvider = ({ children }) => {
   const [dark, setDark] = React.useState(true);
   const [auth, setAuth] = React.useState(true);
   const [user, setUser] = React.useState(null);
-  const id = localStorage.getItem("userId");
+  const SECRET_KEY = "secret!";
 
+  const token = localStorage.getItem("token");
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, SECRET_KEY);
+      var userId = decoded.id;
+    } catch (err) {
+      setAuth(false);
+      localStorage.removeItem("token");
+    }
+  }
   const getUserById = useQuery(GET_USER_BY_ID, {
-    variables: { userId: id },
+    variables: { userId: userId },
   });
   React.useEffect(() => {
-    if (getUserById?.data && id) {
-      setUser(getUserById?.data.getUserById);
+    if (getUserById?.data?.successful === false || !userId) {
+      setAuth(false);
+      localStorage.removeItem("token");
+    }
+    if (userId) {
+      setUser(getUserById?.data?.getUserById);
       setAuth(true);
     } else {
       setAuth(false);
+      localStorage.removeItem("token");
     }
-  }, [getUserById?.data, setUser, id, setAuth]);
+  }, [getUserById, setUser, userId, setAuth]);
   const setDarkTheme = () => {
     // 2
     localStorage.setItem("theme", "dark");
@@ -65,7 +81,7 @@ export const ContextProvider = ({ children }) => {
     }
   };
   const handleLogout = () => {
-    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
     window.location.reload();
   };
   return (

@@ -45,8 +45,8 @@ const Login = () => {
         variables: { email: email, password: password },
       });
       if (response.data.login.successful) {
-        localStorage.setItem("userId", response.data.login.message);
-        navigate("/");
+        localStorage.setItem("token", response.data.login.token);
+        window.location.href = "/";
       } else {
         toast.error(response.data.login.message, {
           position: "bottom-left",
@@ -68,7 +68,6 @@ const Login = () => {
         draggable: false,
         progress: undefined,
       });
-      console.log(err);
     }
   };
   return (

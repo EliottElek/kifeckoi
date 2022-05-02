@@ -4,6 +4,7 @@ import "../kanban.scss";
 import "../../Client/RecentEvents/RecentEvents.css";
 import "../../GlobalInfos/GlobalInfos.scss";
 import { FiEdit2 } from "react-icons/fi";
+import { BiTime } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { AiOutlineCheck } from "react-icons/ai";
@@ -19,6 +20,7 @@ import Avatars from "./Avatars";
 import AddContributorsEvent from "./AddContributorsEvent";
 import {
   CHANGE_EVENT_DESCRIPTION,
+  CHANGE_EVENT_STATUS,
   CHANGE_EVENT_STATE,
   DELETE_EVENT,
   CREATE_EVENT,
@@ -60,6 +62,7 @@ const Card = (props) => {
   const [openEditPopUp, setOpenEditPopUp] = useState(false);
   const [submitOnEnterMode, setSubmitOnEnterMode] = useState(false);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
+  const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
   const [deleteEvent] = useMutation(DELETE_EVENT);
   const [createEvent] = useMutation(CREATE_EVENT);
@@ -90,7 +93,6 @@ const Card = (props) => {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
       });
-      console.log(err);
     }
   };
   const handleCloseModal = () => {
@@ -117,7 +119,7 @@ const Card = (props) => {
 
       events[sourceColIndex].tasks = sourceTask;
       events[destinationColIndex].tasks = destinationTask;
-      await changeEventState({
+      await changeEventStatus({
         variables: {
           eventId: props.task.id,
           newStatus: category?.title,
@@ -145,11 +147,32 @@ const Card = (props) => {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
       });
-      console.log(err);
     }
     setEvents([...events]);
     currentProject.events = [...events];
     setCurrentProject(currentProject);
+  };
+  const handleChangeState = async (newState) => {
+    if (props.task.state === newState) return;
+    try {
+      await changeEventState({
+        variables: {
+          eventId: props.task.id,
+          newState: newState,
+        },
+      });
+      props.dataEvents.refetch();
+    } catch {
+      toast.error("Impossible de changer l'état de cette cart.", {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+      });
+    }
   };
   const handledeleteEvent = async (e) => {
     e.stopPropagation();
@@ -172,7 +195,6 @@ const Card = (props) => {
         progress: undefined,
       });
     } catch (err) {
-      console.log(err);
       toast.error("Impossible de supprimer cette carte. Réessayez plus tard.", {
         position: "bottom-left",
         autoClose: 5000,
@@ -236,7 +258,6 @@ const Card = (props) => {
         draggable: false,
         progress: undefined,
       });
-      console.log(err);
     }
   };
 
@@ -394,6 +415,25 @@ const Card = (props) => {
               >
                 {props.task.period}
               </span>
+              {props.task.state === "Vérifié" && !modifMode && (
+                <span
+                  data-tip
+                  data-for="periodTooltip"
+                  className={`card__status__verified`}
+                >
+                  {props.task.state}
+                  <AiOutlineCheck color="var(--check-color)" />
+                </span>
+              )}
+              {props.task.state === "À vérifier" && !modifMode && (
+                <span
+                  data-tip
+                  data-for="periodTooltip"
+                  className={`card__status__to__verify`}
+                >
+                  {props.task.state} <BiTime color="var(--warning-color)" />
+                </span>
+              )}
               {modifMode ? (
                 <form
                   className="modif__description__form"
@@ -465,7 +505,28 @@ const Card = (props) => {
               justifyContent: "space-between",
             }}
           >
-            <h2 className={"status__title__modal"}>{props.task.status}</h2>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <h2 className={"status__title__modal"}>{props.task.status}</h2>
+              {props.task.state === "Vérifié" && !modifMode && (
+                <span
+                  data-tip
+                  data-for="periodTooltip"
+                  className={`modal__card__status__verified`}
+                >
+                  {props.task.state}
+                  <AiOutlineCheck color="var(--check-color)" />
+                </span>
+              )}
+              {props.task.state === "À vérifier" && !modifMode && (
+                <span
+                  data-tip
+                  data-for="periodTooltip"
+                  className={`modal__card__status__to__verify`}
+                >
+                  {props.task.state} <BiTime color="var(--warning-color)" />
+                </span>
+              )}
+            </div>
             <div
               style={{
                 display: "flex",
@@ -549,6 +610,27 @@ const Card = (props) => {
       </Modal>
       <Popup open={openPopUp} setOpen={setOpenPopUp} bottom>
         <Menu>
+          <MenuItem
+            style={{ backgroundColor: "green" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleChangeState("Vérifié");
+              setOpenPopUp(false);
+            }}
+          >
+            <p>Vérifié</p>
+          </MenuItem>
+          <MenuItem
+            style={{ backgroundColor: "red" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleChangeState("À vérifier");
+              setOpenPopUp(false);
+            }}
+          >
+            <p>À vérifier</p>
+          </MenuItem>
+          <span className={"divider"} />
           <MenuItem
             onClick={(e) => {
               setOpenModal(true);

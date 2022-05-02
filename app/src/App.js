@@ -168,6 +168,8 @@ const MainContent = () => {
           path="/project/:id"
           element={<Navigate to="/project/:id/global" />}
         />
+        <Route exact path="/project" element={<Navigate to="/" />} />
+        <Route exact path="/client" element={<Navigate to="/" />} />
         <Route
           exact
           path="/project/:id/infos"
