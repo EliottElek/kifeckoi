@@ -48,7 +48,7 @@ export const CHANGE_COMMENT__CONTENT = {
         if (!context.user) throw new Error("You must be authenticated.")
 
         const { commentId, newContent } = args
-        const comment = await Comment.findOne({ id: commentId })
+        const comment = await Comment.findOne({ id: commentId }, { relations: ["author"] })
         if (!comment) throw new Error("Cannot find comment.")
         if (context.user.id !== comment.author.id) throw new Error("You cannot update a comment you did not create.")
 
@@ -65,7 +65,7 @@ export const DELETE_COMMENT = {
         if (!context.user) throw new Error("You must be authenticated.")
 
         const { commentId } = args
-        const comment = await Comment.findOne({ id: commentId });
+        const comment = await Comment.findOne({ id: commentId }, { relations: ["author"] });
         if (!comment) throw new Error("Cannot find comment.")
         if (context.user.id !== comment.author.id) throw new Error("You cannot delete a comment you did not create.")
 

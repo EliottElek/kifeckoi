@@ -22,6 +22,8 @@ export const CREATE_PROJECT = {
         if (!client) {
             throw new Error("Cannot find client.")
         } else {
+            const user = User.findOne({ id: context.user.id })
+            if (!user) throw new Error("Cannot find creator user.")
             const newProject = Project.create({
                 name: name, id: newid, client: client, clientId: clientId, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "", perimeterDescription: "", planningDescription: "", goCopyDate: "", goLiveDate: "", logoUrl: ""
             })
@@ -59,13 +61,14 @@ export const ADD_CONTRIBUTORS_TO_PROJECT = {
             const client = await Client.findOne({ id: project.clientId }, { relations: ["contributors"] })
             if (!client) throw new Error("Cannot find client.")
             project.contributors = [];
-            client.contributors = [];
             contributors.map(async (contributor: any) => {
                 const acc = await User.findOne({ id: contributor })
                 if (acc) {
                     project.contributors.push(acc)
-                    client.contributors.push(acc)
 
+                    if (client.contributors.findIndex((c) => c.id !== acc.id)) {
+                        client.contributors.push(acc)
+                    }
                 }
             })
             contributorsFound = project.contributors;

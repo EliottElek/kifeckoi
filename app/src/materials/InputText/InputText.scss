@@ -1,8 +1,11 @@
 @import "../constants.scss";
 
 .input__text__container {
-  width: 100% !important;
-  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 8px;
+  margin-top: 14px;
 }
 .input__text__label {
   margin: 3px;
@@ -10,7 +13,6 @@
 }
 .input__text {
   outline: none;
-  width: 90%;
   border: solid 1px rgba(128, 128, 128, 0.315);
   padding: 14px;
   color: var(--font-color);

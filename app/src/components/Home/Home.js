@@ -9,6 +9,8 @@ import { GET_ALL_CLIENTS } from "../../graphql/queries";
 import { toast } from "react-toastify";
 import Modal from "../../materials/Modal/Modal";
 import Progress from "../../materials/Progress/Progress";
+import CheckBox from "../../materials/CheckBox/CheckBox";
+import { useNavigate } from "react-router";
 const Home = () => {
   const { user } = useContext(Context);
   const { data, refetch, loading } = useQuery(GET_ALL_CLIENTS, {
@@ -16,7 +18,8 @@ const Home = () => {
   });
   const [createClient] = useMutation(CREATE_CLIENT);
   const [open, setOpen] = React.useState(false);
-
+  const [checked, setChecked] = React.useState(false);
+  const navigate = useNavigate();
   const [nameInput, setNameInput] = React.useState("");
   const title = document.getElementById("title");
   title.innerHTML = `Clients | Kifekoi`;
@@ -33,7 +36,7 @@ const Home = () => {
       });
     }
     try {
-      await createClient({
+      const resp = await createClient({
         variables: { name: nameInput, userId: user.id },
       });
       toast.success(`${nameInput} créé avec succès.`, {
@@ -46,6 +49,10 @@ const Home = () => {
         progress: undefined,
       });
       refetch();
+      if (checked) {
+        const newProjectId = resp.data.createClient.id;
+        navigate(`/client/${newProjectId}`);
+      }
     } catch (err) {
       toast.error(`Impossible de créer le client.`, {
         position: "bottom-left",
@@ -107,6 +114,10 @@ const Home = () => {
             placeholder={`Comment s'appelle le client ?`}
             onChange={(e) => setNameInput(e.target.value)}
           />{" "}
+          <div className="checkbox__container">
+            <CheckBox checked={checked} setChecked={setChecked} />{" "}
+            <span>Aller sur la page client après la création</span>
+          </div>
           <div style={{ display: "flex", gap: "6px" }}>
             <Button
               style={{ height: "30px" }}

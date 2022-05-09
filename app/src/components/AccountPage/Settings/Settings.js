@@ -8,8 +8,8 @@ const Settings = () => {
     React.useContext(Context);
   const [maxCaractersCard, setMaxCaractersCard] = React.useState(0);
   React.useEffect(() => {
-    setMaxCaractersCard(user.maxCaractersCard);
-  }, [user.maxCaractersCard, setMaxCaractersCard]);
+    setMaxCaractersCard(user?.maxCaractersCard);
+  }, [user?.maxCaractersCard, setMaxCaractersCard]);
   return (
     <div class={"settings__container"}>
       <h1>Paramètres</h1>

@@ -9,5 +9,8 @@ export const ClientType: any = new GraphQLObjectType({
         name: { type: GraphQLString },
         projects: { type: new GraphQLList(ProjectType) },
         contributors: { type: new GraphQLList(UserType) },
+        creation: { type: GraphQLString },
+        creator: { type: UserType },
+
     })
 })

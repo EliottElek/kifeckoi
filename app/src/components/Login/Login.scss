@@ -6,6 +6,7 @@
   background-color: var(--color-background-1);
   position: relative;
   height: 100%;
+  width: auto;
 }
 .signup__container {
   display: flex;
@@ -14,8 +15,8 @@
   flex-grow: 1;
   background-color: var(--color-background-1);
   position: relative;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding: 40px 20px;
+  width: auto;
 }
 .logo__container {
   position: absolute;
@@ -25,7 +26,7 @@
 .login__card {
   width: 100%;
   padding: 30px;
-  max-width: 400px;
+  max-width: 500px;
   box-shadow: 0 2px 4px var(--shadow-color);
   background-color: var(--card-background);
   color: var(--font-color);
@@ -33,6 +34,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.top__login__card__logocontainer {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 20px;
 }
 .forgot__password__btn {
   background-color: transparent;
@@ -58,4 +65,20 @@
   text-align: center;
   width: 100%;
   color: var(--font-color);
+}
+.login__btn {
+  background-color: transparent;
+  border: none;
+  text-decoration: underline;
+  font-size: 1rem;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.top__login__already__account {
+  font-size: 0.8rem;
+}
+.firstname__lastname__container {
+  display: flex;
+  gap: 10px;
 }

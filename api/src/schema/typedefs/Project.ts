@@ -21,5 +21,7 @@ export const ProjectType: any = new GraphQLObjectType({
         clientId: { type: GraphQLString },
         events: { type: new GraphQLList(EventType) },
         contributors: { type: new GraphQLList(UserType) },
+        creation: { type: GraphQLString },
+        creator: { type: UserType },
     })
 })

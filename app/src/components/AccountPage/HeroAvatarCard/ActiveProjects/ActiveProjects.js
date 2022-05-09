@@ -8,14 +8,14 @@ const ActiveProjects = () => {
   const navigate = useNavigate();
   return (
     <div className={"active__projects__container"}>
-      <h3>{user.projects.length} projets actifs</h3>
-      {user.projects.map((project, i) => (
+      <h3>{user?.projects?.length} projets actifs</h3>
+      {user?.projects?.map((project, i) => (
         <div
           key={i}
           className={"active__projects__container__item"}
           onClick={() => navigate(`/project/${project.id}/global`)}
         >
-          <span>{project.name}</span>
+          <span>{project?.name}</span>
           <FaChevronRight />
         </div>
       ))}

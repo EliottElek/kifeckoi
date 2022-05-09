@@ -4,6 +4,8 @@ import { useParams } from "react-router";
 import Progress from "../../materials/Progress/Progress";
 import ProjectItem from "./ProjectItem";
 import Button from "../../materials/Button/Button";
+import CheckBox from "../../materials/CheckBox/CheckBox";
+import { useNavigate } from "react-router";
 import "./Client.scss";
 import {
   FIND_CLIENT_BY_ID,
@@ -18,13 +20,14 @@ const Client = () => {
   const { currentClient, setCurrentClient, user } = React.useContext(Context);
   const [nameInput, setNameInput] = React.useState("");
   const [open, setOpen] = React.useState(false);
-
+  const navigate = useNavigate();
   const { id } = useParams();
   const dataClient = useQuery(FIND_CLIENT_BY_ID, { variables: { id: id } });
   const { data, refetch, loading } = useQuery(FIND_PROJECTS_BY_CLIENT_ID, {
     variables: { clientId: id, userId: user?.id },
   });
   const [createProject] = useMutation(CREATE_PROJECT);
+  const [checked, setChecked] = React.useState(false);
 
   React.useEffect(() => {
     if (dataClient?.data) {
@@ -53,7 +56,7 @@ const Client = () => {
         });
       }
       const contributors = [user.id];
-      await createProject({
+      const resp = await createProject({
         variables: {
           name: nameInput,
           clientId: idParams,
@@ -69,6 +72,10 @@ const Client = () => {
         draggable: false,
         progress: undefined,
       });
+      if (checked) {
+        const newProjectId = resp.data.createProject.id;
+        navigate(`/project/${newProjectId}`);
+      }
     } catch (err) {
       toast.error(`Impossible de créer le projet.`, {
         position: "bottom-left",
@@ -112,7 +119,7 @@ const Client = () => {
         <div className="client__projects__container__list">
           {data?.findProjectsByClientId?.length === 0 && (
             <h4 className={"client__projects__container__title"}>
-              Aucun client.
+              Aucun projet.
             </h4>
           )}
           {data?.findProjectsByClientId?.length !== 0 &&
@@ -137,6 +144,10 @@ const Client = () => {
             placeholder={`Comment s'appelle le projet ?`}
             onChange={(e) => setNameInput(e.target.value)}
           />{" "}
+          <div className="checkbox__container">
+            <CheckBox checked={checked} setChecked={setChecked} />{" "}
+            <span>Aller sur la page projet après la création</span>
+          </div>
           <div style={{ display: "flex", gap: "6px" }}>
             <Button
               type={"button"}

@@ -29,6 +29,9 @@ export class Project extends BaseEntity {
     logoUrl!: string;
     @Column()
     clientId!: string;
+    @Column()
+    creation!: string;
+    @ManyToOne(() => User, creator => creator.projects, { onDelete: 'CASCADE' }) creator!: User;
     @ManyToOne(() => Client, client => client.projects, { onDelete: 'CASCADE' }) client!: Client;
     @OneToMany(() => Event, event => event.project, { onDelete: 'CASCADE' }) events!: Event[];
     @ManyToMany(() => User, contributor => contributor.projects, { onDelete: 'CASCADE' })

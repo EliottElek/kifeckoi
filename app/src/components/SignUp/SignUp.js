@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import React from "react";
 import { Navigate, useNavigate } from "react-router";
 import logo from "../../assets/images/logo.png";
+import icon from "../../assets/images/icon.png";
 import { CREATE_USER } from "../../graphql/mutations";
 import Button from "../../materials/Button/Button";
 import InputText from "../../materials/InputText/InputText";
@@ -102,19 +103,34 @@ const SignUp = () => {
       </div>
       <form className="login__card" onSubmit={handleLogin}>
         <div className={"top__login__card"}>
-          <h1>Créez un compte</h1>
-          <InputText
-            placeHolder="Votre prénom..."
-            label="Prénom"
-            value={firstname}
-            onChange={(e) => setFirstname(e.target.value)}
-          />
-          <InputText
-            placeHolder="Votre nom..."
-            label="Nom"
-            value={lastname}
-            onChange={(e) => setLastname(e.target.value)}
-          />
+          <h1 className={"top__login__card__logocontainer"}>
+            <img src={icon} className="logo__kifekoi" alt="" /> Kifekoi
+          </h1>
+          <h3>Créez votre compte Kifekoi.</h3>
+          <span className="top__login__already__account">
+            Si vous avez déjà un compte,{" "}
+            <button
+              type="button"
+              className="login__btn"
+              onClick={() => navigate("/login")}
+            >
+              connectez-vous.{" "}
+            </button>
+          </span>
+          <div className="firstname__lastname__container">
+            <InputText
+              placeHolder="Votre prénom..."
+              label="Prénom"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
+            />
+            <InputText
+              placeHolder="Votre nom..."
+              label="Nom"
+              value={lastname}
+              onChange={(e) => setLastname(e.target.value)}
+            />
+          </div>
           <InputText
             placeHolder="Votre email..."
             label="Email"
@@ -142,22 +158,18 @@ const SignUp = () => {
             onChange={(e) => setVerifpassword(e.target.value)}
           />
         </div>
-        <div className={"top__login__card"}>
-          <button
-            type="button"
-            className="new__account__btn"
-            onClick={() => navigate("/login")}
-          >
-            Vous avez déjà de compte ? Connectez-vous.
-          </button>
-          <Button
-            type={"submit"}
-            style={{ width: "100%", padding: "14px" }}
-            onClick={handleLogin}
-          >
-            Se connecter
-          </Button>
-        </div>
+        <Button
+          type={"submit"}
+          style={{
+            margin: "10px",
+            padding: "14px 40px",
+            alignSelf: "flex-end",
+            marginTop: "40px",
+          }}
+          onClick={handleLogin}
+        >
+          Se connecter
+        </Button>
       </form>
     </div>
   );
