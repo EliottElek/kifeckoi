@@ -1,6 +1,6 @@
 /* @import "../../materials/constants.scss"; */
 .stickynavbar__container {
-  z-index: 1;
+  z-index: 2;
   /* position: fixed; */
   padding: 0;
   margin: 0;
@@ -58,4 +58,25 @@
   .nav__actions {
     display: none;
   }
+}
+.list__style__btn,
+.list__style__btn__active {
+  background-color: transparent;
+  height: 30px;
+  width: 30px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  color: var(--font-color);
+  border-radius: 4px;
+}
+.list__style__btn:hover,
+.list__style__btn__active:hover {
+  background-color: var(--color-background-1);
+}
+.list__style__btn__active {
+  background-color: var(--color-background-1);
 }

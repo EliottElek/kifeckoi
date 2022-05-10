@@ -22,10 +22,20 @@ import Progress from "../../materials/Progress/Progress";
 import isEmoji from "../../assets/functions/isEmoji";
 import Backdrop from "../../materials/Backdrop/Backdrop";
 import getPeriod from "../../assets/functions/getPeriod";
+import Row from "./Row/Row";
+import CheckBox from "../../materials/CheckBox/CheckBox";
 const EventKanban = ({ type, setLength, length }) => {
-  const { events, setCurrentProject, setEvents, user, currentProject } =
-    React.useContext(Context);
-  const [addCard, setAddCard] = useState(false);
+  const {
+    events,
+    setCurrentProject,
+    setEvents,
+    user,
+    currentProject,
+    listStyle,
+    addCard,
+    setAddCard,
+  } = React.useContext(Context);
+  const [selectAll, setSelectAll] = useState(false);
   const [selectedAcountables, setSelectedcontributors] = React.useState([]);
   const [eventSelected, setEventSelected] = useState();
   const [eventsData, setEventsData] = React.useState([]);
@@ -123,7 +133,7 @@ const EventKanban = ({ type, setLength, length }) => {
           creatorId: user.id,
           description: description,
           contributors: ArrayOfIds,
-          status: eventSelected.title,
+          status: eventSelected ? eventSelected.title : "Nouveau",
           period: getPeriod(),
         },
       });
@@ -142,6 +152,7 @@ const EventKanban = ({ type, setLength, length }) => {
         progress: undefined,
         transition: Flip,
       });
+      console.log(err);
     }
   };
   const commentEnterSubmit = (e) => {
@@ -172,6 +183,92 @@ const EventKanban = ({ type, setLength, length }) => {
         <Progress size="medium" reversed />
       </div>
     );
+  if (listStyle) {
+    return (
+      <>
+        <table className={"events__rows__container"}>
+          <tr className={"events__rows__container__head"}>
+            <th>
+              <CheckBox checked={selectAll} setChecked={setSelectAll} />
+            </th>
+            <th>Période</th>
+            <th>Contributeurs</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>État</th>
+            <th></th>
+          </tr>
+          {eventsData.map((e, i) => (
+            <Row
+              key={i}
+              type={type}
+              task={e}
+              setLength={setLength}
+              length={length}
+              dataEvents={dataEvents}
+              dataProject={dataProject}
+            />
+          ))}
+          {addCard && (
+            <tr className={"event__row"}>
+              <td></td>
+              <td
+                style={{ fontSize: "0.9rem" }}
+                className={"current__period__row"}
+              >
+                {getPeriod()}
+              </td>
+
+              <td></td>
+              <td>
+                <form onSubmit={add}>
+                  <AutoTextArea
+                    onKeyPress={commentEnterSubmit}
+                    placeholder={"Titre de l'évènement..."}
+                    onChange={(e) => setInput(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    value={input}
+                    autoFocus
+                    className="modif__description__textarea__row"
+                  ></AutoTextArea>
+                </form>
+              </td>
+              <td style={{ fontSize: "0.9rem" }}>Nouveau</td>
+              <td>
+                <Button style={{ height: "30px" }} onClick={add}>
+                  Créer
+                </Button>
+              </td>
+              <td>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setAddCard(false);
+                  }}
+                  className="clear__button"
+                >
+                  <MdOutlineClear />
+                </button>
+              </td>
+            </tr>
+          )}
+        </table>
+        {!addCard && (
+          <Button
+            onClick={() => setAddCard(true)}
+            style={{
+              position: "sticky",
+              bottom: "10px",
+              margin: "10px",
+              zIndex: 1,
+            }}
+          >
+            Ajouter un évènement +
+          </Button>
+        )}
+      </>
+    );
+  }
   return (
     <>
       {!events ? (
@@ -204,8 +301,8 @@ const EventKanban = ({ type, setLength, length }) => {
                     <div className="kanban__section__content">
                       {section?.tasks?.map((task, index) => (
                         <Card
-                          key={task.id}
-                          draggableId={task.id}
+                          key={task?.id}
+                          draggableId={task?.id}
                           index={index}
                           type={type}
                           task={task}

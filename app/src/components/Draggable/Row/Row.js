@@ -1,23 +1,20 @@
 import { useContext, useState, useEffect } from "react";
-import "./Card.scss";
+import "../Card/Card.scss";
+import "./Row.scss";
 import "../kanban.scss";
 import "../../Client/RecentEvents/RecentEvents.css";
 import "../../GlobalInfos/GlobalInfos.scss";
-import { FiEdit2 } from "react-icons/fi";
 import { BiTime } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { AiOutlineCheck } from "react-icons/ai";
-import { FiMoreVertical, FiMoreHorizontal } from "react-icons/fi";
-import { FaRegComments } from "react-icons/fa";
-import { HiOutlineDuplicate } from "react-icons/hi";
+import { FiMoreHorizontal } from "react-icons/fi";
 import { ImWarning } from "react-icons/im";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { BsPeopleFill } from "react-icons/bs";
 import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
-import Avatars from "./Avatars";
-import AddContributorsEvent from "./AddContributorsEvent";
+import AddContributorsEvent from "../Card/AddContributorsEvent";
 import {
   CHANGE_EVENT_DESCRIPTION,
   CHANGE_EVENT_STATUS,
@@ -25,7 +22,6 @@ import {
   DELETE_EVENT,
   CREATE_EVENT,
 } from "../../../graphql/mutations";
-import { Draggable } from "react-beautiful-dnd";
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
 import { Context } from "../../Context/Context";
 import { useMutation, useQuery } from "@apollo/client";
@@ -34,17 +30,16 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router";
 import MenuItem from "../../../materials/Menu/MenuItem";
 import Menu from "../../../materials/Menu/Menu";
-import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
-import ReactMarkdown from "../../../assets/ReactMarkdown";
 import Progress from "../../../materials/Progress/Progress";
-import Comments from "./Comments/Comments";
+import Comments from "../Card/Comments/Comments";
 import Button from "../../../materials/Button/Button";
-import ModifAreaCard from "./ModifAreaCard/ModifAreaCard";
+import ModifAreaCard from "../Card/ModifAreaCard/ModifAreaCard";
 import shortString from "../../../assets/functions/shortString";
 import getPeriod from "../../../assets/functions/getPeriod";
 import Avatar from "../../../materials/Avatar/Avatar";
 import formatDate from "../../../assets/functions/formatDate";
-const Card = (props) => {
+import CheckBox from "../../../materials/CheckBox/CheckBox";
+const Row = (props) => {
   const { setEvents, events, currentProject, setCurrentProject, user } =
     useContext(Context);
   const [openModal, setOpenModal] = useState(false);
@@ -53,8 +48,7 @@ const Card = (props) => {
   const [modifMode, setModifMode] = useState(false);
   const [openPopUp, setOpenPopUp] = useState(false);
   const [comments, setComments] = useState([]);
-  const [openEditPopUp, setOpenEditPopUp] = useState(false);
-  const [submitOnEnterMode, setSubmitOnEnterMode] = useState(false);
+  const [checked, setChecked] = useState(false);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
   const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
@@ -259,201 +253,76 @@ const Card = (props) => {
     e.stopPropagation();
     setOpenPopUp(true);
   };
-  const commentEnterSubmit = (e) => {
-    if (submitOnEnterMode && e.key === "Enter" && e.shiftKey === false) {
-      return handleModifyDescription(e);
-    }
-  };
   if (props.add) return <div className="card">{props.children}</div>;
   const Msg = ({ children }) => <div>{children}</div>;
   return (
-    <div
-      className={"card"}
+    <tr
+      className={"event__row"}
       onClick={() => {
         if (!openPopUp) {
           setOpenModal(true);
         } else setOpenPopUp(false);
       }}
     >
-      <Draggable
-        key={props?.task?.id}
-        draggableId={props?.task?.id}
-        index={props?.index}
+      <td>
+        <CheckBox
+          style={{ margin: "0px" }}
+          setChecked={setChecked}
+          checked={checked}
+        />
+      </td>
+      <td
+        style={{ fontSize: "0.9rem" }}
+        className={
+          props?.task?.period === getPeriod()
+            ? "current__period__row"
+            : "previous__period__row"
+        }
       >
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            style={{
-              ...provided.draggableProps.style,
-            }}
+        {props?.task?.period}
+      </td>
+      {props?.task?.contributors.length === 0 ? (
+        <td>Aucun contributeur.</td>
+      ) : (
+        <td>
+          <strong>{props?.task?.contributors.length}</strong> contributeur(s)
+        </td>
+      )}
+      <td>{shortString(props.task.description, user.maxCaractersCard)}</td>
+      <td style={{ fontSize: "0.9rem" }}>{props?.task?.status}</td>
+      <td>
+        {props.task.state === "Vérifié" && (
+          <span
+            data-tip
+            style={{ fontSize: "0.9rem" }}
+            data-for="periodTooltip"
+            className={`modal__card__status__verified`}
           >
-            <div
-              className={
-                snapshot.isDragging ? "card__content dragging" : "card__content"
-              }
-            >
-              <div className="card__content__events__container">
-                <button
-                  data-tip
-                  data-for="archiveTooltip"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpenDeleteModal(true);
-                  }}
-                  className="kanban__section__content__name__container__edit__button"
-                >
-                  <MdOutlineDeleteOutline />
-                </button>
-                <button
-                  data-tip
-                  data-for="duplicateTooltip"
-                  onClick={duplicate}
-                  className="kanban__section__content__name__container__edit__button more__button"
-                >
-                  <HiOutlineDuplicate />
-                </button>
-                <button
-                  data-tip
-                  data-for="moreTooltip"
-                  onClick={handleMoreAction}
-                  className="kanban__section__content__name__container__edit__button more__button"
-                >
-                  <FiMoreVertical />
-                </button>
-                <span className="kanban__section__content__name__container__comments__indicator">
-                  <span className="kanban__section__content__name__container__comments__indicator__number">
-                    {comments?.length}
-                  </span>
-                  <FaRegComments />
-                </span>
-              </div>
-              <div className={"card__content__added__indicator"}>
-                {modifMode ? (
-                  <div className="kanban__section__content__name__container__button__container">
-                    <button
-                      data-tip
-                      data-for="moreTooltip"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setOpenEditPopUp(true);
-                      }}
-                      className="kanban__section__content__name__container__edit__button more__button"
-                    >
-                      <FiMoreHorizontal />
-                    </button>
-                    <Popup
-                      open={openEditPopUp}
-                      setOpen={setOpenEditPopUp}
-                      bottom
-                    >
-                      <Menu>
-                        <MenuItem
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSubmitOnEnterMode(!submitOnEnterMode);
-                            setOpenEditPopUp(false);
-                          }}
-                        >
-                          <p>
-                            {submitOnEnterMode
-                              ? "Désactiver la soumission rapide..."
-                              : "Activer la soumission rapide..."}
-                          </p>
-                        </MenuItem>
-                      </Menu>
-                    </Popup>
-                    <button
-                      data-tip
-                      data-for="validateTooltip"
-                      onClick={handleModifyDescription}
-                      className="kanban__section__content__name__container__edit__button validate"
-                    >
-                      <AiOutlineCheck />
-                    </button>
-                    <button
-                      data-tip
-                      data-for="cancelTooltip"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setModifMode(false);
-                      }}
-                      className="kanban__section__content__name__container__edit__button"
-                    >
-                      <MdOutlineClear />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    data-tip
-                    data-for="editTooltip"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setModifMode(true);
-                    }}
-                    className="kanban__section__content__name__container__edit__button"
-                  >
-                    <FiEdit2 />
-                  </button>
-                )}
-              </div>
-              <span
-                data-tip
-                data-for="periodTooltip"
-                className={`card__icon ${
-                  props.task.period === getPeriod()
-                    ? "current__period"
-                    : "previous__period"
-                }`}
-              >
-                {props.task.period}
-              </span>
-              {props.task.state === "Vérifié" && !modifMode && (
-                <span
-                  data-tip
-                  data-for="periodTooltip"
-                  className={`card__status__verified`}
-                >
-                  {props.task.state}
-                  <AiOutlineCheck color="var(--check-color)" />
-                </span>
-              )}
-              {props.task.state === "À vérifier" && !modifMode && (
-                <span
-                  data-tip
-                  data-for="periodTooltip"
-                  className={`card__status__to__verify`}
-                >
-                  {props.task.state} <BiTime color="var(--warning-color)" />
-                </span>
-              )}
-              {modifMode ? (
-                <form
-                  className="modif__description__form"
-                  onSubmit={handleModifyDescription}
-                >
-                  <AutoTextArea
-                    autoFocus
-                    onKeyPress={commentEnterSubmit}
-                    onChange={(e) => setDescription(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    value={description}
-                    className="modif__description__textarea"
-                  ></AutoTextArea>
-                </form>
-              ) : (
-                <div className="card__description">
-                  <ReactMarkdown>
-                    {shortString(props.task.description, user.maxCaractersCard)}
-                  </ReactMarkdown>
-                </div>
-              )}
-              <Avatars users={props.task.contributors} />
-            </div>
-          </div>
+            {props.task.state}
+            <AiOutlineCheck color="var(--check-color)" />
+          </span>
         )}
-      </Draggable>
+        {props.task.state === "À vérifier" && (
+          <span
+            style={{ fontSize: "0.9rem" }}
+            data-tip
+            data-for="periodTooltip"
+            className={`modal__card__status__to__verify`}
+          >
+            {props.task.state} <BiTime color="var(--warning-color)" />
+          </span>
+        )}
+      </td>
+      <td>
+        <button
+          data-tip
+          data-for="moreTooltip"
+          onClick={handleMoreAction}
+          className="kanban__section__content__name__container__edit__button more__button"
+        >
+          <FiMoreHorizontal />
+        </button>
+      </td>
       <Modal open={openModal} setOpen={handleCloseModal}>
         <div className="modal__content__container">
           <div className="period__title__modal__container">
@@ -595,7 +464,11 @@ const Card = (props) => {
           )}
         </div>
       </Modal>
-      <Popup open={openPopUp} setOpen={setOpenPopUp} bottom>
+      <Popup
+        open={openPopUp}
+        setOpen={setOpenPopUp}
+        style={{ transform: "translate(-10px,0px)" }}
+      >
         <Menu>
           <MenuItem
             style={{ backgroundColor: "green" }}
@@ -756,8 +629,8 @@ const Card = (props) => {
           </div>
         </div>
       </Modal>
-    </div>
+    </tr>
   );
 };
 
-export default Card;
+export default Row;

@@ -7,6 +7,7 @@ import Menu from "../../materials/Menu/Menu";
 import MenuItem from "../../materials/Menu/MenuItem";
 import Popup from "../../materials/Popup/Popup";
 import { CgMenuGridO } from "react-icons/cg";
+import { MdFormatListBulleted } from "react-icons/md";
 import StickyNavbar from "./StickyNavbar";
 import Button from "../../materials/Button/Button";
 import logo from "../../assets/images/logo.png";
@@ -25,6 +26,9 @@ const StickyNavAdvanced = () => {
     setCurrentProject,
     setCurrentClient,
     handleLogout,
+    setListStyle,
+    listStyle,
+    setAddCard,
   } = useContext(Context);
   const [openPopUp, setOpenPopUp] = React.useState(false);
   const navigate = useNavigate();
@@ -59,6 +63,17 @@ const StickyNavAdvanced = () => {
         <span className="period__span" data-tip data-for="weekTooltip">
           {period}
         </span>
+        <button
+          onClick={() => {
+            setAddCard(false);
+            setListStyle(!listStyle);
+          }}
+          className={
+            listStyle ? "list__style__btn__active" : "list__style__btn"
+          }
+        >
+          <MdFormatListBulleted />
+        </button>
       </div>
       <div className="events__container">
         <div className="nav__actions">

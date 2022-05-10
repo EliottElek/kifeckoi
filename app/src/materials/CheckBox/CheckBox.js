@@ -6,7 +6,10 @@ const CheckBox = ({ children, checked, setChecked, style, rounded }) => {
       <div
         style={style}
         className="checkbox_container"
-        onClick={() => setChecked(!checked)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setChecked(!checked);
+        }}
       >
         <div className="checkbox">
           {checked && (

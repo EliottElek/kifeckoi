@@ -24,7 +24,7 @@
   width: 20px;
   height: 20px;
   border-radius: 4px;
-  border: solid 2px var(--main-color);
+  border: solid 0.1rem var(--main-color);
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -33,6 +33,7 @@
   display: flex;
   align-items: center;
   gap: 3px;
+  justify-content: center;
 }
 .checkbox_inner {
   display: flex;

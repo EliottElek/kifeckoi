@@ -18,6 +18,8 @@ export const ContextProvider = ({ children }) => {
   const [dark, setDark] = React.useState(true);
   const [auth, setAuth] = React.useState(true);
   const [user, setUser] = React.useState(null);
+  const [addCard, setAddCard] = React.useState(false);
+
   const SECRET_KEY = "secret!";
 
   const token = localStorage.getItem("token");
@@ -116,6 +118,8 @@ export const ContextProvider = ({ children }) => {
         setMarkdown: setMarkdown,
         handleLogout: handleLogout,
         getUserById: getUserById,
+        setAddCard: setAddCard,
+        addCard: addCard,
       }}
     >
       {children}
