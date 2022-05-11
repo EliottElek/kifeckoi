@@ -29,10 +29,12 @@ const StickyNavAdvanced = () => {
     setListStyle,
     listStyle,
     setAddCard,
+    selectedEvents,
   } = useContext(Context);
   const [openPopUp, setOpenPopUp] = React.useState(false);
   const navigate = useNavigate();
   let urlElement = window.location.href.split("/")[5];
+
   let period = getPeriod();
   return (
     <StickyNavbar>
@@ -74,6 +76,11 @@ const StickyNavAdvanced = () => {
         >
           <MdFormatListBulleted />
         </button>
+        {listStyle && (
+          <span className="selected__number__span">
+            {selectedEvents?.length} sélectionné(s)
+          </span>
+        )}
       </div>
       <div className="events__container">
         <div className="nav__actions">

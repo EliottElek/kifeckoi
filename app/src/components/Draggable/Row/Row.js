@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "../Card/Card.scss";
 import "./Row.scss";
 import "../kanban.scss";
@@ -40,8 +40,15 @@ import Avatar from "../../../materials/Avatar/Avatar";
 import formatDate from "../../../assets/functions/formatDate";
 import CheckBox from "../../../materials/CheckBox/CheckBox";
 const Row = (props) => {
-  const { setEvents, events, currentProject, setCurrentProject, user } =
-    useContext(Context);
+  const {
+    setEvents,
+    events,
+    currentProject,
+    setCurrentProject,
+    user,
+    selectedEvents,
+    setSelectedEvents,
+  } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
@@ -56,6 +63,12 @@ const Row = (props) => {
   const [createEvent] = useMutation(CREATE_EVENT);
   const [description, setDescription] = useState(props.task.description);
 
+  useEffect(() => {
+    if (selectedEvents.find((e) => e.id === props.task.id)) setChecked(true);
+    else {
+      setChecked(false);
+    }
+  }, [selectedEvents, props.task.id, setChecked]);
   const { id } = useParams();
   const commentsData = useQuery(GET_ALL_COMMENTS_BY_EVENT_ID, {
     variables: { eventId: props.task.id },
@@ -86,6 +99,16 @@ const Row = (props) => {
   const handleCloseModal = () => {
     setModifMode(false);
     setOpenModal(false);
+  };
+  const handleSelect = () => {
+    if (!checked) {
+      setSelectedEvents((prev) => [...prev, { id: props.task.id }]);
+    } else {
+      const newSelected = selectedEvents.filter(
+        (ev) => ev.id !== props.task.id
+      );
+      setSelectedEvents(newSelected);
+    }
   };
   const handleMoveTo = async (category) => {
     try {
@@ -266,6 +289,7 @@ const Row = (props) => {
     >
       <td>
         <CheckBox
+          onClick={handleSelect}
           style={{ margin: "0px" }}
           setChecked={setChecked}
           checked={checked}
@@ -282,13 +306,17 @@ const Row = (props) => {
         {props?.task?.period}
       </td>
       {props?.task?.contributors.length === 0 ? (
-        <td>Aucun contributeur.</td>
+        <td style={{ fontStyle: "italic", fontSize: "0.8rem" }}>
+          Aucun contributeur.
+        </td>
       ) : (
-        <td>
+        <td style={{ fontSize: "0.9rem" }}>
           <strong>{props?.task?.contributors.length}</strong> contributeur(s)
         </td>
       )}
-      <td>{shortString(props.task.description, user.maxCaractersCard)}</td>
+      <td style={{ fontSize: "0.9rem" }}>
+        {shortString(props.task.description, user.maxCaractersCard)}
+      </td>
       <td style={{ fontSize: "0.9rem" }}>{props?.task?.status}</td>
       <td>
         {props.task.state === "Vérifié" && (

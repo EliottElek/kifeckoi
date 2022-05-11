@@ -11,6 +11,7 @@ export const ContextProvider = ({ children }) => {
   const [openDrawer, setOpenDrawer] = React.useState(true);
   const [projects, setProjects] = React.useState([]);
   const [events, setEvents] = React.useState(rawEvents);
+  const [selectedEvents, setSelectedEvents] = React.useState([]);
   const [currentClient, setCurrentClient] = React.useState(null);
   const [currentProject, setCurrentProject] = React.useState(null);
   const [listStyle, setListStyle] = React.useState(false);
@@ -107,6 +108,8 @@ export const ContextProvider = ({ children }) => {
         setProjects: setProjects,
         events: events,
         setEvents: setEvents,
+        selectedEvents:selectedEvents,
+        setSelectedEvents:setSelectedEvents,
         currentClient: currentClient,
         setCurrentClient: setCurrentClient,
         currentProject: currentProject,

@@ -78,5 +78,9 @@
   background-color: var(--color-background-1);
 }
 .list__style__btn__active {
-  background-color: var(--color-background-1);
+  border: solid 0.1rem var(--main-color);
+}
+.selected__number__span {
+  font-size: 0.8rem;
+  color: var(--font-color);
 }

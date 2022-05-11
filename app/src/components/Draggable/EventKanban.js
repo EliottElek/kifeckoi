@@ -1,17 +1,26 @@
 import "./kanban.scss";
 import { DragDropContext } from "react-beautiful-dnd";
 import React, { useState } from "react";
+import Popup from "../../materials/Popup/Popup";
+import Menu from "../../materials/Menu/Menu";
+import MenuItem from "../../materials/Menu/MenuItem";
 import Card from "./Card/Card";
 import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
 import { BiPlus } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
 import { useMutation, useQuery } from "@apollo/client";
+import { FaChevronDown } from "react-icons/fa";
+
 import {
   FIND_EVENTS_BY_PROJECT_ID,
   FIND_PROJECT_BY_PROJECT_ID,
 } from "../../graphql/queries";
-import { CREATE_EVENT, CHANGE_EVENT_STATUS } from "../../graphql/mutations";
+import {
+  CREATE_EVENT,
+  CHANGE_EVENT_STATUS,
+  CHANGE_EVENT_STATE,
+} from "../../graphql/mutations";
 import { toast } from "react-toastify";
 import rawEvents from "../../rawEvents";
 import { Navigate, useParams } from "react-router";
@@ -34,14 +43,18 @@ const EventKanban = ({ type, setLength, length }) => {
     listStyle,
     addCard,
     setAddCard,
+    setSelectedEvents,
+    selectedEvents,
   } = React.useContext(Context);
   const [selectAll, setSelectAll] = useState(false);
+  const [openActionPopup, setOpenActionPopup] = useState(false);
   const [selectedAcountables, setSelectedcontributors] = React.useState([]);
   const [eventSelected, setEventSelected] = useState();
   const [eventsData, setEventsData] = React.useState([]);
   const [input, setInput] = useState("");
   const [createEvent] = useMutation(CREATE_EVENT);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_STATUS);
+  const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
 
   const { id } = useParams();
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
@@ -78,6 +91,61 @@ const EventKanban = ({ type, setLength, length }) => {
     });
     setEvents(eventsFinal);
   }, [eventsData, setEvents]);
+
+  const changeStateSelectedEvents = async (newState) => {
+    try {
+      selectedEvents.forEach(
+        async (event) =>
+          await changeEventState({
+            variables: {
+              eventId: event.id,
+              newState: newState,
+            },
+          })
+      );
+      toast.success(
+        `${selectedEvents.length} évènements passés en "${newState}".`,
+        {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          transition: Flip,
+        }
+      );
+    } catch (err) {
+      toast.warning(`Une erreur est surevenue.`, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        transition: Flip,
+      });
+      console.log(err);
+    }
+    dataEvents.refetch();
+  };
+  const selectAllEvents = () => {
+    if (!selectAll) {
+      setSelectedEvents([]);
+      setSelectedEvents(
+        eventsData.map((e) => {
+          return { id: e.id };
+        })
+      );
+      setSelectAll(false);
+    } else {
+      setSelectedEvents([]);
+    }
+    console.log(selectedEvents);
+  };
+
   const onDragEnd = async (result) => {
     if (!result.destination) return;
     const { source, destination } = result;
@@ -188,8 +256,48 @@ const EventKanban = ({ type, setLength, length }) => {
       <>
         <table className={"events__rows__container"}>
           <tr className={"events__rows__container__head"}>
-            <th>
-              <CheckBox checked={selectAll} setChecked={setSelectAll} />
+            <th style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <CheckBox
+                onClick={selectAllEvents}
+                checked={selectAll}
+                setChecked={setSelectAll}
+              />
+              <span
+                style={{
+                  fontWeight: "normal",
+                  fontSize: "0.8rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  cursor: "pointer",
+                }}
+                onClick={() => setOpenActionPopup(true)}
+              >
+                Actions <FaChevronDown fontSize="0.6rem" />
+              </span>
+              <Popup
+                style={{ transform: "translate(80px, 50px)" }}
+                bottom
+                open={openActionPopup}
+                setOpen={setOpenActionPopup}
+              >
+                <Menu>
+                  <MenuItem
+                    onClick={() => {
+                      changeStateSelectedEvents("Vérifié");
+                    }}
+                  >
+                    <span>Passer en "Vérifié"</span>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      changeStateSelectedEvents("À vérifier");
+                    }}
+                  >
+                    <span>Passer en "À vérifier"</span>
+                  </MenuItem>
+                </Menu>
+              </Popup>
             </th>
             <th>Période</th>
             <th>Contributeurs</th>
@@ -239,7 +347,7 @@ const EventKanban = ({ type, setLength, length }) => {
                   Créer
                 </Button>
               </td>
-              <td>
+              <td style={{ padding: "4px" }}>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
