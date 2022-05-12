@@ -83,7 +83,8 @@ const events = [
 const GlobalInfos = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentProject, setCurrentProject, user } = useContext(Context);
+  const { currentProject, setCurrentProject, setSelectedEvents, user } =
+    useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [openLogoModal, setOpenLogoModal] = useState(false);
   const [openNameModal, setOpenNameModal] = useState(false);
@@ -407,9 +408,10 @@ const GlobalInfos = () => {
             <EventCard
               key={i}
               type={event.name}
-              onClick={() =>
-                navigate(`/project/${currentProject?.id}/${event.url}`)
-              }
+              onClick={() => {
+                setSelectedEvents([]);
+                navigate(`/project/${currentProject?.id}/${event.url}`);
+              }}
             />
           ))}
         </div>

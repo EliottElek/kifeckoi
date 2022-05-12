@@ -20,6 +20,7 @@ import {
   CREATE_EVENT,
   CHANGE_EVENT_STATUS,
   CHANGE_EVENT_STATE,
+  DELETE_EVENT,
 } from "../../graphql/mutations";
 import { toast } from "react-toastify";
 import rawEvents from "../../rawEvents";
@@ -55,6 +56,7 @@ const EventKanban = ({ type, setLength, length }) => {
   const [createEvent] = useMutation(CREATE_EVENT);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
+  const [deleteEvent] = useMutation(DELETE_EVENT);
 
   const { id } = useParams();
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
@@ -116,6 +118,7 @@ const EventKanban = ({ type, setLength, length }) => {
           transition: Flip,
         }
       );
+      setSelectedEvents([]);
     } catch (err) {
       toast.warning(`Une erreur est surevenue.`, {
         position: "bottom-left",
@@ -186,6 +189,43 @@ const EventKanban = ({ type, setLength, length }) => {
       items.splice(result.destination.index, 0, reorderedItem);
       dataEvents.refetch();
     }
+  };
+  const handleDeleteSelectedEvents = async (e) => {
+    try {
+      selectedEvents.forEach(
+        async (ev) =>
+          await deleteEvent({
+            variables: {
+              eventId: ev.id,
+            },
+          })
+      );
+      setSelectedEvents([]);
+      toast(`${selectedEvents.length} évènement(s) archivés avec succès.`, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+      });
+    } catch (err) {
+      toast.error(
+        "Impossible de supprimer ces évènements. Réessayez plus tard.",
+        {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+        }
+      );
+    }
+    dataEvents.refetch();
+    setOpenActionPopup(false);
   };
   const add = async (e) => {
     if (input === "") return;
@@ -271,7 +311,9 @@ const EventKanban = ({ type, setLength, length }) => {
                   gap: "6px",
                   cursor: "pointer",
                 }}
-                onClick={() => setOpenActionPopup(true)}
+                onClick={() => {
+                  selectedEvents.length > 0 && setOpenActionPopup(true);
+                }}
               >
                 Actions <FaChevronDown fontSize="0.6rem" />
               </span>
@@ -295,6 +337,9 @@ const EventKanban = ({ type, setLength, length }) => {
                     }}
                   >
                     <span>Passer en "À vérifier"</span>
+                  </MenuItem>
+                  <MenuItem onClick={handleDeleteSelectedEvents}>
+                    <span>Supprimer {selectedEvents?.length} évènement(s)</span>
                   </MenuItem>
                 </Menu>
               </Popup>

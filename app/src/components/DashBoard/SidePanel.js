@@ -18,6 +18,7 @@ const SidePanel = () => {
     projects,
     setProjects,
     currentClient,
+    setSelectedEvents,
     user,
   } = React.useContext(Context);
   const dataClients = useQuery(GET_ALL_CLIENTS, {
@@ -53,7 +54,10 @@ const SidePanel = () => {
     return (
       <ListItem
         id={id}
-        onClick={() => navigate(`/project/${currentProject?.id}/${comp?.id}`)}
+        onClick={() => {
+          setSelectedEvents([]);
+          navigate(`/project/${currentProject?.id}/${comp?.id}`);
+        }}
       >
         <span>{comp?.name}</span>
       </ListItem>
