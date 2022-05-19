@@ -25,7 +25,7 @@ export const CREATE_PROJECT = {
             const user = User.findOne({ id: context.user.id })
             if (!user) throw new Error("Cannot find creator user.")
             const newProject = Project.create({
-                name: name, id: newid, client: client, clientId: clientId, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "", perimeterDescription: "", planningDescription: "", goCopyDate: "", goLiveDate: "", logoUrl: ""
+                name: name, id: newid, client: client, clientId: clientId, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "", perimeterDescription: "", planningDescription: "", goCopyDate: "", goLiveDate: "", logoUrl: "", creation: new Date().toString()
             })
             contributors.map(async (contributor: any) => {
                 const acc = await User.findOne({ id: contributor })

@@ -94,7 +94,7 @@ const Comment = ({ comment, commentsData }) => {
         <div className={"comment__item__name__content"}>
           {comment?.author?.firstname} {comment?.author?.lastname}
           <span className={"comment__item__name__date"}>
-            {formatDate(comment?.creation)}
+            {formatDate(comment?.creation, true)}
           </span>
         </div>
         <span className={"span__content"}>

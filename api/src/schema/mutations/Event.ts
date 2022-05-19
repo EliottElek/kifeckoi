@@ -112,6 +112,18 @@ export const DELETE_EVENT = {
         return { successful: true, message: "Event was successfully deleted." }
     }
 }
+export const DELETE_MULTIPLE_EVENTS = {
+    type: MessageType,
+    args: {
+        eventIds: { type: new GraphQLList(GraphQLString) },
+    },
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+        const { eventIds } = args
+        await Event.delete(eventIds)
+        return { successful: true, message: "Events were successfully deleted." }
+    }
+}
 export const ADD_CONTRIBUTORS_TO_EVENT = {
     type: EventType,
     args: {

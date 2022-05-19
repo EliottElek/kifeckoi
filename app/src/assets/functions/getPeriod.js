@@ -6,5 +6,6 @@ const getPeriod = () => {
   var days = Math.floor((today - startDate) / (24 * 60 * 60 * 1000));
   var weekNumber = Math.ceil((today.getDay() + 1 + days) / 7);
   return "Y" + yearNumber + "W" + weekNumber;
+
 };
 export default getPeriod;

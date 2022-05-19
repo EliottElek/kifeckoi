@@ -83,7 +83,8 @@ const events = [
 const GlobalInfos = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentProject, setCurrentProject, user } = useContext(Context);
+  const { currentProject, setCurrentProject, setSelectedEvents, user } =
+    useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [openLogoModal, setOpenLogoModal] = useState(false);
   const [openNameModal, setOpenNameModal] = useState(false);
@@ -96,12 +97,10 @@ const GlobalInfos = () => {
   const [modifyProjectInfos] = useMutation(MODIFY_PROJECT_GLOBAL_INFOS);
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
     variables: { id: id, userId: user?.id },
+    onCompleted: (data) => {
+      setCurrentProject(data?.findProjectByProjectId);
+    },
   });
-  React.useEffect(() => {
-    if (dataProject?.data) {
-      setCurrentProject({ ...dataProject?.data?.findProjectByProjectId });
-    }
-  }, [setCurrentProject, dataProject?.data]);
 
   const handleModifyGlobalStatus = async (item) => {
     try {
@@ -407,9 +406,10 @@ const GlobalInfos = () => {
             <EventCard
               key={i}
               type={event.name}
-              onClick={() =>
-                navigate(`/project/${currentProject?.id}/${event.url}`)
-              }
+              onClick={() => {
+                setSelectedEvents([]);
+                navigate(`/project/${currentProject?.id}/${event.url}`);
+              }}
             />
           ))}
         </div>

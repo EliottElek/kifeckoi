@@ -1,23 +1,20 @@
-import { useContext, useState } from "react";
-import "./Card.scss";
+import React, { useContext, useState, useEffect } from "react";
+import "../Card/Card.scss";
+import "./Row.scss";
 import "../kanban.scss";
 import "../../Client/RecentEvents/RecentEvents.css";
 import "../../GlobalInfos/GlobalInfos.scss";
-import { FiEdit2 } from "react-icons/fi";
 import { BiTime } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { AiOutlineCheck } from "react-icons/ai";
-import { FiMoreVertical, FiMoreHorizontal } from "react-icons/fi";
-import { FaRegComments } from "react-icons/fa";
-import { HiOutlineDuplicate } from "react-icons/hi";
+import { AiOutlineCheck, AiFillInfoCircle } from "react-icons/ai";
+import { FiMoreHorizontal } from "react-icons/fi";
 import { ImWarning } from "react-icons/im";
-import { AiOutlineCheckCircle, AiFillInfoCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 import { BsPeopleFill } from "react-icons/bs";
 import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
-import Avatars from "./Avatars";
-import AddContributorsEvent from "./AddContributorsEvent";
+import AddContributorsEvent from "../Card/AddContributorsEvent";
 import {
   CHANGE_EVENT_DESCRIPTION,
   CHANGE_EVENT_STATUS,
@@ -25,7 +22,6 @@ import {
   DELETE_EVENT,
   CREATE_EVENT,
 } from "../../../graphql/mutations";
-import { Draggable } from "react-beautiful-dnd";
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
 import { Context } from "../../Context/Context";
 import { useMutation, useQuery } from "@apollo/client";
@@ -34,27 +30,32 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router";
 import MenuItem from "../../../materials/Menu/MenuItem";
 import Menu from "../../../materials/Menu/Menu";
-import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
-import ReactMarkdown from "../../../assets/ReactMarkdown";
 import Progress from "../../../materials/Progress/Progress";
-import Comments from "./Comments/Comments";
+import Comments from "../Card/Comments/Comments";
 import Button from "../../../materials/Button/Button";
-import ModifAreaCard from "./ModifAreaCard/ModifAreaCard";
+import ModifAreaCard from "../Card/ModifAreaCard/ModifAreaCard";
 import shortString from "../../../assets/functions/shortString";
 import getPeriod from "../../../assets/functions/getPeriod";
 import Avatar from "../../../materials/Avatar/Avatar";
 import formatDate from "../../../assets/functions/formatDate";
-const Card = (props) => {
-  const { setEvents, events, currentProject, setCurrentProject, user } =
-    useContext(Context);
+import CheckBox from "../../../materials/CheckBox/CheckBox";
+const Row = (props) => {
+  const {
+    setEvents,
+    events,
+    currentProject,
+    setCurrentProject,
+    user,
+    selectedEvents,
+    setSelectedEvents,
+  } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
   const [modifMode, setModifMode] = useState(false);
   const [openPopUp, setOpenPopUp] = useState(false);
   const [comments, setComments] = useState([]);
-  const [openEditPopUp, setOpenEditPopUp] = useState(false);
-  const [submitOnEnterMode, setSubmitOnEnterMode] = useState(false);
+  const [checked, setChecked] = useState(false);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
   const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
@@ -62,13 +63,21 @@ const Card = (props) => {
   const [createEvent] = useMutation(CREATE_EVENT);
   const [description, setDescription] = useState(props.task.description);
 
+  useEffect(() => {
+    if (selectedEvents.find((e) => e.id === props.task.id)) setChecked(true);
+    else {
+      setChecked(false);
+    }
+  }, [selectedEvents, props.task.id, setChecked]);
   const { id } = useParams();
   const commentsData = useQuery(GET_ALL_COMMENTS_BY_EVENT_ID, {
     variables: { eventId: props.task.id },
-    onCompleted: (data) => {
-      setComments(data?.getAllCommentsByEventId);
-    },
   });
+  useEffect(() => {
+    if (commentsData?.data) {
+      setComments(commentsData?.data?.getAllCommentsByEventId);
+    }
+  }, [setComments, commentsData?.data]);
   const handleModifyDescription = async (e) => {
     e.stopPropagation();
     try {
@@ -90,6 +99,16 @@ const Card = (props) => {
   const handleCloseModal = () => {
     setModifMode(false);
     setOpenModal(false);
+  };
+  const handleSelect = () => {
+    if (!checked) {
+      setSelectedEvents((prev) => [...prev, { id: props.task.id }]);
+    } else {
+      const newSelected = selectedEvents.filter(
+        (ev) => ev.id !== props.task.id
+      );
+      setSelectedEvents(newSelected);
+    }
   };
   const handleMoveTo = async (category) => {
     try {
@@ -201,7 +220,7 @@ const Card = (props) => {
   const duplicate = async (e) => {
     e.stopPropagation();
     try {
-      const ArrayOfIds = props?.task?.contributors?.map((acc) => acc.id);
+      const ArrayOfIds = props.task.contributors.map((acc) => acc.id);
 
       const newEvent = await createEvent({
         variables: {
@@ -241,7 +260,6 @@ const Card = (props) => {
         }
       );
     } catch (err) {
-      console.log(err);
       toast.error(`Impossible de créer l'évènement.`, {
         position: "bottom-left",
         autoClose: 5000,
@@ -258,208 +276,81 @@ const Card = (props) => {
     e.stopPropagation();
     setOpenPopUp(true);
   };
-  const commentEnterSubmit = (e) => {
-    if (submitOnEnterMode && e.key === "Enter" && e.shiftKey === false) {
-      return handleModifyDescription(e);
-    }
-  };
   if (props.add) return <div className="card">{props.children}</div>;
   const Msg = ({ children }) => <div>{children}</div>;
   return (
-    <div
-      className={"card"}
+    <tr
+      className={"event__row"}
       onClick={() => {
         if (!openPopUp) {
           setOpenModal(true);
         } else setOpenPopUp(false);
       }}
     >
-      <Draggable
-        key={props?.task?.id}
-        draggableId={props?.task?.id}
-        index={props?.index}
+      <td>
+        <CheckBox
+          onClick={handleSelect}
+          style={{ margin: "0px" }}
+          setChecked={setChecked}
+          checked={checked}
+        />
+      </td>
+      <td
+        style={{ fontSize: "0.9rem" }}
+        className={
+          props?.task?.period === getPeriod()
+            ? "current__period__row"
+            : "previous__period__row"
+        }
       >
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            style={{
-              ...provided.draggableProps.style,
-            }}
+        {props?.task?.period}
+      </td>
+      {props?.task?.contributors?.length === 0 ? (
+        <td style={{ fontStyle: "italic", fontSize: "0.8rem" }}>
+          Aucun contributeur.
+        </td>
+      ) : (
+        <td style={{ fontSize: "0.9rem" }}>
+          <strong>{props?.task?.contributors?.length}</strong> contributeur(s)
+        </td>
+      )}
+      <td style={{ fontSize: "0.9rem" }}>
+        {shortString(props.task.description, user.maxCaractersCard)}
+      </td>
+      <td style={{ fontSize: "0.9rem" }}>{props?.task?.status}</td>
+      <td>
+        {props.task.state === "Vérifié" && (
+          <span
+            data-tip
+            style={{ fontSize: "0.9rem" }}
+            data-for="periodTooltip"
+            className={`modal__card__status__verified`}
           >
-            <div
-              className={
-                snapshot.isDragging ? "card__content dragging" : "card__content"
-              }
-            >
-              <div
-                className={
-                  props.task.state === "Vérifié"
-                    ? `status__indicator__verified`
-                    : `status__indicator__to-verify`
-                }
-              />
-              <div className="card__content__events__container">
-                <button
-                  data-tip
-                  data-for="archiveTooltip"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpenDeleteModal(true);
-                  }}
-                  className="kanban__section__content__name__container__edit__button"
-                >
-                  <MdOutlineDeleteOutline />
-                </button>
-                <button
-                  data-tip
-                  data-for="duplicateTooltip"
-                  onClick={duplicate}
-                  className="kanban__section__content__name__container__edit__button more__button"
-                >
-                  <HiOutlineDuplicate />
-                </button>
-                <button
-                  data-tip
-                  data-for="moreTooltip"
-                  onClick={handleMoreAction}
-                  className="kanban__section__content__name__container__edit__button more__button"
-                >
-                  <FiMoreVertical />
-                </button>
-                <span className="kanban__section__content__name__container__comments__indicator">
-                  <span className="kanban__section__content__name__container__comments__indicator__number">
-                    {comments?.length}
-                  </span>
-                  <FaRegComments />
-                </span>
-              </div>
-              <div className={"card__content__added__indicator"}>
-                {modifMode ? (
-                  <div className="kanban__section__content__name__container__button__container">
-                    <button
-                      data-tip
-                      data-for="moreTooltip"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setOpenEditPopUp(true);
-                      }}
-                      className="kanban__section__content__name__container__edit__button more__button"
-                    >
-                      <FiMoreHorizontal />
-                    </button>
-                    <Popup
-                      open={openEditPopUp}
-                      setOpen={setOpenEditPopUp}
-                      bottom
-                    >
-                      <Menu>
-                        <MenuItem
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSubmitOnEnterMode(!submitOnEnterMode);
-                            setOpenEditPopUp(false);
-                          }}
-                        >
-                          <p>
-                            {submitOnEnterMode
-                              ? "Désactiver la soumission rapide..."
-                              : "Activer la soumission rapide..."}
-                          </p>
-                        </MenuItem>
-                      </Menu>
-                    </Popup>
-                    <button
-                      data-tip
-                      data-for="validateTooltip"
-                      onClick={handleModifyDescription}
-                      className="kanban__section__content__name__container__edit__button validate"
-                    >
-                      <AiOutlineCheck />
-                    </button>
-                    <button
-                      data-tip
-                      data-for="cancelTooltip"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setModifMode(false);
-                      }}
-                      className="kanban__section__content__name__container__edit__button"
-                    >
-                      <MdOutlineClear />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    data-tip
-                    data-for="editTooltip"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setModifMode(true);
-                    }}
-                    className="kanban__section__content__name__container__edit__button"
-                  >
-                    <FiEdit2 />
-                  </button>
-                )}
-              </div>
-              <span
-                data-tip
-                data-for="periodTooltip"
-                className={`card__icon ${
-                  props.task.period === getPeriod()
-                    ? "current__period"
-                    : "previous__period"
-                }`}
-              >
-                {props.task.period}
-              </span>
-              {props.task.state === "Vérifié" && !modifMode && (
-                <span
-                  data-tip
-                  data-for="periodTooltip"
-                  className={`card__status__verified`}
-                >
-                  {props.task.state}
-                  <AiOutlineCheck color="var(--check-color)" />
-                </span>
-              )}
-              {props.task.state === "À vérifier" && !modifMode && (
-                <span
-                  data-tip
-                  data-for="periodTooltip"
-                  className={`card__status__to__verify`}
-                >
-                  {props.task.state} <BiTime color="var(--warning-color)" />
-                </span>
-              )}
-              {modifMode ? (
-                <form
-                  className="modif__description__form"
-                  onSubmit={handleModifyDescription}
-                >
-                  <AutoTextArea
-                    autoFocus
-                    onKeyPress={commentEnterSubmit}
-                    onChange={(e) => setDescription(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    value={description}
-                    className="modif__description__textarea"
-                  ></AutoTextArea>
-                </form>
-              ) : (
-                <div className="card__description">
-                  <ReactMarkdown>
-                    {shortString(props.task.description, user.maxCaractersCard)}
-                  </ReactMarkdown>
-                </div>
-              )}
-              <Avatars users={props.task.contributors} />
-            </div>
-          </div>
+            {props.task.state}
+            <AiOutlineCheck color="var(--check-color)" />
+          </span>
         )}
-      </Draggable>
+        {props.task.state === "À vérifier" && (
+          <span
+            style={{ fontSize: "0.9rem" }}
+            data-tip
+            data-for="periodTooltip"
+            className={`modal__card__status__to__verify`}
+          >
+            {props.task.state} <BiTime color="var(--warning-color)" />
+          </span>
+        )}
+      </td>
+      <td>
+        <button
+          data-tip
+          data-for="moreTooltip"
+          onClick={handleMoreAction}
+          className="kanban__section__content__name__container__edit__button more__button"
+        >
+          <FiMoreHorizontal />
+        </button>
+      </td>
       <Modal open={openModal} setOpen={handleCloseModal}>
         <div className="modal__content__container">
           <div className="period__title__modal__container">
@@ -520,6 +411,37 @@ const Card = (props) => {
                 </span>
               )}
             </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                marginRight: "4px",
+              }}
+            >
+              <Button
+                style={{ height: "35px", display: "flex", gap: "4px" }}
+                reversed
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenAddContributorModal(true);
+                  // setOpenModal(false);
+                }}
+              >
+                Gérer les contributeurs <BsPeopleFill fontSize={"1.2rem"} />
+              </Button>
+              <Button
+                style={{ height: "35px", display: "flex", gap: "4px" }}
+                reversed
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenModal(false);
+                  setOpenDeleteModal(true);
+                }}
+              >
+                Supprimer <MdOutlineDeleteOutline fontSize={"1.2rem"} />
+              </Button>
+            </div>
           </div>
           <span className="date__creator__span">
             <span>Le {formatDate(props.task.creation)}</span>
@@ -569,38 +491,6 @@ const Card = (props) => {
               event={props.task}
             />
           )}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-              marginRight: "4px",
-            }}
-          >
-            <Button
-              style={{ height: "35px", display: "flex", gap: "4px" }}
-              reversed
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenModal(false);
-                setOpenAddContributorModal(true);
-                // setOpenModal(false);
-              }}
-            >
-              Gérer les contributeurs <BsPeopleFill fontSize={"1.2rem"} />
-            </Button>
-            <Button
-              style={{ height: "35px", display: "flex", gap: "4px" }}
-              reversed
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenModal(false);
-                setOpenDeleteModal(true);
-              }}
-            >
-              Supprimer <MdOutlineDeleteOutline fontSize={"1.2rem"} />
-            </Button>
-          </div>
           <h3 style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <AiFillInfoCircle /> Informations
           </h3>
@@ -612,7 +502,11 @@ const Card = (props) => {
           </p>
         </div>
       </Modal>
-      <Popup open={openPopUp} setOpen={setOpenPopUp} bottom>
+      <Popup
+        open={openPopUp}
+        setOpen={setOpenPopUp}
+        style={{ transform: "translate(-10px,0px)" }}
+      >
         <Menu>
           <MenuItem
             style={{ backgroundColor: "green" }}
@@ -756,7 +650,7 @@ const Card = (props) => {
             <MdOutlineClear />
           </button>
           <div>
-            <h3>Êtes-vous sûr de vouloir supprimer cet évènement ?</h3>
+            <h3>Êtes-vous sûr(e) de vouloir supprimer cet évènement ?</h3>
             <p>La suppression sera définitive. </p>
           </div>
           <div className={"delete__actions__container"}>
@@ -773,8 +667,8 @@ const Card = (props) => {
           </div>
         </div>
       </Modal>
-    </div>
+    </tr>
   );
 };
 
-export default Card;
+export default Row;

@@ -158,3 +158,37 @@
 .clear__button:hover {
   background-color: rgba(128, 128, 128, 0.246);
 }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.events__rows__container__head {
+  position: sticky;
+  top: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1;
+  background-color: var(--color-background-1);
+  outline: 1px solid var(--border-color);
+}
+.modif__description__textarea__row {
+  width: 97% !important;
+  font-size: 1rem;
+  background-color: transparent;
+  border: none;
+  padding-top: 5px;
+  max-height: 30px;
+  border-radius: 1px;
+  margin: 0;
+  transition: 0.2s ease;
+  color: var(--font-color);
+  overflow: hidden;
+}

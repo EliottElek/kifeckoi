@@ -1,12 +1,22 @@
-import React from "react";
 import "./CheckBox.scss";
-const CheckBox = ({ children, checked, setChecked, style, rounded }) => {
+const CheckBox = ({
+  children,
+  checked,
+  onClick,
+  setChecked,
+  style,
+  rounded,
+}) => {
   const BasicCheckBox = () => {
     return (
       <div
         style={style}
         className="checkbox_container"
-        onClick={() => setChecked(!checked)}
+        onClick={(e) => {
+          onClick && onClick();
+          e.stopPropagation();
+          setChecked(!checked);
+        }}
       >
         <div className="checkbox">
           {checked && (

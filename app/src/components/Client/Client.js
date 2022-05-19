@@ -22,18 +22,18 @@ const Client = () => {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
-  const dataClient = useQuery(FIND_CLIENT_BY_ID, { variables: { id: id } });
+  const dataClient = useQuery(FIND_CLIENT_BY_ID, {
+    variables: { id: id },
+    onCompleted: (data) => {
+      setCurrentClient(data?.findClientById);
+    },
+  });
   const { data, refetch, loading } = useQuery(FIND_PROJECTS_BY_CLIENT_ID, {
     variables: { clientId: id, userId: user?.id },
   });
   const [createProject] = useMutation(CREATE_PROJECT);
   const [checked, setChecked] = React.useState(false);
 
-  React.useEffect(() => {
-    if (dataClient?.data) {
-      setCurrentClient(dataClient?.data?.findClientById);
-    }
-  }, [setCurrentClient, dataClient?.data]);
   React.useEffect(() => {
     if (currentClient) {
       const title = document.getElementById("title");

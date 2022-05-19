@@ -1,5 +1,5 @@
 import React from "react";
-import "./ModifAreaCard.scss";
+import "../../../GlobalInfos/ModifTextArea/ModifTextArea.scss";
 import {
   AiOutlineUnorderedList,
   AiOutlineItalic,
@@ -185,7 +185,7 @@ const ModifAreaCard = ({
           e.stopPropagation();
           setModifMode(true);
         }}
-        className="modif__textarea__paragraph__modal"
+        className="modif__textarea__paragraph"
       >
         <ReactMarkdownSnippet>{event.description}</ReactMarkdownSnippet>
       </div>

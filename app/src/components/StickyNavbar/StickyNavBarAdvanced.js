@@ -7,8 +7,9 @@ import Menu from "../../materials/Menu/Menu";
 import MenuItem from "../../materials/Menu/MenuItem";
 import Popup from "../../materials/Popup/Popup";
 import { CgMenuGridO } from "react-icons/cg";
+import { MdFormatListBulleted } from "react-icons/md";
 import StickyNavbar from "./StickyNavbar";
-import Button from "../../materials/Button/Button";
+// import Button from "../../materials/Button/Button";
 import logo from "../../assets/images/logo.png";
 import getPeriod from "../../assets/functions/getPeriod";
 import ReactTooltip from "react-tooltip";
@@ -25,10 +26,15 @@ const StickyNavAdvanced = () => {
     setCurrentProject,
     setCurrentClient,
     handleLogout,
+    setListStyle,
+    listStyle,
+    setAddCard,
+    selectedEvents,
   } = useContext(Context);
   const [openPopUp, setOpenPopUp] = React.useState(false);
   const navigate = useNavigate();
   let urlElement = window.location.href.split("/")[5];
+
   let period = getPeriod();
   return (
     <StickyNavbar>
@@ -59,9 +65,25 @@ const StickyNavAdvanced = () => {
         <span className="period__span" data-tip data-for="weekTooltip">
           {period}
         </span>
+        <button
+          onClick={() => {
+            setAddCard(false);
+            setListStyle(!listStyle);
+          }}
+          className={
+            listStyle ? "list__style__btn__active" : "list__style__btn"
+          }
+        >
+          <MdFormatListBulleted />
+        </button>
+        {listStyle && (
+          <span className="selected__number__span">
+            {selectedEvents?.length} sélectionné(s)
+          </span>
+        )}
       </div>
       <div className="events__container">
-        <div className="nav__actions">
+        {/* <div className="nav__actions">
           <Button style={{ height: "35px" }}>Sauvegarder</Button>
           <Button style={{ height: "35px" }} reversed>
             Valider
@@ -72,7 +94,7 @@ const StickyNavAdvanced = () => {
           <Button style={{ height: "35px" }} reversed>
             Annuler
           </Button>
-        </div>
+        </div> */}
         <button className="settings__button" onClick={() => setOpenPopUp(true)}>
           <Avatar src={user?.avatarUrl} name={user?.firstname} />
           <Popup
