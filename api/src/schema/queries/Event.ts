@@ -19,6 +19,22 @@ export const GET_ALL_EVENTS = {
         });
     }
 }
+export const GET_ALL_EVENTS_ALL_TYPES = {
+    type: new GraphQLList(EventType),
+    args: {
+        id: { type: GraphQLString },
+
+    },
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
+        const { id } = args
+
+        return await Event.find({
+            where: { projectId: id }, relations: ["project", "comments", "creator", "contributors"],
+        });
+    }
+}
 export const GET_LATEST_EVENTS = {
     type: new GraphQLList(EventType),
     args: {

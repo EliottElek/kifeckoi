@@ -16,6 +16,9 @@ import { useQuery, useMutation } from "@apollo/client";
 import Modal from "../../materials/Modal/Modal";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router";
+import Chart from "./Chart/Chart";
+import { Chart2 } from "./Chart/Chart2";
+import { Chart3 } from "./Chart/Chart3";
 const Client = () => {
   const { currentClient, setCurrentClient, user } = React.useContext(Context);
   const [nameInput, setNameInput] = React.useState("");
@@ -110,59 +113,78 @@ const Client = () => {
       </div>
     );
   return (
-    <div className={"client__container"}>
-      <div className={"client__projects__container"}>
-        <h1 className={"client__projects__container__title"}>
-          {currentClient?.name} - Projets
-        </h1>
-        <div className={"client__projects__container__spacer"} />
-        <div className="client__projects__container__list">
-          {data?.findProjectsByClientId?.length === 0 && (
-            <h4 className={"client__projects__container__title"}>
-              Aucun projet.
-            </h4>
-          )}
-          {data?.findProjectsByClientId?.length !== 0 &&
-            data?.findProjectsByClientId?.map((project, i) => (
-              <ProjectItem key={i} project={project} />
-            ))}
+    <div className="client">
+      <div className={"client__container"}>
+        <div className={"client__projects__container"}>
+          <h1 className={"client__projects__container__title"}>
+            {currentClient?.name} - Projets
+          </h1>
+          <div className={"client__projects__container__spacer"} />
+          <div className="client__projects__container__list">
+            {data?.findProjectsByClientId?.length === 0 && (
+              <h4 className={"client__projects__container__title"}>
+                Aucun projet.
+              </h4>
+            )}
+            {data?.findProjectsByClientId?.length !== 0 &&
+              data?.findProjectsByClientId?.map((project, i) => (
+                <ProjectItem key={i} project={project} />
+              ))}
+          </div>
+        </div>
+        <div className="client__new__clients__container">
+          <h1 className={"client__projects__container__title"}>
+            Nouveau projet
+          </h1>
+          <div className={"client__projects__container__spacer"} />
+          <Button onClick={() => setOpen(true)} style={{ marginTop: "10px" }}>
+            Créer un nouveau projet +
+          </Button>
+        </div>
+        <Modal open={open} setOpen={setOpen} onSubmit={submit}>
+          <form className="modal__content__container">
+            <input
+              autoFocus
+              className="name__input medium__title__textarea"
+              value={nameInput}
+              placeholder={`Comment s'appelle le projet ?`}
+              onChange={(e) => setNameInput(e.target.value)}
+            />{" "}
+            <div className="checkbox__container">
+              <CheckBox checked={checked} setChecked={setChecked} />{" "}
+              <span>Aller sur la page projet après la création</span>
+            </div>
+            <div style={{ display: "flex", gap: "6px" }}>
+              <Button
+                type={"button"}
+                style={{ height: "30px" }}
+                reversed
+                onClick={() => setOpen(false)}
+              >
+                Annuler
+              </Button>
+              <Button
+                style={{ height: "30px" }}
+                onClick={submit}
+                type={"submit"}
+              >
+                Valider
+              </Button>
+            </div>
+          </form>
+        </Modal>
+      </div>
+      <div className={"chart__container"}>
+        <div>
+          <Chart />
+        </div>
+        <div>
+          <Chart2 />
+        </div>
+        <div>
+          <Chart3 />
         </div>
       </div>
-      <div className="client__new__clients__container">
-        <h1 className={"client__projects__container__title"}>Nouveau projet</h1>
-        <div className={"client__projects__container__spacer"} />
-        <Button onClick={() => setOpen(true)} style={{ marginTop: "10px" }}>
-          Créer un nouveau projet +
-        </Button>
-      </div>
-      <Modal open={open} setOpen={setOpen} onSubmit={submit}>
-        <form className="modal__content__container">
-          <input
-            autoFocus
-            className="name__input medium__title__textarea"
-            value={nameInput}
-            placeholder={`Comment s'appelle le projet ?`}
-            onChange={(e) => setNameInput(e.target.value)}
-          />{" "}
-          <div className="checkbox__container">
-            <CheckBox checked={checked} setChecked={setChecked} />{" "}
-            <span>Aller sur la page projet après la création</span>
-          </div>
-          <div style={{ display: "flex", gap: "6px" }}>
-            <Button
-              type={"button"}
-              style={{ height: "30px" }}
-              reversed
-              onClick={() => setOpen(false)}
-            >
-              Annuler
-            </Button>
-            <Button style={{ height: "30px" }} onClick={submit} type={"submit"}>
-              Valider
-            </Button>
-          </div>
-        </form>
-      </Modal>
     </div>
   );
 };

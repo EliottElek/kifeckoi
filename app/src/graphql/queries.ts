@@ -90,7 +90,7 @@ query findProjectByProjectId($id: String! $userId : String!){
 }
 `
 export const FIND_PROJECTS_BY_CLIENT_ID = gql`
-query findProjectsByClientId($clientId: String $userId : String!){
+query findProjectsByClientId($clientId: String! $userId : String!){
   findProjectsByClientId(clientId : $clientId userId:$userId){
         id
         name
@@ -106,9 +106,9 @@ query{
     }
   }
 `
-export const GET_ALL_EVENTS = gql`
-query{
-    getAllEvents{
+export const GET_ALL_EVENTS_ALL_TYPES = gql`
+query getAllEventsAllTypes($id :String!){
+  getAllEventsAllTypes(id : $id){
     type
     id
     period

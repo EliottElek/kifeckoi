@@ -11,6 +11,9 @@ import Modal from "../../materials/Modal/Modal";
 import Progress from "../../materials/Progress/Progress";
 import CheckBox from "../../materials/CheckBox/CheckBox";
 import { useNavigate } from "react-router";
+import Chart from "./Chart/Chart";
+import { Chart2 } from "./Chart/Chart2";
+import { Chart3 } from "./Chart/Chart3";
 const Home = () => {
   const { user } = useContext(Context);
   const { data, refetch, loading } = useQuery(GET_ALL_CLIENTS, {
@@ -84,54 +87,69 @@ const Home = () => {
       </div>
     );
   return (
-    <div className={"home__container"}>
-      <div className={"home__clients__container"}>
-        <h1 className={"home__clients__container__title"}>Clients</h1>
-        <div className={"home__clients__container__spacer"} />
-        <div className="home__clients__container__list">
-          {data?.getAllClients?.length === 0 && (
-            <h4 className={"home__clients__container__title"}>Aucun client.</h4>
-          )}
-          {data?.getAllClients?.length !== 0 &&
-            data?.getAllClients?.map((client, i) => (
-              <ClientItem key={i} client={client} />
-            ))}
-        </div>
-      </div>
-      <div className="home__new__clients__container">
-        <h1 className={"home__clients__container__title"}>Nouveau client</h1>
-        <div className={"home__clients__container__spacer"} />
-        <Button onClick={() => setOpen(true)} style={{ marginTop: "10px" }}>
-          Créer un nouveau client +
-        </Button>
-      </div>
-      <Modal open={open} setOpen={setOpen}>
-        <div className="modal__content__container">
-          <input
-            autoFocus
-            className="name__input medium__title__textarea"
-            value={nameInput}
-            placeholder={`Comment s'appelle le client ?`}
-            onChange={(e) => setNameInput(e.target.value)}
-          />{" "}
-          <div className="checkbox__container">
-            <CheckBox checked={checked} setChecked={setChecked} />{" "}
-            <span>Aller sur la page client après la création</span>
-          </div>
-          <div style={{ display: "flex", gap: "6px" }}>
-            <Button
-              style={{ height: "30px" }}
-              reversed
-              onClick={() => setOpen(false)}
-            >
-              Annuler
-            </Button>
-            <Button style={{ height: "30px" }} onClick={submit}>
-              Valider
-            </Button>
+    <div className="home">
+      <div className={"home__container"}>
+        <div className={"home__clients__container"}>
+          <h1 className={"home__clients__container__title"}>Clients</h1>
+          <div className={"home__clients__container__spacer"} />
+          <div className="home__clients__container__list">
+            {data?.getAllClients?.length === 0 && (
+              <h4 className={"home__clients__container__title"}>
+                Aucun client.
+              </h4>
+            )}
+            {data?.getAllClients?.length !== 0 &&
+              data?.getAllClients?.map((client, i) => (
+                <ClientItem key={i} client={client} />
+              ))}
           </div>
         </div>
-      </Modal>
+        <div className="home__new__clients__container">
+          <h1 className={"home__clients__container__title"}>Nouveau client</h1>
+          <div className={"home__clients__container__spacer"} />
+          <Button onClick={() => setOpen(true)} style={{ marginTop: "10px" }}>
+            Créer un nouveau client +
+          </Button>
+        </div>
+        <Modal open={open} setOpen={setOpen}>
+          <div className="modal__content__container">
+            <input
+              autoFocus
+              className="name__input medium__title__textarea"
+              value={nameInput}
+              placeholder={`Comment s'appelle le client ?`}
+              onChange={(e) => setNameInput(e.target.value)}
+            />{" "}
+            <div className="checkbox__container">
+              <CheckBox checked={checked} setChecked={setChecked} />{" "}
+              <span>Aller sur la page client après la création</span>
+            </div>
+            <div style={{ display: "flex", gap: "6px" }}>
+              <Button
+                style={{ height: "30px" }}
+                reversed
+                onClick={() => setOpen(false)}
+              >
+                Annuler
+              </Button>
+              <Button style={{ height: "30px" }} onClick={submit}>
+                Valider
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      </div>
+      <div className={"chart__container"}>
+        <div>
+          <Chart />
+        </div>
+        <div>
+          <Chart2 />
+        </div>
+        <div>
+          <Chart3 />
+        </div>
+      </div>
     </div>
   );
 };
