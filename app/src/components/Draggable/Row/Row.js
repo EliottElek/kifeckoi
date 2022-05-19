@@ -7,7 +7,7 @@ import "../../GlobalInfos/GlobalInfos.scss";
 import { BiTime } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { AiOutlineCheck } from "react-icons/ai";
+import { AiOutlineCheck, AiFillInfoCircle } from "react-icons/ai";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { ImWarning } from "react-icons/im";
 import { AiOutlineCheckCircle } from "react-icons/ai";
@@ -305,13 +305,13 @@ const Row = (props) => {
       >
         {props?.task?.period}
       </td>
-      {props?.task?.contributors.length === 0 ? (
+      {props?.task?.contributors?.length === 0 ? (
         <td style={{ fontStyle: "italic", fontSize: "0.8rem" }}>
           Aucun contributeur.
         </td>
       ) : (
         <td style={{ fontSize: "0.9rem" }}>
-          <strong>{props?.task?.contributors.length}</strong> contributeur(s)
+          <strong>{props?.task?.contributors?.length}</strong> contributeur(s)
         </td>
       )}
       <td style={{ fontSize: "0.9rem" }}>
@@ -487,9 +487,19 @@ const Row = (props) => {
             <Comments
               commentsData={commentsData}
               comments={comments}
+              dataEvents={props.dataEvents}
               event={props.task}
             />
           )}
+          <h3 style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <AiFillInfoCircle /> Informations
+          </h3>
+          <p style={{ fontStyle: "italic" }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            convallis nibh non lorem vulputate egestas. Sed leo odio, dignissim
+            ac sollicitudin eget, vehicula nec dui. Praesent in lorem ut augue
+            lobortis suscipit.
+          </p>
         </div>
       </Modal>
       <Popup
@@ -640,7 +650,7 @@ const Row = (props) => {
             <MdOutlineClear />
           </button>
           <div>
-            <h3>Êtes-vous sûr de vouloir supprimer cet évènement ?</h3>
+            <h3>Êtes-vous sûr(e) de vouloir supprimer cet évènement ?</h3>
             <p>La suppression sera définitive. </p>
           </div>
           <div className={"delete__actions__container"}>

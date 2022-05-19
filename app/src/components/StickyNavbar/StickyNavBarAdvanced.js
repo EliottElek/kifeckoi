@@ -9,7 +9,7 @@ import Popup from "../../materials/Popup/Popup";
 import { CgMenuGridO } from "react-icons/cg";
 import { MdFormatListBulleted } from "react-icons/md";
 import StickyNavbar from "./StickyNavbar";
-import Button from "../../materials/Button/Button";
+// import Button from "../../materials/Button/Button";
 import logo from "../../assets/images/logo.png";
 import getPeriod from "../../assets/functions/getPeriod";
 import ReactTooltip from "react-tooltip";
@@ -83,7 +83,7 @@ const StickyNavAdvanced = () => {
         )}
       </div>
       <div className="events__container">
-        <div className="nav__actions">
+        {/* <div className="nav__actions">
           <Button style={{ height: "35px" }}>Sauvegarder</Button>
           <Button style={{ height: "35px" }} reversed>
             Valider
@@ -94,7 +94,7 @@ const StickyNavAdvanced = () => {
           <Button style={{ height: "35px" }} reversed>
             Annuler
           </Button>
-        </div>
+        </div> */}
         <button className="settings__button" onClick={() => setOpenPopUp(true)}>
           <Avatar src={user?.avatarUrl} name={user?.firstname} />
           <Popup

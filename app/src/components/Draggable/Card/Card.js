@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import "./Card.scss";
 import "../kanban.scss";
 import "../../Client/RecentEvents/RecentEvents.css";
@@ -12,7 +12,7 @@ import { FiMoreVertical, FiMoreHorizontal } from "react-icons/fi";
 import { FaRegComments } from "react-icons/fa";
 import { HiOutlineDuplicate } from "react-icons/hi";
 import { ImWarning } from "react-icons/im";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiFillInfoCircle } from "react-icons/ai";
 import { BsPeopleFill } from "react-icons/bs";
 import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
@@ -65,12 +65,10 @@ const Card = (props) => {
   const { id } = useParams();
   const commentsData = useQuery(GET_ALL_COMMENTS_BY_EVENT_ID, {
     variables: { eventId: props.task.id },
+    onCompleted: (data) => {
+      setComments(data?.getAllCommentsByEventId);
+    },
   });
-  useEffect(() => {
-    if (commentsData?.data) {
-      setComments(commentsData?.data?.getAllCommentsByEventId);
-    }
-  }, [setComments, commentsData?.data]);
   const handleModifyDescription = async (e) => {
     e.stopPropagation();
     try {
@@ -203,7 +201,7 @@ const Card = (props) => {
   const duplicate = async (e) => {
     e.stopPropagation();
     try {
-      const ArrayOfIds = props.task.contributors.map((acc) => acc.id);
+      const ArrayOfIds = props?.task?.contributors?.map((acc) => acc.id);
 
       const newEvent = await createEvent({
         variables: {
@@ -243,6 +241,7 @@ const Card = (props) => {
         }
       );
     } catch (err) {
+      console.log(err);
       toast.error(`Impossible de créer l'évènement.`, {
         position: "bottom-left",
         autoClose: 5000,
@@ -294,6 +293,13 @@ const Card = (props) => {
                 snapshot.isDragging ? "card__content dragging" : "card__content"
               }
             >
+              <div
+                className={
+                  props.task.state === "Vérifié"
+                    ? `status__indicator__verified`
+                    : `status__indicator__to-verify`
+                }
+              />
               <div className="card__content__events__container">
                 <button
                   data-tip
@@ -514,37 +520,6 @@ const Card = (props) => {
                 </span>
               )}
             </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                marginRight: "4px",
-              }}
-            >
-              <Button
-                style={{ height: "35px", display: "flex", gap: "4px" }}
-                reversed
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpenAddContributorModal(true);
-                  // setOpenModal(false);
-                }}
-              >
-                Gérer les contributeurs <BsPeopleFill fontSize={"1.2rem"} />
-              </Button>
-              <Button
-                style={{ height: "35px", display: "flex", gap: "4px" }}
-                reversed
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOpenModal(false);
-                  setOpenDeleteModal(true);
-                }}
-              >
-                Supprimer <MdOutlineDeleteOutline fontSize={"1.2rem"} />
-              </Button>
-            </div>
           </div>
           <span className="date__creator__span">
             <span>Le {formatDate(props.task.creation)}</span>
@@ -590,9 +565,51 @@ const Card = (props) => {
             <Comments
               commentsData={commentsData}
               comments={comments}
+              dataEvents={props.dataEvents}
               event={props.task}
             />
           )}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              marginRight: "4px",
+            }}
+          >
+            <Button
+              style={{ height: "35px", display: "flex", gap: "4px" }}
+              reversed
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenModal(false);
+                setOpenAddContributorModal(true);
+                // setOpenModal(false);
+              }}
+            >
+              Gérer les contributeurs <BsPeopleFill fontSize={"1.2rem"} />
+            </Button>
+            <Button
+              style={{ height: "35px", display: "flex", gap: "4px" }}
+              reversed
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenModal(false);
+                setOpenDeleteModal(true);
+              }}
+            >
+              Supprimer <MdOutlineDeleteOutline fontSize={"1.2rem"} />
+            </Button>
+          </div>
+          <h3 style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <AiFillInfoCircle /> Informations
+          </h3>
+          <p style={{ fontStyle: "italic" }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            convallis nibh non lorem vulputate egestas. Sed leo odio, dignissim
+            ac sollicitudin eget, vehicula nec dui. Praesent in lorem ut augue
+            lobortis suscipit.
+          </p>
         </div>
       </Modal>
       <Popup open={openPopUp} setOpen={setOpenPopUp} bottom>

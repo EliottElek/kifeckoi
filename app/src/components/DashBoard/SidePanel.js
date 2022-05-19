@@ -21,24 +21,22 @@ const SidePanel = () => {
     setSelectedEvents,
     user,
   } = React.useContext(Context);
-  const dataClients = useQuery(GET_ALL_CLIENTS, {
+  useQuery(GET_ALL_CLIENTS, {
     variables: { userId: user?.id },
+    onCompleted: (data) => {
+      setClients(data?.getAllClients);
+    },
   });
-  const dataProjects = useQuery(FIND_PROJECTS_BY_CLIENT_ID, {
+  useQuery(FIND_PROJECTS_BY_CLIENT_ID, {
     variables: { clientId: currentClient?.id, userId: user?.id },
+    onCompleted: (data) => {
+      if (currentClient) {
+        setProjects(data?.findProjectsByClientId);
+      } else {
+        setProjects([]);
+      }
+    },
   });
-  React.useEffect(() => {
-    if (dataClients?.data) {
-      setClients(dataClients?.data?.getAllClients);
-    }
-  }, [setClients, dataClients?.data]);
-  React.useEffect(() => {
-    if (dataProjects?.data && currentClient) {
-      setProjects(dataProjects?.data?.findProjectsByClientId);
-    } else {
-      setProjects([]);
-    }
-  }, [setProjects, dataProjects?.data, currentClient]);
   const navElements = [
     { id: "global", name: "Status global" },
     { id: "actions", name: "Actions" },

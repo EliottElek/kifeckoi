@@ -97,12 +97,10 @@ const GlobalInfos = () => {
   const [modifyProjectInfos] = useMutation(MODIFY_PROJECT_GLOBAL_INFOS);
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
     variables: { id: id, userId: user?.id },
+    onCompleted: (data) => {
+      setCurrentProject(data?.findProjectByProjectId);
+    },
   });
-  React.useEffect(() => {
-    if (dataProject?.data) {
-      setCurrentProject({ ...dataProject?.data?.findProjectByProjectId });
-    }
-  }, [setCurrentProject, dataProject?.data]);
 
   const handleModifyGlobalStatus = async (item) => {
     try {

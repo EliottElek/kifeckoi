@@ -1,4 +1,3 @@
-import React from "react";
 import "./CheckBox.scss";
 const CheckBox = ({
   children,

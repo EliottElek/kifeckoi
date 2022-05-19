@@ -15,9 +15,10 @@ import { CREATE_COMMENT } from "../../../../../graphql/mutations";
 import { Context } from "../../../../Context/Context";
 import Avatar from "../../../../../materials/Avatar/Avatar";
 import ReactTooltip from "react-tooltip";
-const CommentForm = ({ commentsData, event }) => {
+import Progress from "../../../../../materials/Progress/Progress";
+const CommentForm = ({ commentsData, dataEvents, event }) => {
   const [modifMode, setModifMode] = React.useState(false);
-  const [createComment] = useMutation(CREATE_COMMENT);
+  const [createComment, { loading }] = useMutation(CREATE_COMMENT);
   const [content, setContent] = React.useState("");
   const { user } = React.useContext(Context);
   const handleInsertStyle = (style) => {
@@ -70,6 +71,25 @@ const CommentForm = ({ commentsData, event }) => {
       });
     }
   };
+  if (loading) {
+    return (
+      <span style={{ display: "flex", alignItems: "center" }}>
+        <Progress size="small" /> Envoi...
+      </span>
+    );
+  } else if (commentsData.loading) {
+    return (
+      <span style={{ display: "flex", alignItems: "center" }}>
+        <Progress size="small" /> Réception...
+      </span>
+    );
+  } else if (dataEvents.loading) {
+    return (
+      <span style={{ display: "flex", alignItems: "center" }}>
+        <Progress size="small" /> Réception...
+      </span>
+    );
+  }
   if (modifMode)
     return (
       <div className={"edit__block__container__comment"}>

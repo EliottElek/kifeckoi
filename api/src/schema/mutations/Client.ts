@@ -21,7 +21,9 @@ export const CREATE_CLIENT = {
 
         const user = await User.findOne({ id: context.user.id })
         if (!user) throw new Error("Cannot fidn user.")
-        const client = Client.create({ name: name, projects: [], id: newid, contributors: [] })
+        const client = Client.create({
+            name: name, projects: [], id: newid, contributors: [], creation: new Date().toString()
+        })
         client.creator = user
         client.contributors.push(user)
         Client.save(client)

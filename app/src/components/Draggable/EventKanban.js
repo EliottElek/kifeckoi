@@ -1,4 +1,5 @@
 import "./kanban.scss";
+import "./Card/Card.scss";
 import { DragDropContext } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import Popup from "../../materials/Popup/Popup";
@@ -11,7 +12,7 @@ import { BiPlus } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
 import { useMutation, useQuery } from "@apollo/client";
 import { FaChevronDown } from "react-icons/fa";
-
+import Modal from "../../materials/Modal/Modal";
 import {
   FIND_EVENTS_BY_PROJECT_ID,
   FIND_PROJECT_BY_PROJECT_ID,
@@ -20,7 +21,7 @@ import {
   CREATE_EVENT,
   CHANGE_EVENT_STATUS,
   CHANGE_EVENT_STATE,
-  DELETE_EVENT,
+  DELETE_MULTIPLE_EVENTS,
 } from "../../graphql/mutations";
 import { toast } from "react-toastify";
 import rawEvents from "../../rawEvents";
@@ -29,7 +30,6 @@ import { Flip } from "react-toastify";
 import Column from "./Column";
 import AutoTextArea from "../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import Progress from "../../materials/Progress/Progress";
-import isEmoji from "../../assets/functions/isEmoji";
 import Backdrop from "../../materials/Backdrop/Backdrop";
 import getPeriod from "../../assets/functions/getPeriod";
 import Row from "./Row/Row";
@@ -49,39 +49,28 @@ const EventKanban = ({ type, setLength, length }) => {
   } = React.useContext(Context);
   const [selectAll, setSelectAll] = useState(false);
   const [openActionPopup, setOpenActionPopup] = useState(false);
-  const [selectedAcountables, setSelectedcontributors] = React.useState([]);
+  const [selectedAcountables, setSelectedcontributors] = useState([]);
   const [eventSelected, setEventSelected] = useState();
-  const [eventsData, setEventsData] = React.useState([]);
+  const [eventsData, setEventsData] = useState([]);
   const [input, setInput] = useState("");
   const [createEvent] = useMutation(CREATE_EVENT);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
-  const [deleteEvent] = useMutation(DELETE_EVENT);
-
+  const [deleteMultipleEvents] = useMutation(DELETE_MULTIPLE_EVENTS);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { id } = useParams();
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
     variables: { id: id, userId: user?.id },
+    onCompleted: (data) => {
+      setCurrentProject(data?.findProjectByProjectId);
+    },
   });
   const dataEvents = useQuery(FIND_EVENTS_BY_PROJECT_ID, {
     variables: { id: id, type: type },
+    onCompleted: (data) => {
+      setEventsData(data.findEventsByProjectId);
+    },
   });
-  React.useEffect(() => {
-    if (dataProject?.data) {
-      setCurrentProject({ ...dataProject?.data?.findProjectByProjectId });
-    }
-  }, [setCurrentProject, dataProject?.data]);
-
-  React.useEffect(() => {
-    if (dataEvents?.data) {
-      setEventsData([...dataEvents?.data?.findEventsByProjectId]);
-    }
-  }, [dataEvents?.data, setEventsData]);
-
-  React.useEffect(() => {
-    if (!eventsData.contributors) {
-      dataEvents.refetch();
-    }
-  }, [dataEvents, eventsData.contributors]);
 
   React.useEffect(() => {
     rawEvents.forEach((item) => (item.tasks = []));
@@ -192,16 +181,14 @@ const EventKanban = ({ type, setLength, length }) => {
   };
   const handleDeleteSelectedEvents = async (e) => {
     try {
-      selectedEvents.forEach(
-        async (ev) =>
-          await deleteEvent({
-            variables: {
-              eventId: ev.id,
-            },
-          })
-      );
+      const ids = selectedEvents.map((e) => e.id);
+      const response = await deleteMultipleEvents({
+        variables: {
+          eventIds: ids,
+        },
+      });
       setSelectedEvents([]);
-      toast(`${selectedEvents.length} évènement(s) archivés avec succès.`, {
+      toast(`${response.data.deleteMultipleEvents.message}`, {
         position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,
@@ -225,21 +212,19 @@ const EventKanban = ({ type, setLength, length }) => {
       );
     }
     dataEvents.refetch();
-    setOpenActionPopup(false);
+    setOpenDeleteModal(false);
   };
   const add = async (e) => {
     if (input === "") return;
     e.preventDefault();
     const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
-    const description =
-      input.length === 3 && isEmoji(input) ? `# ${input}` : input;
     try {
       await createEvent({
         variables: {
           type: type,
           projectId: id,
           creatorId: user.id,
-          description: description,
+          description: input,
           contributors: ArrayOfIds,
           status: eventSelected ? eventSelected.title : "Nouveau",
           period: getPeriod(),
@@ -268,7 +253,7 @@ const EventKanban = ({ type, setLength, length }) => {
       return add(e);
     }
   };
-  if (!dataProject.data && !dataProject.loading) {
+  if (!dataProject && !dataProject.loading) {
     return <Navigate to={"/404"} />;
   }
   if (!currentProject)
@@ -315,7 +300,7 @@ const EventKanban = ({ type, setLength, length }) => {
                   selectedEvents.length > 0 && setOpenActionPopup(true);
                 }}
               >
-                Actions <FaChevronDown fontSize="0.6rem" />
+                <FaChevronDown fontSize="0.6rem" />
               </span>
               <Popup
                 style={{ transform: "translate(80px, 50px)" }}
@@ -338,7 +323,12 @@ const EventKanban = ({ type, setLength, length }) => {
                   >
                     <span>Passer en "À vérifier"</span>
                   </MenuItem>
-                  <MenuItem onClick={handleDeleteSelectedEvents}>
+                  <MenuItem
+                    onClick={() => {
+                      setOpenActionPopup(false);
+                      setOpenDeleteModal(true);
+                    }}
+                  >
                     <span>Supprimer {selectedEvents?.length} évènement(s)</span>
                   </MenuItem>
                 </Menu>
@@ -419,9 +409,70 @@ const EventKanban = ({ type, setLength, length }) => {
             Ajouter un évènement +
           </Button>
         )}
+        <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
+          <div className="modal__content__container space__between">
+            <button
+              data-tip
+              data-for="closeTooltip"
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenDeleteModal(false);
+              }}
+              className="close__modal__button"
+            >
+              <MdOutlineClear />
+            </button>
+            <div>
+              <h3>
+                Êtes-vous sûr(e) de vouloir supprimer {selectedEvents.length}{" "}
+                évènement(s) ?
+              </h3>
+              {selectedEvents.length === 1 ? (
+                <p>L'évènement suivant sera supprimé :</p>
+              ) : (
+                <p>
+                  Les {selectedEvents.length} évènement(s) suivants seront
+                  supprimés :
+                </p>
+              )}
+              <ul
+                style={{
+                  margin: "20px",
+                }}
+              >
+                {selectedEvents.map((eve) => (
+                  <li
+                    style={{
+                      listStyle: "inside",
+                    }}
+                    key={eve.id}
+                  >
+                    id : {eve.id}
+                  </li>
+                ))}
+              </ul>
+              <p>La suppression sera définitive. </p>
+            </div>
+            <div
+              className={"delete__actions__container"}
+              style={{ position: "sticky", bottom: "12px" }}
+            >
+              <Button
+                reversed
+                onClick={() => {
+                  setOpenDeleteModal(false);
+                }}
+              >
+                Annuler
+              </Button>
+              <Button onClick={handleDeleteSelectedEvents}>Supprimer</Button>
+            </div>
+          </div>
+        </Modal>
       </>
     );
   }
+
   return (
     <>
       {!events ? (

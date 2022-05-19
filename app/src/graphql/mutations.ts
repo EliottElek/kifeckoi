@@ -130,6 +130,14 @@ mutation addContributorsToProject($projectId : String! $contributors : [String!]
     }
 }
 `
+export const DELETE_MULTIPLE_EVENTS = gql`
+mutation deleteMultipleEvents($eventIds : [String!]){
+    deleteMultipleEvents(eventIds:$eventIds){
+        message
+        successful
+    }
+}
+`
 export const ADD_CONTRIBUTORS_TO_EVENT = gql`
 mutation addContributorsToEvent($eventId : String! $contributors : [String!]){
     addContributorsToEvent(eventId:$eventId contributors:$contributors){
