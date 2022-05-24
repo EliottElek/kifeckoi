@@ -1,7 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../Context/Context";
 import { useMutation, useQuery } from "@apollo/client";
-import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
+import {
+  FIND_PROJECT_BY_PROJECT_ID,
+  GET_ALL_EVENTS_ALL_TYPES,
+} from "../../graphql/queries";
 import { MODIFY_PROJECT_GLOBAL_INFOS } from "../../graphql/mutations";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { IoIosAddCircle } from "react-icons/io";
@@ -12,7 +15,6 @@ import "./GlobalInfos.scss";
 import UserCard from "./UserCard/UserCard";
 import AddContributorsModal from "./AddContributorsModal";
 import { FiMoreHorizontal } from "react-icons/fi";
-import EventCard from "./EventCard/EventCard";
 import Button from "../../materials/Button/Button";
 import Popup from "../../materials/Popup/Popup";
 import Menu from "../../materials/Menu/Menu";
@@ -22,6 +24,7 @@ import ModifTextArea from "./ModifTextArea/ModifTextArea";
 import DatePicker from "./DatePicker/DatePicker";
 import AddLogoModal from "./AddLogoModal/AddLogoModal";
 import ChangeNameModal from "./ChangeNameModal/ChangeNameModal";
+import PieSelector from "./Charts/PieSelector";
 const status = [
   {
     name: "conforme",
@@ -54,39 +57,14 @@ const status = [
     icon: "",
   },
 ];
-const events = [
-  {
-    name: "Actions",
-    url: "actions",
-  },
-  {
-    name: "Infos",
-    url: "infos",
-  },
-  {
-    name: "Problèmes",
-    url: "problems",
-  },
-  {
-    name: "Risques",
-    url: "risks",
-  },
-  {
-    name: "Décisions",
-    url: "decisions",
-  },
-  {
-    name: "Livrables",
-    url: "deliverables",
-  },
-];
 const GlobalInfos = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentProject, setCurrentProject, setSelectedEvents, user } =
-    useContext(Context);
+  const { currentProject, setCurrentProject, user } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [openLogoModal, setOpenLogoModal] = useState(false);
+  const [events, setEvents] = useState([]);
+
   const [openNameModal, setOpenNameModal] = useState(false);
   const [openTitleMenu, setOpenTitleMenu] = useState(false);
   const [openGlobalStatusPopup, setOpenGlobalStatusPopup] = useState(false);
@@ -101,7 +79,15 @@ const GlobalInfos = () => {
       setCurrentProject(data?.findProjectByProjectId);
     },
   });
-
+  const eventsData = useQuery(GET_ALL_EVENTS_ALL_TYPES, {
+    variables: { id: id },
+    onCompleted: (data) => {
+      setEvents(data?.getAllEventsAllTypes);
+    },
+  });
+  React.useEffect(() => {
+    eventsData.refetch();
+  });
   const handleModifyGlobalStatus = async (item) => {
     try {
       setOpenGlobalStatusPopup(false);
@@ -352,7 +338,7 @@ const GlobalInfos = () => {
                 </MenuItem>
               ))}
             </Menu>
-          </Popup>{" "}
+          </Popup>
         </h3>
         <ModifTextArea type={"planning"} dataProject={dataProject} />
         <h3
@@ -401,17 +387,11 @@ const GlobalInfos = () => {
         </h3>
         <ModifTextArea type={"perimètre"} dataProject={dataProject} />
         <h3 style={{ marginTop: "30px" }}>Évènements</h3>
-        <div className="event__cards__container">
-          {events.map((event, i) => (
-            <EventCard
-              key={i}
-              type={event.name}
-              onClick={() => {
-                setSelectedEvents([]);
-                navigate(`/project/${currentProject?.id}/${event.url}`);
-              }}
-            />
-          ))}
+        <div className="global__charts__container">
+          <PieSelector events={events} selector="type" title={"Types"} />
+          <PieSelector events={events} selector="period" title={"Périodes"} />
+          <PieSelector events={events} selector="state" title={"États"} />
+          <PieSelector events={events} selector="status" title={"Status"} />
         </div>
         <div
           style={{

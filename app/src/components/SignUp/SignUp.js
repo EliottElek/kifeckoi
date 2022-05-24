@@ -65,7 +65,7 @@ const SignUp = () => {
       });
       if (response.data.createUser.successful) {
         localStorage.setItem("token", response.data.createUser.token);
-        window.location.href = "/";
+        window.location.reload();
       } else {
         toast.error(response.data.createUser.message, {
           position: "bottom-left",
@@ -168,7 +168,7 @@ const SignUp = () => {
           }}
           onClick={handleLogin}
         >
-          Se connecter
+          Créer le compte
         </Button>
       </form>
     </div>

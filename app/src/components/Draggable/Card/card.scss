@@ -353,3 +353,16 @@
 .status__indicator__to-verify {
   background-color: rgba(182, 98, 3, 0.5);
 }
+.card__done__span {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(4, 238, 4, 0.295);
+  color: var(--check-color);
+  border-top-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

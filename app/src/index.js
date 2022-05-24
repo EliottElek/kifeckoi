@@ -10,7 +10,7 @@ import {
   HttpLink,
 } from "apollo-boost";
 import { ApolloProvider } from "@apollo/client";
-const httpLink = new HttpLink({ uri: "http://localhost:3001/graphql" });
+const httpLink = new HttpLink({ uri: "http://localhost:3002/graphql" });
 
 const authLink = new ApolloLink((operation, forward) => {
   // Retrieve the authorization token from local storage.

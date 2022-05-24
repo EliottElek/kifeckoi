@@ -19,13 +19,12 @@ td {
 }
 .current__period__row {
   color: var(--main-color);
-  background-color: rgba(0, 204, 255, 0.15);
+  // background-color: rgba(0, 204, 255, 0.15);
   text-align: center;
 }
 .previous__period__row {
   color: var(--main-color2);
-  height: 100% !important;
-  background-color: rgba(255, 0, 0, 0.15);
+  // background-color: rgba(255, 0, 0, 0.15);
   text-align: center;
 }
 .kanban__section__content__name__container {

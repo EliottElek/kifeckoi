@@ -1,9 +1,17 @@
+.home {
+  width: auto;
+  max-height: 100%;
+  position: relative;
+  overflow-y: auto;
+  color: var(--font-color);
+}
 .home__container {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
   padding: 30px;
   justify-content: space-between;
+  overflow-y: auto;
 }
 .home__clients__container {
   // display: flex;
@@ -60,6 +68,10 @@
   .home__container {
     flex-direction: column;
   }
+  .chart__container {
+    display: grid;
+    grid-template-columns: 100% !important;
+  }
   .home__clients__container__title {
     font-size: 1.4rem;
   }
@@ -87,4 +99,17 @@
   margin: 10px;
   margin-bottom: -10px;
   gap: 4px;
+}
+.chart__container {
+  padding: 10px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 49% 49%;
+  grid-gap: 10px;
+  height: 500px;
+}
+.chart__item {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  margin-top: 10px;
 }
