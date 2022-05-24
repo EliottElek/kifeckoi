@@ -12,7 +12,7 @@ import jwt from 'jsonwebtoken'
 import { createServer } from "http"
 const SECRET_KEY = 'secret!'
 
-const PORT = 3001
+const PORT = 3002
 interface JwtPayload {
     id: string,
     email: string

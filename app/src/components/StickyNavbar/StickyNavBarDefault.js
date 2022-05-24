@@ -85,14 +85,6 @@ const StickyNavDefault = ({ account }) => {
                 <p>Mon compte</p>
               </MenuItem>
               <MenuItem
-                onClick={(e) => {
-                  setOpenPopUp(false);
-                  navigate("/settings");
-                }}
-              >
-                <p>Paramètres</p>
-              </MenuItem>
-              <MenuItem
                 onClick={() => {
                   handleLogout();
                 }}

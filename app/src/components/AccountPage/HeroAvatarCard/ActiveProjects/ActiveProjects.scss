@@ -1,7 +1,8 @@
 .active__projects__container {
-  margin-top: 40px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  max-height: 300px;
   &__item {
     min-height: 44px;
     border-radius: 2px;
