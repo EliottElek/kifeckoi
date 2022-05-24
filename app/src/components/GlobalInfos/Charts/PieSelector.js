@@ -4,16 +4,16 @@ import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChartEvents = ({ events }) => {
+const PieSelector = ({ events, selector, title }) => {
   const [data, setData] = React.useState(null);
 
   React.useEffect(() => {
     let labels = [];
     let values = [];
     events?.forEach((item) => {
-      const index = labels.findIndex((l) => l === item?.type);
+      const index = labels.findIndex((l) => l === item[selector]);
       if (index === -1) {
-        labels.push(item?.type);
+        labels.push(item[selector]);
         values.push(1);
       } else {
         values[index]++;
@@ -45,8 +45,26 @@ const PieChartEvents = ({ events }) => {
         },
       ],
     });
-  }, [events, setData]);
-
+  }, [events, setData, selector]);
+  const options = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+      render: "percentage",
+      fontColor: ["green", "white", "red"],
+      precision: 2,
+      text: "23%",
+      datalabels: {
+        // display: false,
+        color: "black",
+        font: {
+          size: 14,
+          weight: "bold",
+        },
+      },
+    },
+  };
   if (!data || data.labels.length === 0)
     return (
       <div style={{ position: "relative" }}>
@@ -55,9 +73,23 @@ const PieChartEvents = ({ events }) => {
     );
 
   return (
-    <div style={{ position: "relative", maxWidth: "300px" }}>
-      <Pie data={data} />
+    <div
+      style={{
+        position: "relative",
+        maxWidth: "240px",
+        textAlign: "center",
+        padding: "8px",
+      }}
+    >
+      <h5
+        style={{
+          padding: "8px",
+        }}
+      >
+        {title}
+      </h5>
+      <Pie options={options} data={data} />
     </div>
   );
 };
-export default PieChartEvents;
+export default PieSelector;

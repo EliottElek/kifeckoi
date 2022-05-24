@@ -193,3 +193,13 @@ focus {
   border-radius: 50%;
   padding: 12px;
 }
+.global__charts__container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: var(--card-background);
+  border-radius: 12px;
+  margin-top: 10px;
+  padding: 12px;
+}

@@ -140,13 +140,13 @@ const Home = () => {
         </Modal>
       </div>
       <div className={"chart__container"}>
-        <div>
+        <div className={"chart__item"}>
           <Chart />
         </div>
-        <div>
+        <div className={"chart__item"}>
           <Chart2 />
         </div>
-        <div>
+        <div className={"chart__item"}>
           <Chart3 />
         </div>
       </div>

@@ -101,10 +101,15 @@
   gap: 4px;
 }
 .chart__container {
-  padding: 30px;
+  padding: 10px;
   position: relative;
   display: grid;
-  grid-template-columns: 45% 45%;
-  grid-gap: 10%;
+  grid-template-columns: 49% 49%;
+  grid-gap: 10px;
   height: 500px;
+}
+.chart__item {
+  background-color: var(--card-background);
+  border-radius: 12px;
+  margin-top: 10px;
 }

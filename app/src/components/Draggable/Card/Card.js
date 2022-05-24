@@ -456,6 +456,11 @@ const Card = (props) => {
                 </div>
               )}
               <Avatars users={props.task.contributors} />
+              {props.task.status === "Réalisé" && (
+                <span className="card__done__span">
+                  <AiOutlineCheckCircle />
+                </span>
+              )}
             </div>
           </div>
         )}

@@ -76,7 +76,7 @@ const UserCard = ({
   return (
     <>
       <div className={"user__card"}>
-        <img src={usr.avatarUrl} className={"user__card__background"} alt="" />
+        {/* <img src={usr.avatarUrl} className={"user__card__background"} alt="" /> */}
         <Avatar name={usr.username} large src={usr.avatarUrl} />
         <h5 className={"user__card__name"}>
           {usr.firstname + " " + usr.lastname}

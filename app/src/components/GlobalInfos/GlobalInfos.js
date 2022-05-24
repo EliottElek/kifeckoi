@@ -24,7 +24,7 @@ import ModifTextArea from "./ModifTextArea/ModifTextArea";
 import DatePicker from "./DatePicker/DatePicker";
 import AddLogoModal from "./AddLogoModal/AddLogoModal";
 import ChangeNameModal from "./ChangeNameModal/ChangeNameModal";
-import PieChartEvents from "./Pie";
+import PieSelector from "./Charts/PieSelector";
 const status = [
   {
     name: "conforme",
@@ -387,7 +387,12 @@ const GlobalInfos = () => {
         </h3>
         <ModifTextArea type={"perimètre"} dataProject={dataProject} />
         <h3 style={{ marginTop: "30px" }}>Évènements</h3>
-        <PieChartEvents events={events} setEvents={setEvents} />
+        <div className="global__charts__container">
+          <PieSelector events={events} selector="type" title={"Types"} />
+          <PieSelector events={events} selector="period" title={"Périodes"} />
+          <PieSelector events={events} selector="state" title={"États"} />
+          <PieSelector events={events} selector="status" title={"Status"} />
+        </div>
         <div
           style={{
             display: "flex",
