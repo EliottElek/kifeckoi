@@ -1,10 +1,8 @@
-import { useState } from "react";
+import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { FiMoreHorizontal } from "react-icons/fi";
 import "./kanban.scss";
-import Popup from "../../materials/Popup/Popup";
-import MenuItem from "../../materials/Menu/MenuItem";
-import Menu from "../../materials/Menu/Menu";
+import { Menu, MenuItem } from "@mui/material";
 
 const Column = ({
   droppableId,
@@ -13,90 +11,104 @@ const Column = ({
   section,
   setEventSelected,
 }) => {
-  const [openMenu, setOpenMenu] = useState(false);
+  //open the menu
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openPopUp = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <div className={`kanban__section`}>
       <button
-        onClick={() => {
-          setOpenMenu(true);
-        }}
+        onClick={handleClick}
         className="kanban__section__title__more__button"
       >
         <FiMoreHorizontal />
       </button>
       <Droppable droppableId={droppableId}>{children}</Droppable>
-      <Popup open={openMenu} setOpen={setOpenMenu}>
-        <Menu>
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenMenu(false);
-              setEventSelected(section);
-              setAddCard(true);
-            }}
-          >
-            <p>Ajouter une carte...</p>
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenMenu(false);
-            }}
-          >
-            <p>Copier la liste...</p>
-          </MenuItem>
-          <span className={"divider"} />
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenMenu(false);
-            }}
-          >
-            <p>Trier par date de création...</p>
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenMenu(false);
-            }}
-          >
-            <p>Trier par ordre alphabétique...</p>
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenMenu(false);
-            }}
-          >
-            <p>Afficher uniquement les actions vérifiées...</p>
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenMenu(false);
-            }}
-          >
-            <p>Afficher uniquement les actions à vérifier...</p>
-          </MenuItem>
-          <span className={"divider"} />
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenMenu(false);
-            }}
-          >
-            <p>Déplacer toutes les cartes...</p>
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenMenu(false);
-            }}
-          >
-            <p>Archiver toutes les cartes...</p>
-          </MenuItem>
-        </Menu>
-      </Popup>
+      <Menu
+        anchorEl={anchorEl}
+        open={openPopUp}
+        onClose={handleClose}
+        sx={{
+          "& .MuiPaper-root": {
+            color: "var(--font-color)",
+            bgcolor: "var(--card-background)",
+          },
+        }}
+      >
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(null);
+            setEventSelected(section);
+            setAddCard(true);
+          }}
+        >
+          <p>Ajouter une carte...</p>
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(null);
+          }}
+        >
+          <p>Copier la liste...</p>
+        </MenuItem>
+        <span className={"divider"} />
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(null);
+          }}
+        >
+          <p>Trier par date de création...</p>
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(null);
+          }}
+        >
+          <p>Trier par ordre alphabétique...</p>
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(null);
+          }}
+        >
+          <p>Afficher uniquement les actions vérifiées...</p>
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(null);
+          }}
+        >
+          <p>Afficher uniquement les actions à vérifier...</p>
+        </MenuItem>
+        <span className={"divider"} />
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(null);
+          }}
+        >
+          <p>Déplacer toutes les cartes...</p>
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(null);
+          }}
+        >
+          <p>Archiver toutes les cartes...</p>
+        </MenuItem>
+      </Menu>
     </div>
   );
 };
