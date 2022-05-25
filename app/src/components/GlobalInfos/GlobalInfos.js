@@ -3,7 +3,7 @@ import { Context } from "../Context/Context";
 import { useMutation, useQuery } from "@apollo/client";
 import {
   FIND_PROJECT_BY_PROJECT_ID,
-  GET_ALL_EVENTS_ALL_TYPES,
+  //GET_ALL_EVENTS_ALL_TYPES,
 } from "../../graphql/queries";
 import { MODIFY_PROJECT_GLOBAL_INFOS } from "../../graphql/mutations";
 import { Navigate, useNavigate, useParams } from "react-router";
@@ -24,7 +24,7 @@ import ModifTextArea from "./ModifTextArea/ModifTextArea";
 import DatePicker from "./DatePicker/DatePicker";
 import AddLogoModal from "./AddLogoModal/AddLogoModal";
 import ChangeNameModal from "./ChangeNameModal/ChangeNameModal";
-import PieSelector from "./Charts/PieSelector";
+// import PieSelector from "./Charts/PieSelector";
 const status = [
   {
     name: "conforme",
@@ -63,7 +63,7 @@ const GlobalInfos = () => {
   const { currentProject, setCurrentProject, user } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [openLogoModal, setOpenLogoModal] = useState(false);
-  const [events, setEvents] = useState([]);
+  // const [events, setEvents] = useState([]);
 
   const [openNameModal, setOpenNameModal] = useState(false);
   const [openTitleMenu, setOpenTitleMenu] = useState(false);
@@ -79,15 +79,15 @@ const GlobalInfos = () => {
       setCurrentProject(data?.findProjectByProjectId);
     },
   });
-  const eventsData = useQuery(GET_ALL_EVENTS_ALL_TYPES, {
-    variables: { id: id },
-    onCompleted: (data) => {
-      setEvents(data?.getAllEventsAllTypes);
-    },
-  });
-  React.useEffect(() => {
-    eventsData.refetch();
-  });
+  // const eventsData = useQuery(GET_ALL_EVENTS_ALL_TYPES, {
+  //   variables: { id: id },
+  //   onCompleted: (data) => {
+  //     setEvents(data?.getAllEventsAllTypes);
+  //   },
+  // });
+  // React.useEffect(() => {
+  //   eventsData.refetch();
+  // });
   const handleModifyGlobalStatus = async (item) => {
     try {
       setOpenGlobalStatusPopup(false);
@@ -386,13 +386,13 @@ const GlobalInfos = () => {
           </Popup>
         </h3>
         <ModifTextArea type={"perimètre"} dataProject={dataProject} />
-        <h3 style={{ marginTop: "30px" }}>Évènements</h3>
-        <div className="global__charts__container">
+        {/*<h3 style={{ marginTop: "30px" }}>Évènements</h3>
+         <div className="global__charts__container">
           <PieSelector events={events} selector="type" title={"Types"} />
           <PieSelector events={events} selector="period" title={"Périodes"} />
           <PieSelector events={events} selector="state" title={"États"} />
           <PieSelector events={events} selector="status" title={"Status"} />
-        </div>
+        </div> */}
         <div
           style={{
             display: "flex",
