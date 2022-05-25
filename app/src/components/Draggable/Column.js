@@ -41,6 +41,7 @@ const Column = ({
         }}
       >
         <MenuItem
+          style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
@@ -51,6 +52,7 @@ const Column = ({
           <p>Ajouter une carte...</p>
         </MenuItem>
         <MenuItem
+          style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
@@ -60,6 +62,7 @@ const Column = ({
         </MenuItem>
         <span className={"divider"} />
         <MenuItem
+          style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
@@ -68,6 +71,7 @@ const Column = ({
           <p>Trier par date de création...</p>
         </MenuItem>
         <MenuItem
+          style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
@@ -76,6 +80,7 @@ const Column = ({
           <p>Trier par ordre alphabétique...</p>
         </MenuItem>
         <MenuItem
+          style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
@@ -84,6 +89,7 @@ const Column = ({
           <p>Afficher uniquement les actions vérifiées...</p>
         </MenuItem>
         <MenuItem
+          style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
@@ -93,6 +99,7 @@ const Column = ({
         </MenuItem>
         <span className={"divider"} />
         <MenuItem
+          style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
@@ -101,6 +108,7 @@ const Column = ({
           <p>Déplacer toutes les cartes...</p>
         </MenuItem>
         <MenuItem
+          style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);

@@ -3,9 +3,7 @@ import ReactMarkdownSnippet from "../../../../assets/ReactMarkdown";
 import Avatar from "../../../../materials/Avatar/Avatar";
 import "./Comments.scss";
 import { FiMoreHorizontal } from "react-icons/fi";
-import Popup from "../../../../materials/Popup/Popup";
-import MenuItem from "../../../../materials/Menu/MenuItem";
-import Menu from "../../../../materials/Menu/Menu";
+import { Menu, MenuItem } from "@mui/material";
 import { toast } from "react-toastify";
 import { useMutation } from "@apollo/client";
 import AutoTextArea from "../../../../materials/AutoSizeTextArea/AutoSizeTextArea";
@@ -19,11 +17,16 @@ const Comment = ({ comment, commentsData }) => {
   const { user } = React.useContext(Context);
   const [changeCommentContent] = useMutation(CHANGE_COMMENT__CONTENT);
   const [deleteComment] = useMutation(DELETE_COMMENT);
-
-  const [openPopUp, setOpenPopUp] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
   const [content, setContent] = React.useState(comment.content);
-
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openPopUp = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const handleUpdateCommentContent = async () => {
     try {
       await changeCommentContent({
@@ -139,35 +142,45 @@ const Comment = ({ comment, commentsData }) => {
             className="more__button__comment"
             onClick={(e) => {
               e.stopPropagation();
-              setOpenPopUp(true);
+              handleClick(e);
             }}
           >
             <FiMoreHorizontal />
           </button>
-          <Popup open={openPopUp} setOpen={setOpenPopUp}>
-            <Menu>
-              <MenuItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setEditMode(true);
-                  setOpenPopUp(false);
-                }}
-              >
-                <p>Modifier...</p>
-              </MenuItem>
-              <MenuItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteComment();
-                  setOpenPopUp(false);
-                }}
-              >
-                <p>Supprimer...</p>
-              </MenuItem>
-            </Menu>
-          </Popup>{" "}
         </>
       )}
+      <Menu
+        anchorEl={anchorEl}
+        open={openPopUp}
+        onClose={handleClose}
+        sx={{
+          "& .MuiPaper-root": {
+            color: "var(--font-color)",
+            bgcolor: "var(--card-background)",
+          },
+        }}
+      >
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditMode(true);
+            setAnchorEl(null);
+          }}
+        >
+          <p>Modifier...</p>
+        </MenuItem>
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDeleteComment();
+            setAnchorEl(null);
+          }}
+        >
+          <p>Supprimer...</p>
+        </MenuItem>
+      </Menu>
     </div>
   );
 };

@@ -1,11 +1,9 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import Avatar from "../../../materials/Avatar/Avatar";
 import { Context } from "../../Context/Context";
 import Button from "../../../materials/Button/Button";
 import Modal from "../../../materials/Modal/Modal";
-import Menu from "../../../materials/Menu/Menu";
-import Popup from "../../../materials/Popup/Popup";
-import MenuItem from "../../../materials/Menu/MenuItem";
+import { Menu, MenuItem } from "@mui/material";
 import {
   ADD_CONTRIBUTORS_TO_PROJECT,
   ADD_CONTRIBUTORS_TO_EVENT,
@@ -25,11 +23,17 @@ const UserCard = ({
   event,
 }) => {
   const { currentProject, user } = useContext(Context);
-  const [openPopUp, setOpenPopUp] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [addContributors] = useMutation(ADD_CONTRIBUTORS_TO_PROJECT);
   const [addContributorsEvents] = useMutation(ADD_CONTRIBUTORS_TO_EVENT);
-
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openPopUp = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const { id } = useParams();
   const handleDeleteContributor = async (e) => {
     e.stopPropagation();
@@ -84,39 +88,9 @@ const UserCard = ({
         <h6 className={"user__card__username"}>({usr.username})</h6>
         <p className={"user__card__email"}>{usr.email}</p>
         {user.id !== usr.id && !modal && (
-          <>
-            <button onClick={setOpenPopUp} className="delete__user__button">
-              <FiMoreHorizontal />
-            </button>
-            <Popup
-              open={openPopUp}
-              setOpen={setOpenPopUp}
-              bottom
-              style={{
-                transform: "translate(70%, -60%)",
-              }}
-            >
-              <Menu>
-                {!eventMode && (
-                  <MenuItem
-                    onClick={(e) => {
-                      setOpenPopUp(false);
-                    }}
-                  >
-                    <p>Passer en administrateur</p>
-                  </MenuItem>
-                )}
-                <MenuItem
-                  onClick={(e) => {
-                    setOpenDeleteModal(true);
-                    setOpenPopUp(false);
-                  }}
-                >
-                  <p>Supprimer</p>
-                </MenuItem>
-              </Menu>
-            </Popup>
-          </>
+          <button onClick={handleClick} className="delete__user__button">
+            <FiMoreHorizontal />
+          </button>
         )}
       </div>
       <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
@@ -142,6 +116,33 @@ const UserCard = ({
           </div>
         </div>
       </Modal>
+      <Menu
+        anchorEl={anchorEl}
+        open={openPopUp}
+        onClose={handleClose}
+        sx={{
+          "& .MuiPaper-root": {
+            color: "var(--font-color)",
+            bgcolor: "var(--card-background)",
+          },
+        }}
+      >
+        <MenuItem
+          onClick={(e) => {
+            setAnchorEl(null);
+          }}
+        >
+          <p>Passer en administrateur</p>
+        </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            setOpenDeleteModal(true);
+            setAnchorEl(null);
+          }}
+        >
+          <p>Supprimer</p>
+        </MenuItem>
+      </Menu>
     </>
   );
 };

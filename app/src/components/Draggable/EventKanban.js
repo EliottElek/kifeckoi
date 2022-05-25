@@ -2,9 +2,8 @@ import "./kanban.scss";
 import "./Card/card.scss";
 import { DragDropContext } from "react-beautiful-dnd";
 import React, { useState } from "react";
-import Popup from "../../materials/Popup/Popup";
-import Menu from "../../materials/Menu/Menu";
-import MenuItem from "../../materials/Menu/MenuItem";
+import { Menu } from "@mui/material";
+import { MenuItem } from "@mui/material";
 import Card from "./Card/Card";
 import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
@@ -48,7 +47,6 @@ const EventKanban = ({ type, setLength, length }) => {
     selectedEvents,
   } = React.useContext(Context);
   const [selectAll, setSelectAll] = useState(false);
-  const [openActionPopup, setOpenActionPopup] = useState(false);
   const [selectedAcountables, setSelectedcontributors] = useState([]);
   const [eventSelected, setEventSelected] = useState();
   const [eventsData, setEventsData] = useState([]);
@@ -59,6 +57,14 @@ const EventKanban = ({ type, setLength, length }) => {
   const [deleteMultipleEvents] = useMutation(DELETE_MULTIPLE_EVENTS);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { id } = useParams();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openPopUp = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
     variables: { id: id, userId: user?.id },
     onCompleted: (data) => {
@@ -296,43 +302,12 @@ const EventKanban = ({ type, setLength, length }) => {
                   gap: "6px",
                   cursor: "pointer",
                 }}
-                onClick={() => {
-                  selectedEvents.length > 0 && setOpenActionPopup(true);
+                onClick={(e) => {
+                  selectedEvents.length > 0 && handleClick(e);
                 }}
               >
                 <FaChevronDown fontSize="0.6rem" />
               </span>
-              <Popup
-                style={{ transform: "translate(80px, 50px)" }}
-                bottom
-                open={openActionPopup}
-                setOpen={setOpenActionPopup}
-              >
-                <Menu>
-                  <MenuItem
-                    onClick={() => {
-                      changeStateSelectedEvents("Vérifié");
-                    }}
-                  >
-                    <span>Passer en "Vérifié"</span>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      changeStateSelectedEvents("À vérifier");
-                    }}
-                  >
-                    <span>Passer en "À vérifier"</span>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      setOpenActionPopup(false);
-                      setOpenDeleteModal(true);
-                    }}
-                  >
-                    <span>Supprimer {selectedEvents?.length} évènement(s)</span>
-                  </MenuItem>
-                </Menu>
-              </Popup>
             </th>
             <th>Période</th>
             <th>Contributeurs</th>
@@ -469,6 +444,40 @@ const EventKanban = ({ type, setLength, length }) => {
             </div>
           </div>
         </Modal>
+        <Menu
+          anchorEl={anchorEl}
+          open={openPopUp}
+          onClose={handleClose}
+          sx={{
+            "& .MuiPaper-root": {
+              color: "var(--font-color)",
+              bgcolor: "var(--card-background)",
+            },
+          }}
+        >
+          <MenuItem
+            onClick={() => {
+              changeStateSelectedEvents("Vérifié");
+            }}
+          >
+            <span>Passer en "Vérifié"</span>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              changeStateSelectedEvents("À vérifier");
+            }}
+          >
+            <span>Passer en "À vérifier"</span>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setAnchorEl(null);
+              setOpenDeleteModal(true);
+            }}
+          >
+            <span>Supprimer {selectedEvents?.length} évènement(s)</span>
+          </MenuItem>
+        </Menu>
       </>
     );
   }

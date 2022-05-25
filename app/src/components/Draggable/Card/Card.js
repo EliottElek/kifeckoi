@@ -30,7 +30,6 @@ import { Draggable } from "react-beautiful-dnd";
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
 import { Context } from "../../Context/Context";
 import { useMutation, useQuery } from "@apollo/client";
-import Popup from "../../../materials/Popup/Popup";
 import { toast } from "react-toastify";
 import { useParams } from "react-router";
 import { MenuItem } from "@mui/material";
@@ -53,7 +52,6 @@ const Card = (props) => {
   const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
   const [modifMode, setModifMode] = useState(false);
   const [comments, setComments] = useState([]);
-  const [openEditPopUp, setOpenEditPopUp] = useState(false);
   const [submitOnEnterMode, setSubmitOnEnterMode] = useState(false);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
   const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
@@ -71,6 +69,14 @@ const Card = (props) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const [anchorEl2, setAnchorEl2] = React.useState(null);
+  const openPopUp2 = Boolean(anchorEl2);
+  const handleClick2 = (event) => {
+    setAnchorEl2(event.currentTarget);
+  };
+  const handleClose2 = () => {
+    setAnchorEl2(null);
   };
   const commentsData = useQuery(GET_ALL_COMMENTS_BY_EVENT_ID, {
     variables: { eventId: props.task.id },
@@ -352,33 +358,12 @@ const Card = (props) => {
                       data-for="moreTooltip"
                       onClick={(e) => {
                         e.stopPropagation();
-                        setOpenEditPopUp(true);
+                        handleClick2(e);
                       }}
                       className="kanban__section__content__name__container__edit__button more__button"
                     >
                       <FiMoreHorizontal />
                     </button>
-                    <Popup
-                      open={openEditPopUp}
-                      setOpen={setOpenEditPopUp}
-                      bottom
-                    >
-                      <Menu>
-                        <MenuItem
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSubmitOnEnterMode(!submitOnEnterMode);
-                            setOpenEditPopUp(false);
-                          }}
-                        >
-                          <p>
-                            {submitOnEnterMode
-                              ? "Désactiver la soumission rapide..."
-                              : "Activer la soumission rapide..."}
-                          </p>
-                        </MenuItem>
-                      </Menu>
-                    </Popup>
                     <button
                       data-tip
                       data-for="validateTooltip"
@@ -778,6 +763,7 @@ const Card = (props) => {
           if (category.title !== props.task.status)
             return (
               <MenuItem
+                style={{ fontSize: "0.9rem" }}
                 key={category.title}
                 onClick={() => handleMoveTo(category)}
               >
@@ -791,6 +777,7 @@ const Card = (props) => {
         })}
         <span className={"divider"} />
         <MenuItem
+          style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             e.stopPropagation();
             setOpenDeleteModal(true);
@@ -798,6 +785,30 @@ const Card = (props) => {
           }}
         >
           <p>Archiver...</p>
+        </MenuItem>
+      </Menu>
+      <Menu
+        anchorEl={anchorEl2}
+        open={openPopUp2}
+        onClose={handleClose2}
+        sx={{
+          "& .MuiPaper-root": {
+            color: "var(--font-color)",
+            bgcolor: "var(--card-background)",
+          },
+        }}
+      >
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setSubmitOnEnterMode(!submitOnEnterMode);
+            setAnchorEl2(null);
+          }}
+        >
+          {submitOnEnterMode
+            ? "Désactiver la soumission rapide..."
+            : "Activer la soumission rapide..."}
         </MenuItem>
       </Menu>
     </div>
