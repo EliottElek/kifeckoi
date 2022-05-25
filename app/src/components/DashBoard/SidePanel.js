@@ -20,6 +20,7 @@ const SidePanel = () => {
     currentClient,
     setSelectedEvents,
     user,
+    setOpenDrawer,
   } = React.useContext(Context);
   useQuery(GET_ALL_CLIENTS, {
     variables: { userId: user?.id },
@@ -54,6 +55,7 @@ const SidePanel = () => {
         id={id}
         onClick={() => {
           setSelectedEvents([]);
+          setOpenDrawer(false);
           navigate(`/project/${currentProject?.id}/${comp?.id}`);
         }}
       >
@@ -64,7 +66,13 @@ const SidePanel = () => {
   const ProjectItem = ({ comp, id }) => {
     const navigate = useNavigate();
     return (
-      <ListItem id={id} onClick={() => navigate(`/project/${comp?.id}/global`)}>
+      <ListItem
+        id={id}
+        onClick={() => {
+          setOpenDrawer(false);
+          navigate(`/project/${comp?.id}/global`);
+        }}
+      >
         <span>{comp?.name}</span>
       </ListItem>
     );
@@ -72,7 +80,13 @@ const SidePanel = () => {
   const ClientItem = ({ comp, id }) => {
     const navigate = useNavigate();
     return (
-      <ListItem id={id} onClick={() => navigate(`/client/${comp?.id}`)}>
+      <ListItem
+        id={id}
+        onClick={() => {
+          setOpenDrawer(false);
+          navigate(`/client/${comp?.id}`);
+        }}
+      >
         <span>{comp?.name}</span>
       </ListItem>
     );
