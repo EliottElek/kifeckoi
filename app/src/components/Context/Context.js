@@ -8,7 +8,7 @@ export const Context = React.createContext();
 export const ContextProvider = ({ children }) => {
   const [clients, setClients] = React.useState([]);
   const [users, setUsers] = React.useState();
-  const [openDrawer, setOpenDrawer] = React.useState(true);
+  const [openDrawer, setOpenDrawer] = React.useState(false);
   const [projects, setProjects] = React.useState([]);
   const [events, setEvents] = React.useState(rawEvents);
   const [selectedEvents, setSelectedEvents] = React.useState([]);
@@ -108,8 +108,8 @@ export const ContextProvider = ({ children }) => {
         setProjects: setProjects,
         events: events,
         setEvents: setEvents,
-        selectedEvents:selectedEvents,
-        setSelectedEvents:setSelectedEvents,
+        selectedEvents: selectedEvents,
+        setSelectedEvents: setSelectedEvents,
         currentClient: currentClient,
         setCurrentClient: setCurrentClient,
         currentProject: currentProject,
