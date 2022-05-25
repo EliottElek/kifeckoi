@@ -11,8 +11,14 @@ import { ApolloServer } from "apollo-server-express"
 import jwt from 'jsonwebtoken'
 import { createServer } from "http"
 const SECRET_KEY = 'secret!'
+process.env["KIFEKOI_ENV"] = 'prod';
 
-const PORT = 3002
+const config = {
+    PORT: process.env.PORT || 3002, host: process.env["KIFEKOI_ENV"] === "dev" ? "localhost" : "eu-cdbr-west-02.cleardb.net",
+    database: process.env["KIFEKOI_ENV"] === "dev" ? "kifekoi" : "heroku_211d386b351cda0",
+    username: process.env["KIFEKOI_ENV"] === "dev" ? "root" : "bbd85b03c94878",
+    password: process.env["KIFEKOI_ENV"] === "dev" ? "elektra1" : "f93317de",
+}
 interface JwtPayload {
     id: string,
     email: string
@@ -22,9 +28,10 @@ const main = async () => {
 
     await createConnection({
         type: "mysql",
-        database: 'kifekoi',
-        username: "root",
-        password: "elektra1",
+        host: config.host,
+        database: config.database,
+        username: config.username,
+        password: config.password,
         logging: true,
         synchronize: true,
         entities: [User, Client, Project, Event, Comment]
@@ -58,8 +65,8 @@ const main = async () => {
     server.applyMiddleware({ app });
     const httpServer = createServer(app);
 
-    httpServer.listen(PORT, () => {
-        console.log(`API running correctly on http://localhost:${PORT}`)
+    httpServer.listen(config.PORT, () => {
+        console.log(`API running correctly on http://${config.host}:${config.PORT}`)
     })
 }
 main().catch((err) => {
