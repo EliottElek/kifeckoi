@@ -25,20 +25,8 @@ const PieSelector = ({ events, selector, title }) => {
         {
           label: "# of Votes",
           data: values,
-          backgroundColor: [
-            "#01ffff80",
-            "#5ec2c280",
-            "#4f9b9b80",
-            "#748f8f80",
-            "#8d8d8d80",
-          ],
-          borderColor: [
-            "#01ffff80",
-            "#5ec2c280",
-            "#4f9b9b80",
-            "#748f8f80",
-            "#8d8d8d80",
-          ],
+          backgroundColor: ["#e2e2e2"],
+          borderColor: ["#e2e2e2"],
           borderWidth: 1,
         },
       ],
@@ -61,6 +49,12 @@ const PieSelector = ({ events, selector, title }) => {
           weight: "bold",
         },
       },
+    },
+    onClick: function (evt, element) {
+      if (element.length > 0) {
+        const ind = element[0].index;
+        alert(ind);
+      }
     },
   };
   if (!data || data.labels.length === 0)

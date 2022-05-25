@@ -1,7 +1,8 @@
+import { MenuList } from "@mui/material";
 import "./Menu.scss";
 
 const Menu = ({ children }) => {
-  return <ul className="menu">{children}</ul>;
+  return <MenuList>{children}</MenuList>;
 };
 
 export default Menu;

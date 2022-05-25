@@ -3,12 +3,11 @@ import { useNavigate } from "react-router";
 import { Context } from "../Context/Context";
 import Switch from "../../materials/Switch/Switch";
 import Avatar from "../../materials/Avatar/Avatar";
-import Menu from "../../materials/Menu/Menu";
-import MenuItem from "../../materials/Menu/MenuItem";
-import Popup from "../../materials/Popup/Popup";
 import { CgMenuGridO } from "react-icons/cg";
 import { MdFormatListBulleted } from "react-icons/md";
 import StickyNavbar from "./StickyNavbar";
+import { Menu } from "@mui/material";
+import { MenuItem } from "@mui/material";
 // import Button from "../../materials/Button/Button";
 import logo from "../../assets/images/logo.png";
 import getPeriod from "../../assets/functions/getPeriod";
@@ -31,7 +30,14 @@ const StickyNavAdvanced = () => {
     setAddCard,
     selectedEvents,
   } = useContext(Context);
-  const [openPopUp, setOpenPopUp] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const navigate = useNavigate();
   let urlElement = window.location.href.split("/")[5];
 
@@ -83,63 +89,56 @@ const StickyNavAdvanced = () => {
         )}
       </div>
       <div className="events__container">
-        {/* <div className="nav__actions">
-          <Button style={{ height: "35px" }}>Sauvegarder</Button>
-          <Button style={{ height: "35px" }} reversed>
-            Valider
-          </Button>
-          <Button style={{ height: "35px" }} reversed>
-            Libérer
-          </Button>
-          <Button style={{ height: "35px" }} reversed>
-            Annuler
-          </Button>
-        </div> */}
-        <button className="settings__button" onClick={() => setOpenPopUp(true)}>
+        <button className="settings__button" onClick={handleClick}>
           <Avatar src={user?.avatarUrl} name={user?.firstname} />
-          <Popup
-            style={{ transform: "translate(-40%, 65%)" }}
-            open={openPopUp}
-            setOpen={setOpenPopUp}
-            bottom
-          >
-            <Menu>
-              <MenuItem
-                onClick={(e) => {
-                  setOpenPopUp(false);
-                  navigate("/account");
-                }}
-              >
-                <p>Mon compte</p>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleLogout();
-                }}
-              >
-                <p>Déconnexion</p>
-              </MenuItem>
-              <span className={"divider"} />
-              <li className={"menu-item-no-hover"}>
-                <span>
-                  Passer en mode
-                  {dark ? " jour ☀️" : " nuit 🌙"}
-                </span>
-                <Switch
-                  onChange={(e) => {
-                    toggleTheme(e);
-                    setDark(!dark);
-                  }}
-                  defaultChecked={defaultDark}
-                />
-              </li>
-            </Menu>
-          </Popup>
         </button>
       </div>
       <ReactTooltip delayShow={500} id="weekTooltip" effect="solid">
         <span>Semaine actuelle</span>
       </ReactTooltip>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        sx={{
+          "& .MuiPaper-root": {
+            color: "var(--font-color)",
+            bgcolor: "var(--card-background)",
+          },
+        }}
+      >
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            setAnchorEl(null);
+            navigate("/account");
+          }}
+        >
+          <p>Mon compte</p>
+        </MenuItem>
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={() => {
+            handleLogout();
+          }}
+        >
+          <p>Déconnexion</p>
+        </MenuItem>
+        <span className={"divider"} />
+        <MenuItem>
+          <span>
+            Passer en mode
+            {dark ? " jour ☀️" : " nuit 🌙"}
+          </span>
+          <Switch
+            onChange={(e) => {
+              toggleTheme(e);
+              setDark(!dark);
+            }}
+            defaultChecked={defaultDark}
+          />
+        </MenuItem>
+      </Menu>
     </StickyNavbar>
   );
 };

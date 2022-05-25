@@ -6,7 +6,7 @@ import { Context } from "./components/Context/Context";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
-import Drawer from "./materials/Drawer/Drawer";
+import Drawer from "./materials/Drawer/Drawer2";
 import Backdrop from "./materials/Backdrop/Backdrop";
 import Progress from "./materials/Progress/Progress";
 import StickyNavDefault from "./components/StickyNavbar/StickyNavBarDefault";
@@ -333,7 +333,7 @@ const MainContent = () => {
         />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
-      <ToastContainer theme={dark ? "dark" : "light"} />
+      <ToastContainer theme={!dark ? "dark" : "light"} />
     </NoInternetConnection>
   );
 };
