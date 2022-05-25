@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
-import "../Card/Card.scss";
+import { useContext, useState, useEffect } from "react";
+import "../Card/card.scss";
 import "./Row.scss";
 import "../kanban.scss";
 import "../../Client/RecentEvents/RecentEvents.css";

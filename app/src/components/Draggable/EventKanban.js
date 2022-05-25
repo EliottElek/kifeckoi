@@ -1,5 +1,5 @@
 import "./kanban.scss";
-import "./Card/Card.scss";
+import "./Card/card.scss";
 import { DragDropContext } from "react-beautiful-dnd";
 import React, { useState } from "react";
 import Popup from "../../materials/Popup/Popup";
