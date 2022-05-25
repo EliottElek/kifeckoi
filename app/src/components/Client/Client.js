@@ -16,9 +16,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import Modal from "../../materials/Modal/Modal";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router";
-import Chart from "./Chart/Chart";
-import { Chart2 } from "./Chart/Chart2";
-import { Chart3 } from "./Chart/Chart3";
+
 const Client = () => {
   const { currentClient, setCurrentClient, user } = React.useContext(Context);
   const [nameInput, setNameInput] = React.useState("");
@@ -173,17 +171,6 @@ const Client = () => {
             </div>
           </form>
         </Modal>
-      </div>
-      <div className={"chart__container"}>
-        <div className={"chart__item"}>
-          <Chart />
-        </div>
-        <div className={"chart__item"}>
-          <Chart2 />
-        </div>
-        <div className={"chart__item"}>
-          <Chart3 />
-        </div>
       </div>
     </div>
   );

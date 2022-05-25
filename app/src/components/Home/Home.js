@@ -11,9 +11,6 @@ import Modal from "../../materials/Modal/Modal";
 import Progress from "../../materials/Progress/Progress";
 import CheckBox from "../../materials/CheckBox/CheckBox";
 import { useNavigate } from "react-router";
-import Chart from "./Chart/Chart";
-import { Chart2 } from "./Chart/Chart2";
-import { Chart3 } from "./Chart/Chart3";
 const Home = () => {
   const { user } = useContext(Context);
   const { data, refetch, loading } = useQuery(GET_ALL_CLIENTS, {
@@ -138,17 +135,6 @@ const Home = () => {
             </div>
           </div>
         </Modal>
-      </div>
-      <div className={"chart__container"}>
-        <div className={"chart__item"}>
-          <Chart />
-        </div>
-        <div className={"chart__item"}>
-          <Chart2 />
-        </div>
-        <div className={"chart__item"}>
-          <Chart3 />
-        </div>
       </div>
     </div>
   );
