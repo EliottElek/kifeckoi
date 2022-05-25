@@ -26,6 +26,7 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
         }}
+        style={{ boxShadow: "0 1px 2px var(--shadow-color)" }}
       >
         <StickyNavAdvanced />
       </AppBar>
