@@ -1,0 +1,2 @@
+.active__projects__container{display:flex;flex-direction:column;overflow-y:auto;max-height:300px}.active__projects__container__item{min-height:44px;border-radius:2px;width:100%;background-color:transparent;display:flex;align-items:center;justify-content:space-between;transition:all .2s;cursor:pointer}.active__projects__container__item>*{margin:8px}.active__projects__container__item:hover{background-color:var(--color-background-1);transition:all .2s}.active__projects__container>h3{margin-top:20px}
+/*# sourceMappingURL=14.85043cb0.chunk.css.map */

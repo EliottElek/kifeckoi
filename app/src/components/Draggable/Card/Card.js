@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import "./Card.scss";
+import "./card.scss";
 import "../kanban.scss";
 import "../../Client/RecentEvents/RecentEvents.css";
 import "../../GlobalInfos/GlobalInfos.scss";
