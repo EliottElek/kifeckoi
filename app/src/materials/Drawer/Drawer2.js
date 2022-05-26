@@ -23,8 +23,8 @@ function ResponsiveDrawer(props) {
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          width: { sm: `${drawerWidth}px)` },
+          display: { xs: "block", sm: "none" },
         }}
         style={{ boxShadow: "none" }}
       >
@@ -66,8 +66,7 @@ function ResponsiveDrawer(props) {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block",
-          },
+            display: { xs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
