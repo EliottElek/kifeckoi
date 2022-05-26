@@ -26,7 +26,7 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
         }}
-        style={{ boxShadow: "0 1px 2px var(--shadow-color)" }}
+        style={{ boxShadow: "none" }}
       >
         <StickyNavAdvanced />
       </AppBar>
@@ -52,20 +52,40 @@ function ResponsiveDrawer(props) {
             },
           }}
         >
+          <AppBar
+            position="fixed"
+            sx={{
+              width: { sm: `${drawerWidth}px)` },
+            }}
+            style={{ boxShadow: "none" }}
+          >
+            <StickyNavAdvanced />
+          </AppBar>
           {props.secondaryContent}
         </Drawer>
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block" },
+            display: { xs: "none", sm: "block",
+          },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              pt: "50px",
               bgcolor: "var(--color-background-2)",
             },
           }}
           open
         >
+          <AppBar
+            position="fixed"
+            sx={{
+              width: { sm: `${drawerWidth}px)` },
+            }}
+            style={{ boxShadow: "none" }}
+          >
+            <StickyNavAdvanced />
+          </AppBar>
           {props.secondaryContent}
         </Drawer>
       </Box>
