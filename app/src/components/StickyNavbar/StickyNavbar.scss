@@ -13,6 +13,9 @@
   align-items: center;
   justify-content: space-between;
 }
+.toggle__drawer__button {
+  display: none;
+}
 .settings__button {
   width: 40px;
   height: 40px;
@@ -74,6 +77,9 @@
   color: var(--font-color);
 }
 @media screen and (max-width: 950px) {
+  .toggle__drawer__button {
+    display: flex;
+  }
   .name__container__title,
   .period__span {
     font-size: 1rem;

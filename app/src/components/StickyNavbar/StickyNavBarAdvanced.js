@@ -128,7 +128,7 @@ const StickyNavAdvanced = () => {
         <MenuItem>
           <span>
             Passer en mode
-            {dark ? " jour ☀️" : " nuit 🌙"}
+            {dark ? " jour " : " nuit "}
           </span>
           <Switch
             onChange={(e) => {

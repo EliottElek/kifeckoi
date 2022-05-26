@@ -3,6 +3,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import StickyNavAdvanced from "../../components/StickyNavbar/StickyNavBarAdvanced";
+import StickyNavDefault from "../../components/StickyNavbar/StickyNavBarDefault";
 import { Context } from "../../components/Context/Context";
 
 const drawerWidth = 240;
@@ -28,7 +29,7 @@ function ResponsiveDrawer(props) {
         }}
         style={{ boxShadow: "none" }}
       >
-        <StickyNavAdvanced />
+        {props.advanced ? <StickyNavAdvanced /> : <StickyNavDefault />}
       </AppBar>
       <Box
         component="nav"
@@ -59,7 +60,7 @@ function ResponsiveDrawer(props) {
             }}
             style={{ boxShadow: "none" }}
           >
-            <StickyNavAdvanced />
+            {props.advanced ? <StickyNavAdvanced /> : <StickyNavDefault />}
           </AppBar>
           {props.secondaryContent}
         </Drawer>
@@ -83,7 +84,7 @@ function ResponsiveDrawer(props) {
             }}
             style={{ boxShadow: "none" }}
           >
-            <StickyNavAdvanced />
+            {props.advanced ? <StickyNavAdvanced /> : <StickyNavDefault />}
           </AppBar>
           {props.secondaryContent}
         </Drawer>
