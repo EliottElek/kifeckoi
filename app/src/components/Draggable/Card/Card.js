@@ -84,13 +84,13 @@ const Card = (props) => {
       setComments(data?.getAllCommentsByEventId);
     },
   });
-  const handleModifyDescription = async (e) => {
+  const handleModifyDescription = async (e, content) => {
     e.stopPropagation();
     try {
       await changeEventDescription({
         variables: {
           eventId: props.task.id,
-          newDescription: description,
+          newDescription: content,
         },
       });
       props.dataEvents.refetch();
@@ -543,8 +543,6 @@ const Card = (props) => {
           </button>
           <ModifAreaCard
             event={props.task}
-            value={description}
-            setValue={setDescription}
             handleModifyDescription={handleModifyDescription}
             placeholder={"La carte doit avoir une description..."}
           />
