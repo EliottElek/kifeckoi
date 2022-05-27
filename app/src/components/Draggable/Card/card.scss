@@ -46,18 +46,6 @@
 .status__container {
   margin-top: 30px;
 }
-.modal__content__container_scrollable {
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-height: 100%;
-}
-.modal__content__container_scrollable_item_container {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
 .modal__content__container_scrollable_item_container > span {
   margin-right: 3px;
   transition: 0.1s all;

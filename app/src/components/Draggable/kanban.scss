@@ -4,7 +4,6 @@
   align-items: flex-start;
   overflow: auto;
   min-height: 100%;
-
   &__section {
     min-width: 200px;
     width: 500px;
@@ -12,7 +11,7 @@
     border-radius: 2px;
     padding-top: 50px;
     position: relative;
-    background-color: var(--color-background-1);
+    background-color: transparent;
 
     & ~ & {
       margin-left: 10px;
