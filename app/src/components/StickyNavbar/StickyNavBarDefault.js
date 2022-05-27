@@ -103,8 +103,13 @@ const StickyNavAdvanced = () => {
           <p>Déconnexion</p>
         </MenuItem>
         <span className={"divider"} />
-        <MenuItem>
-          <span>
+        <MenuItem
+          onClick={(e) => {
+            toggleTheme(e);
+            setDark(!dark);
+          }}
+        >
+          <span style={{ marginRight: "8px" }}>
             Passer en mode
             {dark ? " jour " : " nuit "}
           </span>
