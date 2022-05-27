@@ -3,6 +3,8 @@
   width: auto;
   align-items: flex-start;
   overflow: auto;
+  min-height: 100%;
+
   &__section {
     min-width: 200px;
     width: 500px;
