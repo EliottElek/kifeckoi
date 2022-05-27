@@ -293,7 +293,7 @@
   padding: 2px 6px;
   border-radius: 14px;
   font-size: 0.8rem;
-  outline: solid 1px rgba(128, 128, 128, 0.336);
+  border: solid 1px rgba(128, 128, 128, 0.336);
 }
 .modal__card__status__verified,
 .modal__card__status__to__verify {
@@ -306,7 +306,7 @@
   padding: 3px 8px;
   border-radius: 14px;
   font-size: 1rem;
-  outline: solid 1px rgba(128, 128, 128, 0.336);
+  border: solid 1px rgba(128, 128, 128, 0.336);
 }
 .status__indicator__verified,
 .status__indicator__to-verify {
