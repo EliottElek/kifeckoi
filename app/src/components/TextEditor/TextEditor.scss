@@ -4,3 +4,24 @@
 .text-editor * {
   color: var(--font-color);
 }
+.ql-toolbar .ql-stroke {
+  fill: none;
+  stroke: var(--font-color);
+}
+.ql-toolbar:hover,
+.ql-strokehover {
+  fill: none;
+  stroke: var(--font-color);
+}
+.ql-toolbar .ql-fill {
+  fill: var(--font-color);
+  stroke: none;
+}
+
+.ql-toolbar .ql-picker {
+  color: var(--font-color);
+}
+.ql-container > .ql-editor.ql-blank::before {
+  color: var(--font-color);
+  opacity: 0.5;
+}

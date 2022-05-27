@@ -35,22 +35,6 @@
 .dragging {
   box-shadow: 3px 3px 10px 6px rgba(0, 0, 0, 0.2);
 }
-.modal__content__container {
-  transition: 0.1s all;
-  width: 100%;
-  cursor: default;
-  flex-grow: 1;
-  position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 1px;
-  background-color: var(--color-background-1);
-  color: var(--font-color);
-  border-radius: 4px;
-}
 .status__span {
   max-width: 140px;
   font-size: 1rem !important;
@@ -58,9 +42,6 @@
   align-items: center;
   justify-content: center;
   color: var(--font-color);
-}
-.modal__content__container > * {
-  margin: 2px;
 }
 .status__container {
   margin-top: 30px;

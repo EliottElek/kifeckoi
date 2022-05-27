@@ -72,7 +72,7 @@ const ModifTextArea = ({ type, dataProject }) => {
   else
     return (
       <>
-        {input !== "" ? (
+        {input !== "<p><br></p>" ? (
           <div
             onClick={() => setModifMode(true)}
             className="modif__textarea__paragraph"

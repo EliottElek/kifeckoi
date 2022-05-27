@@ -48,9 +48,9 @@ const TextEditor = ({
       <div
         style={{
           display: "flex",
-          gap: "4px",
-          margin: "4px",
-          marginTop: "8px",
+          gap: "12px",
+          marginTop: "12px",
+          justifyContent: "flex-end",
         }}
       >
         <Button
@@ -59,7 +59,11 @@ const TextEditor = ({
             setModifMode(false);
           }}
           reversed
-          style={{ height: "30px" }}
+          style={{
+            height: "40px",
+            width: "140px",
+            outline: "solid 2px var(--main-color)",
+          }}
         >
           Annuler
         </Button>
@@ -68,7 +72,11 @@ const TextEditor = ({
             handleModifyDescription(e, quill.root.innerHTML);
             setModifMode(false);
           }}
-          style={{ height: "30px" }}
+          style={{
+            height: "40px",
+            width: "140px",
+            outline: "solid 2px var(--main-color)",
+          }}
         >
           Valider
         </Button>

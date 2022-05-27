@@ -1,4 +1,3 @@
-/* @import "../../materials/constants.scss"; */
 .stickynavbar__container {
   padding: 0;
   margin: 0;
@@ -13,9 +12,7 @@
   align-items: center;
   justify-content: space-between;
 }
-.toggle__drawer__button {
-  display: none;
-}
+
 .settings__button {
   width: 40px;
   height: 40px;
@@ -34,7 +31,8 @@
   cursor: default;
 }
 .logo__kifekoi {
-  height: 55px;
+  height: 36px;
+  margin-left: 12px;
   width: auto;
   cursor: pointer;
 }
@@ -77,9 +75,6 @@
   color: var(--font-color);
 }
 @media screen and (max-width: 950px) {
-  .toggle__drawer__button {
-    display: flex;
-  }
   .name__container__title,
   .period__span {
     font-size: 1rem;

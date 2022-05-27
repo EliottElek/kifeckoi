@@ -239,6 +239,7 @@ const GlobalInfos = () => {
             marginBottom: "15px",
             display: "flex",
             alignItems: "center",
+            flex: "none",
           }}
         >
           Status global{" "}

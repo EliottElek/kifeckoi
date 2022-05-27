@@ -459,7 +459,7 @@ const Card = (props) => {
           </div>
         )}
       </Draggable>
-      <Modal open={openModal} setOpen={handleCloseModal}>
+      <Modal open={openModal} setOpen={setOpenModal}>
         <div className="modal__content__container">
           <div className="period__title__modal__container">
             <span
@@ -543,6 +543,8 @@ const Card = (props) => {
           </button>
           <ModifAreaCard
             event={props.task}
+            value={description}
+            setValue={setDescription}
             handleModifyDescription={handleModifyDescription}
             placeholder={"La carte doit avoir une description..."}
           />
