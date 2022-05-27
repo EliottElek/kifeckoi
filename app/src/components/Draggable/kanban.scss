@@ -2,6 +2,7 @@
   display: flex;
   width: auto;
   align-items: flex-start;
+  overflow: auto;
   &__section {
     min-width: 200px;
     padding: 4px;
@@ -96,8 +97,10 @@
 }
 @media screen and (max-width: 600px) {
   .kanban {
+    scroll-snap-type: inline mandatory;
     &__section {
       min-width: 98vw;
+      scroll-snap-align: start;
     }
   }
 }
