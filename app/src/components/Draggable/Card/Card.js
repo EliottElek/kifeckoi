@@ -581,7 +581,7 @@ const Card = (props) => {
               reversed
               onClick={(e) => {
                 e.stopPropagation();
-                setOpenModal(false);
+                // setOpenModal(false);
                 setOpenAddContributorModal(true);
                 // setOpenModal(false);
               }}

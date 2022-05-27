@@ -62,7 +62,7 @@ const TextEditor = ({
           style={{
             height: "40px",
             width: "140px",
-            outline: "solid 2px var(--main-color)",
+            border: "solid 2px var(--main-color)",
           }}
         >
           Annuler
@@ -75,7 +75,7 @@ const TextEditor = ({
           style={{
             height: "40px",
             width: "140px",
-            outline: "solid 2px var(--main-color)",
+            border: "solid 2px var(--main-color)",
           }}
         >
           Valider

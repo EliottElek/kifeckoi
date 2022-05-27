@@ -14,7 +14,7 @@ export default function BasicModal({ children, open, setOpen }) {
     left: "50%",
     transform: "translate(-50%, -50%)",
     maxHeight: fullScreen ? "90vh" : "80%",
-    height: fullScreen ? "90vh" : "80%",
+    height: fullScreen ? "90vh" : "none",
     width: fullScreen ? "100vw" : "85%",
     maxWidth: fullScreen ? "none" : "900px",
     boxShadow: "3px 3px 10px 6px rgba(0, 0, 0, 0.06)",

@@ -57,7 +57,7 @@ body {
 }
 .modal__content__container {
   transition: 0.1s all;
-  margin: 40px 8px 20px 8px;
+  margin: 40px auto 20px auto;
   cursor: default;
   flex-grow: 1;
   position: relative;
@@ -70,6 +70,7 @@ body {
   background-color: var(--color-background-1);
   color: var(--font-color);
   border-radius: 4px;
+  width: 95%;
 }
 .close__modal__button {
   border: none;

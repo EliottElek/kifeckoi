@@ -3,7 +3,6 @@
   width: auto;
   align-items: flex-start;
   &__section {
-    width: 500px;
     min-width: 200px;
     padding: 4px;
     border-radius: 2px;
@@ -93,6 +92,13 @@
 @media screen and (max-width: 1000px) {
   .kanban__section__title {
     font-size: 0.8rem;
+  }
+}
+@media screen and (max-width: 600px) {
+  .kanban {
+    &__section {
+      min-width: 98vw;
+    }
   }
 }
 .kanban__section__title__more__button {
