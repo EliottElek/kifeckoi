@@ -5,6 +5,7 @@ mutation createUser($firstname: String! $lastname : String! $email : String! $av
     createUser(firstname : $firstname lastname : $lastname email : $email avatarUrl : $avatarUrl username : $username password : $password){
         successful
         message
+        token
     }
 }
 `

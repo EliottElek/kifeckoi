@@ -1,7 +1,6 @@
 import { useMutation } from "@apollo/client";
 import React from "react";
 import { Navigate, useNavigate } from "react-router";
-import logo from "../../assets/images/logo.png";
 import icon from "../../assets/images/icon.png";
 import { CREATE_USER } from "../../graphql/mutations";
 import Button from "../../materials/Button/Button";
@@ -65,7 +64,7 @@ const SignUp = () => {
       });
       if (response.data.createUser.successful) {
         localStorage.setItem("token", response.data.createUser.token);
-        window.location.reload();
+        window.location.href = "/";
       } else {
         toast.error(response.data.createUser.message, {
           position: "bottom-left",
@@ -91,16 +90,6 @@ const SignUp = () => {
   };
   return (
     <div className="signup__container">
-      <div className="logo__container">
-        <img
-          onClick={() => {
-            navigate(`/`);
-          }}
-          src={logo}
-          alt=""
-          className="logo__kifekoi"
-        />
-      </div>
       <form className="login__card" onSubmit={handleLogin}>
         <div className={"top__login__card"}>
           <h1 className={"top__login__card__logocontainer"}>

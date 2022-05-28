@@ -66,6 +66,15 @@ query findProjectByProjectId($id: String! $userId : String!){
         goLiveDate
         goCopyDate
         logoUrl
+        creation
+        creator{
+          id
+          username
+          avatarUrl
+          email
+          firstname
+          lastname
+        }
         client {
           id 
           name
