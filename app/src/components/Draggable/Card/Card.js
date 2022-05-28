@@ -445,7 +445,7 @@ const Card = (props) => {
               ) : (
                 <div className="card__description">
                   <ReactMarkdown>
-                    {shortString(props.task.description, user.maxCaractersCard)}
+                    {shortString(props.task.description, 80)}
                   </ReactMarkdown>
                 </div>
               )}

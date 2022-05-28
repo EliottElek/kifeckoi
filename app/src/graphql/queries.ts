@@ -22,7 +22,6 @@ query getUserById($userId: String!){
       email
       avatarUrl
       username
-      maxCaractersCard
       projects{
         id
         name

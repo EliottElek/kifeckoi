@@ -4,12 +4,8 @@ import "./Settings.scss";
 import Switch from "../../../materials/Switch/Switch";
 import Button from "../../../materials/Button/Button";
 const Settings = () => {
-  const { toggleTheme, setDark, defaultDark, dark, user } =
+  const { toggleTheme, setDark, defaultDark, dark } =
     React.useContext(Context);
-  const [maxCaractersCard, setMaxCaractersCard] = React.useState(0);
-  React.useEffect(() => {
-    setMaxCaractersCard(user?.maxCaractersCard);
-  }, [user?.maxCaractersCard, setMaxCaractersCard]);
   return (
     <div class={"settings__container"}>
       <h1>Paramètres</h1>
@@ -26,22 +22,6 @@ const Settings = () => {
             setDark(!dark);
           }}
           defaultChecked={defaultDark}
-        />
-      </div>
-      <h3>Évènements</h3>
-      <div className={"settings__container__item"}>
-        <span>
-          Définissez combien de caractères maximum s'affichent sur une carte.
-          Par défaut, nous conseillons 65.
-        </span>
-        <input
-          className={"settings__container__item__number-input"}
-          type="number"
-          min="1"
-          max="120"
-          step="1"
-          onChange={(e) => setMaxCaractersCard(e.target.value)}
-          value={maxCaractersCard}
         />
       </div>
       <div className={"settings__container__item__space"}></div>
