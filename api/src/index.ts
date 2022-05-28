@@ -33,7 +33,7 @@ const main = async () => {
         username: config.username,
         password: config.password,
         logging: true,
-        synchronize: true,
+        synchronize: false,
         entities: [User, Client, Project, Event, Comment]
     })
     const app = express()

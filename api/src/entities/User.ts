@@ -19,8 +19,6 @@ export class User extends BaseEntity {
     password!: string;
     @Column()
     avatarUrl!: string;
-    @Column()
-    maxCaractersCard!: number;
     @ManyToMany(() => Event, (events: { contributors: any; }) => events.contributors, { cascade: true }) events!: Event[];
     @ManyToMany(() => Project, (projects: { contributors: any; }) => projects.contributors, { cascade: true }) projects!: Project[];
     @OneToMany(() => Comment, comment => comment.author) comments!: Comment[];

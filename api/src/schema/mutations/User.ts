@@ -3,9 +3,10 @@ import gravatar from "gravatar"
 import { GraphQLID, GraphQLString } from "graphql";
 import { User } from '../../entities/User'
 const { v4: uuid } = require("uuid");
+const bcrypt = require("bcryptjs")
+
 import jwt from 'jsonwebtoken'
 const SECRET_KEY = 'secret!'
-
 export const CREATE_USER = {
     type: MessageType,
     args: {
@@ -24,8 +25,12 @@ export const CREATE_USER = {
             { s: "100", r: "x", d: "retro" },
             true
         );
-        await User.insert({ id: newuuid, firstname, lastname, email, avatarUrl: avatarUrl ? avatarUrl : avatar, username, password, maxCaractersCard: 65 })
-        return { successful: true, message: newuuid }
+        await User.insert({ id: newuuid, firstname, lastname, email, avatarUrl: avatarUrl ? avatarUrl : avatar, username, password: bcrypt.hashSync(password) })
+        const token = jwt.sign(
+            { email: email, id: newuuid },
+            SECRET_KEY,
+        )
+        return { successful: true, message: "User logged in.", token: token }
     }
 }
 
@@ -101,7 +106,7 @@ export const LOGIN = {
             return { successful: false, message: "Impossible de trouver l'utilisateur." }
 
         else {
-            if (password === user.password) {
+            if (bcrypt.compareSync(password, user.password)) {
                 const token = jwt.sign(
                     { email: user.email, id: user.id },
                     SECRET_KEY,
@@ -111,24 +116,5 @@ export const LOGIN = {
             else return { successful: false, message: "Le mot de passe est incorrect." }
 
         }
-    }
-}
-export const UPDATE_MAX_CARACTER_NB = {
-    type: MessageType,
-    args: {
-        id: { type: GraphQLString },
-        number: { type: GraphQLString },
-    },
-    async resolve(parent: any, args: any, context: any) {
-        if (!context.user) throw new Error("You must be authenticated.")
-
-        const { id, number } = args
-        if (!context.user.id === id) throw new Error("You cannot change the number of max characters of another user.")
-
-        const user = await User.findOne({ id: id })
-        if (!user) throw new Error("Cannot find user.")
-
-        await User.update({ id: id }, { maxCaractersCard: number })
-        return { successful: true, message: "maxCaractersCard was successfully updated." }
     }
 }

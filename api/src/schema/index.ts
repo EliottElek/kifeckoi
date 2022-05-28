@@ -1,9 +1,9 @@
 import { GraphQLObjectType, GraphQLSchema } from "graphql";
 import { GET_ALL_USERS, GET_USER_BY_ID } from "./queries/User"
-import { CREATE_USER, DELETE_USER, UPDATE_PASSWORD, UPDATE_AVATAR, LOGIN, UPDATE_MAX_CARACTER_NB } from "./mutations/User"
+import { CREATE_USER, DELETE_USER, UPDATE_PASSWORD, UPDATE_AVATAR, LOGIN } from "./mutations/User"
 import { CREATE_CLIENT } from "./mutations/Client"
 import { FIND_CLIENT_BY_ID, GET_ALL_CLIENTS } from './queries/Client'
-import { CREATE_PROJECT, ADD_CONTRIBUTORS_TO_PROJECT, MODIFY_PROJECT_GLOBAL_INFOS, MODIFY_PROJECT_NAME } from './mutations/Project'
+import { CREATE_PROJECT, ADD_CONTRIBUTORS_TO_PROJECT, REMOVE_CONTRIBUTORS, MODIFY_PROJECT_GLOBAL_INFOS, MODIFY_PROJECT_NAME } from './mutations/Project'
 import { FIND_PROJECT_BY_PROJECT_ID, FIND_PROJECTS_BY_CLIENT_ID, GET_ALL_PROJECTS } from "./queries/Project";
 import { GET_ALL_EVENTS, GET_LATEST_EVENTS, FIND_EVENTS_BY_PROJECT_ID, GET_ALL_EVENTS_ALL_TYPES } from "./queries/Event";
 import { CREATE_EVENT, CHANGE_EVENT_STATUS, CHANGE_EVENT_STATE, CHANGE_EVENT_DESCRIPTION, DELETE_EVENT, ADD_CONTRIBUTORS_TO_EVENT, DELETE_MULTIPLE_EVENTS } from "./mutations/Event";
@@ -37,6 +37,7 @@ const Mutation = new GraphQLObjectType({
         createClient: CREATE_CLIENT,
         createProject: CREATE_PROJECT,
         addContributorsToProject: ADD_CONTRIBUTORS_TO_PROJECT,
+        removeContributors: REMOVE_CONTRIBUTORS,
         addContributorsToEvent: ADD_CONTRIBUTORS_TO_EVENT,
         createEvent: CREATE_EVENT,
         changeEventStatus: CHANGE_EVENT_STATUS,
@@ -50,7 +51,6 @@ const Mutation = new GraphQLObjectType({
         modifyProjectGlobalInfos: MODIFY_PROJECT_GLOBAL_INFOS,
         modifyProjectName: MODIFY_PROJECT_NAME,
         login: LOGIN,
-        updateMaxCaracterNb: UPDATE_MAX_CARACTER_NB,
     }
 })
 

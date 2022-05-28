@@ -4,7 +4,7 @@ import { GraphQLList, GraphQLString } from "graphql";
 import { Project } from '../../entities/Project'
 import { Client } from '../../entities/Client'
 import { User } from '../../entities/User'
-
+import sendMail from '../../utils/mail'
 export const CREATE_PROJECT = {
     type: ProjectType,
     args: {
@@ -19,14 +19,22 @@ export const CREATE_PROJECT = {
         const client = await Client.findOne({ id: clientId })
         const newid = uuid();
         const contributorsFound: User[] = []
+
         if (!client) {
             throw new Error("Cannot find client.")
         } else {
             const user = User.findOne({ id: context.user.id })
             if (!user) throw new Error("Cannot find creator user.")
             const newProject = Project.create({
-                name: name, id: newid, client: client, clientId: clientId, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "", perimeterDescription: "", planningDescription: "", goCopyDate: "", goLiveDate: "", logoUrl: "", creation: new Date().toString()
+                name: name, id: newid, client: client, clientId: clientId, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "<p><br></p>", perimeterDescription: "<p><br></p>", planningDescription: "<p><br></p>", goCopyDate: "", goLiveDate: "", logoUrl: "", creation: new Date().toString()
             })
+            const creatorFound = await User.findOne({ id: context.user.id })
+
+            if (!creatorFound) {
+                throw new Error("Cannot find project.")
+            } else {
+                newProject.creator = creatorFound
+            }
             contributors.map(async (contributor: any) => {
                 const acc = await User.findOne({ id: contributor })
                 if (acc) {
@@ -52,26 +60,53 @@ export const ADD_CONTRIBUTORS_TO_PROJECT = {
         if (!context.user) throw new Error("You must be authenticated.")
         const { projectId, contributors } = args
         const project = await Project.findOne({ id: projectId }, { relations: ["contributors"] })
-
-        let contributorsFound: User[] = []
-
         if (!project) {
             throw new Error("Cannot find project.")
         } else {
             const client = await Client.findOne({ id: project.clientId }, { relations: ["contributors"] })
             if (!client) throw new Error("Cannot find client.")
-            project.contributors = [];
             contributors.map(async (contributor: any) => {
                 const acc = await User.findOne({ id: contributor })
                 if (acc) {
                     project.contributors.push(acc)
 
-                    if (client.contributors.findIndex((c) => c.id !== acc.id)) {
+                    if (!client.contributors.find((c) => c.id === acc.id)) {
                         client.contributors.push(acc)
                     }
+                    sendMail(context.user, project, acc, 'add-contributor', "Invitation à rejoindre un projet").catch(console.error);
                 }
             })
-            contributorsFound = project.contributors;
+            Project.save(project)
+            Client.save(client)
+        }
+        return { ...args }
+    }
+}
+export const REMOVE_CONTRIBUTORS = {
+    type: ProjectType,
+    args: {
+        projectId: { type: GraphQLString },
+        contributors: { type: new GraphQLList(GraphQLString) },
+
+    },
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+        const { projectId, contributors } = args
+        const project = await Project.findOne({ id: projectId }, { relations: ["contributors", "creator"] })
+        if (!project) {
+            throw new Error("Cannot find project.")
+        } else {
+            const client = await Client.findOne({ id: project.clientId }, { relations: ["contributors"] })
+            if (!client) throw new Error("Cannot find client.")
+            contributors.map(async (contributor: any) => {
+                const acc = await User.findOne({ id: contributor })
+                if (acc) {
+                    console.log(project)
+                    if (acc.id === project.creator.id) throw new Error("Your cannot remove the person who created the project from the collaborators.")
+                    project.contributors = project.contributors.filter((c) => c.id !== acc.id)
+                    sendMail(context.user, project, acc, 'remove-contributor', "Fin de collaboration").catch(console.error);
+                }
+            })
             Project.save(project)
             Client.save(client)
         }
