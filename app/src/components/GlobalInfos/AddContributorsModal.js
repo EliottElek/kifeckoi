@@ -19,9 +19,7 @@ const AddContributorsModal = ({
   const { id } = useParams();
   const handleAddContributors = async () => {
     try {
-      const allContributors =
-        alreadyExistingContributors.concat(selectedContributors);
-      const ArrayOfIds = allContributors.map((acc) => acc.id);
+      const ArrayOfIds = selectedContributors.map((acc) => acc.id);
 
       await addContributors({
         variables: {

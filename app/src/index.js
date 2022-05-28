@@ -13,9 +13,9 @@ import { ApolloProvider } from "@apollo/client";
 process.env["KIFEKOI_ENV"] = "dev";
 const httpLink = new HttpLink({
   uri:
-    process.env["KIFEKOI_ENV"] === "dev"
-      ? "http://localhost:3002/graphql"
-      : "https://kifekoi-api.herokuapp.com/graphql",
+    // process.env["KIFEKOI_ENV"] === "dev"?
+       "http://localhost:3002/graphql"
+      // : "https://kifekoi-api.herokuapp.com/graphql",
 });
 
 const authLink = new ApolloLink((operation, forward) => {

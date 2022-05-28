@@ -5,7 +5,7 @@ import Button from "../../../materials/Button/Button";
 import Modal from "../../../materials/Modal/Modal";
 import { Menu, MenuItem } from "@mui/material";
 import {
-  ADD_CONTRIBUTORS_TO_PROJECT,
+  REMOVE_CONTRIBUTORS,
   ADD_CONTRIBUTORS_TO_EVENT,
 } from "../../../graphql/mutations";
 import { toast } from "react-toastify";
@@ -22,9 +22,9 @@ const UserCard = ({
   eventMode,
   event,
 }) => {
-  const { currentProject, user } = useContext(Context);
+  const { user } = useContext(Context);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [addContributors] = useMutation(ADD_CONTRIBUTORS_TO_PROJECT);
+  const [removeContributors] = useMutation(REMOVE_CONTRIBUTORS);
   const [addContributorsEvents] = useMutation(ADD_CONTRIBUTORS_TO_EVENT);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openPopUp = Boolean(anchorEl);
@@ -38,23 +38,18 @@ const UserCard = ({
   const handleDeleteContributor = async (e) => {
     e.stopPropagation();
     try {
-      const allContributors = currentProject.contributors;
-      const newContributors = allContributors.filter(
-        (con) => con.id !== usr.id
-      );
-      const finalIds = newContributors.map((r) => r.id);
       if (eventMode)
         await addContributorsEvents({
           variables: {
             eventId: event.id,
-            contributors: finalIds,
+            contributors: usr.id,
           },
         });
       else
-        await addContributors({
+        await removeContributors({
           variables: {
             projectId: id,
-            contributors: finalIds,
+            contributors: usr.id,
           },
         });
       dataEvents &&
