@@ -35,7 +35,6 @@ import { useParams } from "react-router";
 import { MenuItem } from "@mui/material";
 import { Menu } from "@mui/material";
 import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
-import ReactMarkdown from "../../../assets/ReactMarkdown";
 import Progress from "../../../materials/Progress/Progress";
 import Comments from "./Comments/Comments";
 import Button from "../../../materials/Button/Button";
@@ -44,6 +43,7 @@ import shortString from "../../../assets/functions/shortString";
 import getPeriod from "../../../assets/functions/getPeriod";
 import Avatar from "../../../materials/Avatar/Avatar";
 import formatDate from "../../../assets/functions/formatDate";
+import RenderHtml from "../../../assets/RenderHtml";
 const Card = (props) => {
   const { setEvents, events, currentProject, setCurrentProject, user } =
     useContext(Context);
@@ -444,9 +444,9 @@ const Card = (props) => {
                 </form>
               ) : (
                 <div className="card__description">
-                  <ReactMarkdown>
+                  <RenderHtml>
                     {shortString(props.task.description, 80)}
-                  </ReactMarkdown>
+                  </RenderHtml>
                 </div>
               )}
               <Avatars users={props.task.contributors} />

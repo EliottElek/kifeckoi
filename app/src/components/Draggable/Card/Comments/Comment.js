@@ -1,5 +1,4 @@
 import React from "react";
-import ReactMarkdownSnippet from "../../../../assets/ReactMarkdown";
 import Avatar from "../../../../materials/Avatar/Avatar";
 import "./Comments.scss";
 import { FiMoreHorizontal } from "react-icons/fi";
@@ -13,6 +12,7 @@ import {
 } from "../../../../graphql/mutations";
 import formatDate from "../../../../assets/functions/formatDate";
 import { Context } from "../../../Context/Context";
+import RenderHtml from "../../../../assets/RenderHtml";
 const Comment = ({ comment, commentsData }) => {
   const { user } = React.useContext(Context);
   const [changeCommentContent] = useMutation(CHANGE_COMMENT__CONTENT);
@@ -132,7 +132,7 @@ const Comment = ({ comment, commentsData }) => {
               </div>
             </>
           ) : (
-            <ReactMarkdownSnippet>{comment?.content}</ReactMarkdownSnippet>
+            <RenderHtml>{comment?.content}</RenderHtml>
           )}
         </span>
       </div>

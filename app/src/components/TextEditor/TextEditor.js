@@ -1,50 +1,70 @@
-import { useCallback, useState } from "react";
-import "quill/dist/quill.snow.css";
+import React from "react";
+import ReactQuill from "react-quill";
+import "quill-mention";
+import "react-quill/dist/quill.snow.css";
 import "./TextEditor.scss";
 import Button from "../../materials/Button/Button";
-import Quill from "quill";
-const TOOLBAR_OPTIONS = [
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-  [{ font: [] }],
-  [{ list: "ordered" }, { list: "bullet" }],
-  ["bold", "italic", "underline"],
-  [{ color: [] }, { background: [] }],
-  [{ script: "sub" }, { script: "super" }],
-  [{ align: [] }],
-  ["image", "blockquote", "code-block"],
-  ["clean"],
+
+const atValues = [
+  { id: 1, value: "Eliott" },
+  { id: 2, value: "Clémence" },
+  { id: 3, value: "Paul" },
+  { id: 4, value: "Henri" },
+];
+const hashValues = [
+  { id: 3, value: "Fredrik Sundqvist 2" },
+  { id: 4, value: "Patrik Sjölin 2" },
 ];
 
-const TextEditor = ({
+const mentionModuleConfig = {
+  allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+  mentionDenotationChars: ["@", "#"],
+  source: function (searchTerm, renderList, mentionChar) {
+    let values;
+
+    if (mentionChar === "@") {
+      values = atValues;
+    } else {
+      values = hashValues;
+    }
+
+    if (searchTerm.length === 0) {
+      renderList(values, searchTerm);
+    } else {
+      const matches = [];
+      for (let i = 0; i < values.length; i++)
+        if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) {
+          matches.push(values[i]);
+        }
+      renderList(matches, searchTerm);
+    }
+  },
+};
+
+const modules = {
+  mention: mentionModuleConfig,
+};
+
+function CommentBox({
   setModifMode,
   defaultValue,
   handleModifyDescription,
   placeholder,
-}) => {
-  const [quill, setQuill] = useState();
-  const wrapperRef = useCallback(
-    (wrapper) => {
-      if (wrapper == null) return;
+}) {
+  const [value, setValue] = React.useState(defaultValue);
 
-      wrapper.innerHTML = "";
-      const editor = document.createElement("div");
-      wrapper.append(editor);
-      const q = new Quill(editor, {
-        theme: "snow",
-        modules: { toolbar: TOOLBAR_OPTIONS },
-      });
-      if (defaultValue) {
-        const delta = q.clipboard.convert(defaultValue);
-        q.setContents(delta, "silent");
-      }
-      if (placeholder) q.root.dataset.placeholder = placeholder;
-      setQuill(q);
-    },
-    [defaultValue, placeholder]
-  );
+  const handleChange = (content, delta, source, editor) => {
+    setValue(content);
+  };
   return (
     <>
-      <div className={"text-editor"} ref={wrapperRef} />
+      <ReactQuill
+        theme="snow"
+        value={value}
+        onChange={handleChange}
+        modules={modules}
+        placeholder={placeholder}
+      />
       <div
         style={{
           display: "flex",
@@ -69,7 +89,7 @@ const TextEditor = ({
         </Button>
         <Button
           onClick={(e) => {
-            handleModifyDescription(e, quill.root.innerHTML);
+            handleModifyDescription(e, value);
             setModifMode(false);
           }}
           style={{
@@ -83,6 +103,6 @@ const TextEditor = ({
       </div>
     </>
   );
-};
+}
 
-export default TextEditor;
+export default CommentBox;

@@ -1,7 +1,7 @@
 import React from "react";
+import RenderHtml from "../../../../assets/RenderHtml";
 import "../../../GlobalInfos/ModifTextArea/ModifTextArea.scss";
 import TextEditor from "../../../TextEditor/TextEditor";
-import ReactMarkdownSnippet from "../../../../assets/ReactMarkdown";
 const ModifAreaCard = ({ event, handleModifyDescription }) => {
   const [modifMode, setModifMode] = React.useState(false);
 
@@ -25,7 +25,7 @@ const ModifAreaCard = ({ event, handleModifyDescription }) => {
         }}
         className="modif__textarea__paragraph"
       >
-        <ReactMarkdownSnippet>{event.description}</ReactMarkdownSnippet>
+        <RenderHtml>{event.description}</RenderHtml>
       </div>
     );
 };
