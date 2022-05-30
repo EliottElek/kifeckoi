@@ -41,7 +41,6 @@ import Progress from "../../../materials/Progress/Progress";
 import Comments from "./Comments/Comments";
 import Button from "../../../materials/Button/Button";
 import ModifAreaCard from "./ModifAreaCard/ModifAreaCard";
-import shortString from "../../../assets/functions/shortString";
 import getPeriod from "../../../assets/functions/getPeriod";
 import Avatar from "../../../materials/Avatar/Avatar";
 import formatDate from "../../../assets/functions/formatDate";
@@ -461,7 +460,8 @@ const Card = (props) => {
               ) : (
                 <div className="card__description">
                   <RenderHtml>
-                    {shortString(props.task.description, 80)}
+                    {/* {shortString(props.task.description, 80)} */}
+                    {props.task.description}
                   </RenderHtml>
                 </div>
               )}
