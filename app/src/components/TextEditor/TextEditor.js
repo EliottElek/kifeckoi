@@ -1,70 +1,77 @@
 import React from "react";
-import ReactQuill from "react-quill";
+import Quill from "quill";
 import "quill-mention";
-import "react-quill/dist/quill.snow.css";
+import "quill/dist/quill.snow.css";
 import "./TextEditor.scss";
 import Button from "../../materials/Button/Button";
+import { GET_ALL_USERS } from "../../graphql/queries";
+import { useQuery } from "@apollo/client";
 
-const atValues = [
-  { id: 1, value: "Eliott" },
-  { id: 2, value: "Clémence" },
-  { id: 3, value: "Paul" },
-  { id: 4, value: "Henri" },
-];
-const hashValues = [
-  { id: 3, value: "Fredrik Sundqvist 2" },
-  { id: 4, value: "Patrik Sjölin 2" },
-];
-
-const mentionModuleConfig = {
-  allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-  mentionDenotationChars: ["@", "#"],
-  source: function (searchTerm, renderList, mentionChar) {
-    let values;
-
-    if (mentionChar === "@") {
-      values = atValues;
-    } else {
-      values = hashValues;
-    }
-
-    if (searchTerm.length === 0) {
-      renderList(values, searchTerm);
-    } else {
-      const matches = [];
-      for (let i = 0; i < values.length; i++)
-        if (~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())) {
-          matches.push(values[i]);
-        }
-      renderList(matches, searchTerm);
-    }
-  },
-};
-
-const modules = {
-  mention: mentionModuleConfig,
-};
-
-function CommentBox({
+export default function TextEditor({
   setModifMode,
   defaultValue,
   handleModifyDescription,
   placeholder,
 }) {
-  const [value, setValue] = React.useState(defaultValue);
+  const [mentions, setMentions] = React.useState([]);
+  const [quill, setQuill] = React.useState();
+  const { data } = useQuery(GET_ALL_USERS);
 
-  const handleChange = (content, delta, source, editor) => {
-    setValue(content);
-  };
+  const wrapperRef = React.useCallback(
+    (wrapper) => {
+      async function suggestPeople(searchTerm) {
+        const allPeople = data?.getAllUsers?.map((user) => {
+          return { id: user.id, value: user.username };
+        });
+        return allPeople.filter((person) => person.value.includes(searchTerm));
+      }
+      const modules = {
+        mention: {
+          allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+          mentionDenotationChars: ["@", "#"],
+          source: async function (searchTerm, renderList) {
+            const matchedPeople = await suggestPeople(searchTerm);
+            renderList(matchedPeople);
+          },
+        },
+        toolbar: [
+          ["bold", "italic", "underline"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ header: [1, 2, false] }],
+          ["clean"],
+        ],
+      };
+      if (wrapper == null) return;
+
+      wrapper.innerHTML = "";
+      const editor = document.createElement("div");
+      wrapper.append(editor);
+      const q = new Quill(editor, {
+        theme: "snow",
+        modules: modules,
+      });
+      if (defaultValue) {
+        const delta = q.clipboard.convert(defaultValue);
+        q.setContents(delta, "silent");
+      }
+      if (placeholder) q.root.dataset.placeholder = placeholder;
+      setQuill(q);
+    },
+    [defaultValue, placeholder, data?.getAllUsers]
+  );
+
+  React.useEffect(() => {
+    if (quill) {
+      quill.getModule("mention").options.onSelect = (item, insertItem) => {
+        setMentions([...mentions, item]);
+        insertItem(item);
+      };
+    }
+  }, [quill, mentions]);
+
   return (
     <>
-      <ReactQuill
-        theme="snow"
-        value={value}
-        onChange={handleChange}
-        modules={modules}
-        placeholder={placeholder}
-      />
+      <div ref={wrapperRef} />
       <div
         style={{
           display: "flex",
@@ -89,7 +96,7 @@ function CommentBox({
         </Button>
         <Button
           onClick={(e) => {
-            handleModifyDescription(e, value);
+            handleModifyDescription(e, quill.root.innerHTML, mentions);
             setModifMode(false);
           }}
           style={{
@@ -104,5 +111,3 @@ function CommentBox({
     </>
   );
 }
-
-export default CommentBox;

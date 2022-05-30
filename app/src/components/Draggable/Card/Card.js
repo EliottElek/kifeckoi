@@ -18,6 +18,7 @@ import { BsPeopleFill } from "react-icons/bs";
 import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
+import "../../TextEditor/TextEditor.scss";
 import AddContributorsEvent from "./AddContributorsEvent";
 import {
   CHANGE_EVENT_DESCRIPTION,
@@ -25,6 +26,7 @@ import {
   CHANGE_EVENT_STATE,
   DELETE_EVENT,
   CREATE_EVENT,
+  MENTION_USERS_IN_EVENTS,
 } from "../../../graphql/mutations";
 import { Draggable } from "react-beautiful-dnd";
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
@@ -56,6 +58,8 @@ const Card = (props) => {
   const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
   const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
+  const [mentionUsersInEvent] = useMutation(MENTION_USERS_IN_EVENTS);
+
   const [deleteEvent] = useMutation(DELETE_EVENT);
   const [createEvent] = useMutation(CREATE_EVENT);
   const [description, setDescription] = useState(props.task.description);
@@ -84,9 +88,21 @@ const Card = (props) => {
       setComments(data?.getAllCommentsByEventId);
     },
   });
-  const handleModifyDescription = async (e, content) => {
+  const handleModifyDescription = async (e, content, mentions) => {
     e.stopPropagation();
     try {
+      if (mentions.length !== 0) {
+        //We get the ids of people mentionned
+        const mentionsIds = mentions.map((m) => m.id);
+        //we send an email to them, saying that the user mentionned them in an event
+        await mentionUsersInEvent({
+          variables: {
+            eventId: props.task.id,
+            userIds: mentionsIds,
+            mentionContext: content,
+          },
+        });
+      }
       await changeEventDescription({
         variables: {
           eventId: props.task.id,

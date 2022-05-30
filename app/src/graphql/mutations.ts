@@ -168,3 +168,11 @@ mutation modifyProjectName($projectId : String! $name: String!){
     }
 }
 `
+export const MENTION_USERS_IN_EVENTS = gql`
+mutation mentionUsersInEvents($eventId: String! $mentionContext: String! $userIds: [String!]){
+    mentionUsersInEvents(eventId : $eventId mentionContext : $mentionContext  userIds : $userIds){
+    successful
+    message
+    } 
+  }
+`
