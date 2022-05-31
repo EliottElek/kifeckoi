@@ -203,3 +203,7 @@ td {
   color: var(--font-color);
   overflow: hidden;
 }
+.kanban__section__overflow {
+  height: 80vh;
+  overflow-y: auto;
+}

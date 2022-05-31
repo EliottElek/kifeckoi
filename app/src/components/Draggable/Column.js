@@ -28,7 +28,9 @@ const Column = ({
       >
         <FiMoreHorizontal />
       </button>
+      <div className={`kanban__section__overflow`}>
       <Droppable droppableId={droppableId}>{children}</Droppable>
+      </div>
       <Menu
         anchorEl={anchorEl}
         open={openPopUp}
