@@ -1,8 +1,9 @@
 .dnd__wide__container {
-  height: 100%;
-  background-color: var(--color-background-1);
-  width: 100%;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: var(--background1);
+  overflow: hidden;
 }
 .settings__button {
   width: 40px;

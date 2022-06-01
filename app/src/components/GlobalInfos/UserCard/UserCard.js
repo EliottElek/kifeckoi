@@ -5,7 +5,7 @@ import Button from "../../../materials/Button/Button";
 import Modal from "../../../materials/Modal/Modal";
 import { Menu, MenuItem } from "@mui/material";
 import {
-  ADD_CONTRIBUTORS_TO_PROJECT,
+  REMOVE_CONTRIBUTORS,
   ADD_CONTRIBUTORS_TO_EVENT,
 } from "../../../graphql/mutations";
 import { toast } from "react-toastify";
@@ -22,9 +22,9 @@ const UserCard = ({
   eventMode,
   event,
 }) => {
-  const { currentProject, user } = useContext(Context);
+  const { user, currentProject } = useContext(Context);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [addContributors] = useMutation(ADD_CONTRIBUTORS_TO_PROJECT);
+  const [removeContributors] = useMutation(REMOVE_CONTRIBUTORS);
   const [addContributorsEvents] = useMutation(ADD_CONTRIBUTORS_TO_EVENT);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openPopUp = Boolean(anchorEl);
@@ -38,43 +38,45 @@ const UserCard = ({
   const handleDeleteContributor = async (e) => {
     e.stopPropagation();
     try {
-      const allContributors = currentProject.contributors;
-      const newContributors = allContributors.filter(
-        (con) => con.id !== usr.id
-      );
-      const finalIds = newContributors.map((r) => r.id);
       if (eventMode)
         await addContributorsEvents({
           variables: {
             eventId: event.id,
-            contributors: finalIds,
+            contributors: usr.id,
           },
         });
       else
-        await addContributors({
+        await removeContributors({
           variables: {
             projectId: id,
-            contributors: finalIds,
+            contributors: usr.id,
           },
         });
-      dataEvents &&
-        setTimeout(() => {
-          dataEvents.refetch();
-        }, 200);
-      dataProject &&
-        setTimeout(() => {
-          dataProject.refetch();
-        }, 200);
-      toast.success("Contributeur supprimé avec succès.", {
-        position: toast.POSITION.BOTTOM_LEFT,
-        pauseOnHover: false,
-      });
-      setOpenDeleteModal(false);
+      if (user.id === usr.id) window.location.href = "/";
+      else {
+        dataEvents &&
+          setTimeout(() => {
+            dataEvents.refetch();
+          }, 200);
+        dataProject &&
+          setTimeout(() => {
+            dataProject.refetch();
+          }, 200);
+        toast.success("Contributeur supprimé avec succès.", {
+          position: toast.POSITION.BOTTOM_LEFT,
+          pauseOnHover: false,
+        });
+        setOpenDeleteModal(false);
+      }
     } catch (err) {
-      toast.error("Impossible de supprimer les contributeurs.", {
-        position: toast.POSITION.BOTTOM_LEFT,
-        pauseOnHover: false,
-      });
+      toast.error(
+        "Une erreur est survenue. Vous essayez peut-être de supprimer le créateur de ce projet.",
+        {
+          position: toast.POSITION.BOTTOM_LEFT,
+          pauseOnHover: false,
+        }
+      );
+      console.log(err.message);
     }
   };
   return (
@@ -87,7 +89,7 @@ const UserCard = ({
         </h5>
         <h6 className={"user__card__username"}>({usr.username})</h6>
         <p className={"user__card__email"}>{usr.email}</p>
-        {user.id !== usr.id && !modal && (
+        {currentProject?.creator?.id !== usr.id && !modal && (
           <button onClick={handleClick} className="delete__user__button">
             <FiMoreHorizontal />
           </button>
@@ -106,13 +108,29 @@ const UserCard = ({
           >
             <MdOutlineClear />
           </button>
-          <h3>Êtes-vous sûr de vouloir supprimer {usr.firstname} ?</h3>
-          <p>Vous pourrez le rajouter à un autre moment. </p>
+          {user.id === usr.id ? (
+            <>
+              <h3>
+                {user.firstname}, êtes-vous sûr de vouloir quitter ce projet ?
+              </h3>
+              <p>
+                Vous devrez attendre qu'un administrateur vous ajoute pour
+                collaborer à nouveau.
+              </p>
+            </>
+          ) : (
+            <>
+              <h3>Êtes-vous sûr de vouloir supprimer {usr.firstname} ?</h3>
+              <p>Vous pourrez le rajouter à un autre moment. </p>
+            </>
+          )}
           <div className={"delete__actions__container"}>
             <Button reversed onClick={() => setOpenDeleteModal(false)}>
               Annuler
             </Button>
-            <Button onClick={handleDeleteContributor}>Supprimer</Button>
+            <Button onClick={handleDeleteContributor}>
+              {user.id === usr.id ? "Quitter" : "Supprimer"}
+            </Button>
           </div>
         </div>
       </Modal>
@@ -140,7 +158,7 @@ const UserCard = ({
             setAnchorEl(null);
           }}
         >
-          <p>Supprimer</p>
+          {user.id === usr.id ? <p>Quitter ce projet</p> : <p>Supprimer</p>}
         </MenuItem>
       </Menu>
     </>

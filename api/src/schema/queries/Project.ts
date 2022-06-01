@@ -29,7 +29,7 @@ export const FIND_PROJECT_BY_PROJECT_ID = {
 
         const { id, userId } = args
         if (context.user.id !== userId) throw new Error("The user who made the request is not the same as the one in the context.");
-        const project = await Project.findOne({ id: id }, { relations: ["client", "events", "contributors"] })
+        const project = await Project.findOne({ id: id }, { relations: ["client", "events", "contributors", "creator"] })
         if (!project) throw new Error("Cannot find project.")
         if (!project.contributors.find((contrib) => contrib.id === context.user.id)) { throw new Error("User does not have access to this project.") }
         return project

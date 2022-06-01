@@ -18,6 +18,7 @@ import { BsPeopleFill } from "react-icons/bs";
 import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
+import "../../TextEditor/TextEditor.scss";
 import AddContributorsEvent from "./AddContributorsEvent";
 import {
   CHANGE_EVENT_DESCRIPTION,
@@ -25,6 +26,7 @@ import {
   CHANGE_EVENT_STATE,
   DELETE_EVENT,
   CREATE_EVENT,
+  MENTION_USERS_IN_EVENTS,
 } from "../../../graphql/mutations";
 import { Draggable } from "react-beautiful-dnd";
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
@@ -35,15 +37,14 @@ import { useParams } from "react-router";
 import { MenuItem } from "@mui/material";
 import { Menu } from "@mui/material";
 import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
-import ReactMarkdown from "../../../assets/ReactMarkdown";
 import Progress from "../../../materials/Progress/Progress";
 import Comments from "./Comments/Comments";
 import Button from "../../../materials/Button/Button";
 import ModifAreaCard from "./ModifAreaCard/ModifAreaCard";
-import shortString from "../../../assets/functions/shortString";
 import getPeriod from "../../../assets/functions/getPeriod";
 import Avatar from "../../../materials/Avatar/Avatar";
 import formatDate from "../../../assets/functions/formatDate";
+import RenderHtml from "../../../assets/RenderHtml";
 const Card = (props) => {
   const { setEvents, events, currentProject, setCurrentProject, user } =
     useContext(Context);
@@ -56,6 +57,8 @@ const Card = (props) => {
   const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
   const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
+  const [mentionUsersInEvent] = useMutation(MENTION_USERS_IN_EVENTS);
+
   const [deleteEvent] = useMutation(DELETE_EVENT);
   const [createEvent] = useMutation(CREATE_EVENT);
   const [description, setDescription] = useState(props.task.description);
@@ -84,13 +87,25 @@ const Card = (props) => {
       setComments(data?.getAllCommentsByEventId);
     },
   });
-  const handleModifyDescription = async (e) => {
+  const handleModifyDescription = async (e, content, mentions) => {
     e.stopPropagation();
     try {
+      if (mentions.length !== 0) {
+        //We get the ids of people mentionned
+        const mentionsIds = mentions.map((m) => m.id);
+        //we send an email to them, saying that the user mentionned them in an event
+        await mentionUsersInEvent({
+          variables: {
+            eventId: props.task.id,
+            userIds: mentionsIds,
+            mentionContext: content,
+          },
+        });
+      }
       await changeEventDescription({
         variables: {
           eventId: props.task.id,
-          newDescription: description,
+          newDescription: content,
         },
       });
       props.dataEvents.refetch();
@@ -444,9 +459,10 @@ const Card = (props) => {
                 </form>
               ) : (
                 <div className="card__description">
-                  <ReactMarkdown>
-                    {shortString(props.task.description, user.maxCaractersCard)}
-                  </ReactMarkdown>
+                  <RenderHtml>
+                    {/* {shortString(props.task.description, 80)} */}
+                    {props.task.description}
+                  </RenderHtml>
                 </div>
               )}
               <Avatars users={props.task.contributors} />
@@ -459,7 +475,7 @@ const Card = (props) => {
           </div>
         )}
       </Draggable>
-      <Modal open={openModal} setOpen={handleCloseModal}>
+      <Modal open={openModal} setOpen={setOpenModal}>
         <div className="modal__content__container">
           <div className="period__title__modal__container">
             <span
@@ -581,7 +597,7 @@ const Card = (props) => {
               reversed
               onClick={(e) => {
                 e.stopPropagation();
-                setOpenModal(false);
+                // setOpenModal(false);
                 setOpenAddContributorModal(true);
                 // setOpenModal(false);
               }}

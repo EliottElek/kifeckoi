@@ -13,7 +13,6 @@ export const UserType = new GraphQLObjectType({
         avatarUrl: { type: GraphQLString },
         password: { type: GraphQLString },
         username: { type: GraphQLString },
-        maxCaractersCard: { type: GraphQLInt },
         events: { type: new GraphQLList(EventType) },
         comments: { type: new GraphQLList(CommentType) },
         createdEvents: { type: new GraphQLList(EventType) },

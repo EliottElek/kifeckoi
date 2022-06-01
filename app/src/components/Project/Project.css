@@ -108,13 +108,6 @@
   display: grid;
   place-items: center;
 }
-.modal__content__container {
-  width: 95%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 23px;
-}
 .modal__content__events__container {
   display: flex;
   gap: 12px;

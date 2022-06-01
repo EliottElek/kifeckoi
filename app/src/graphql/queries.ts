@@ -22,7 +22,6 @@ query getUserById($userId: String!){
       email
       avatarUrl
       username
-      maxCaractersCard
       projects{
         id
         name
@@ -66,6 +65,15 @@ query findProjectByProjectId($id: String! $userId : String!){
         goLiveDate
         goCopyDate
         logoUrl
+        creation
+        creator{
+          id
+          username
+          avatarUrl
+          email
+          firstname
+          lastname
+        }
         client {
           id 
           name

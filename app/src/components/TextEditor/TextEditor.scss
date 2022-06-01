@@ -1,0 +1,76 @@
+.text-editor {
+  background-color: var(--card-background);
+}
+.text-editor * {
+  color: var(--font-color);
+}
+.ql-toolbar .ql-stroke {
+  fill: none;
+  stroke: var(--font-color);
+}
+.ql-toolbar:hover,
+.ql-strokehover {
+  fill: none;
+  stroke: var(--font-color);
+}
+.ql-toolbar .ql-fill {
+  fill: var(--font-color);
+  stroke: none;
+}
+
+.ql-toolbar .ql-picker {
+  color: var(--font-color);
+}
+.ql-container > .ql-editor.ql-blank::before {
+  color: var(--font-color);
+  opacity: 0.5;
+}
+.App {
+  font-family: sans-serif;
+}
+
+.ql-mention-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ql-mention-list-container {
+  width: 270px;
+  height: 200px;
+  overflow-y: auto;
+  border-radius: 4px;
+  background-color: var(--card-background);
+  box-shadow: 0 2px 12px 0 rgba(30, 30, 30, 0.08);
+  z-index: 9001;
+}
+
+.ql-mention-list-item {
+  cursor: pointer;
+  height: 44px;
+  line-height: 44px;
+  font-size: 16px;
+  padding: 0 20px;
+  vertical-align: middle;
+}
+
+.ql-mention-list-item.selected {
+  background-color: var(--color-background-1);
+  text-decoration: none;
+}
+
+.mention {
+  border-radius: 2px;
+  background-color: var(--check-background);
+  color: var(--font-color);
+  padding: 2px;
+  margin: 2px;
+}
+
+/* 这里设置最大高度 */
+.ql-editor {
+  font-size: 1rem;
+  overflow: hidden;
+  overflow-y: scroll;
+}

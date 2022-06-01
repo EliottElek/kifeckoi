@@ -19,6 +19,7 @@
   position: relative;
   overflow-y: auto;
   color: var(--font-color);
+  background: var(--background1);
 }
 .global__infos__container h4 {
   color: var(--font-color);
@@ -132,22 +133,22 @@
   gap: 4px;
 }
 .à__risque__span {
-  background-color: rgba(255, 166, 0, 0.363);
+  border: solid 2px rgba(255, 166, 0, 0.363);
 }
 .conforme__span {
-  background-color: rgba(0, 255, 55, 0.24);
+  border: solid 2px rgba(0, 255, 55, 0.24);
 }
 .vigilance__span {
-  background-color: rgba(255, 217, 0, 0.219);
+  border: solid 2px rgba(255, 217, 0, 0.219);
 }
 .alerte__span {
-  background-color: rgba(255, 0, 0, 0.308);
+  border: solid 2px rgba(255, 0, 0, 0.308);
 }
 .issue__span {
-  background-color: rgba(174, 0, 255, 0.212);
+  border: solid 2px rgba(174, 0, 255, 0.212);
 }
 .gestion__de__crise__span {
-  background-color: rgba(255, 0, 0, 0.459);
+  border: solid 2px rgba(255, 0, 0, 0.459);
 }
 /* Removes the clear button from date inputs */
 input[type="date"]::-webkit-clear-button {
@@ -202,4 +203,10 @@ focus {
   border-radius: 12px;
   margin-top: 10px;
   padding: 12px;
+}
+.date__creator__span {
+  font-style: italic;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  padding-bottom: 24px;
 }

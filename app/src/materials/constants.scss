@@ -74,23 +74,3 @@ input:focus {
 textarea {
   resize: none;
 }
-.toggle__drawer__button {
-  width: 30px;
-  position: absolute;
-  left: 10px;
-  height: 30px;
-  border-radius: 50%;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  background-color: transparent;
-  cursor: pointer;
-  transition: 0.2s all;
-  padding: 4px;
-  color: var(--font-color);
-}
-.toggle__drawer__button:hover {
-  background-color: var(--color-background-1);
-}

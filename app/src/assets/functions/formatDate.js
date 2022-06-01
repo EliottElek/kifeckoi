@@ -12,7 +12,7 @@ const formatDate = (date, hoursBool) => {
     if (minutes <= 9) minutes = "0" + minutes;
     if (hours <= 9) hours = "0" + hours;
     const time = hours + ":" + minutes;
-    formated += " " + time;
+    formated += " à " + time;
   }
   return formated;
 };

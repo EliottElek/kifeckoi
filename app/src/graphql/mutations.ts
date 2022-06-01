@@ -5,6 +5,7 @@ mutation createUser($firstname: String! $lastname : String! $email : String! $av
     createUser(firstname : $firstname lastname : $lastname email : $email avatarUrl : $avatarUrl username : $username password : $password){
         successful
         message
+        token
     }
 }
 `
@@ -130,6 +131,13 @@ mutation addContributorsToProject($projectId : String! $contributors : [String!]
     }
 }
 `
+export const REMOVE_CONTRIBUTORS = gql`
+mutation removeContributors($projectId : String! $contributors : [String!]){
+    removeContributors(projectId:$projectId contributors:$contributors){
+        id
+    }
+}`
+
 export const DELETE_MULTIPLE_EVENTS = gql`
 mutation deleteMultipleEvents($eventIds : [String!]){
     deleteMultipleEvents(eventIds:$eventIds){
@@ -159,4 +167,12 @@ mutation modifyProjectName($projectId : String! $name: String!){
         id
     }
 }
+`
+export const MENTION_USERS_IN_EVENTS = gql`
+mutation mentionUsersInEvents($eventId: String! $mentionContext: String! $userIds: [String!]){
+    mentionUsersInEvents(eventId : $eventId mentionContext : $mentionContext  userIds : $userIds){
+    successful
+    message
+    } 
+  }
 `

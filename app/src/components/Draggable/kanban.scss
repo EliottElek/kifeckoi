@@ -2,19 +2,25 @@
   display: flex;
   width: auto;
   align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 100%;
   &__section {
-    width: 500px;
     min-width: 200px;
+    width: 500px;
     padding: 4px;
+    height: calc(100% - 55px);
     border-radius: 2px;
     padding-top: 50px;
     position: relative;
-    background-color: var(--color-background-1);
-
+    background-color: transparent;
     & ~ & {
       margin-left: 10px;
     }
-
+    &__spacer {
+      background-color: transparent;
+      padding: 4px;
+    }
     &__title {
       position: absolute;
       font-size: 1.1rem;
@@ -95,9 +101,21 @@
     font-size: 0.8rem;
   }
 }
+@media screen and (max-width: 600px) {
+  .kanban {
+    scroll-snap-type: inline mandatory;
+    &__section {
+      min-width: 98vw;
+      scroll-snap-align: start;
+    }
+  }
+  .kanban__section__overflow {
+    max-height: none;
+    overflow-y: hidden;
+  }
+}
 .kanban__section__title__more__button {
   position: absolute;
-  opacity: 0;
   top: 0;
   right: 0;
   background-color: transparent;
@@ -191,4 +209,18 @@ td {
   transition: 0.2s ease;
   color: var(--font-color);
   overflow: hidden;
+}
+.kanban__section__overflow {
+  max-height: 90%;
+  overflow-y: auto;
+}
+@media (hover: hover) {
+  .kanban__section__title__more__button {
+    opacity: 0;
+  }
+}
+@media (hover: none) {
+  .kanban__section__title__more__button {
+    opacity: 1;
+  }
 }

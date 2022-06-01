@@ -7,6 +7,7 @@ import Button from "../../materials/Button/Button";
 import InputText from "../../materials/InputText/InputText";
 import { Context } from "../Context/Context";
 import { toast } from "react-toastify";
+
 import "./Login.scss";
 const Login = () => {
   const { auth } = React.useContext(Context);
@@ -84,6 +85,8 @@ const Login = () => {
       </div>
       <form className="login__card" onSubmit={handleLogin}>
         <div className={"top__login__card"}>
+          <div style={{ height: "60px" }} />
+
           <h1>Connectez-vous</h1>
           <InputText
             placeHolder="Votre email..."

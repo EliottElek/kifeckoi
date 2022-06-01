@@ -22,6 +22,7 @@ import ModifTextArea from "./ModifTextArea/ModifTextArea";
 import DatePicker from "./DatePicker/DatePicker";
 import AddLogoModal from "./AddLogoModal/AddLogoModal";
 import ChangeNameModal from "./ChangeNameModal/ChangeNameModal";
+import formatDate from "../../assets/functions/formatDate";
 const status = [
   {
     name: "conforme",
@@ -225,6 +226,13 @@ const GlobalInfos = () => {
             </button>
           </div>
         </h2>
+        {currentProject?.creator && (
+          <span className={"date__creator__span"}>
+            Créé par {currentProject.creator.firstname} (
+            {currentProject.creator.email}) le{" "}
+            {formatDate(currentProject?.creation, true)}
+          </span>
+        )}
         <h4
           className={"client__link__big"}
           onClick={() => navigate(`/client/${currentProject?.client?.id}`)}
@@ -239,6 +247,7 @@ const GlobalInfos = () => {
             marginBottom: "15px",
             display: "flex",
             alignItems: "center",
+            flex: "none",
           }}
         >
           Status global{" "}

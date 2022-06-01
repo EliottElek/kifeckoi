@@ -7,7 +7,7 @@ import { CgMenuGridO } from "react-icons/cg";
 import StickyNavbar from "./StickyNavbar";
 import { Menu } from "@mui/material";
 import { MenuItem } from "@mui/material";
-// import Button from "../../materials/Button/Button";
+import "./StickyNavbar.scss";
 import logo from "../../assets/images/logo.png";
 import getPeriod from "../../assets/functions/getPeriod";
 import ReactTooltip from "react-tooltip";
@@ -39,13 +39,13 @@ const StickyNavAdvanced = () => {
   let period = getPeriod();
   return (
     <StickyNavbar>
-      <button
-        className={"toggle__drawer__button"}
-        onClick={() => setOpenDrawer(!openDrawer)}
-      >
-        <CgMenuGridO />
-      </button>
-      <div className="name__container">
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <button
+          className={"toggle__drawer__button"}
+          onClick={() => setOpenDrawer(!openDrawer)}
+        >
+          <CgMenuGridO />
+        </button>
         <img
           onClick={() => {
             setCurrentProject(null);
@@ -56,25 +56,24 @@ const StickyNavAdvanced = () => {
           alt=""
           className="logo__kifekoi"
         />
-        <h2
-          className="name__container__title"
-          onClick={() => navigate(`/project/${currentProject?.id}/global`)}
-        >
-          {currentProject?.name}
-          {urlElement && ` - ${urlElement} `}
-        </h2>
-        <span className="period__span" data-tip data-for="weekTooltip">
-          {period}
-        </span>
+        <div className="name__container">
+          <h2
+            className="name__container__title"
+            onClick={() => navigate(`/project/${currentProject?.id}/global`)}
+          >
+            {currentProject?.name}
+            {urlElement && ` - ${urlElement} `}
+          </h2>
+          <span className="period__span" data-tip data-for="weekTooltip">
+            {period}
+          </span>
+        </div>
       </div>
       <div className="events__container">
         <button className="settings__button" onClick={handleClick}>
           <Avatar src={user?.avatarUrl} name={user?.firstname} />
         </button>
       </div>
-      <ReactTooltip delayShow={500} id="weekTooltip" effect="solid">
-        <span>Semaine actuelle</span>
-      </ReactTooltip>
       <Menu
         anchorEl={anchorEl}
         open={open}
@@ -104,8 +103,13 @@ const StickyNavAdvanced = () => {
           <p>Déconnexion</p>
         </MenuItem>
         <span className={"divider"} />
-        <MenuItem>
-          <span>
+        <MenuItem
+          onClick={(e) => {
+            toggleTheme(e);
+            setDark(!dark);
+          }}
+        >
+          <span style={{ marginRight: "8px" }}>
             Passer en mode
             {dark ? " jour " : " nuit "}
           </span>
@@ -118,6 +122,9 @@ const StickyNavAdvanced = () => {
           />
         </MenuItem>
       </Menu>
+      <ReactTooltip delayShow={500} id="weekTooltip" effect="solid">
+        <span>Semaine actuelle</span>
+      </ReactTooltip>
     </StickyNavbar>
   );
 };
