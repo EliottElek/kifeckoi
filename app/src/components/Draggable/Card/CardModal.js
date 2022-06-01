@@ -16,8 +16,9 @@ const CardModal = (props) => {
   return (
     <Modal open={props.openModal} setOpen={props.setOpenModal}>
       <div className="modal__content__container">
+        <span>id : {props.task.id.split("-")[0]}</span>
         <ModifAreaCard
-          style={{ fontSize: "2rem" }}
+          large
           event={props.task}
           value={props.description}
           setValue={props.setDescription}
