@@ -2,17 +2,18 @@
   display: flex;
   width: auto;
   align-items: flex-start;
-  overflow: auto;
-  min-height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 100%;
   &__section {
     min-width: 200px;
     width: 500px;
     padding: 4px;
+    height: calc(100% - 55px);
     border-radius: 2px;
     padding-top: 50px;
     position: relative;
     background-color: transparent;
-
     & ~ & {
       margin-left: 10px;
     }
@@ -108,10 +109,13 @@
       scroll-snap-align: start;
     }
   }
+  .kanban__section__overflow {
+    max-height: none;
+    overflow-y: hidden;
+  }
 }
 .kanban__section__title__more__button {
   position: absolute;
-  opacity: 0;
   top: 0;
   right: 0;
   background-color: transparent;
@@ -207,6 +211,16 @@ td {
   overflow: hidden;
 }
 .kanban__section__overflow {
-  max-height: 80vh;
+  max-height: 90%;
   overflow-y: auto;
+}
+@media (hover: hover) {
+  .kanban__section__title__more__button {
+    opacity: 0;
+  }
+}
+@media (hover: none) {
+  .kanban__section__title__more__button {
+    opacity: 1;
+  }
 }

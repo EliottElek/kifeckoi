@@ -480,102 +480,100 @@ const EventKanban = ({ type, setLength, length }) => {
       </>
     );
   }
+  if (!events)
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Progress size="medium" reversed />
+      </div>
+    );
 
   return (
-    <>
-      {!events ? (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Progress size="medium" reversed />
-        </div>
-      ) : (
-        <DragDropContext onDragEnd={onDragEnd}>
-          <div className="kanban">
-            {events?.map((section, i) => (
-              <Column
-                addCard={addCard}
-                setAddCard={setAddCard}
-                section={section}
-                setEventSelected={setEventSelected}
-                key={section.id}
-                droppableId={section.id}
-              >
-                {(provided) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
-                    <h2 className={`kanban__section__title`}>
-                      {section?.title} ({section?.tasks?.length})
-                    </h2>
-                    <div className="kanban__section__content">
-                      {section?.tasks?.map((task, index) => (
-                        <Card
-                          key={task?.id}
-                          draggableId={task?.id}
-                          index={index}
-                          type={type}
-                          task={task}
-                          setLength={setLength}
-                          length={length}
-                          dataEvents={dataEvents}
-                          dataProject={dataProject}
-                          className={`card card__${i + 1}`}
-                        />
-                      ))}
-                      {addCard && eventSelected.id === section.id && (
-                        <Card add type={type} task={""} className={`card`}>
-                          <form className="add__card__form" onSubmit={add}>
-                            <AutoTextArea
-                              onKeyPress={commentEnterSubmit}
-                              placeholder={"Titre de l'évènement..."}
-                              onChange={(e) => setInput(e.target.value)}
-                              onClick={(e) => e.stopPropagation()}
-                              value={input}
-                              autoFocus
-                              className="modif__description__textarea"
-                            ></AutoTextArea>
-                            <div className="add__card__button__container">
-                              <Button
-                                style={{ width: "80%", height: "35px" }}
-                                type="submit"
-                                disabled={
-                                  !eventSelected || input === "" ? true : false
-                                }
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  add(e);
-                                  setAddCard(false);
-                                }}
-                              >
-                                Ajouter
-                              </Button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setAddCard(false);
-                                }}
-                                className="clear__button"
-                              >
-                                <MdOutlineClear />
-                              </button>
-                            </div>
-                          </form>
-                        </Card>
-                      )}
-                      {provided.placeholder}
-                    </div>
-                    <div className={`kanban__section__spacer`}></div>
-                  </div>
-                )}
-              </Column>
-            ))}
-          </div>
-        </DragDropContext>
-      )}
-    </>
+    <div className="kanban">
+      <DragDropContext onDragEnd={onDragEnd}>
+        {events?.map((section, i) => (
+          <Column
+            addCard={addCard}
+            setAddCard={setAddCard}
+            section={section}
+            setEventSelected={setEventSelected}
+            key={section.id}
+            droppableId={section.id}
+          >
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                <h2 className={`kanban__section__title`}>
+                  {section?.title} ({section?.tasks?.length})
+                </h2>
+                <div className="kanban__section__content">
+                  {section?.tasks?.map((task, index) => (
+                    <Card
+                      key={task?.id}
+                      draggableId={task?.id}
+                      index={index}
+                      type={type}
+                      task={task}
+                      setLength={setLength}
+                      length={length}
+                      dataEvents={dataEvents}
+                      dataProject={dataProject}
+                      className={`card card__${i + 1}`}
+                    />
+                  ))}
+                  {addCard && eventSelected.id === section.id && (
+                    <Card add type={type} task={""} className={`card`}>
+                      <form className="add__card__form" onSubmit={add}>
+                        <AutoTextArea
+                          onKeyPress={commentEnterSubmit}
+                          placeholder={"Titre de l'évènement..."}
+                          onChange={(e) => setInput(e.target.value)}
+                          onClick={(e) => e.stopPropagation()}
+                          value={input}
+                          autoFocus
+                          className="modif__description__textarea"
+                        ></AutoTextArea>
+                        <div className="add__card__button__container">
+                          <Button
+                            style={{ width: "80%", height: "35px" }}
+                            type="submit"
+                            disabled={
+                              !eventSelected || input === "" ? true : false
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              add(e);
+                              setAddCard(false);
+                            }}
+                          >
+                            Ajouter
+                          </Button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setAddCard(false);
+                            }}
+                            className="clear__button"
+                          >
+                            <MdOutlineClear />
+                          </button>
+                        </div>
+                      </form>
+                    </Card>
+                  )}
+                  {provided.placeholder}
+                </div>
+                <div className={`kanban__section__spacer`}></div>
+              </div>
+            )}
+          </Column>
+        ))}
+      </DragDropContext>
+    </div>
   );
 };
 

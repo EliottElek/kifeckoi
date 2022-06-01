@@ -20,9 +20,7 @@ const DndWide = ({ type }) => {
 
   return (
     <Suspense fallback={renderLoader()}>
-      <div className={"dnd__wide__container"}>
         <EventKanban type={type} />
-      </div>
     </Suspense>
   );
 };

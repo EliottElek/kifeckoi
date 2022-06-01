@@ -30,7 +30,9 @@ const Column = ({
         <FiMoreHorizontal />
       </button>
       <div className={`kanban__section__overflow`}>
-        <Droppable droppableId={droppableId}>{children}</Droppable>
+        <Droppable style={{ overflowY: "auto" }} droppableId={droppableId}>
+          {children}
+        </Droppable>
       </div>
       <button
         onClick={() => {

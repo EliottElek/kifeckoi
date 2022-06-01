@@ -154,13 +154,24 @@
   opacity: 0;
   transition: 0.1s all;
 }
+@media (hover: hover) {
+  .card__content__events__container,
+  .card__content__added__indicator {
+    opacity: 0;
+  }
+}
+@media (hover: none) {
+  .card__content__events__container,
+  .card__content__added__indicator {
+    opacity: 1;
+  }
+}
 .kanban__section__content__name__container__edit__button:hover {
   background-color: var(--color-background-1);
   color: var(--font-color);
   transition: 0.1s ease;
 }
 .card__content__added__indicator {
-  opacity: 0;
   transition: 0.2s ease;
   padding: 3px;
   background-color: transparent;
