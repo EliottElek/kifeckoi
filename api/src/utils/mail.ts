@@ -13,7 +13,7 @@ const handlebarOptions = {
   },
   viewPath: path.resolve('./views/'),
 };
-async function sendMail(sender: User, project: Project, receiver: User, template: string, subject: string) {
+async function sendMail(sender: User, project: Project, receiver: User, template: string, subject: string, mentionContext: string) {
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -33,7 +33,8 @@ async function sendMail(sender: User, project: Project, receiver: User, template
     context: {
       sender: sender,
       receiver: receiver,
-      project: project
+      project: project,
+      mentionContext: mentionContext
     }
   });
 }
