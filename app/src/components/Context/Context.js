@@ -20,6 +20,7 @@ export const ContextProvider = ({ children }) => {
   const [auth, setAuth] = React.useState(true);
   const [user, setUser] = React.useState(null);
   const [addCard, setAddCard] = React.useState(false);
+  const [eventsData, setEventsData] = React.useState([]);
 
   const SECRET_KEY = "secret!";
 
@@ -101,6 +102,8 @@ export const ContextProvider = ({ children }) => {
         user: user,
         setUser: setUser,
         users: users,
+        eventsData: eventsData,
+        setEventsData: setEventsData,
         setUsers: setUsers,
         clients: clients,
         setClients: setClients,

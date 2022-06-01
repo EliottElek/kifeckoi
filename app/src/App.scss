@@ -3,12 +3,12 @@ html,
 body {
   width: 100vw;
   height: 100vh;
-  background-color: var(--color-background-1);
+  background-color: transparent;
 }
 .dashboard {
   width: 100vw;
   height: 100vh;
-  background-color: var(--color-background-1);
+  background: var(--background1);
 }
 .logo__kifekoi {
   height: 40px;
