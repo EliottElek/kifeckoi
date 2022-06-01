@@ -7,7 +7,6 @@ import { MenuItem } from "@mui/material";
 import Card from "./Card/Card";
 import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
-import { BiPlus } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
 import { useMutation, useQuery } from "@apollo/client";
 import { FaChevronDown } from "react-icons/fa";
@@ -568,15 +567,7 @@ const EventKanban = ({ type, setLength, length }) => {
                       )}
                       {provided.placeholder}
                     </div>
-                    <button
-                      onClick={() => {
-                        setEventSelected(section);
-                        setAddCard(true);
-                      }}
-                      className={`kanban__section__title__button`}
-                    >
-                      <BiPlus /> Ajouter une carte
-                    </button>
+                    <div className={`kanban__section__spacer`}></div>
                   </div>
                 )}
               </Column>

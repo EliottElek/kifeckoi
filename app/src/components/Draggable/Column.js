@@ -2,6 +2,7 @@ import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { FiMoreHorizontal } from "react-icons/fi";
 import "./kanban.scss";
+import { BiPlus } from "react-icons/bi";
 import { Menu, MenuItem } from "@mui/material";
 
 const Column = ({
@@ -29,8 +30,17 @@ const Column = ({
         <FiMoreHorizontal />
       </button>
       <div className={`kanban__section__overflow`}>
-      <Droppable droppableId={droppableId}>{children}</Droppable>
+        <Droppable droppableId={droppableId}>{children}</Droppable>
       </div>
+      <button
+        onClick={() => {
+          setEventSelected(section);
+          setAddCard(true);
+        }}
+        className={`kanban__section__title__button`}
+      >
+        <BiPlus /> Ajouter une carte
+      </button>
       <Menu
         anchorEl={anchorEl}
         open={openPopUp}

@@ -16,7 +16,10 @@
     & ~ & {
       margin-left: 10px;
     }
-
+    &__spacer {
+      background-color: transparent;
+      padding: 4px;
+    }
     &__title {
       position: absolute;
       font-size: 1.1rem;
@@ -204,6 +207,6 @@ td {
   overflow: hidden;
 }
 .kanban__section__overflow {
-  height: 80vh;
+  max-height: 80vh;
   overflow-y: auto;
 }
