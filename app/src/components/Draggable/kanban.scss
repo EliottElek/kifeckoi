@@ -5,6 +5,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   height: 100%;
+  background: var(--background1);
   &__section {
     min-width: 200px;
     width: 500px;
@@ -223,4 +224,9 @@ td {
   .kanban__section__title__more__button {
     opacity: 1;
   }
+}
+.events__rows {
+  max-height: 100%;
+  overflow-y: auto;
+  background: var(--background1);
 }

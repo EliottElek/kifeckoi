@@ -2,9 +2,11 @@
   cursor: pointer;
   padding: 10px;
   position: relative;
+  transition: 0.2s ease;
 }
 .event__row:hover {
   background-color: var(--color-background-2);
+  transition: 0.2s ease;
 }
 table {
   border-collapse: collapse;
@@ -15,7 +17,7 @@ th,
 td {
   padding: 8px;
   text-align: left;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid transparent;
 }
 .current__period__row {
   color: var(--main-color);

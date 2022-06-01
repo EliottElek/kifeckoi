@@ -283,10 +283,24 @@ const EventKanban = ({ type, setLength, length }) => {
     );
   if (listStyle) {
     return (
-      <>
+      <div
+        className={"events__rows"}
+        style={{
+          maxHeight: "100%",
+          overflowY: "auto",
+          background: "var(--background1)",
+        }}
+      >
         <table className={"events__rows__container"}>
           <tr className={"events__rows__container__head"}>
-            <th style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <th
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                height: "100%",
+              }}
+            >
               <CheckBox
                 onClick={selectAllEvents}
                 checked={selectAll}
@@ -477,7 +491,7 @@ const EventKanban = ({ type, setLength, length }) => {
             <span>Supprimer {selectedEvents?.length} évènement(s)</span>
           </MenuItem>
         </Menu>
-      </>
+      </div>
     );
   }
   if (!events)

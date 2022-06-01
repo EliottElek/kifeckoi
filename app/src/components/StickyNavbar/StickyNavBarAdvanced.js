@@ -4,6 +4,7 @@ import { Context } from "../Context/Context";
 import Switch from "../../materials/Switch/Switch";
 import Avatar from "../../materials/Avatar/Avatar";
 import { CgMenuGridO } from "react-icons/cg";
+import { HiOutlineFilter } from "react-icons/hi";
 import { MdFormatListBulleted } from "react-icons/md";
 import StickyNavbar from "./StickyNavbar";
 import { Menu } from "@mui/material";
@@ -37,6 +38,14 @@ const StickyNavAdvanced = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const [anchorElFilter, setAnchorElFilter] = React.useState(null);
+  const openFilter = Boolean(anchorElFilter);
+  const handleClickFilter = (event) => {
+    setAnchorElFilter(event.currentTarget);
+  };
+  const handleCloseFilter = () => {
+    setAnchorElFilter(null);
   };
   const navigate = useNavigate();
   let urlElement = window.location.href.split("/")[5];
@@ -84,9 +93,14 @@ const StickyNavAdvanced = () => {
             <MdFormatListBulleted />
           </button>
           {listStyle && (
-            <span className="selected__number__span">
-              {selectedEvents?.length} sélectionné(s)
-            </span>
+            <div className="top__nav__list__action__container">
+              <span className="selected__number__span">
+                {selectedEvents?.length} sélectionné(s)
+              </span>
+              <button onClick={handleClickFilter} className={"top__nav__btn"}>
+                Filtrer <HiOutlineFilter />
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -123,17 +137,16 @@ const StickyNavAdvanced = () => {
         >
           <p>Déconnexion</p>
         </MenuItem>
-        <span className={"divider"} />
         <MenuItem
           onClick={(e) => {
             toggleTheme(e);
             setDark(!dark);
           }}
         >
-          <span style={{ marginRight: "8px" }}>
+          <p style={{ marginRight: "8px", fontSize: "0.9rem" }}>
             Passer en mode
             {dark ? " jour " : " nuit "}
-          </span>
+          </p>
           <Switch
             onChange={(e) => {
               toggleTheme(e);
@@ -141,6 +154,30 @@ const StickyNavAdvanced = () => {
             }}
             defaultChecked={defaultDark}
           />
+        </MenuItem>
+      </Menu>
+      <Menu
+        anchorEl={anchorElFilter}
+        open={openFilter}
+        onClose={handleCloseFilter}
+        sx={{
+          "& .MuiPaper-root": {
+            color: "var(--font-color)",
+            bgcolor: "var(--card-background)",
+          },
+        }}
+      >
+        <MenuItem style={{ fontSize: "0.9rem" }}>
+          Afficher les évènements créés cette semaine
+        </MenuItem>
+        <MenuItem style={{ fontSize: "0.9rem" }}>
+          Afficher les évènements créés la semaine dernière
+        </MenuItem>
+        <MenuItem style={{ fontSize: "0.9rem" }}>
+          Afficher les évènements en status à vérifier
+        </MenuItem>
+        <MenuItem style={{ fontSize: "0.9rem" }}>
+          Afficher les évènements en status vérifier
         </MenuItem>
       </Menu>
       <ReactTooltip delayShow={500} id="weekTooltip" effect="solid">
