@@ -38,7 +38,7 @@ body {
   --font-color: rgb(224, 224, 224);
   --color-background-1: #1c2128;
   --color-background-2: #0f1e25;
-  --card-background: #383838;
+  --card-background: #2b2f3e;
   --main-color: #01ffff80;
   --main-color2: #e620e6af;
   --shadow-color: #191a1b;
@@ -81,7 +81,7 @@ body {
   background-color: var(--color-background-1);
   color: var(--font-color);
   border-radius: 4px;
-  width: 95%;
+  padding: 10px;
 }
 .close__modal__button {
   border: none;

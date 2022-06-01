@@ -12,6 +12,7 @@ export default function TextEditor({
   defaultValue,
   handleModifyDescription,
   placeholder,
+  large,
 }) {
   const [mentions, setMentions] = React.useState([]);
   const [quill, setQuill] = React.useState();
@@ -71,7 +72,12 @@ export default function TextEditor({
 
   return (
     <>
-      <div ref={wrapperRef} />
+      <div
+        className={
+          large ? "textarea__edit__mode__large" : "textarea__edit__mode"
+        }
+        ref={wrapperRef}
+      />
       <div
         style={{
           display: "flex",
