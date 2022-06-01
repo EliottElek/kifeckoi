@@ -5,6 +5,7 @@ import { Event } from '../../entities/Event'
 import { User } from '../../entities/User'
 import { EventType } from '../typedefs/Event'
 import { MessageType } from '../typedefs/Message'
+import sendMail from "../../utils/mail";
 
 export const CREATE_EVENT = {
     type: EventType,
@@ -150,5 +151,34 @@ export const ADD_CONTRIBUTORS_TO_EVENT = {
             Event.save(event)
         }
         return { ...args, contributorsFound }
+    }
+}
+export const MENTION_USERS_IN_EVENTS = {
+    type: MessageType,
+    args: {
+        eventId: { type: GraphQLString },
+        userIds: { type: new GraphQLList(GraphQLString) },
+        mentionContext: { type: GraphQLString },
+    },
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
+        const { eventId, userIds, mentionContext } = args
+        const event = await Event.findOne({ id: eventId })
+        if (!event) {
+            throw new Error("Cannot find event.")
+        } else {
+            const project = await Project.findOne({ id: event.projectId })
+            if (!project) {
+                throw new Error("Cannot find project.")
+            }
+            userIds.map(async (contributor: any) => {
+                const usr = await User.findOne({ id: contributor })
+                if (usr) {
+                    sendMail(context.user, project, usr, 'event-mention', `${context.user.firstname} vous a mentionné(e) dans ${project.name}.`, mentionContext).catch(console.error);
+                }
+            })
+        }
+        return { successfull: true, message: "All mentionned users have been alerted." }
     }
 }

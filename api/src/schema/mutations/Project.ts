@@ -73,7 +73,7 @@ export const ADD_CONTRIBUTORS_TO_PROJECT = {
                     if (!client.contributors.find((c) => c.id === acc.id)) {
                         client.contributors.push(acc)
                     }
-                    sendMail(context.user, project, acc, 'add-contributor', "Invitation à rejoindre un projet").catch(console.error);
+                    sendMail(context.user, project, acc, 'add-contributor', "Invitation à rejoindre un projet", "").catch(console.error);
                 }
             })
             Project.save(project)
@@ -104,7 +104,7 @@ export const REMOVE_CONTRIBUTORS = {
                     console.log(project)
                     if (acc.id === project.creator.id) throw new Error("Your cannot remove the person who created the project from the collaborators.")
                     project.contributors = project.contributors.filter((c) => c.id !== acc.id)
-                    sendMail(context.user, project, acc, 'remove-contributor', "Fin de collaboration").catch(console.error);
+                    sendMail(context.user, project, acc, 'remove-contributor', "Fin de collaboration", "").catch(console.error);
                 }
             })
             Project.save(project)
