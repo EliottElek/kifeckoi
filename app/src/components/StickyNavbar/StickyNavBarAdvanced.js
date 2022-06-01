@@ -167,10 +167,19 @@ const StickyNavAdvanced = () => {
           },
         }}
       >
-        <MenuItem style={{ fontSize: "0.9rem" }}>
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            
+          }}
+        >
           Afficher les évènements créés cette semaine
         </MenuItem>
-        <MenuItem style={{ fontSize: "0.9rem" }}>
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={() => {
+          }}
+        >
           Afficher les évènements créés la semaine dernière
         </MenuItem>
         <MenuItem style={{ fontSize: "0.9rem" }}>

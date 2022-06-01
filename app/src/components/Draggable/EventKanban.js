@@ -44,11 +44,12 @@ const EventKanban = ({ type, setLength, length }) => {
     setAddCard,
     setSelectedEvents,
     selectedEvents,
+    eventsData,
+    setEventsData,
   } = React.useContext(Context);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedAcountables, setSelectedcontributors] = useState([]);
   const [eventSelected, setEventSelected] = useState();
-  const [eventsData, setEventsData] = useState([]);
   const [input, setInput] = useState("");
   const [createEvent] = useMutation(CREATE_EVENT);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_STATUS);
@@ -283,14 +284,7 @@ const EventKanban = ({ type, setLength, length }) => {
     );
   if (listStyle) {
     return (
-      <div
-        className={"events__rows"}
-        style={{
-          maxHeight: "100%",
-          overflowY: "auto",
-          background: "var(--background1)",
-        }}
-      >
+      <div className={"events__rows"}>
         <table className={"events__rows__container"}>
           <tr className={"events__rows__container__head"}>
             <th

@@ -11,6 +11,7 @@
   flex-grow: 1;
   padding: 30px;
   justify-content: space-between;
+  background-color: transparent;
 }
 .client__projects__container {
   // display: flex;
@@ -53,13 +54,13 @@
   width: 95%;
   height: 50px;
   overflow: hidden;
-  background-color: var(--color-background-1);
+  background-color: transparent;
   color: var(--font-color);
   transition: 0.1s ease-in;
   border-radius: 2px;
 }
 .project__item:hover {
-  filter: brightness(1.1);
+  background-color: var(--color-background-1);
   border-radius: 4px;
   transition: 0.1s ease-out;
 }

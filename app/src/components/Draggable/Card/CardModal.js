@@ -16,6 +16,14 @@ const CardModal = (props) => {
   return (
     <Modal open={props.openModal} setOpen={props.setOpenModal}>
       <div className="modal__content__container">
+        <ModifAreaCard
+          style={{ fontSize: "2rem" }}
+          event={props.task}
+          value={props.description}
+          setValue={props.setDescription}
+          handleModifyDescription={props.handleModifyDescription}
+          placeholder={"La carte doit avoir une description..."}
+        />
         <div className="period__title__modal__container">
           <span
             data-tip
@@ -96,13 +104,6 @@ const CardModal = (props) => {
         >
           <MdOutlineClear />
         </button>
-        <ModifAreaCard
-          event={props.task}
-          value={props.description}
-          setValue={props.setDescription}
-          handleModifyDescription={props.handleModifyDescription}
-          placeholder={"La carte doit avoir une description..."}
-        />
         {props?.task?.contributors?.length !== 0 && (
           <div style={{ marginTop: "20px" }}>
             <h3 style={{ marginBottom: "6px" }}>Contributeurs</h3>
