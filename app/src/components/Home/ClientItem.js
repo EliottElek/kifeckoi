@@ -1,21 +1,36 @@
-import React from "react";
 import "./Home.scss";
 
 import { useNavigate } from "react-router";
-
+import GridItem from "../Grid/GridItem";
+import Avatars from "../Draggable/Card/Avatars";
+import logo from "../../assets/images/logo.png";
+import formatDate from "../../assets/functions/formatDate";
 const ClientItem = ({ client }) => {
   const navigate = useNavigate();
 
   return (
-    <div
+    <GridItem
       onClick={() => navigate(`/client/${client.id}`)}
       className={"client__item"}
     >
-      <div className={"client__item__name__container"}>
-        <p>{client.name}</p>
+      <div className={"client__card__header"}>
+        <img src={client.avatarUrl ? client.avatarUrl : logo} alt="" />
       </div>
-      <i className="gg-chevron-right"></i>
-    </div>
+      <img
+        className="middle__image"
+        alt=""
+        src={
+          "https://www.comundi.fr/mag-des-competences/wp-content/uploads/2021/09/La-relation-client.jpg"
+        }
+      />
+      <div className="client__card__avatars__container">
+        <div className="client__card__avatars__container__title">
+          <h3>{client.name}</h3>
+          <p>{formatDate(client.creation, true)}</p>
+        </div>
+        <Avatars users={client?.contributors} />
+      </div>
+    </GridItem>
   );
 };
 

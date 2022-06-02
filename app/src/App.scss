@@ -158,3 +158,15 @@ body {
   object-fit: cover;
   margin: auto;
 }
+.modif__textarea__paragraph {
+  cursor: pointer;
+  flex-grow: 1;
+  margin-top: 14px;
+  border: solid 1px transparent;
+  border-radius: 4px;
+  padding: 4px;
+}
+.modif__textarea__paragraph__modal:hover,
+.modif__textarea__paragraph:hover {
+  border-color: rgba(128, 128, 128, 0.13);
+}

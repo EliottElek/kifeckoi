@@ -15,8 +15,8 @@ import Avatar from "../../../materials/Avatar/Avatar";
 const CardModal = (props) => {
   return (
     <Modal open={props.openModal} setOpen={props.setOpenModal}>
+      <span className="id__span">{props.task.id.split("-")[0]}</span>
       <div className="modal__content__container">
-        <span>id : {props.task.id.split("-")[0]}</span>
         <ModifAreaCard
           large
           event={props.task}
