@@ -39,6 +39,7 @@ query getAllClients($userId : String!){
         id
         username
         avatarUrl
+        firstname
       }
     }
   }
@@ -109,10 +110,12 @@ query findProjectsByClientId($clientId: String! $userId : String!){
         id
         name
         creation
+        logoUrl
         contributors{
           id
           username
           avatarUrl
+          firstname
         }
     }
 }

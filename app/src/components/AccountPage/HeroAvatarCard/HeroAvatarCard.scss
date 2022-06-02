@@ -34,8 +34,8 @@
     }
     &__avatar {
       border-radius: 50%;
-      height: 130px;
-      width: 130px;
+      max-height: 130px;
+      max-width: 130px;
       object-fit: cover;
     }
   }

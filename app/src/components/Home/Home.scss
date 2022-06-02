@@ -4,114 +4,7 @@
   position: relative;
   overflow-y: auto;
   color: var(--font-color);
-}
-.home__container {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-  padding: 30px;
-  justify-content: space-between;
-  overflow-y: auto;
-}
-.home__clients__container {
-  // display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  gap: 20px;
-  &__spacer {
-    height: 3px;
-    width: 98%;
-    margin: 12px auto;
-    background-color: var(--main-color);
-  }
-  &__title {
-    color: var(--font-color);
-  }
-  &__list {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    justify-content: space-between;
-    max-height: 90vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-}
-.home__new__clients__container {
-  // display: flex;
-  flex-grow: 0.3;
-  flex-direction: column;
-  gap: 20px;
-  justify-content: flex-start;
-}
-.client__item {
-  display: flex;
-  font-size: 1.2rem;
-  cursor: pointer;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0px 10px;
-  width: 95%;
-  overflow: hidden;
-  height: 50px;
-  background-color: transparent;
-  color: var(--font-color);
-  transition: 0.1s ease-in;
-  border-radius: 2px;
-}
-.client__item:hover {
-  background-color: var(--color-background-1);
-  border-radius: 4px;
-  transition: 0.1s ease-out;
-}
-@media screen and (max-width: 1000px) {
-  .home__container {
-    flex-direction: column;
-  }
-  .chart__container {
-    display: grid;
-    grid-template-columns: 100% !important;
-  }
-  .home__clients__container__title {
-    font-size: 1.4rem;
-  }
-  .home__new__clients__container {
-    margin-top: 40px;
-  }
-}
-.name__input {
-  padding: 5px;
-  padding-top: 8px;
-  border-radius: 4px;
-  flex-grow: 1 !important;
-  font-size: 1.4rem;
-  padding: 12px 12px 20px 12px;
-  background-color: var(--card-background);
-  border: none;
-  color: var(--font-color);
-  margin-bottom: 10px;
-  margin: 0;
-  box-shadow: 0 2px 4px var(--shadow-color);
-}
-.checkbox__container {
-  display: flex;
-  align-items: center;
-  margin: 10px;
-  margin-bottom: -10px;
-  gap: 4px;
-}
-.chart__container {
-  padding: 10px;
-  position: relative;
-  display: grid;
-  grid-template-columns: 49% 49%;
-  grid-gap: 10px;
-  height: 500px;
-}
-.chart__item {
-  background-color: var(--card-background);
-  border-radius: 12px;
-  margin-top: 10px;
+  min-height: 80vh;
 }
 .client__card__header {
   background-color: var(--card-background);
@@ -145,8 +38,45 @@
   font-size: 0.8rem;
 }
 .middle__image {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100px;
+}
+.middle__image > img {
+  height: 150px;
   object-fit: cover;
-  width: 100%;
-  height: 100%;
   opacity: 0.5;
+}
+.checkbox__container {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0px;
+}
+.modal__add {
+  padding: 30px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.add__modal__actions {
+  display: flex;
+  gap: 6px;
+  align-self: flex-end;
+  margin-top: 12px;
+}
+.name__input {
+  padding: 5px;
+  padding-top: 8px;
+  border-radius: 4px;
+  flex-grow: 1 !important;
+  font-size: 1.4rem;
+  padding: 12px 12px 20px 12px;
+  background-color: var(--color-background-2);
+  border: none;
+  color: var(--font-color);
+  margin-bottom: 10px;
+  margin: 0;
+  border: solid 1px var(--border-color);
 }

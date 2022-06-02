@@ -11,6 +11,7 @@ import Modal from "../../materials/Modal/Modal";
 import Progress from "../../materials/Progress/Progress";
 import CheckBox from "../../materials/CheckBox/CheckBox";
 import { useNavigate } from "react-router";
+import Backdrop from "../../materials/Backdrop/Backdrop";
 import Grid from "../Grid/Grid";
 const Home = () => {
   const { user } = useContext(Context);
@@ -19,7 +20,7 @@ const Home = () => {
   });
   const [createClient] = useMutation(CREATE_CLIENT);
   const [open, setOpen] = React.useState(false);
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = React.useState(true);
   const navigate = useNavigate();
   const [nameInput, setNameInput] = React.useState("");
   const title = document.getElementById("title");
@@ -71,24 +72,17 @@ const Home = () => {
     setNameInput("");
     setOpen(false);
   };
-  if (loading)
+  if (loading || !data)
     return (
-      <div
-        style={{
-          flexGrow: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Progress />
-      </div>
+      <Backdrop>
+        <Progress size="medium" />
+      </Backdrop>
     );
   return (
     <div className="home">
       <h1 className={"client__projects__container__title"}>Clients</h1>
       <Button onClick={() => setOpen(true)} style={{ marginTop: "10px" }}>
-        Créer un nouveau client +
+        Créer un nouveau client
       </Button>
       <Grid>
         {data?.getAllClients?.length === 0 && (
@@ -100,10 +94,10 @@ const Home = () => {
           ))}
       </Grid>
       <Modal open={open} setOpen={setOpen}>
-        <div className="modal__content__container">
+        <div className="modal__add">
           <input
             autoFocus
-            className="name__input medium__title__textarea"
+            className="name__input"
             value={nameInput}
             placeholder={`Comment s'appelle le client ?`}
             onChange={(e) => setNameInput(e.target.value)}
@@ -112,7 +106,9 @@ const Home = () => {
             <CheckBox checked={checked} setChecked={setChecked} />{" "}
             <span>Aller sur la page client après la création</span>
           </div>
-          <div style={{ display: "flex", gap: "6px" }}>
+          <div
+            className="add__modal__actions"
+          >
             <Button
               style={{ height: "30px" }}
               reversed

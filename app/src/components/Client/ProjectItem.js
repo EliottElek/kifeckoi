@@ -14,15 +14,18 @@ const ProjectItem = ({ project }) => {
       className={"project__item"}
     >
       <div className={"client__card__header"}>
-        <img src={project.avatarUrl ? project.avatarUrl : logo} alt="" />
+        <img src={project.logoUrl ? project.logoUrl : logo} alt="" />
       </div>
-      <img
-        className="middle__image"
-        alt=""
-        src={
-          "https://www.comundi.fr/mag-des-competences/wp-content/uploads/2021/09/La-relation-client.jpg"
-        }
-      />
+      <div className="middle__image">
+        <img
+          alt=""
+          src={
+            project.logoUrl
+              ? project.logoUrl
+              : "https://www.comundi.fr/mag-des-competences/wp-content/uploads/2021/09/La-relation-client.jpg"
+          }
+        />
+      </div>
       <div className="client__card__avatars__container">
         <div className="client__card__avatars__container__title">
           <h3>{project.name}</h3>

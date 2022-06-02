@@ -1,5 +1,4 @@
 import React from "react";
-import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import Modal from "../../../materials/Modal/Modal";
 import { MODIFY_PROJECT_NAME } from "../../../graphql/mutations";
 import { toast } from "react-toastify";
@@ -39,23 +38,28 @@ const ChangeNameModal = ({ open, setOpen, dataProject }) => {
   };
   return (
     <Modal open={open} setOpen={setOpen}>
-      <div className="modal__content__container space-between">
-        <AutoTextArea
+      <div className="modal__add">
+        <input
           autoFocus
-          className="modif__textarea big__title__textarea"
+          className="name__input"
           value={name}
           placeholder={`Le nom du projet ne peut pas être vide...`}
           onChange={(e) => setName(e.target.value)}
-        />{" "}
-        <div style={{ display: "flex", gap: "6px", justifySelf: "flex-end" }}>
+        />
+        <div className="add__modal__actions">
           <Button
+            type={"button"}
             style={{ height: "30px" }}
             reversed
             onClick={() => setOpen(false)}
           >
             Annuler
           </Button>
-          <Button style={{ height: "30px" }} onClick={handleChangeName}>
+          <Button
+            style={{ height: "30px" }}
+            onClick={handleChangeName}
+            type={"submit"}
+          >
             Valider
           </Button>
         </div>
