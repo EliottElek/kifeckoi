@@ -17,14 +17,7 @@ const ProjectItem = ({ project }) => {
         <img src={project.logoUrl ? project.logoUrl : logo} alt="" />
       </div>
       <div className="middle__image">
-        <img
-          alt=""
-          src={
-            project.logoUrl
-              ? project.logoUrl
-              : "https://www.comundi.fr/mag-des-competences/wp-content/uploads/2021/09/La-relation-client.jpg"
-          }
-        />
+        <img alt="" src={project.logoUrl ? project.logoUrl : logo} />
       </div>
       <div className="client__card__avatars__container">
         <div className="client__card__avatars__container__title">

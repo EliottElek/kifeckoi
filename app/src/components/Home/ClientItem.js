@@ -17,12 +17,7 @@ const ClientItem = ({ client }) => {
         <img src={client.avatarUrl ? client.avatarUrl : logo} alt="" />
       </div>
       <div className="middle__image">
-        <img
-          alt=""
-          src={
-            "https://www.comundi.fr/mag-des-competences/wp-content/uploads/2021/09/La-relation-client.jpg"
-          }
-        />
+        <img alt="" src={logo} />
       </div>
       <div className="client__card__avatars__container">
         <div className="client__card__avatars__container__title">

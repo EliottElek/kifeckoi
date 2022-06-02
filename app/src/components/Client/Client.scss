@@ -44,7 +44,7 @@
 .middle__image > img {
   height: 150px;
   object-fit: cover;
-  opacity: 0.5;
+  filter: brightness(0.5);
 }
 
 .checkbox__container {
