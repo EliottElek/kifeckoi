@@ -102,13 +102,26 @@
 }
 .title__buttons__container {
   opacity: 0;
-  transform: translateX(-30px);
   transition: 0.2s all;
   height: auto;
+  z-index: 0;
+}
+@media (hover: hover) {
+  .title__buttons__container {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+}
+@media (hover: none) {
+  .title__buttons__container {
+    transform: none;
+    opacity: 1;
+  }
 }
 .title__modif__button {
   color: var(--font-color);
   background-color: transparent;
+  z-index: 0;
   height: 40px;
   width: 40px;
   border-radius: 50%;

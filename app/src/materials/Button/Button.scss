@@ -1,6 +1,7 @@
 @import "../constants.scss";
 
 .button__versed {
+  text-transform: uppercase;
   background-color: var(--main-color);
   color: rgb(255, 255, 255);
   border: solid 1px var(--main-color);
@@ -34,6 +35,7 @@
 }
 
 .button__reversed {
+  text-transform: uppercase;
   background-color: transparent;
   color: var(--main-color);
   border: none;

@@ -7,7 +7,6 @@ import {
 } from "../../graphql/queries";
 import { MODIFY_PROJECT_GLOBAL_INFOS } from "../../graphql/mutations";
 import { Navigate, useNavigate, useParams } from "react-router";
-import { IoIosAddCircle } from "react-icons/io";
 import { FaChevronDown } from "react-icons/fa";
 import Backdrop from "../../materials/Backdrop/Backdrop";
 import Progress from "../../materials/Progress/Progress";
@@ -106,15 +105,6 @@ const GlobalInfos = () => {
   const handleClosePerimeter = () => {
     setAnchorElPerimeter(null);
   };
-  // const eventsData = useQuery(GET_ALL_EVENTS_ALL_TYPES, {
-  //   variables: { id: id },
-  //   onCompleted: (data) => {
-  //     setEvents(data?.getAllEventsAllTypes);
-  //   },
-  // });
-  // React.useEffect(() => {
-  //   eventsData.refetch();
-  // });
   const handleModifyGlobalStatus = async (item) => {
     try {
       await modifyProjectInfos({
@@ -220,7 +210,7 @@ const GlobalInfos = () => {
               src={currentProject.logoUrl}
             />
           )}
-          <div className={"title__buttons__container"} style={{ zIndex: 2 }}>
+          <div className={"title__buttons__container"}>
             <button className="title__modif__button" onClick={handleClickName}>
               <FiMoreHorizontal />
             </button>
@@ -331,7 +321,7 @@ const GlobalInfos = () => {
             onClick={() => setOpenModal(true)}
             style={{ height: "35px", gap: "8px" }}
           >
-            Ajouter <IoIosAddCircle />
+            Ajouter
           </Button>
         </div>
         <div className={"user__cards__container"}>

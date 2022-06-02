@@ -1,10 +1,10 @@
 import React from "react";
-import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import Modal from "../../../materials/Modal/Modal";
 import { MODIFY_PROJECT_GLOBAL_INFOS } from "../../../graphql/mutations";
 import { toast } from "react-toastify";
 import { Context } from "../../Context/Context";
 import { useMutation } from "@apollo/client";
+import "../ChangeNameModal/ChangeNameModal.scss";
 import Button from "../../../materials/Button/Button";
 const AddLogoModal = ({ open, setOpen, dataProject }) => {
   const { currentProject } = React.useContext(Context);
@@ -42,15 +42,15 @@ const AddLogoModal = ({ open, setOpen, dataProject }) => {
   };
   return (
     <Modal open={open} setOpen={setOpen}>
-      <div className="modal__content__container">
-        <AutoTextArea
+      <div className="modal__add">
+        <input
           autoFocus
-          className="modif__textarea"
+          className="name__input"
           value={url}
           placeholder={`Ajoutez un logo au format url...`}
           onChange={(e) => setUrl(e.target.value)}
         />{" "}
-        <div style={{ display: "flex", gap: "6px" }}>
+        <div className="add__modal__actions">
           <Button
             style={{ height: "30px" }}
             reversed

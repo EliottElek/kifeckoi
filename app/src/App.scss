@@ -4,22 +4,23 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: transparent;
+  background: var(--background1);
 }
 .dashboard {
   width: 100vw;
   height: 100vh;
-  background: var(--background1);
 }
 .logo__kifekoi {
   height: 40px;
   width: auto;
 }
 :root {
-  --font-color: #172b4dd7;
+  // --font-color: #172b4dd7;
+  --font-color: #37352f;
   --color-background-1: rgb(238, 238, 238);
   --color-background-2: white;
   --card-background: white;
-  --main-color: #033d74e7;
+  --main-color: #831c73;
   --main-color2: #e620e6af;
   --shadow-color: #d8e1e8;
   --warning-color: #dfba19df;
@@ -38,7 +39,7 @@ body {
   --font-color: rgb(224, 224, 224);
   --color-background-1: #1c2128;
   --color-background-2: #0f1e25;
-  --card-background: #2b2f3e;
+  --card-background: #2c3a3f;
   --main-color: #01ffff80;
   --main-color2: #e620e6af;
   --shadow-color: #191a1b;
@@ -78,7 +79,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   gap: 1px;
-  background-color: var(--color-background-1);
+  background: transparent;
   color: var(--font-color);
   border-radius: 4px;
   padding: 10px;

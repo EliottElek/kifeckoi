@@ -95,6 +95,8 @@ function ResponsiveDrawer(props) {
           flexGrow: 1,
           width: `calc(100% - ${drawerWidth}px)`,
           paddingTop: "50px",
+          overflowY: "auto",
+          background: "var(--background1)",
         }}
       >
         {props.mainContent}
