@@ -34,6 +34,12 @@ query getAllClients($userId : String!){
     getAllClients(userId : $userId){
       name
       id
+      creation
+      contributors{
+        id
+        username
+        avatarUrl
+      }
     }
   }
 `
@@ -102,6 +108,12 @@ query findProjectsByClientId($clientId: String! $userId : String!){
   findProjectsByClientId(clientId : $clientId userId:$userId){
         id
         name
+        creation
+        contributors{
+          id
+          username
+          avatarUrl
+        }
     }
 }
 `

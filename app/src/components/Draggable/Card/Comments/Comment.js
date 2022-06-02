@@ -5,7 +5,6 @@ import { FiMoreHorizontal } from "react-icons/fi";
 import { Menu, MenuItem } from "@mui/material";
 import { toast } from "react-toastify";
 import { useMutation } from "@apollo/client";
-import AutoTextArea from "../../../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import {
   CHANGE_COMMENT__CONTENT,
   DELETE_COMMENT,
@@ -13,12 +12,12 @@ import {
 import formatDate from "../../../../assets/functions/formatDate";
 import { Context } from "../../../Context/Context";
 import RenderHtml from "../../../../assets/RenderHtml";
+import TextEditor from "../../../TextEditor/TextEditor";
 const Comment = ({ comment, commentsData }) => {
   const { user } = React.useContext(Context);
   const [changeCommentContent] = useMutation(CHANGE_COMMENT__CONTENT);
   const [deleteComment] = useMutation(DELETE_COMMENT);
   const [editMode, setEditMode] = React.useState(false);
-  const [content, setContent] = React.useState(comment.content);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openPopUp = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -27,12 +26,12 @@ const Comment = ({ comment, commentsData }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleUpdateCommentContent = async () => {
+  const handleUpdateCommentContent = async (e, cont) => {
     try {
       await changeCommentContent({
         variables: {
           commentId: comment.id,
-          newContent: content,
+          newContent: cont,
         },
       });
       commentsData.refetch();
@@ -86,6 +85,17 @@ const Comment = ({ comment, commentsData }) => {
       });
     }
   };
+  if (editMode)
+    return (
+      <div style={{ width: "100%" }}>
+        <TextEditor
+          defaultValue={comment?.content}
+          setModifMode={setEditMode}
+          handleModifyDescription={handleUpdateCommentContent}
+          placeholder={`Votre commentaire...`}
+        />
+      </div>
+    );
   return (
     <div className={editMode ? "comment__item__edit__mode" : "comment__item"}>
       <Avatar
@@ -100,41 +110,7 @@ const Comment = ({ comment, commentsData }) => {
             {formatDate(comment?.creation, true)}
           </span>
         </div>
-        <span className={"span__content"}>
-          {editMode ? (
-            <>
-              <AutoTextArea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'
-                className={"edit__comment__textarea"}
-              />
-              <div className={"edit__comment__action__container"}>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleUpdateCommentContent();
-                    setEditMode(false);
-                  }}
-                  className={"edit__comment__action__submit"}
-                >
-                  Valider
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setEditMode(false);
-                  }}
-                  className={"edit__comment__action__cancel"}
-                >
-                  Annuler
-                </button>
-              </div>
-            </>
-          ) : (
-            <RenderHtml>{comment?.content}</RenderHtml>
-          )}
-        </span>
+        <RenderHtml>{comment?.content}</RenderHtml>
       </div>
       {user.id === comment.author.id && (
         <>

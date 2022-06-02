@@ -1,0 +1,22 @@
+.grid__container {
+  display: grid;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-top: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.grid__item {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 250px;
+  // min-width: 30%;
+  border-radius: 16px;
+  background-color: var(--color-background-1);
+}
+.grid__item:hover {
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+

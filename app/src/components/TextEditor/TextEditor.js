@@ -56,6 +56,7 @@ export default function TextEditor({
         q.setContents(delta, "silent");
       }
       if (placeholder) q.root.dataset.placeholder = placeholder;
+      q.focus();
       setQuill(q);
     },
     [defaultValue, placeholder, data?.getAllUsers]

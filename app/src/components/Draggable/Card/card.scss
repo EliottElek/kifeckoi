@@ -345,3 +345,12 @@
   align-items: center;
   justify-content: center;
 }
+.id__span {
+  font-style: italic;
+  opacity: 0.5;
+  position: absolute;
+  top: 10px;
+  font-size: 0.8rem;
+  left: 10px;
+  color: var(--font-color);
+}
