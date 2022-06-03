@@ -41,12 +41,14 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  height: 100px;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
 }
 .middle__image > img {
-  height: 150px;
   object-fit: cover;
   opacity: 0.5;
+  height: 100px;
   filter: brightness(0.5);
 }
 .checkbox__container {

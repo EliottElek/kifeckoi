@@ -1,7 +1,6 @@
 @import "../constants.scss";
 
 .button__versed {
-  text-transform: uppercase;
   background-color: var(--main-color);
   color: rgb(255, 255, 255);
   border: solid 1px var(--main-color);
@@ -15,27 +14,24 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-decoration: none !important;
-  padding: 9px 16px;
+  padding: 6px 16px;
   border: none;
   display: inline-flex;
   align-items: center;
-  // box-shadow: 0 1px 2px rgb(36 57 141 / 40%);
   border-radius: 4px;
   line-height: 1.6;
   font-family: Inter, sans-serif;
   font-weight: 500;
   cursor: pointer;
   transition: filter 0.3s, background 0.3s, color 0.3s;
-  font-size: 0.9em;
   filter: brightness(1);
   white-space: nowrap;
   z-index: 0;
 }
 
 .button__reversed {
-  text-transform: uppercase;
   background-color: transparent;
   color: var(--main-color);
   border: none;
@@ -48,20 +44,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-decoration: none !important;
-  padding: 9px 16px;
+  padding: 6px 16px;
   border: none;
   display: inline-flex;
   align-items: center;
-  // box-shadow: 0 1px 2px rgb(36 57 141 / 40%);
   border-radius: 4px;
   line-height: 1.6;
   font-family: Inter, sans-serif;
   font-weight: 500;
   cursor: pointer;
   transition: filter 0.3s, background 0.3s, color 0.3s;
-  font-size: 0.9em;
   filter: brightness(1);
   white-space: nowrap;
   z-index: 0;

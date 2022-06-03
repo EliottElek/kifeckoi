@@ -293,9 +293,7 @@ const Card = (props) => {
     <div
       className={"card"}
       onClick={() => {
-        if (!openPopUp) {
-          setOpenModal(true);
-        } else setAnchorEl(null);
+        setOpenModal(true);
       }}
     >
       <Draggable
@@ -482,6 +480,8 @@ const Card = (props) => {
         handleCloseModal={handleCloseModal}
         modifMode={modifMode}
         setModifMode={setModifMode}
+        setOpenDeleteModal={setOpenDeleteModal}
+        setOpenAddContributorModal={setOpenAddContributorModal}
       />
       {true && (
         <>
@@ -517,7 +517,10 @@ const Card = (props) => {
         setOpen={setOpenAddContributorModal}
       />
       <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
-        <div className="modal__content__container space__between">
+        <div
+          className="modal__content__container space__between"
+          style={{ width: "95%" }}
+        >
           <button
             data-tip
             data-for="closeTooltip"

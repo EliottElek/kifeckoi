@@ -5,6 +5,7 @@ import GridItem from "../Grid/GridItem";
 import Avatars from "../Draggable/Card/Avatars";
 import logo from "../../assets/images/logo.png";
 import formatDate from "../../assets/functions/formatDate";
+import AvatarFromLetter from "../../utils/AvatarFromLetter";
 const ClientItem = ({ client }) => {
   const navigate = useNavigate();
 
@@ -17,7 +18,11 @@ const ClientItem = ({ client }) => {
         <img src={client.avatarUrl ? client.avatarUrl : logo} alt="" />
       </div>
       <div className="middle__image">
-        <img alt="" src={logo} />
+        {client.avatarUrl ? (
+          <img alt="" src={client.avatarUrl} />
+        ) : (
+          <AvatarFromLetter text={client.name} />
+        )}
       </div>
       <div className="client__card__avatars__container">
         <div className="client__card__avatars__container__title">

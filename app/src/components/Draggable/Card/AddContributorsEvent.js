@@ -53,7 +53,7 @@ const AddContributorsEvevent = ({
   };
   return (
     <Modal open={open}>
-      <div className="modal__content__container">
+      <div className="modal__content__container" style={{ width: "95%" }}>
         <button
           onClick={(e) => {
             e.stopPropagation();

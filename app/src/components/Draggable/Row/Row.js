@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "../Card/card.scss";
 import "./Row.scss";
 import "../kanban.scss";
@@ -12,6 +12,7 @@ import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
 import AddContributorsEvent from "../Card/AddContributorsEvent";
 import CardModal from "../Card/CardModal";
+import { Divider } from "@mui/material";
 import {
   CHANGE_EVENT_DESCRIPTION,
   CHANGE_EVENT_STATUS,
@@ -22,11 +23,10 @@ import {
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
 import { Context } from "../../Context/Context";
 import { useMutation, useQuery } from "@apollo/client";
-import Popup from "../../../materials/Popup/Popup";
 import { toast } from "react-toastify";
 import { useParams } from "react-router";
-import MenuItem from "../../../materials/Menu/MenuItem";
-import Menu from "../../../materials/Menu/Menu";
+import { MenuItem } from "@mui/material";
+import { Menu } from "@mui/material";
 import Button from "../../../materials/Button/Button";
 import shortString from "../../../assets/functions/shortString";
 import getPeriod from "../../../assets/functions/getPeriod";
@@ -46,7 +46,6 @@ const Row = (props) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
   const [modifMode, setModifMode] = useState(false);
-  const [openPopUp, setOpenPopUp] = useState(false);
   const [comments, setComments] = useState([]);
   const [checked, setChecked] = useState(false);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
@@ -55,7 +54,16 @@ const Row = (props) => {
   const [deleteEvent] = useMutation(DELETE_EVENT);
   const [createEvent] = useMutation(CREATE_EVENT);
   const [description, setDescription] = useState(props.task.description);
-
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openPopUp = Boolean(anchorEl);
+  const handleClick = (event) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+  };
   useEffect(() => {
     if (selectedEvents.find((e) => e.id === props.task.id)) setChecked(true);
     else {
@@ -145,7 +153,6 @@ const Row = (props) => {
           progress: undefined,
         }
       );
-      setOpenPopUp(false);
     } catch (err) {
       toast.error("Impossible de déplacer l'évènement.", {
         position: toast.POSITION.BOTTOM_LEFT,
@@ -265,19 +272,13 @@ const Row = (props) => {
     }
   };
 
-  const handleMoreAction = (e) => {
-    e.stopPropagation();
-    setOpenPopUp(true);
-  };
   if (props.add) return <div className="card">{props.children}</div>;
   const Msg = ({ children }) => <div>{children}</div>;
   return (
     <tr
       className={"event__row"}
       onClick={() => {
-        if (!openPopUp) {
-          setOpenModal(true);
-        } else setOpenPopUp(false);
+        setOpenModal(true);
       }}
     >
       <td>
@@ -338,7 +339,7 @@ const Row = (props) => {
         <button
           data-tip
           data-for="moreTooltip"
-          onClick={handleMoreAction}
+          onClick={handleClick}
           className="kanban__section__content__name__container__edit__button more__button"
         >
           <FiMoreHorizontal />
@@ -357,108 +358,9 @@ const Row = (props) => {
         handleCloseModal={handleCloseModal}
         modifMode={modifMode}
         setModifMode={setModifMode}
+        setOpenDeleteModal={setOpenDeleteModal}
+        setOpenAddContributorModal={setOpenAddContributorModal}
       />
-      <Popup
-        open={openPopUp}
-        setOpen={setOpenPopUp}
-        style={{ transform: "translate(-10px,0px)" }}
-      >
-        <Menu>
-          <MenuItem
-            style={{ backgroundColor: "green" }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleChangeState("Vérifié");
-              setOpenPopUp(false);
-            }}
-          >
-            <p>Vérifié</p>
-          </MenuItem>
-          <MenuItem
-            style={{ backgroundColor: "red" }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleChangeState("À vérifier");
-              setOpenPopUp(false);
-            }}
-          >
-            <p>À vérifier</p>
-          </MenuItem>
-          <span className={"divider"} />
-          <MenuItem
-            onClick={(e) => {
-              setOpenModal(true);
-              setOpenPopUp(false);
-            }}
-          >
-            <p>Ouvrir la carte...</p>
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              duplicate(e);
-              setOpenPopUp(false);
-            }}
-          >
-            <p>Dupliquer...</p>
-          </MenuItem>
-          <span className={"divider"} />
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setModifMode(true);
-              setOpenPopUp(false);
-            }}
-          >
-            <p>Édition rapide...</p>
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenPopUp(false);
-              setOpenModal(true);
-              setModifMode(true);
-            }}
-          >
-            <p>Édition avancée...</p>
-          </MenuItem>
-          <span className={"divider"} />
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenAddContributorModal(true);
-              setOpenPopUp(false);
-            }}
-          >
-            <p>Gérer les contributeurs...</p>
-          </MenuItem>
-          <span className={"divider"} />
-          {events.map((category) => {
-            if (category.title !== props.task.status)
-              return (
-                <MenuItem
-                  key={category.title}
-                  onClick={() => handleMoveTo(category)}
-                >
-                  <p>
-                    Déplacer vers{" "}
-                    <span className={"underlined"}>{category.title}</span>...
-                  </p>
-                </MenuItem>
-              );
-            else return null;
-          })}
-          <span className={"divider"} />
-          <MenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenDeleteModal(true);
-              setOpenPopUp(false);
-            }}
-          >
-            <p>Archiver...</p>
-          </MenuItem>
-        </Menu>
-      </Popup>
       {true && (
         <>
           <ReactTooltip delayShow={500} id="duplicateTooltip" effect="solid">
@@ -493,7 +395,10 @@ const Row = (props) => {
         setOpen={setOpenAddContributorModal}
       />
       <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
-        <div className="modal__content__container space__between">
+        <div
+          className="modal__content__container space__between"
+          style={{ width: "95%" }}
+        >
           <button
             data-tip
             data-for="closeTooltip"
@@ -512,7 +417,8 @@ const Row = (props) => {
           <div className={"delete__actions__container"}>
             <Button
               reversed
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setOpenDeleteModal(false);
                 setOpenModal(false);
               }}
@@ -523,6 +429,118 @@ const Row = (props) => {
           </div>
         </div>
       </Modal>
+      <Menu
+        anchorEl={anchorEl}
+        open={openPopUp}
+        onClose={handleClose}
+        sx={{
+          "& .MuiPaper-root": {
+            color: "var(--font-color)",
+            bgcolor: "var(--card-background)",
+          },
+        }}
+      >
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleChangeState("Vérifié");
+            setAnchorEl(null);
+          }}
+        >
+          Vérifié
+        </MenuItem>
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleChangeState("À vérifier");
+            setAnchorEl(null);
+          }}
+        >
+          À vérifier
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            setOpenModal(true);
+            setAnchorEl(null);
+          }}
+        >
+          Ouvrir la carte...
+        </MenuItem>
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            duplicate(e);
+            setAnchorEl(null);
+          }}
+        >
+          Dupliquer...
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setModifMode(true);
+            setAnchorEl(null);
+          }}
+        >
+          Édition rapide...
+        </MenuItem>
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setAnchorEl(null);
+            setOpenModal(true);
+            setModifMode(true);
+          }}
+        >
+          Édition avancée...
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenAddContributorModal(true);
+            setAnchorEl(null);
+          }}
+        >
+          <p>Gérer les contributeurs...</p>
+        </MenuItem>
+        <span className={"divider"} />
+        {events.map((category) => {
+          if (category.title !== props.task.status)
+            return (
+              <MenuItem
+                style={{ fontSize: "0.9rem" }}
+                key={category.title}
+                onClick={() => handleMoveTo(category)}
+              >
+                <p>
+                  Déplacer vers{" "}
+                  <span className={"underlined"}>{category.title}</span>...
+                </p>
+              </MenuItem>
+            );
+          else return null;
+        })}
+        <span className={"divider"} />
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenDeleteModal(true);
+            setAnchorEl(null);
+          }}
+        >
+          <p>Archiver...</p>
+        </MenuItem>
+      </Menu>
     </tr>
   );
 };
