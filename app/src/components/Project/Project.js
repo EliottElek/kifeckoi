@@ -24,7 +24,7 @@ const Project = () => {
     }
   }, [currentProject?.name, currentProject]);
   React.useEffect(() => {
-    if (currentProject) {
+    if (currentProject && setTitle) {
       setTitle(currentProject?.name);
     }
   }, [currentProject?.name, setTitle, currentProject]);
