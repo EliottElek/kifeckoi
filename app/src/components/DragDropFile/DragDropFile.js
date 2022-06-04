@@ -66,6 +66,7 @@ const DropFileInput = (props) => {
           onDrop={onDrop}
           {...getRootProps()}
         >
+          {props.header}
           <UploadFileIcon style={{ fontSize: "4rem" }} />
 
           <div className="drop-file-input__label">

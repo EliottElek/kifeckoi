@@ -23,6 +23,7 @@ import formatDate from "../../assets/functions/formatDate";
 import DropFileInput from "../DragDropFile/DragDropFile";
 import axios from "axios";
 import getBase64 from "../../assets/functions/base64";
+import { BiImport, BiExport } from "react-icons/bi";
 const status = [
   {
     name: "conforme",
@@ -107,7 +108,7 @@ const GlobalInfos = () => {
               draggable: false,
               progress: undefined,
             });
-          if (resp.length === 0)
+          else if (resp.length === 0)
             setUploadResponse({
               success: true,
               message: "Les évènements ont bien été importés.",
@@ -266,6 +267,17 @@ const GlobalInfos = () => {
       ) : (
         <div className="global__infos__container">
           <div style={{ margin: "30px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Button
+                onClick={() => setOpenUploadModal(true)}
+                style={{ gap: "8px" }}
+              >
+                Importer <BiImport fontSize="1.2rem" />
+              </Button>
+              <Button style={{ gap: "8px" }}>
+                Exporter <BiExport fontSize="1.2rem" />
+              </Button>
+            </div>
             <h2 className="title__global__big">
               {currentProject?.name}{" "}
               {currentProject.logoUrl !== "" && (
@@ -283,9 +295,6 @@ const GlobalInfos = () => {
                   <FiMoreHorizontal />
                 </button>
               </div>
-              <Button onClick={() => setOpenUploadModal(true)}>
-                Importer des données
-              </Button>
             </h2>
             {currentProject?.creator && (
               <span className={"date__creator__span"}>
@@ -535,6 +544,15 @@ const GlobalInfos = () => {
               onFileChange={onFileChange}
               onFileSubmit={onFileSubmit}
               setOpenModal={setOpenUploadModal}
+              header={
+                <>
+                  <h3>Fichiers autorisés : .csv</h3>
+                  <p>
+                    Importez des évènements : actions, informations,
+                    problèmes...
+                  </p>
+                </>
+              }
             />
           </Modal>
           <Modal open={openRspModal} setOpen={setOpenRspModal}>

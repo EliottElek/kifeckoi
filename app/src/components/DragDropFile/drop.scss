@@ -55,7 +55,10 @@
   padding: 15px;
   border-radius: 6px;
   border: solid 1px var(--border-color);
-  padding: 24px;
+  padding: 8px;
+  gap: 8px;
+  margin-top: 16px;
+  align-items: center;
 }
 
 .drop-file-preview__item img {
@@ -78,10 +81,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  right: -5px;
-  top: 15px;
-  transform: translateY(-50%);
   cursor: pointer;
   transition: opacity 0.3s ease;
 }
