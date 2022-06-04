@@ -23,6 +23,9 @@
   justify-content: space-between;
   box-shadow: 0 2px 4px var(--shadow-color);
 }
+.add__card >*{
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
 .card__content ul > li {
   list-style: disc;
   margin-left: 12px;
