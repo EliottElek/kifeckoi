@@ -1,12 +1,8 @@
 import "./Progress.scss";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const Progress = ({ size, reversed, style }) => {
-  return (
-    <div
-      style={style}
-      className={`loader-${size} ${reversed && "reversed"}`}
-    ></div>
-  );
+const Progress = () => {
+  return <CircularProgress style={{ color: "var(--main-color)" }} />;
 };
 
 export default Progress;
