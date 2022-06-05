@@ -287,7 +287,7 @@ const Card = (props) => {
       return handleModifyDescription(e);
     }
   };
-  if (props.add) return <div className="card">{props.children}</div>;
+  if (props.add) return <div className="card add__card">{props.children}</div>;
   const Msg = ({ children }) => <div>{children}</div>;
   return (
     <div
