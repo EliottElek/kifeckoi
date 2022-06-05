@@ -148,7 +148,7 @@ body {
   .toggle__drawer__button {
     display: flex;
   }
-  :root {
+  [data-theme="dark"] {
     --background1: #1c2128;
   }
 }
