@@ -3,7 +3,6 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
-import { CgMenuGridO } from "react-icons/cg";
 import StickyNavAdvanced from "../../components/StickyNavbar/StickyNavBarAdvanced";
 import { Context } from "../../components/Context/Context";
 import { useNavigate } from "react-router";
@@ -67,12 +66,6 @@ function ResponsiveDrawer(props) {
               borderBottom: "solid 1px var(border-color)",
             }}
           >
-            <button
-              className={"toggle__drawer__button"}
-              onClick={() => setOpenDrawer(!openDrawer)}
-            >
-              <CgMenuGridO />
-            </button>
             <img
               onClick={() => {
                 setCurrentProject(null);
@@ -98,31 +91,6 @@ function ResponsiveDrawer(props) {
           }}
           open
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              height: "55px",
-              borderBottom: "solid 1px var(--border-color)",
-            }}
-          >
-            <button
-              className={"toggle__drawer__button"}
-              onClick={() => setOpenDrawer(!openDrawer)}
-            >
-              <CgMenuGridO />
-            </button>
-            <img
-              onClick={() => {
-                setCurrentProject(null);
-                setCurrentClient(null);
-                navigate(`/`);
-              }}
-              src={logo}
-              alt=""
-              className="logo__kifekoi"
-            />
-          </div>{" "}
           {props.secondaryContent}
         </Drawer>
       </Box>

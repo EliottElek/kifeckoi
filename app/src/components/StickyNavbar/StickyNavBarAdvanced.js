@@ -10,7 +10,8 @@ import "./StickyNavbar.scss";
 import getPeriod from "../../assets/functions/getPeriod";
 import ReactTooltip from "react-tooltip";
 import ToggleButtonActions from "./ToggleButtonsActions";
-
+import { IconButton } from "@mui/material";
+import AppsIcon from "@mui/icons-material/Apps";
 const StickyNavAdvanced = () => {
   const {
     currentProject,
@@ -22,6 +23,8 @@ const StickyNavAdvanced = () => {
     handleLogout,
     setListStyle,
     setAddCard,
+    setOpenDrawer,
+    openDrawer,
   } = useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -38,6 +41,15 @@ const StickyNavAdvanced = () => {
   return (
     <StickyNavbar>
       <div style={{ display: "flex", alignItems: "center" }}>
+        <IconButton
+          sx={{
+            display: { xs: "flex", md: "none" },
+            color: "var(--font-color)",
+          }}
+          onClick={() => setOpenDrawer(!openDrawer)}
+        >
+          <AppsIcon sx={{ fontSize: "2rem" }} />
+        </IconButton>
         <div className="name__container">
           <h2
             className="name__container__title"

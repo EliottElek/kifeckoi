@@ -107,7 +107,7 @@
     scroll-snap-type: inline mandatory;
     &__section {
       min-width: 98vw;
-      scroll-snap-align: start;
+      scroll-snap-align: center;
     }
   }
   .kanban__section__overflow {
