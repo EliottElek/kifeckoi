@@ -23,7 +23,8 @@ import formatDate from "../../assets/functions/formatDate";
 import DropFileInput from "../DragDropFile/DragDropFile";
 import axios from "axios";
 import getBase64 from "../../assets/functions/base64";
-import { BiImport, BiExport } from "react-icons/bi";
+import { BiImport } from "react-icons/bi";
+import { MdOutlineClear } from "react-icons/md";
 const status = [
   {
     name: "conforme",
@@ -274,9 +275,9 @@ const GlobalInfos = () => {
               >
                 Importer <BiImport fontSize="1.2rem" />
               </Button>
-              <Button style={{ gap: "8px" }}>
+              {/* <Button style={{ gap: "8px" }}>
                 Exporter <BiExport fontSize="1.2rem" />
-              </Button>
+              </Button> */}
             </div>
             <h2 className="title__global__big">
               {currentProject?.name}{" "}
@@ -554,6 +555,16 @@ const GlobalInfos = () => {
                 </>
               }
             />
+            <button
+              data-tip
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenUploadModal(false);
+              }}
+              className="close__modal__button"
+            >
+              <MdOutlineClear />
+            </button>
           </Modal>
           <Modal open={openRspModal} setOpen={setOpenRspModal}>
             <div className="modal__content__container" style={{ width: "95%" }}>

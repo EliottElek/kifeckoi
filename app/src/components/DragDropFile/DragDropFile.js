@@ -56,7 +56,22 @@ const DropFileInput = (props) => {
   };
 
   return (
-    <>
+    <div className="drop__container">
+      <p>{props.header}</p>
+      <p>Les évènements doivent respecter le schéma suivant : </p>
+      <ul>
+        <li>id : chaîne de caractères ou vide</li>
+        <li>
+          type : "Action", "Info", "Décision", "Risque", "Livrable", "Problème"
+        </li>
+        <li>description : chaîne de caractères</li>
+        <li>
+          status :"Nouveau", "En cours", " À planifier", "Réalisé", "Décalage
+          date"
+        </li>
+        <li>période : chaîne de caractères ou vide</li>
+        <li>state : "Vérifié", "À vérifier" ou vide</li>
+      </ul>
       {fileList.length === 0 && (
         <div
           ref={wrapperRef}
@@ -66,7 +81,6 @@ const DropFileInput = (props) => {
           onDrop={onDrop}
           {...getRootProps()}
         >
-          {props.header}
           <UploadFileIcon style={{ fontSize: "4rem" }} />
 
           <div className="drop-file-input__label">
@@ -109,7 +123,7 @@ const DropFileInput = (props) => {
           </Button>
         </div>
       ) : null}
-    </>
+    </div>
   );
 };
 

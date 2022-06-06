@@ -4,8 +4,6 @@ import { Context } from "../Context/Context";
 import Switch from "../../materials/Switch/Switch";
 import Avatar from "../../materials/Avatar/Avatar";
 import { CgMenuGridO } from "react-icons/cg";
-import { HiOutlineFilter } from "react-icons/hi";
-import { MdFormatListBulleted } from "react-icons/md";
 import StickyNavbar from "./StickyNavbar";
 import { Menu } from "@mui/material";
 import { MenuItem } from "@mui/material";
@@ -13,6 +11,8 @@ import "./StickyNavbar.scss";
 import logo from "../../assets/images/logo.png";
 import getPeriod from "../../assets/functions/getPeriod";
 import ReactTooltip from "react-tooltip";
+import ToggleButtonActions from "./ToggleButtonsActions";
+
 const StickyNavAdvanced = () => {
   const {
     currentProject,
@@ -27,9 +27,7 @@ const StickyNavAdvanced = () => {
     setCurrentClient,
     handleLogout,
     setListStyle,
-    listStyle,
     setAddCard,
-    selectedEvents,
   } = useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -38,14 +36,6 @@ const StickyNavAdvanced = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-  const [anchorElFilter, setAnchorElFilter] = React.useState(null);
-  const openFilter = Boolean(anchorElFilter);
-  const handleClickFilter = (event) => {
-    setAnchorElFilter(event.currentTarget);
-  };
-  const handleCloseFilter = () => {
-    setAnchorElFilter(null);
   };
   const navigate = useNavigate();
   let urlElement = window.location.href.split("/")[5];
@@ -81,27 +71,10 @@ const StickyNavAdvanced = () => {
           <span className="period__span" data-tip data-for="weekTooltip">
             {period}
           </span>
-          <button
-            onClick={() => {
-              setAddCard(false);
-              setListStyle(!listStyle);
-            }}
-            className={
-              listStyle ? "list__style__btn__active" : "list__style__btn"
-            }
-          >
-            <MdFormatListBulleted />
-          </button>
-          {listStyle && (
-            <div className="top__nav__list__action__container">
-              <span className="selected__number__span">
-                {selectedEvents?.length} sélectionné(s)
-              </span>
-              <button onClick={handleClickFilter} className={"top__nav__btn"}>
-                Filtrer <HiOutlineFilter />
-              </button>
-            </div>
-          )}
+          <ToggleButtonActions
+            setListStyle={setListStyle}
+            setAddCard={setAddCard}
+          />
         </div>
       </div>
       <div className="events__container">
@@ -154,39 +127,6 @@ const StickyNavAdvanced = () => {
             }}
             defaultChecked={defaultDark}
           />
-        </MenuItem>
-      </Menu>
-      <Menu
-        anchorEl={anchorElFilter}
-        open={openFilter}
-        onClose={handleCloseFilter}
-        sx={{
-          "& .MuiPaper-root": {
-            color: "var(--font-color)",
-            bgcolor: "var(--card-background)",
-          },
-        }}
-      >
-        <MenuItem
-          style={{ fontSize: "0.9rem" }}
-          onClick={(e) => {
-            
-          }}
-        >
-          Afficher les évènements créés cette semaine
-        </MenuItem>
-        <MenuItem
-          style={{ fontSize: "0.9rem" }}
-          onClick={() => {
-          }}
-        >
-          Afficher les évènements créés la semaine dernière
-        </MenuItem>
-        <MenuItem style={{ fontSize: "0.9rem" }}>
-          Afficher les évènements en status à vérifier
-        </MenuItem>
-        <MenuItem style={{ fontSize: "0.9rem" }}>
-          Afficher les évènements en status vérifier
         </MenuItem>
       </Menu>
       <ReactTooltip delayShow={500} id="weekTooltip" effect="solid">

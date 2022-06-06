@@ -1,6 +1,16 @@
+.drop__container {
+  padding: 40px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 90%;
+}
+.drop__container > ul {
+  margin: 10px 24px;
+}
 .drop-file-input {
   position: relative;
-  min-height: 300px;
+  min-height: 220px;
   height: 100%;
   width: 100%;
   border: 2px dashed var(--border-color);

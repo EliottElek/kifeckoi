@@ -49,7 +49,7 @@ function ResponsiveDrawer(props) {
               boxSizing: "border-box",
               width: drawerWidth,
               bgcolor: "var(--color-background-2)",
-              paddingTop: "50px",
+              marginTop: "50px",
             },
           }}
         >

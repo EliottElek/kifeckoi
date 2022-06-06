@@ -392,7 +392,10 @@ const EventKanban = ({ type, setLength, length }) => {
           </Button>
         )}
         <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
-          <div className="modal__content__container space__between">
+          <div
+            className="modal__content__container space__between"
+            style={{ width: "95%" }}
+          >
             <button
               data-tip
               data-for="closeTooltip"
