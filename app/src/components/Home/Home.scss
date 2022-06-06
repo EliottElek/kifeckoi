@@ -4,10 +4,9 @@
   position: relative;
   overflow-y: auto;
   color: var(--font-color);
-  min-height: 80vh;
+  background: transparent;
 }
 .client__card__header {
-  background-color: var(--card-background);
   display: flex;
   flex-direction: row;
   justify-content: space-between;

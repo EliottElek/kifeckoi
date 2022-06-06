@@ -4,13 +4,13 @@
   align-items: flex-start;
   overflow-x: auto;
   overflow-y: hidden;
-  height: 100%;
+  flex: 1;
   background: transparent;
   &__section {
     min-width: 200px;
     width: 500px;
     padding: 4px;
-    height: calc(100% - 55px);
+    height: calc(100vh - 130px);
     border-radius: 2px;
     padding-top: 50px;
     position: relative;

@@ -3,12 +3,10 @@ import { useNavigate } from "react-router";
 import { Context } from "../Context/Context";
 import Switch from "../../materials/Switch/Switch";
 import Avatar from "../../materials/Avatar/Avatar";
-import { CgMenuGridO } from "react-icons/cg";
 import StickyNavbar from "./StickyNavbar";
 import { Menu } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import "./StickyNavbar.scss";
-import logo from "../../assets/images/logo.png";
 import getPeriod from "../../assets/functions/getPeriod";
 import ReactTooltip from "react-tooltip";
 import ToggleButtonActions from "./ToggleButtonsActions";
@@ -21,10 +19,6 @@ const StickyNavAdvanced = () => {
     dark,
     setDark,
     defaultDark,
-    setOpenDrawer,
-    openDrawer,
-    setCurrentProject,
-    setCurrentClient,
     handleLogout,
     setListStyle,
     setAddCard,
@@ -44,22 +38,6 @@ const StickyNavAdvanced = () => {
   return (
     <StickyNavbar>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <button
-          className={"toggle__drawer__button"}
-          onClick={() => setOpenDrawer(!openDrawer)}
-        >
-          <CgMenuGridO />
-        </button>
-        <img
-          onClick={() => {
-            setCurrentProject(null);
-            setCurrentClient(null);
-            navigate(`/`);
-          }}
-          src={logo}
-          alt=""
-          className="logo__kifekoi"
-        />
         <div className="name__container">
           <h2
             className="name__container__title"

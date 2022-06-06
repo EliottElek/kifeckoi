@@ -1,16 +1,14 @@
 .stickynavbar__container {
   padding: 0;
   margin: 0;
-  top: 0;
-  left: 0;
   flex-grow: 1;
-  height: 50px;
+  height: 55px;
   background-color: var(--color-background-2);
   display: flex;
-  box-shadow: 0 1px 2px var(--shadow-color);
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  border-bottom: solid 1px var(--border-color);
 }
 
 .settings__button {

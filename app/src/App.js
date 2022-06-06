@@ -6,7 +6,7 @@ import { Context } from "./components/Context/Context";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
-import Drawer from "./materials/Drawer/Drawer2";
+import Drawer from "./materials/Drawer/Drawer";
 import Backdrop from "./materials/Backdrop/Backdrop";
 import Progress from "./materials/Progress/Progress";
 import StickyNavDefault from "./components/StickyNavbar/StickyNavBarDefault";
@@ -43,7 +43,6 @@ const MainContent = () => {
           exact
           path="/"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 mainContent={
                   <SecureRoute margin>
@@ -60,7 +59,6 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route
@@ -94,7 +92,6 @@ const MainContent = () => {
           exact
           path="/project/:id/"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 mainContent={
                   <SecureRoute margin>
@@ -111,14 +108,12 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route
           exact
           path="/project/:id/global"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 mainContent={
                   <SecureRoute margin>
@@ -135,14 +130,12 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route
           exact
           path="/project/:id/actions"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 advanced
                 mainContent={
@@ -160,7 +153,6 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route
@@ -174,7 +166,6 @@ const MainContent = () => {
           exact
           path="/project/:id/infos"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 advanced
                 mainContent={
@@ -192,14 +183,12 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route
           exact
           path="/project/:id/decisions"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 advanced
                 mainContent={
@@ -217,14 +206,12 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route
           exact
           path="/project/:id/risks"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 advanced
                 mainContent={
@@ -242,14 +229,12 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route
           exact
           path="/project/:id/problems"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 advanced
                 mainContent={
@@ -267,14 +252,12 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route
           exact
           path="/project/:id/deliverables"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 advanced
                 mainContent={
@@ -292,14 +275,12 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route
           exact
           path="/client/:id"
           element={
-            <div className={"dashboard"}>
               <Drawer
                 mainContent={
                   <SecureRoute margin>
@@ -316,7 +297,6 @@ const MainContent = () => {
                 drawerWidth={240}
                 breakPoint={800}
               />
-            </div>
           }
         />
         <Route

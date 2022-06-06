@@ -12,6 +12,7 @@ import { MenuItem } from "@mui/material";
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
     margin: theme.spacing(0.5),
+    height: "40px",
     border: 0,
     "&.Mui-disabled": {
       border: 0,
@@ -23,6 +24,14 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
       borderRadius: theme.shape.borderRadius,
     },
   },
+}));
+const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
+  "&.Mui-selected, &.Mui-selected:hover": {
+    color: "var(--font-color)",
+    backgroundColor: "var(--toggle-background)",
+  },
+  margin: theme.spacing(0.5),
+  height: "40px",
 }));
 
 export default function CustomizedDividers(props) {
@@ -51,23 +60,30 @@ export default function CustomizedDividers(props) {
         onChange={handleAlignment}
         aria-label="text alignment"
       >
-        <ToggleButton value="list" aria-label="left aligned">
+        <StyledToggleButton value="list">
           <FormatListBulletedIcon style={{ color: "var(--font-color)" }} />
-        </ToggleButton>
-        <ToggleButton value="grid" aria-label="centered">
+        </StyledToggleButton>
+        <StyledToggleButton value="grid">
           <GridViewIcon style={{ color: "var(--font-color)" }} />
-        </ToggleButton>
+        </StyledToggleButton>
       </StyledToggleButtonGroup>
       <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
-      <ToggleButton onClick={handleClickFilter} style={{ border: "none" }}>
+      <StyledToggleButton
+        onClick={handleClickFilter}
+        style={{ border: "none" }}
+      >
         <FilterAltIcon style={{ color: "var(--font-color)" }} />
+        <p style={{ fontSize: "0.6rem", color: "var(--font-color)" }}>
+          Filtrer
+        </p>
         <ArrowDropDownIcon style={{ color: "var(--font-color)" }} />
-      </ToggleButton>
+      </StyledToggleButton>
       <Menu
         anchorEl={anchorElFilter}
         open={openFilter}
         onClose={handleCloseFilter}
         sx={{
+          margin: "0.5rem",
           "& .MuiPaper-root": {
             color: "var(--font-color)",
             bgcolor: "var(--card-background)",

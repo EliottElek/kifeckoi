@@ -1,32 +1,146 @@
-import React from "react";
-import "./Drawer.scss";
-import { Context } from "../../components/Context/Context";
-import StickyNavDefault from "../../components/StickyNavbar/StickyNavBarDefault";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import Toolbar from "@mui/material/Toolbar";
+import { CgMenuGridO } from "react-icons/cg";
 import StickyNavAdvanced from "../../components/StickyNavbar/StickyNavBarAdvanced";
-const Drawer = ({ mainContent, secondaryContent, advanced }) => {
-  const { openDrawer } = React.useContext(Context);
+import { Context } from "../../components/Context/Context";
+import { useNavigate } from "react-router";
+import logo from "../../assets/images/logo.png";
+const drawerWidth = 240;
+
+function ResponsiveDrawer(props) {
+  const { window } = props;
+  const navigate = useNavigate();
+  const { openDrawer, setOpenDrawer, setCurrentClient, setCurrentProject } =
+    React.useContext(Context);
+
+  const handleDrawerToggle = () => {
+    setOpenDrawer(!openDrawer);
+  };
+
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <div className="very__main__container">
-      {advanced ? <StickyNavAdvanced /> : <StickyNavDefault />}
-      <div
-        className={
-          openDrawer ? "drawer_container" : "drawer_container closed__container"
-        }
+    <Box sx={{ display: "flex", minHeight: "100vh", overflowY: "auto" }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          boxShadow: "none",
+          background: "transparent",
+        }}
       >
-        <div
-          className={
-            openDrawer
-              ? "drawer_container_secondary"
-              : "drawer_container_secondary closed__secondary"
-          }
+        <StickyNavAdvanced />
+      </AppBar>
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        aria-label="mailbox folders"
+      >
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={openDrawer}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+              bgcolor: "var(--color-background-2)",
+            },
+          }}
         >
-          {secondaryContent}
-        </div>
-        <div className="drawer_container_main">{mainContent}</div>
-      </div>
-    </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              height: "55px",
+              borderBottom: "solid 1px var(border-color)",
+            }}
+          >
+            <button
+              className={"toggle__drawer__button"}
+              onClick={() => setOpenDrawer(!openDrawer)}
+            >
+              <CgMenuGridO />
+            </button>
+            <img
+              onClick={() => {
+                setCurrentProject(null);
+                setCurrentClient(null);
+                navigate(`/`);
+              }}
+              src={logo}
+              alt=""
+              className="logo__kifekoi"
+            />
+          </div>
+          {props.secondaryContent}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+              bgcolor: "var(--color-background-2)",
+            },
+          }}
+          open
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              height: "55px",
+              borderBottom: "solid 1px var(--border-color)",
+            }}
+          >
+            <button
+              className={"toggle__drawer__button"}
+              onClick={() => setOpenDrawer(!openDrawer)}
+            >
+              <CgMenuGridO />
+            </button>
+            <img
+              onClick={() => {
+                setCurrentProject(null);
+                setCurrentClient(null);
+                navigate(`/`);
+              }}
+              src={logo}
+              alt=""
+              className="logo__kifekoi"
+            />
+          </div>{" "}
+          {props.secondaryContent}
+        </Drawer>
+      </Box>
+      <Box
+        component="main"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          flexGrow: 1,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          background: "var(--background1)",
+        }}
+      >
+        <Toolbar />
+        {props.mainContent}
+      </Box>
+    </Box>
   );
-};
+}
 
-export default Drawer;
+export default ResponsiveDrawer;
