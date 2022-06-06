@@ -3,6 +3,9 @@ html,
   height: 100vh;
   width: 100vw;
 }
+html, .root{
+  overflow-x: hidden;
+}
 .logo__kifekoi {
   height: 40px;
   width: auto;
@@ -145,7 +148,7 @@ html,
     display: flex;
   }
   [data-theme="dark"] {
-    --background1: #1c2128;
+    --background1: #212b36s;
   }
 }
 .modif__textarea__paragraph img,

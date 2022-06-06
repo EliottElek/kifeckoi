@@ -121,6 +121,7 @@ function ResponsiveDrawer(props) {
           flexGrow: 1,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           background: "var(--background1)",
+          overflowX: "hidden",
         }}
       >
         <Toolbar />

@@ -267,7 +267,7 @@ const GlobalInfos = () => {
         </Backdrop>
       ) : (
         <div className="global__infos__container">
-          <div style={{ margin: "30px" }}>
+          <div style={{ margin: "30px", overflowX: "hidden" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Button
                 onClick={() => setOpenUploadModal(true)}
@@ -275,9 +275,6 @@ const GlobalInfos = () => {
               >
                 Importer <BiImport fontSize="1.2rem" />
               </Button>
-              {/* <Button style={{ gap: "8px" }}>
-                Exporter <BiExport fontSize="1.2rem" />
-              </Button> */}
             </div>
             <h2 className="title__global__big">
               {currentProject?.name}{" "}
