@@ -91,6 +91,25 @@ function ResponsiveDrawer(props) {
           }}
           open
         >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              height: "55px",
+              borderBottom: "solid 1px var(--border-color)",
+            }}
+          >
+            <img
+              onClick={() => {
+                setCurrentProject(null);
+                setCurrentClient(null);
+                navigate(`/`);
+              }}
+              src={logo}
+              alt=""
+              className="logo__kifekoi"
+            />
+          </div>
           {props.secondaryContent}
         </Drawer>
       </Box>
