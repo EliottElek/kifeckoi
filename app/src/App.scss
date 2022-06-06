@@ -28,6 +28,7 @@ body {
   --check-background: #34951652;
   --border-color: rgba(206, 194, 194, 0.397);
   --background1: rgb(238, 238, 238);
+  --progress-color: white;
 }
 
 /* 2 */
@@ -47,6 +48,7 @@ body {
     rgba(212, 221, 235, 0.082),
     rgba(15, 30, 37, 1)
   );
+  --progress-color: #01ffff80;
 }
 *::-webkit-scrollbar {
   width: 5px;
