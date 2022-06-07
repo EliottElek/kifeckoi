@@ -640,7 +640,10 @@ const Card = (props) => {
               <MenuItem
                 style={{ fontSize: "0.9rem" }}
                 key={category.title}
-                onClick={() => handleMoveTo(category)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMoveTo(category);
+                }}
               >
                 <p>
                   Déplacer vers{" "}
