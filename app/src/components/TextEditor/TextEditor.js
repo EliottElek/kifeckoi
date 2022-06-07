@@ -36,10 +36,13 @@ export default function TextEditor({
           },
         },
         toolbar: [
-          ["bold", "italic", "underline"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          [{ header: [1, 2, false] }],
-          ["clean"],
+          [{ header: [1, 2, false] }, { font: [] }],
+          ["bold", "italic", "underline", "code"],
+          [
+            { list: "ordered" },
+            { list: "bullet" },
+          ],
+          ["link", "image"],
         ],
       };
       if (wrapper == null) return;
