@@ -1,10 +1,17 @@
-import React from "react";
 import "./Grid.scss";
+import { Paper } from "@mui/material";
 const GridItem = ({ children, onClick }) => {
   return (
-    <div onClick={onClick} className="grid__item">
+    <Paper
+      onClick={onClick}
+      sx={{
+        bgcolor: "var(--card-background)",
+        cursor: "pointer",
+        color: "var(--font-color)",
+      }}
+    >
       {children}
-    </div>
+    </Paper>
   );
 };
 

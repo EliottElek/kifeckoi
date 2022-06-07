@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import StickyNavAdvanced from "../../components/StickyNavbar/StickyNavBarAdvanced";
+import StickyNavDefault from "../../components/StickyNavbar/StickyNavBarDefault";
 import { Context } from "../../components/Context/Context";
 import { useNavigate } from "react-router";
 import logo from "../../assets/images/logo.png";
@@ -39,7 +40,7 @@ function ResponsiveDrawer(props) {
           background: "transparent",
         }}
       >
-        <StickyNavAdvanced />
+        {props.advanced ? <StickyNavAdvanced /> : <StickyNavDefault />}
       </AppBar>
       <Box
         component="nav"

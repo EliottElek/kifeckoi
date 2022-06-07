@@ -3,14 +3,15 @@ import { useNavigate } from "react-router";
 import { Context } from "../Context/Context";
 import Switch from "../../materials/Switch/Switch";
 import Avatar from "../../materials/Avatar/Avatar";
-import { CgMenuGridO } from "react-icons/cg";
 import StickyNavbar from "./StickyNavbar";
 import { Menu } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import "./StickyNavbar.scss";
-import logo from "../../assets/images/logo.png";
 import getPeriod from "../../assets/functions/getPeriod";
+import { IconButton } from "@mui/material";
 import ReactTooltip from "react-tooltip";
+import AppsIcon from "@mui/icons-material/Apps";
+
 const StickyNavAdvanced = () => {
   const {
     currentProject,
@@ -21,8 +22,6 @@ const StickyNavAdvanced = () => {
     defaultDark,
     setOpenDrawer,
     openDrawer,
-    setCurrentProject,
-    setCurrentClient,
     handleLogout,
   } = useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -40,22 +39,15 @@ const StickyNavAdvanced = () => {
   return (
     <StickyNavbar>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <button
-          className={"toggle__drawer__button"}
+        <IconButton
+          sx={{
+            display: { xs: "flex", md: "none" },
+            color: "var(--font-color)",
+          }}
           onClick={() => setOpenDrawer(!openDrawer)}
         >
-          <CgMenuGridO />
-        </button>
-        <img
-          onClick={() => {
-            setCurrentProject(null);
-            setCurrentClient(null);
-            navigate(`/`);
-          }}
-          src={logo}
-          alt=""
-          className="logo__kifekoi"
-        />
+          <AppsIcon sx={{ fontSize: "2rem" }} />
+        </IconButton>
         <div className="name__container">
           <h2
             className="name__container__title"
