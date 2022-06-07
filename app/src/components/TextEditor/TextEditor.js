@@ -38,10 +38,7 @@ export default function TextEditor({
         toolbar: [
           [{ header: [1, 2, false] }, { font: [] }],
           ["bold", "italic", "underline", "code"],
-          [
-            { list: "ordered" },
-            { list: "bullet" },
-          ],
+          [{ list: "ordered" }, { list: "bullet" }],
           ["link", "image"],
         ],
       };
@@ -60,6 +57,7 @@ export default function TextEditor({
       }
       if (placeholder) q.root.dataset.placeholder = placeholder;
       q.focus();
+      q.setSelection(999999);
       setQuill(q);
     },
     [defaultValue, placeholder, data?.getAllUsers]
