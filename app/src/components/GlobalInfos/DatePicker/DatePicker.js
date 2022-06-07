@@ -59,7 +59,7 @@ const DatePicker = ({ type, dataProject }) => {
         <Button
           onClick={() => setModifMode(true)}
           reversed
-          style={{ height: "30px", marginLeft: "-20px" }}
+          style={{ height: "30px", marginLeft: "-10px" }}
         >
           Ajouter une date de Go live
         </Button>
@@ -105,7 +105,7 @@ const DatePicker = ({ type, dataProject }) => {
         <Button
           onClick={() => setModifMode(true)}
           reversed
-          style={{ height: "30px", marginLeft: "-20px" }}
+          style={{ height: "30px", marginLeft: "-10px" }}
         >
           Ajouter une date de Go copy
         </Button>
