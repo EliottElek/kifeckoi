@@ -26,7 +26,7 @@ function ResponsiveDrawer(props) {
     <Box
       sx={{
         display: "flex",
-        minHeight: "100vh",
+        minHeight: "-webkit-fill-available",
         overflowY: "auto",
       }}
     >
@@ -128,7 +128,7 @@ function ResponsiveDrawer(props) {
           overflowX: "hidden",
         }}
       >
-        <Toolbar />
+        <Toolbar sx={{ minHeight: "55px!important" }} />
         {props.mainContent}
       </Box>
     </Box>

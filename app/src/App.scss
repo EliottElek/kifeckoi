@@ -151,6 +151,11 @@ html,
   [data-theme="dark"] {
     --background1: #212b36;
   }
+  html,
+  .App {
+    height: -webkit-fill-available;
+    width: 100vw;
+  }
 }
 .modif__textarea__paragraph img,
 .ql-editor img {
