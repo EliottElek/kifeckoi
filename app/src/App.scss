@@ -3,7 +3,8 @@ html,
   height: 100vh;
   width: 100vw;
 }
-html, .root{
+html,
+.root {
   overflow-x: hidden;
 }
 .logo__kifekoi {
@@ -140,6 +141,9 @@ html, .root{
   transition: 0.2s all;
   color: var(--font-color);
 }
+* {
+  outline: 1px solid red;
+}
 .toggle__drawer__button:hover {
   background-color: var(--color-background-1);
 }
@@ -148,7 +152,7 @@ html, .root{
     display: flex;
   }
   [data-theme="dark"] {
-    --background1: #212b36s;
+    --background1: #212b36;
   }
 }
 .modif__textarea__paragraph img,

@@ -23,7 +23,13 @@ function ResponsiveDrawer(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", overflowY: "auto" }}>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        overflowY: "auto",
+      }}
+    >
       <AppBar
         position="fixed"
         sx={{
