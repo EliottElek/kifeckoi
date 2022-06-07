@@ -63,7 +63,6 @@ function ResponsiveDrawer(props) {
               display: "flex",
               alignItems: "center",
               height: "55px",
-              borderBottom: "solid 1px var(border-color)",
             }}
           >
             <img
@@ -96,7 +95,6 @@ function ResponsiveDrawer(props) {
               display: "flex",
               alignItems: "center",
               height: "55px",
-              borderBottom: "solid 1px var(--border-color)",
             }}
           >
             <img
