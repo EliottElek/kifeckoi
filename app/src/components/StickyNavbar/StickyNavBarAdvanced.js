@@ -4,7 +4,7 @@ import { Context } from "../Context/Context";
 import Switch from "../../materials/Switch/Switch";
 import Avatar from "../../materials/Avatar/Avatar";
 import StickyNavbar from "./StickyNavbar";
-import { Menu } from "@mui/material";
+import { Menu, Typography } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import "./StickyNavbar.scss";
 import getPeriod from "../../assets/functions/getPeriod";
@@ -12,9 +12,12 @@ import ReactTooltip from "react-tooltip";
 import ToggleButtonActions from "./ToggleButtonsActions";
 import { IconButton } from "@mui/material";
 import AppsIcon from "@mui/icons-material/Apps";
-const StickyNavAdvanced = () => {
+import { Badge } from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import SearchIcon from "@mui/icons-material/Search";
+
+const StickyNavAdvanced = ({ advanced }) => {
   const {
-    currentProject,
     user,
     toggleTheme,
     dark,
@@ -35,15 +38,13 @@ const StickyNavAdvanced = () => {
     setAnchorEl(null);
   };
   const navigate = useNavigate();
-  let urlElement = window.location.href.split("/")[5];
-
   let period = getPeriod();
   return (
     <StickyNavbar>
       <div style={{ display: "flex", alignItems: "center" }}>
         <IconButton
           sx={{
-            display: { xs: "flex", md: "none" },
+            display: { xs: "flex", sm: "none" },
             color: "var(--font-color)",
           }}
           onClick={() => setOpenDrawer(!openDrawer)}
@@ -51,23 +52,44 @@ const StickyNavAdvanced = () => {
           <AppsIcon sx={{ fontSize: "2rem" }} />
         </IconButton>
         <div className="name__container">
-          <h2
-            className="name__container__title"
-            onClick={() => navigate(`/project/${currentProject?.id}/global`)}
-          >
-            {currentProject?.name}
-            {urlElement && ` - ${urlElement} `}
-          </h2>
           <span className="period__span" data-tip data-for="weekTooltip">
             {period}
           </span>
-          <ToggleButtonActions
-            setListStyle={setListStyle}
-            setAddCard={setAddCard}
-          />
+          {advanced && (
+            <ToggleButtonActions
+              setListStyle={setListStyle}
+              setAddCard={setAddCard}
+            />
+          )}
         </div>
       </div>
       <div className="events__container">
+        <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
+          <SearchIcon sx={{ color: "var(--font-color)", opacity: "0.7" }} />
+        </IconButton>
+        <IconButton>
+          <Badge
+            sx={{
+              "& .MuiBadge-badge": {
+                color: "lightgreen",
+                backgroundColor: "var(--main-color)",
+              },
+            }}
+            variant="dot"
+            overlap="circular"
+          >
+            <NotificationsIcon
+              sx={{ color: "var(--font-color)", opacity: "0.7" }}
+            />
+          </Badge>
+        </IconButton>
+        <span className="events__container__divider" />
+        <Typography
+          variant="paragraph"
+          sx={{ display: { xs: "none", md: "flex" } }}
+        >
+          {user?.firstname} {user?.lastname}
+        </Typography>
         <button className="settings__button" onClick={handleClick}>
           <Avatar src={user?.avatarUrl} name={user?.firstname} />
         </button>

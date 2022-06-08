@@ -20,11 +20,17 @@ query getUserById($userId: String!){
       firstname
       lastname
       email
+      comments{
+        id
+      }
       avatarUrl
       username
       projects{
         id
         name
+      }
+      events{
+        id
       }
     } 
   }

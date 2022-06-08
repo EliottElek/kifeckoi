@@ -35,7 +35,6 @@ const ErrorPage = () => {
           La page demandée ne semble pas exister...
           <Button
             style={{ height: "40px", fontWeight: "normal", marginTop: "30px" }}
-            reversed
             onClick={() => navigate("/")}
           >
             Revenir en lieu sûr

@@ -1,16 +1,28 @@
+html {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+body {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
 :root {
   --font-color: #212b36;
-  --color-background-1: rgb(238, 238, 238);
-  --color-background-2: whitesmoke;
+  --color-background-1: #f7f8fc;
+  --color-background-2: #f7f8fc;
+  --panel-background: #363740;
   --card-background: #fffefe;
-  --main-color: #0079bf;
+  --main-color: #3750ff;
   --main-color2: #e620e6af;
   --shadow-color: #d8e1e8;
   --warning-color: #dfba19df;
   --check-color: #339516df;
   --check-background: #34951652;
   --border-color: rgba(206, 194, 194, 0.397);
-  --background1: whitesmoke;
+  --background1: #f7f8fc;
   --progress-color: white;
   --toggle-background: rgb(238, 238, 238);
 }
@@ -170,4 +182,10 @@ html,
 .modif__textarea__paragraph__modal:hover,
 .modif__textarea__paragraph:hover {
   border-color: rgba(128, 128, 128, 0.13);
+}
+.level__two__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.6rem;
 }

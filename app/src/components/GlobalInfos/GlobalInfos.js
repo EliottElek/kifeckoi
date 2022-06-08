@@ -268,7 +268,25 @@ const GlobalInfos = () => {
       ) : (
         <div className="global__infos__container">
           <div style={{ margin: "30px", overflowX: "hidden" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="level__two__header">
+              <h2 className="title__global__big">
+                {currentProject?.name}{" "}
+                {currentProject.logoUrl !== "" && (
+                  <img
+                    alt=""
+                    className={"project__logo"}
+                    src={currentProject.logoUrl}
+                  />
+                )}
+                <div className={"title__buttons__container"}>
+                  <button
+                    className="title__modif__button"
+                    onClick={handleClickName}
+                  >
+                    <FiMoreHorizontal />
+                  </button>
+                </div>
+              </h2>
               <Button
                 onClick={() => setOpenUploadModal(true)}
                 style={{ gap: "8px" }}
@@ -276,24 +294,6 @@ const GlobalInfos = () => {
                 Importer <BiImport fontSize="1.2rem" />
               </Button>
             </div>
-            <h2 className="title__global__big">
-              {currentProject?.name}{" "}
-              {currentProject.logoUrl !== "" && (
-                <img
-                  alt=""
-                  className={"project__logo"}
-                  src={currentProject.logoUrl}
-                />
-              )}
-              <div className={"title__buttons__container"}>
-                <button
-                  className="title__modif__button"
-                  onClick={handleClickName}
-                >
-                  <FiMoreHorizontal />
-                </button>
-              </div>
-            </h2>
             {currentProject?.creator && (
               <span className={"date__creator__span"}>
                 Créé par {currentProject.creator.firstname} (
