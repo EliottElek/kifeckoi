@@ -55,8 +55,8 @@ const SidePanel = () => {
   return (
     <div className="sticky__side__nav">
       <ul className="default__menu">
-        {defaultNavElements.map((item) => (
-          <li>
+        {defaultNavElements.map((item, i) => (
+          <li key={i}>
             <NavLink
               className={({ isActive }) =>
                 isActive

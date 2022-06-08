@@ -50,6 +50,7 @@ export default function TreeViewProjects() {
       <TreeItem nodeId="2" label="Projets" sx={styles.treeItem}>
         {user?.projects?.map((nav) => (
           <TreeItem
+            key={nav.id}
             onClick={() => {
               setOpenDrawer(false);
               navigate(`/project/${nav?.id}`);

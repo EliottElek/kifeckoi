@@ -5,6 +5,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { Context } from "../Context/Context";
 import { useNavigate } from "react-router";
+import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
+import TimelineIcon from "@mui/icons-material/Timeline";
 const styles = {
   treeItem: {
     "& .MuiTreeItem-content": {
@@ -38,13 +40,13 @@ const styles = {
   },
 };
 const navElements = [
-  { id: "global", name: "Overview" },
-  { id: "actions", name: "Actions" },
-  { id: "infos", name: "Infos" },
-  { id: "decisions", name: "Décisions" },
-  { id: "risks", name: "Risques" },
-  { id: "problems", name: "Problèmes" },
-  { id: "deliverables", name: "Livrables" },
+  { id: "global", name: "Overview", icon: <TimelineIcon /> },
+  { id: "actions", name: "Actions", icon: <ViewKanbanIcon /> },
+  { id: "infos", name: "Infos", icon: <ViewKanbanIcon /> },
+  { id: "decisions", name: "Décisions", icon: <ViewKanbanIcon /> },
+  { id: "risks", name: "Risques", icon: <ViewKanbanIcon /> },
+  { id: "problems", name: "Problèmes", icon: <ViewKanbanIcon /> },
+  { id: "deliverables", name: "Livrables", icon: <ViewKanbanIcon /> },
 ];
 export default function TreeViewEvents() {
   const navigate = useNavigate();
@@ -52,6 +54,7 @@ export default function TreeViewEvents() {
   return (
     <TreeView
       aria-label="file system navigator"
+      expanded={["1"]}
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpandIcon={<ChevronRightIcon />}
       sx={{ overflow: "hidden" }}
@@ -59,12 +62,20 @@ export default function TreeViewEvents() {
       <TreeItem nodeId="1" label="Évènements" sx={styles.treeItem}>
         {navElements.map((nav) => (
           <TreeItem
+            key={nav.id}
             onClick={() => {
               setOpenDrawer(false);
               navigate(`/project/${currentProject?.id}/${nav?.id}`);
             }}
             nodeId={nav?.id}
-            label={nav.name}
+            label={
+              <span
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                {nav.icon}
+                {nav.name}
+              </span>
+            }
             sx={
               window?.location?.href.split("/")[5] === nav.id
                 ? styles.treeItemActive
