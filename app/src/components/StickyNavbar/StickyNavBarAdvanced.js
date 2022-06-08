@@ -11,7 +11,7 @@ import getPeriod from "../../assets/functions/getPeriod";
 import ReactTooltip from "react-tooltip";
 import ToggleButtonActions from "./ToggleButtonsActions";
 import { IconButton } from "@mui/material";
-import AppsIcon from "@mui/icons-material/Apps";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Badge } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
@@ -49,7 +49,7 @@ const StickyNavAdvanced = ({ advanced }) => {
           }}
           onClick={() => setOpenDrawer(!openDrawer)}
         >
-          <AppsIcon sx={{ fontSize: "2rem" }} />
+          <MenuIcon sx={{ fontSize: "2rem" }} />
         </IconButton>
         <div className="name__container">
           <span className="period__span" data-tip data-for="weekTooltip">

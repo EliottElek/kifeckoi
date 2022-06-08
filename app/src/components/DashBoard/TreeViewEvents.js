@@ -11,7 +11,14 @@ const styles = {
       height: "40px",
       minWidth: "none",
       color: "white",
-      borderLeft: "solid 3px transparent",
+      borderRight: "solid 3px transparent",
+    },
+    "& .MuiTreeItem-group": {
+      marginLeft: "0px",
+      "& .MuiTreeItem-content": {
+        paddingLeft: "17px",
+        width: "auto",
+      },
     },
   },
   treeItemActive: {
@@ -20,6 +27,13 @@ const styles = {
       color: "white",
       borderColor: "var(--main-color)",
       backgroundColor: "rgba(25, 118, 210, 0.08)",
+    },
+    "& .MuiTreeItem-group": {
+      marginLeft: "0px",
+      "& .MuiTreeItem-content": {
+        paddingLeft: "17px",
+        width: "auto",
+      },
     },
   },
 };
@@ -52,7 +66,7 @@ export default function TreeViewEvents() {
             nodeId={nav?.id}
             label={nav.name}
             sx={
-              window.location.href.split("/").at(-1) === nav.id
+              window?.location?.href.split("/")[5] === nav.id
                 ? styles.treeItemActive
                 : styles.treeItem
             }

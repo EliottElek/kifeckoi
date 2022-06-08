@@ -24,7 +24,7 @@ export default function TextEditor({
         const allPeople = data?.getAllUsers?.map((user) => {
           return { id: user.id, value: user.username };
         });
-        return allPeople.filter((person) => person.value.includes(searchTerm));
+        return allPeople?.filter((person) => person.value.includes(searchTerm));
       }
       const modules = {
         mention: {

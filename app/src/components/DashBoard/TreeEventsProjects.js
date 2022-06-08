@@ -9,8 +9,16 @@ const styles = {
   treeItem: {
     "& .MuiTreeItem-content": {
       height: "40px",
+      minWidth: "none",
       color: "white",
-      borderLeft: "solid 3px transparent",
+      borderRight: "solid 3px transparent",
+    },
+    "& .MuiTreeItem-group": {
+      marginLeft: "0px",
+      "& .MuiTreeItem-content": {
+        paddingLeft: "17px",
+        width: "auto",
+      },
     },
   },
   treeItemActive: {
@@ -19,6 +27,13 @@ const styles = {
       color: "white",
       borderColor: "var(--main-color)",
       backgroundColor: "rgba(25, 118, 210, 0.08)",
+    },
+    "& .MuiTreeItem-group": {
+      marginLeft: "0px",
+      "& .MuiTreeItem-content": {
+        paddingLeft: "17px",
+        width: "auto",
+      },
     },
   },
 };

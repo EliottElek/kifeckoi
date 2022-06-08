@@ -20,6 +20,7 @@ const SidePanel = () => {
     setProjects,
     currentClient,
     user,
+    setOpenDrawer,
   } = React.useContext(Context);
   useQuery(GET_ALL_CLIENTS, {
     variables: { userId: user?.id },
@@ -63,6 +64,7 @@ const SidePanel = () => {
                   : "dashboard__menu__item"
               }
               to={item.to}
+              onClick={() => setOpenDrawer(false)}
             >
               {item.icon}
               {item.name}
