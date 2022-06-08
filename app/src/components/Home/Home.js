@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_CLIENTS } from "../../graphql/queries";
 import Progress from "../../materials/Progress/Progress";
 import Backdrop from "../../materials/Backdrop/Backdrop";
-import Cards from "./Cards/Cards";
+import Cards from "../Cards/Cards";
 import { Chart } from "./Chart/Chart";
 const Home = () => {
   const { user } = useContext(Context);

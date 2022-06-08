@@ -25,6 +25,7 @@ import axios from "axios";
 import getBase64 from "../../assets/functions/base64";
 import { BiImport } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
+import Cards from "./EventCards/Cards";
 const status = [
   {
     name: "conforme",
@@ -73,6 +74,7 @@ const GlobalInfos = () => {
       setCurrentProject(data?.findProjectByProjectId);
     },
   });
+
   const [anchorElName, setAnchorElName] = React.useState(null);
   const [anchorElGlobal, setAnchorElGlobal] = React.useState(null);
   const [anchorElPlanning, setAnchorElPlanning] = React.useState(null);
@@ -250,7 +252,7 @@ const GlobalInfos = () => {
       });
     }
   };
-  if (!dataProject.data && !dataProject.loading) {
+  if (!dataProject && !dataProject.loading) {
     return <Navigate to="/404" />;
   }
   if (!currentProject)
@@ -309,6 +311,7 @@ const GlobalInfos = () => {
             </h4>
             <DatePicker type={"Go live"} dataProject={dataProject} />
             <DatePicker type={"Go copy"} dataProject={dataProject} />
+            <Cards />
             <h1
               style={{
                 marginTop: "30px",
