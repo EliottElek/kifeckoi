@@ -14,8 +14,7 @@ import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Badge } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import SearchIcon from "@mui/icons-material/Search";
-
+import SearchBar from "./SearchBar";
 const StickyNavAdvanced = ({ advanced }) => {
   const {
     user,
@@ -28,6 +27,7 @@ const StickyNavAdvanced = ({ advanced }) => {
     setAddCard,
     setOpenDrawer,
     openDrawer,
+    currentProject,
   } = useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -64,9 +64,7 @@ const StickyNavAdvanced = ({ advanced }) => {
         </div>
       </div>
       <div className="events__container">
-        <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
-          <SearchIcon sx={{ color: "var(--font-color)", opacity: "0.7" }} />
-        </IconButton>
+        {currentProject && <SearchBar />}
         <IconButton>
           <Badge
             sx={{
