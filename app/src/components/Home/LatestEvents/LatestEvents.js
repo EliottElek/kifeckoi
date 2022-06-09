@@ -5,6 +5,8 @@ import "./LatestEvents.scss";
 import { Context } from "../../Context/Context";
 import { useNavigate } from "react-router";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import shortString from "../../../assets/functions/shortString";
+import RenderHtml from "../../../assets/RenderHtml";
 const LatestEvents = () => {
   const { user } = React.useContext(Context);
   const { data } = useQuery(GET_LATEST_EVENTS, { variables: { id: user.id } });
@@ -13,7 +15,7 @@ const LatestEvents = () => {
     <div className={"latest__events__container"}>
       <h3 className={"latest__events__container__title"}>Évènements récents</h3>
       <div className={"latest__events__container__list"}>
-        {data?.getLatestEvents?.map((event, i) => (
+        {data?.getLatestEvents?.slice(0, 5).map((event, i) => (
           <div
             onClick={() =>
               navigate(
@@ -24,9 +26,14 @@ const LatestEvents = () => {
             key={i}
             event={event}
           >
-            <p>
-              {event?.project?.name} - {event.description}
-            </p>
+            <span>
+              <span
+                className={"latest__events__container__list__item__project"}
+              >
+                {event?.project?.name}
+              </span>
+              <RenderHtml>{shortString(event.description, 50)}</RenderHtml>
+            </span>
             <span className={"latest__events__container__list__item__chevron"}>
               {event?.type}
               <ChevronRightIcon />

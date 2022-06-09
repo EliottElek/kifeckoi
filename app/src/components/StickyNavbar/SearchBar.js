@@ -39,15 +39,18 @@ const SearchBar = () => {
         <Modal onClose={() => setOpen(false)} open={open}>
           <Box sx={style}>
             <Paper
+              elevation={0}
               component="form"
               sx={{
                 p: "2px 4px",
                 display: "flex",
                 alignItems: "center",
                 width: "100%",
+                border: "solid 1px var(--border-color)",
               }}
             >
               <InputBase
+                autoFocus
                 sx={{ ml: 1, flex: 1 }}
                 placeholder={`Rechercher dans ${currentProject?.name}`}
                 inputProps={{ "aria-label": "search google maps" }}
