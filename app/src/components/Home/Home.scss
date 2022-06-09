@@ -13,7 +13,7 @@
   padding: 12px;
   border: solid 1px var(--border-color);
   border-radius: 8px;
-  height: 400px;
+  min-height: 400px;
 }
 .chart__container__dashboard__chart {
   display: flex;
@@ -46,5 +46,24 @@
 @media screen and (max-width: 880px) {
   .two__items__grid {
     gap: 0px;
+  }
+  .chart__container__dashboard {
+    flex-direction: column-reverse;
+  }
+  .chart__container__dashboard__chart {
+    width: 100%;
+  }
+  .chart__container__dashboard__data {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .chart__container__dashboard__data__item:not(:last-child) {
+    border-right: solid 1px var(--border-color);
+    border-bottom: none;
   }
 }
