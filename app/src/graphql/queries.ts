@@ -28,6 +28,7 @@ query getUserById($userId: String!){
       projects{
         id
         name
+        creation
       }
       events{
         id
@@ -127,8 +128,8 @@ query findProjectsByClientId($clientId: String! $userId : String!){
 }
 `
 export const GET_ALL_PROJECTS = gql`
-query{
-    getAllProjects{
+query getAllProjects($id :String!){
+  getAllProjects(id : $id){
       logoUrl
       name
       id

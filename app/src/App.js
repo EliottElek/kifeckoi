@@ -13,6 +13,7 @@ import Progress from "./materials/Progress/Progress";
 import NoInternetConnection from "./components/NoInternetConnectionWrapper/NoInternetConnectionWrapper";
 import StickyNavAdvanced from "./components/StickyNavbar/StickyNavBarAdvanced";
 import Chat from "./components/Chat/Chat";
+import Projects from "./components/Projects/Projects";
 const SidePanel = lazy(() => import("./components/DashBoard/SidePanel"));
 const ErrorPage = lazy(() => import("./components/ErrorPage/ErrorPage"));
 const Client = lazy(() => import("./components/Client/Client"));
@@ -166,6 +167,28 @@ const MainContent = () => {
                 <SecureRoute margin>
                   <Suspense fallback={renderLoader()}>
                     <Clients />
+                  </Suspense>
+                </SecureRoute>
+              }
+              secondaryContent={
+                <Suspense fallback={renderLoader()}>
+                  <SecondaryContent />
+                </Suspense>
+              }
+              drawerWidth={240}
+              breakPoint={800}
+            />
+          }
+        />
+        <Route
+          exact
+          path="/projects"
+          element={
+            <Drawer
+              mainContent={
+                <SecureRoute margin>
+                  <Suspense fallback={renderLoader()}>
+                    <Projects />
                   </Suspense>
                 </SecureRoute>
               }

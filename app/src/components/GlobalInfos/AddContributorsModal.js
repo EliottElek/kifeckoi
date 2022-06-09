@@ -43,7 +43,7 @@ const AddContributorsModal = ({
     }
   };
   return (
-    <Modal open={open}>
+    <Modal open={open} setOpen={setOpen}>
       <div className="modal__content__container" style={{ width: "95%" }}>
         <button
           onClick={(e) => {

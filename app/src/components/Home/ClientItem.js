@@ -10,10 +10,7 @@ const ClientItem = ({ client }) => {
   const navigate = useNavigate();
 
   return (
-    <GridItem
-      onClick={() => navigate(`/client/${client.id}`)}
-      className={"client__item"}
-    >
+    <GridItem to={`/client/${client.id}`} className={"client__item"}>
       <div className={"client__card__header"}>
         <img src={client.avatarUrl ? client.avatarUrl : logo} alt="" />
       </div>

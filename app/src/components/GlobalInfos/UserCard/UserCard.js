@@ -96,7 +96,7 @@ const UserCard = ({
         )}
       </div>
       <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
-        <div className="modal__content__container">
+        <div className="modal__content__container" style={{ width: "95%" }}>
           <button
             data-tip
             data-for="closeTooltip"

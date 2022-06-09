@@ -77,7 +77,9 @@ export default function TreeViewEvents() {
               </span>
             }
             sx={
-              window?.location?.href.split("/")[5] === nav.id
+              window?.location?.href.split("/")[
+                window?.location?.href.split("/").length - 1
+              ] === nav.id
                 ? styles.treeItemActive
                 : styles.treeItem
             }

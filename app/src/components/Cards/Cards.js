@@ -1,25 +1,24 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { NavLink } from "react-router-dom";
 import { Context } from "../Context/Context";
 import "./Cards.scss";
-const Card = ({ children, onClick, pointer }) => {
+const Card = ({ children, to, pointer }) => {
   return (
-    <div
-      onClick={onClick}
-      className="cards__container__dashboard__card"
-      style={{ cursor: pointer ? "pointer" : "default" }}
-    >
-      {children}
-    </div>
+    <NavLink to={to} style={{ textDecoration: "none" }}>
+      <div
+        className="cards__container__dashboard__card"
+        style={{ cursor: pointer ? "pointer" : "default" }}
+      >
+        {children}
+      </div>
+    </NavLink>
   );
 };
 const Cards = ({ clients }) => {
-  const navigate = useNavigate();
-
   const { user } = React.useContext(Context);
   return (
     <div className="cards__container__dashboard">
-      <Card>
+      <Card to={"/projects"} pointer>
         <span className="cards__container__dashboard__card__title">
           Projets
         </span>
@@ -27,7 +26,7 @@ const Cards = ({ clients }) => {
           {user?.projects?.length}
         </span>
       </Card>
-      <Card onClick={() => navigate("/clients")} pointer>
+      <Card to={"/clients"} pointer>
         <span className="cards__container__dashboard__card__title">
           Clients
         </span>
@@ -35,7 +34,7 @@ const Cards = ({ clients }) => {
           {clients?.length}
         </span>
       </Card>
-      <Card>
+      <Card to={"/"}>
         <span className="cards__container__dashboard__card__title">
           Évènements attribués
         </span>
@@ -43,7 +42,7 @@ const Cards = ({ clients }) => {
           {user?.events?.length}
         </span>
       </Card>
-      <Card>
+      <Card to={"/"}>
         <span className="cards__container__dashboard__card__title">
           Commentaires
         </span>

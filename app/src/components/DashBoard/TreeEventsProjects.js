@@ -48,6 +48,22 @@ export default function TreeViewProjects() {
       sx={{ overflow: "hidden" }}
     >
       <TreeItem nodeId="2" label="Projets" sx={styles.treeItem}>
+        <TreeItem
+          key={"all"}
+          onClick={() => {
+            setOpenDrawer(false);
+            navigate(`/projects`);
+          }}
+          nodeId={"all"}
+          label={"See all"}
+          sx={
+            window?.location?.href.split("/")[
+              window?.location?.href.split("/").length - 1
+            ] === "projects"
+              ? styles.treeItemActive
+              : styles.treeItem
+          }
+        />
         {user?.projects?.map((nav) => (
           <TreeItem
             key={nav.id}
