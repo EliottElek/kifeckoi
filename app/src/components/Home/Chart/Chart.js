@@ -10,7 +10,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import faker from "faker";
-
+import "../Home.scss";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -34,23 +34,17 @@ export const options = {
     },
   },
 };
-
-const labels = [
-  "Y22W17",
-  "Y22W18",
-  "Y22W19",
-  "Y22W21",
-  "Y22W22",
-  "Y22W23",
-  "Y22W24",
-];
-
+const labels = ["Y22W21", "Y22W22", "Y22W23", "Y22W24"];
+const dataset = {
+  labels: labels,
+  data: labels.map(() => faker.datatype.number({ min: 0, max: 70 })),
+};
 export const data = {
-  labels,
+  labels: dataset.labels,
   datasets: [
     {
-      label: "Dataset 1",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 70 })),
+      label: "Évènements créés",
+      data: dataset.data,
       borderColor: "#3750ff",
       backgroundColor: "#3750ff",
     },
@@ -58,5 +52,19 @@ export const data = {
 };
 
 export function Chart() {
-  return <Line options={options} data={data} width={400} />;
+  return (
+    <div className="chart__container__dashboard">
+      <div className="chart__container__dashboard__chart">
+        <Line options={options} data={data} width={300} />
+      </div>
+      <div className="chart__container__dashboard__data">
+        {data.labels.map((label, i) => (
+          <div key={label} className="chart__container__dashboard__data__item">
+            <p>{label}</p>
+            <h2>{dataset.data[i]}</h2>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

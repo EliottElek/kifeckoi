@@ -54,7 +54,7 @@ export default function TreeViewEvents() {
   return (
     <TreeView
       aria-label="file system navigator"
-      expanded={["1"]}
+      defaultExpanded={["1"]}
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpandIcon={<ChevronRightIcon />}
       sx={{ overflow: "hidden" }}

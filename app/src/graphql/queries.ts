@@ -169,8 +169,8 @@ query getAllEventsAllTypes($id :String!){
   }
 `
 export const GET_LATEST_EVENTS = gql`
-query getLatestEvents($id: String! $type : String!){
-  getLatestEvents(id : $id type : $type){
+query getLatestEvents($id: String!){
+  getLatestEvents(id : $id){
     type
     id
     creation

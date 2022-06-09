@@ -12,6 +12,7 @@ import { NavLink } from "react-router-dom";
 import TreeViewEvents from "./TreeViewEvents";
 import TreeViewProjects from "./TreeEventsProjects";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import SettingsIcon from "@mui/icons-material/Settings";
 const SidePanel = () => {
   const {
     currentProject,
@@ -21,6 +22,7 @@ const SidePanel = () => {
     currentClient,
     user,
     setOpenDrawer,
+    setCurrentProject,
   } = React.useContext(Context);
   useQuery(GET_ALL_CLIENTS, {
     variables: { userId: user?.id },
@@ -51,6 +53,11 @@ const SidePanel = () => {
       icon: <BsChatFill />,
       to: `/chat`,
     },
+    {
+      name: "Settings",
+      icon: <SettingsIcon />,
+      to: `/settings`,
+    },
   ];
   return (
     <div className="sticky__side__nav">
@@ -64,7 +71,10 @@ const SidePanel = () => {
                   : "dashboard__menu__item"
               }
               to={item.to}
-              onClick={() => setOpenDrawer(false)}
+              onClick={() => {
+                setCurrentProject(null);
+                setOpenDrawer(false);
+              }}
             >
               {item.icon}
               {item.name}

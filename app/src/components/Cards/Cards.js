@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { Context } from "../../Context/Context";
+import { Context } from "../Context/Context";
 import "./Cards.scss";
 const Card = ({ children, onClick, pointer }) => {
   return (

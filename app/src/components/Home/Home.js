@@ -5,8 +5,9 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_CLIENTS } from "../../graphql/queries";
 import Progress from "../../materials/Progress/Progress";
 import Backdrop from "../../materials/Backdrop/Backdrop";
-import Cards from "./Cards/Cards";
+import Cards from "../Cards/Cards";
 import { Chart } from "./Chart/Chart";
+import LatestEvents from "./LatestEvents/LatestEvents";
 const Home = () => {
   const { user } = useContext(Context);
   const { data, loading } = useQuery(GET_ALL_CLIENTS, {
@@ -29,8 +30,10 @@ const Home = () => {
         </h1>
       </div>
       <Cards clients={data?.getAllClients} />
-      <div className="chart__container__dashboard">
-        <Chart />
+      <Chart />
+      <div className="two__items__grid">
+        <LatestEvents />
+        <LatestEvents />
       </div>
     </div>
   );

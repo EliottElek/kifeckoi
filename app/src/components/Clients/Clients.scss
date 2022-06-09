@@ -36,6 +36,9 @@
   font-style: italic;
   font-size: 0.8rem;
 }
+.client__card__avatars__container__title > h3 {
+  overflow-wrap: break-word;
+}
 .middle__image {
   display: flex;
   flex: 1;
