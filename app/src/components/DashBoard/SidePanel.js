@@ -2,7 +2,7 @@ import React from "react";
 import { Context } from "../Context/Context";
 import { useQuery } from "@apollo/client";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import { BsChatFill } from "react-icons/bs";
+import ChatBubbleRoundedIcon from "@mui/icons-material/ChatBubbleRounded";
 import {
   GET_ALL_CLIENTS,
   FIND_PROJECTS_BY_CLIENT_ID,
@@ -50,7 +50,7 @@ const SidePanel = () => {
     },
     {
       name: "Chat",
-      icon: <BsChatFill />,
+      icon: <ChatBubbleRoundedIcon />,
       to: `/chat`,
     },
     {

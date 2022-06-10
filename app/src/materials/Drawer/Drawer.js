@@ -79,6 +79,7 @@ function ResponsiveDrawer(props) {
               }}
               src={logo}
               alt=""
+              style={{ margin: "30px" }}
               className="logo__kifekoi"
             />
           </div>
@@ -128,6 +129,7 @@ function ResponsiveDrawer(props) {
               }}
               src={logo}
               alt=""
+              style={{ marginTop: "20px", marginLeft: "20px", height: "42px" }}
               className="logo__kifekoi"
             />
           </div>

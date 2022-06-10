@@ -66,7 +66,7 @@ const Cards = () => {
       <Card onClick={() => navigate(`/project/${id}/actions`)} pointer>
         <span className="cards__container__global__card__title">Actions</span>
         {!actions ? (
-          <Progress />
+          <Progress style={{ color: "var(--main-color)" }} />
         ) : (
           <span className="cards__container__global__card__number">
             {actions?.length}
@@ -76,7 +76,7 @@ const Cards = () => {
       <Card onClick={() => navigate(`/project/${id}/infos`)} pointer>
         <span className="cards__container__global__card__title">Infos</span>
         {!actions ? (
-          <Progress />
+          <Progress style={{ color: "var(--main-color)" }} />
         ) : (
           <span className="cards__container__global__card__number">
             {infos?.length}
@@ -86,7 +86,7 @@ const Cards = () => {
       <Card onClick={() => navigate(`/project/${id}/decisions`)} pointer>
         <span className="cards__container__global__card__title">Décisions</span>
         {!actions ? (
-          <Progress />
+          <Progress style={{ color: "var(--main-color)" }} />
         ) : (
           <span className="cards__container__global__card__number">
             {decisions?.length}
@@ -96,7 +96,7 @@ const Cards = () => {
       <Card onClick={() => navigate(`/project/${id}/risks`)} pointer>
         <span className="cards__container__global__card__title">Risques</span>
         {!actions ? (
-          <Progress />
+          <Progress style={{ color: "var(--main-color)" }} />
         ) : (
           <span className="cards__container__global__card__number">
             {risks?.length}
@@ -106,7 +106,7 @@ const Cards = () => {
       <Card onClick={() => navigate(`/project/${id}/problems`)} pointer>
         <span className="cards__container__global__card__title">Problèmes</span>
         {!actions ? (
-          <Progress />
+          <Progress style={{ color: "var(--main-color)" }} />
         ) : (
           <span className="cards__container__global__card__number">
             {problems?.length}
@@ -116,7 +116,7 @@ const Cards = () => {
       <Card onClick={() => navigate(`/project/${id}/deliverables`)} pointer>
         <span className="cards__container__global__card__title">Livrables</span>
         {!actions ? (
-          <Progress />
+          <Progress style={{ color: "var(--main-color)" }} />
         ) : (
           <span className="cards__container__global__card__number">
             {deliverables?.length}

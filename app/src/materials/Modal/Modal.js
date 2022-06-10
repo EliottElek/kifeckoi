@@ -23,7 +23,7 @@ export default function BasicModal({ children, open, setOpen }) {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "var(--color-background-1)",
+    backgroundColor: "var(--background1)",
   };
 
   return (

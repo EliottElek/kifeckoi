@@ -11,7 +11,7 @@ import { Divider } from "@mui/material";
 import { FiMoreVertical, FiMoreHorizontal } from "react-icons/fi";
 import { FaRegComments } from "react-icons/fa";
 import { HiOutlineDuplicate } from "react-icons/hi";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import DoneIcon from "@mui/icons-material/Done";
 import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
@@ -458,7 +458,7 @@ const Card = (props) => {
               <Avatars users={props.task.contributors} />
               {props.task.status === "Réalisé" && (
                 <span className="card__done__span">
-                  <AiOutlineCheckCircle />
+                  <DoneIcon style={{ height: "1rem" }} />
                 </span>
               )}
             </div>

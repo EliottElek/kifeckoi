@@ -5,6 +5,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { Context } from "../Context/Context";
 import { useNavigate } from "react-router";
+import FilterNoneIcon from "@mui/icons-material/FilterNone";
 const styles = {
   treeItem: {
     "& .MuiTreeItem-content": {
@@ -39,7 +40,8 @@ const styles = {
 };
 export default function TreeViewProjects() {
   const navigate = useNavigate();
-  const { setOpenDrawer, user, currentProject } = React.useContext(Context);
+  const { setOpenDrawer, user, currentProject, setCurrentProject } =
+    React.useContext(Context);
   return (
     <TreeView
       aria-label="file system navigator"
@@ -52,10 +54,16 @@ export default function TreeViewProjects() {
           key={"all"}
           onClick={() => {
             setOpenDrawer(false);
+            setCurrentProject(null);
             navigate(`/projects`);
           }}
           nodeId={"all"}
-          label={"See all"}
+          label={
+            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <FilterNoneIcon style={{ height: "1rem" }} />
+              View all
+            </span>
+          }
           sx={
             window?.location?.href.split("/")[
               window?.location?.href.split("/").length - 1

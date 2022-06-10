@@ -8,13 +8,11 @@ import { Menu, Typography } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import "./StickyNavbar.scss";
 import getPeriod from "../../assets/functions/getPeriod";
-import ReactTooltip from "react-tooltip";
 import ToggleButtonActions from "./ToggleButtonsActions";
 import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Badge } from "@mui/material";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchBar from "./SearchBar";
+import NotifPanel from "./NotifPanel";
 const StickyNavAdvanced = ({ advanced }) => {
   const {
     user,
@@ -39,6 +37,7 @@ const StickyNavAdvanced = ({ advanced }) => {
   };
   const navigate = useNavigate();
   let period = getPeriod();
+
   return (
     <StickyNavbar>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -52,9 +51,7 @@ const StickyNavAdvanced = ({ advanced }) => {
           <MenuIcon sx={{ fontSize: "2rem" }} />
         </IconButton>
         <div className="name__container">
-          <span className="period__span" data-tip data-for="weekTooltip">
-            {period}
-          </span>
+          <span className="period__span">{period}</span>
           {advanced && (
             <ToggleButtonActions
               setListStyle={setListStyle}
@@ -65,22 +62,7 @@ const StickyNavAdvanced = ({ advanced }) => {
       </div>
       <div className="events__container">
         {currentProject && <SearchBar />}
-        <IconButton>
-          <Badge
-            sx={{
-              "& .MuiBadge-badge": {
-                color: "lightgreen",
-                backgroundColor: "var(--main-color)",
-              },
-            }}
-            variant="dot"
-            overlap="circular"
-          >
-            <NotificationsIcon
-              sx={{ color: "var(--font-color)", opacity: "0.7" }}
-            />
-          </Badge>
-        </IconButton>
+        <NotifPanel />
         <span className="events__container__divider" />
         <Typography
           variant="paragraph"
@@ -139,9 +121,6 @@ const StickyNavAdvanced = ({ advanced }) => {
           />
         </MenuItem>
       </Menu>
-      <ReactTooltip delayShow={500} id="weekTooltip" effect="solid">
-        <span>Semaine actuelle</span>
-      </ReactTooltip>
     </StickyNavbar>
   );
 };
