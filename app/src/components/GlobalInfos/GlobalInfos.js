@@ -320,6 +320,9 @@ const GlobalInfos = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: "2px",
+                flexGrow: 1,
+                justifyContent: "space-between",
+                maxWidth: "340px",
               }}
             >
               Status global{" "}
@@ -333,7 +336,7 @@ const GlobalInfos = () => {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "14px",
+                  gap: "6px",
                   justifyContent: "space-between",
                   padding: "4px 8px",
                   color: "white",
@@ -357,6 +360,9 @@ const GlobalInfos = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: "2px",
+                flexGrow: 1,
+                justifyContent: "space-between",
+                maxWidth: "340px",
               }}
             >
               Status planning{" "}
@@ -370,7 +376,7 @@ const GlobalInfos = () => {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "14px",
+                  gap: "6px",
                   justifyContent: "space-between",
                   padding: "4px 8px",
                   color: "white",
@@ -394,6 +400,9 @@ const GlobalInfos = () => {
                 display: "flex",
                 alignItems: "center",
                 gap: "2px",
+                flexGrow: 1,
+                justifyContent: "space-between",
+                maxWidth: "340px",
               }}
             >
               Status périmètre{" "}
@@ -407,7 +416,7 @@ const GlobalInfos = () => {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "14px",
+                  gap: "6px",
                   justifyContent: "space-between",
                   padding: "4px 8px",
                   color: "white",

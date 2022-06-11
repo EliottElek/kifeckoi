@@ -4,7 +4,72 @@ import { GET_USER_BY_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
 import jwt from "jsonwebtoken";
 export const Context = React.createContext();
-
+const channelsD = [
+  {
+    id: "1",
+    seen: false,
+    users: [
+      {
+        firstname: "Paul",
+        lastname: "Moquin",
+        id: "2343",
+        avatarUrl:
+          "https://www.gala.fr/imgre/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Fprismamedia_people.2F2017.2F06.2F30.2F8e7856b3-7f1e-4d09-b428-6d16c8a9f6f0.2Ejpeg/2216x1536/quality/80/mark-ruffalo.jpeg",
+      },
+      {
+        firstname: "Eliott",
+        lastname: "Morcillo",
+        id: "fbc32848-f0fb-40c4-9b8c-71dde10b9665",
+      },
+    ],
+    lastmessage: {
+      id: "3",
+      content: "Content of the last message.",
+    },
+  },
+  {
+    id: "2",
+    seen: true,
+    users: [
+      {
+        firstname: "Henri",
+        lastname: "Jean",
+        id: "2343",
+        avatarUrl:
+          "https://fr.web.img6.acsta.net/c_310_420/pictures/16/07/13/11/18/135527.jpg",
+      },
+      {
+        firstname: "Eliott",
+        lastname: "Morcillo",
+        id: "fbc32848-f0fb-40c4-9b8c-71dde10b9665",
+      },
+    ],
+    lastmessage: {
+      id: "3",
+      content: "Content of the last message.",
+    },
+  },
+  {
+    id: "3",
+    seen: true,
+    users: [
+      {
+        firstname: "Jean",
+        lastname: "Henri",
+        id: "2343",
+      },
+      {
+        firstname: "Eliott",
+        lastname: "Morcillo",
+        id: "fbc32848-f0fb-40c4-9b8c-71dde10b9665",
+      },
+    ],
+    lastmessage: {
+      id: "3",
+      content: "Content of the last message.",
+    },
+  },
+];
 export const ContextProvider = ({ children }) => {
   const [clients, setClients] = React.useState([]);
   const [users, setUsers] = React.useState();
@@ -14,6 +79,8 @@ export const ContextProvider = ({ children }) => {
   const [selectedEvents, setSelectedEvents] = React.useState([]);
   const [currentClient, setCurrentClient] = React.useState(null);
   const [currentProject, setCurrentProject] = React.useState(null);
+  const [channels, setChannels] = React.useState(channelsD);
+  const [channel, setChannel] = React.useState(null);
   const [listStyle, setListStyle] = React.useState(false);
   const [markdown, setMarkdown] = React.useState(true);
   const [dark, setDark] = React.useState(true);
@@ -126,6 +193,10 @@ export const ContextProvider = ({ children }) => {
         getUserById: getUserById,
         setAddCard: setAddCard,
         addCard: addCard,
+        channel: channel,
+        channels: channels,
+        setChannel: setChannel,
+        setChannels: setChannels,
       }}
     >
       {children}
