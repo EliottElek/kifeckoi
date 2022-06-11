@@ -1,0 +1,29 @@
+.channels__container {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 100%;
+  border-right: solid 1px var(--border-color);
+  &__search__input__container {
+    display: flex;
+    border-bottom: solid 1px var(--border-color);
+    min-height: 30px!important;
+    padding: 12px;
+  }
+  &__list {
+    overflow-y: auto;
+  }
+}
+.channel__item {
+  min-height: 40px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  justify-content: flex-start;
+  gap: 8px;
+  border-left: solid 3px transparent;
+}
+.channel__item:hover {
+  background-color: rgba(128, 128, 128, 0.171);
+}

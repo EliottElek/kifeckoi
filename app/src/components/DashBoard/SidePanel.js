@@ -2,7 +2,9 @@ import React from "react";
 import { Context } from "../Context/Context";
 import { useQuery } from "@apollo/client";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import ChatBubbleRoundedIcon from "@mui/icons-material/ChatBubbleRounded";
+// import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import FilterNoneIcon from "@mui/icons-material/FilterNone";
+
 import {
   GET_ALL_CLIENTS,
   FIND_PROJECTS_BY_CLIENT_ID,
@@ -44,15 +46,20 @@ const SidePanel = () => {
   const defaultNavElements = [
     { name: "Dashboard", icon: <DashboardIcon />, to: "/" },
     {
+      name: "Projets",
+      icon: <FilterNoneIcon />,
+      to: `/projects`,
+    },
+    {
       name: "Clients",
       icon: <PeopleAltIcon />,
       to: `/clients`,
     },
-    {
-      name: "Chat",
-      icon: <ChatBubbleRoundedIcon />,
-      to: `/chat`,
-    },
+    // {
+    //   name: "Chat",
+    //   icon: <ChatBubbleOutlineIcon />,
+    //   to: `/chat`,
+    // },
     {
       name: "Settings",
       icon: <SettingsIcon />,

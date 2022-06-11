@@ -225,6 +225,27 @@ const MainContent = () => {
           }
         />
         <Route
+          path="/chat/:id"
+          element={
+            <Drawer
+              mainContent={
+                <SecureRoute margin>
+                  <Suspense fallback={renderLoader()}>
+                    <Chat />
+                  </Suspense>
+                </SecureRoute>
+              }
+              secondaryContent={
+                <Suspense fallback={renderLoader()}>
+                  <SecondaryContent />
+                </Suspense>
+              }
+              drawerWidth={240}
+              breakPoint={800}
+            />
+          }
+        />
+        <Route
           exact
           path="/project/:id"
           element={<Navigate to="/project/:id/global" />}

@@ -59,17 +59,6 @@ const Column = ({
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
-            setEventSelected(section);
-            setAddCard(true);
-          }}
-        >
-          <p>Ajouter une carte...</p>
-        </MenuItem>
-        <MenuItem
-          style={{ fontSize: "0.9rem" }}
-          onClick={(e) => {
-            e.stopPropagation();
-            setAnchorEl(null);
           }}
         >
           <p>Copier la liste...</p>

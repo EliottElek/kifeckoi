@@ -30,12 +30,12 @@ const AutoTextArea = (props) => {
       }}
     >
       <textarea
-        onFocus={(e) =>
+        onFocus={(e) => {
           e.currentTarget.setSelectionRange(
             e.currentTarget.value.length,
             e.currentTarget.value.length
-          )
-        }
+          );
+        }}
         {...props}
         ref={textAreaRef}
         rows={1}
