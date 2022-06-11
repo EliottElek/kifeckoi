@@ -1,0 +1,43 @@
+.latest__events__container {
+  background-color: var(--card-background);
+  margin-top: 20px;
+  display: flex;
+  padding-top: 12px;
+  border: solid 1px var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.latest__events__container__title {
+  padding: 12px;
+}
+.latest__events__container__list {
+  display: flex;
+  flex-direction: column;
+}
+.latest__events__container__list__item {
+  padding: 12px;
+  cursor: pointer;
+  transition: 0.15s all;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+}
+.latest__events__container__list__item:hover {
+  background-color: rgba(128, 128, 128, 0.068);
+  transition: 0.15s all;
+}
+.latest__events__container__list__item:not(:last-child) {
+  border-bottom: solid 1px var(--border-color);
+}
+.latest__events__container__list__item__chevron {
+  opacity: 0.6;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+.latest__events__container__list__item__project {
+  opacity: 0.6;
+}

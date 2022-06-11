@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import "./card.scss";
 import "../kanban.scss";
-import "../../Client/RecentEvents/RecentEvents.css";
 import "../../GlobalInfos/GlobalInfos.scss";
 import { FiEdit2 } from "react-icons/fi";
 import { BiTime } from "react-icons/bi";
@@ -12,7 +11,7 @@ import { Divider } from "@mui/material";
 import { FiMoreVertical, FiMoreHorizontal } from "react-icons/fi";
 import { FaRegComments } from "react-icons/fa";
 import { HiOutlineDuplicate } from "react-icons/hi";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import DoneIcon from "@mui/icons-material/Done";
 import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
@@ -315,13 +314,12 @@ const Card = (props) => {
                 snapshot.isDragging ? "card__content dragging" : "card__content"
               }
             >
-              <div
-                className={
-                  props.task.state === "Vérifié"
-                    ? `status__indicator__verified`
-                    : `status__indicator__to-verify`
-                }
-              />
+              {props.task.state === "Vérifié" && (
+                <div className={`status__indicator__verified`} />
+              )}
+              {props.task.state === "À vérifier" && (
+                <div className={`status__indicator__to-verify`} />
+              )}
               <div className="card__content__events__container">
                 <button
                   data-tip
@@ -460,7 +458,7 @@ const Card = (props) => {
               <Avatars users={props.task.contributors} />
               {props.task.status === "Réalisé" && (
                 <span className="card__done__span">
-                  <AiOutlineCheckCircle />
+                  <DoneIcon style={{ height: "1rem" }} />
                 </span>
               )}
             </div>
@@ -580,6 +578,16 @@ const Card = (props) => {
           }}
         >
           À vérifier
+        </MenuItem>
+        <MenuItem
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleChangeState("");
+            setAnchorEl(null);
+          }}
+        >
+          Neutre
         </MenuItem>
         <Divider />
         <MenuItem

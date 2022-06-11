@@ -1,26 +1,28 @@
 import React from "react";
-import ListItem from "../../materials/List/ListItem";
-import List from "../../materials/List/List";
 import { Context } from "../Context/Context";
-import { useNavigate } from "react-router";
-import MenuAccordion from "../../materials/MenuAccordion/MenuAccordion";
 import { useQuery } from "@apollo/client";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import ChatBubbleRoundedIcon from "@mui/icons-material/ChatBubbleRounded";
 import {
   GET_ALL_CLIENTS,
   FIND_PROJECTS_BY_CLIENT_ID,
 } from "../../graphql/queries";
 import "./DashBoard.scss";
+import { NavLink } from "react-router-dom";
+import TreeViewEvents from "./TreeViewEvents";
+import TreeViewProjects from "./TreeEventsProjects";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import SettingsIcon from "@mui/icons-material/Settings";
 const SidePanel = () => {
   const {
     currentProject,
-    clients,
     setClients,
     projects,
     setProjects,
     currentClient,
-    setSelectedEvents,
     user,
     setOpenDrawer,
+    setCurrentProject,
   } = React.useContext(Context);
   useQuery(GET_ALL_CLIENTS, {
     variables: { userId: user?.id },
@@ -38,95 +40,52 @@ const SidePanel = () => {
       }
     },
   });
-  const navElements = [
-    { id: "global", name: "Status global" },
-    { id: "actions", name: "Actions" },
-    { id: "infos", name: "Infos" },
-    { id: "decisions", name: "Décisions" },
-    { id: "risks", name: "Risques" },
-    { id: "problems", name: "Problèmes" },
-    { id: "deliverables", name: "Livrables" },
-  ];
 
-  const NavItem = ({ comp, id }) => {
-    const navigate = useNavigate();
-    return (
-      <ListItem
-        id={id}
-        onClick={() => {
-          setSelectedEvents([]);
-          setOpenDrawer(false);
-          navigate(`/project/${currentProject?.id}/${comp?.id}`);
-        }}
-      >
-        <span>{comp?.name}</span>
-      </ListItem>
-    );
-  };
-  const ProjectItem = ({ comp, id }) => {
-    const navigate = useNavigate();
-    return (
-      <ListItem
-        id={id}
-        onClick={() => {
-          setOpenDrawer(false);
-          navigate(`/project/${comp?.id}/global`);
-        }}
-      >
-        <span>{comp?.name}</span>
-      </ListItem>
-    );
-  };
-  const ClientItem = ({ comp, id }) => {
-    const navigate = useNavigate();
-    return (
-      <ListItem
-        id={id}
-        onClick={() => {
-          setOpenDrawer(false);
-          navigate(`/client/${comp?.id}`);
-        }}
-      >
-        <span>{comp?.name}</span>
-      </ListItem>
-    );
-  };
-  const EventsNav = () => {
-    return (
-      <List>
-        {navElements?.map((comp, i) => (
-          <NavItem key={i} comp={comp} id={comp.id} />
-        ))}
-      </List>
-    );
-  };
-  const ProjectsNav = () => {
-    return (
-      <List>
-        {projects?.map((comp, i) => (
-          <ProjectItem key={i} comp={comp} id={comp.id} />
-        ))}
-      </List>
-    );
-  };
-  const ClientsNav = () => {
-    return (
-      <List>
-        {clients?.map((comp, i) => (
-          <ClientItem key={i} comp={comp} id={comp.id} />
-        ))}
-      </List>
-    );
-  };
+  const defaultNavElements = [
+    { name: "Dashboard", icon: <DashboardIcon />, to: "/" },
+    {
+      name: "Clients",
+      icon: <PeopleAltIcon />,
+      to: `/clients`,
+    },
+    {
+      name: "Chat",
+      icon: <ChatBubbleRoundedIcon />,
+      to: `/chat`,
+    },
+    {
+      name: "Settings",
+      icon: <SettingsIcon />,
+      to: `/settings`,
+    },
+  ];
   return (
     <div className="sticky__side__nav">
-      {currentProject && (
-        <MenuAccordion defaultOpen title={"Évènements"} content={EventsNav()} />
-      )}
-      {currentClient && (
-        <MenuAccordion defaultOpen title={"Projets"} content={ProjectsNav()} />
-      )}
-      <MenuAccordion defaultOpen title={"Clients"} content={ClientsNav()} />
+      <ul className="default__menu">
+        {defaultNavElements.map((item, i) => (
+          <li key={i}>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? "dashboard__menu__item active__menu__item"
+                  : "dashboard__menu__item"
+              }
+              to={item.to}
+              onClick={() => {
+                setCurrentProject(null);
+                setOpenDrawer(false);
+              }}
+            >
+              {item.icon}
+              {item.name}
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+      <div>
+        {currentProject && <TreeViewEvents />}
+        <TreeViewProjects projects={projects} />
+      </div>
     </div>
   );
 };

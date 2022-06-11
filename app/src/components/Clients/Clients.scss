@@ -1,11 +1,12 @@
-.client {
+.home {
+  padding: 20px;
   width: auto;
   position: relative;
+  overflow-y: auto;
   color: var(--font-color);
-  padding: 20px;
+  background: transparent;
 }
 .client__card__header {
-  background-color: var(--card-background);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -44,15 +45,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100px;
+  height: 150px;
 }
 .middle__image > img {
   object-fit: cover;
   opacity: 0.5;
-  filter: brightness(0.5);
   height: 100px;
+  filter: brightness(0.5);
 }
-
 .checkbox__container {
   display: flex;
   gap: 12px;
@@ -60,7 +60,7 @@
 }
 .modal__add {
   padding: 30px;
-  width: 95%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

@@ -1,18 +1,11 @@
 import "./Client.scss";
-import { useNavigate } from "react-router";
 import GridItem from "../Grid/GridItem";
 import logo from "../../assets/images/logo.png";
 import formatDate from "../../assets/functions/formatDate";
 import Avatars from "../Draggable/Card/Avatars";
 const ProjectItem = ({ project }) => {
-  const navigate = useNavigate();
   return (
-    <GridItem
-      onClick={() => {
-        navigate(`/project/${project?.id}/global`);
-      }}
-      className={"project__item"}
-    >
+    <GridItem to={`/project/${project?.id}/global`} className={"project__item"}>
       <div className={"client__card__header"}>
         <img src={project.logoUrl ? project.logoUrl : logo} alt="" />
       </div>

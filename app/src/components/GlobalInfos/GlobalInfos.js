@@ -4,7 +4,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import { MODIFY_PROJECT_GLOBAL_INFOS } from "../../graphql/mutations";
 import { Navigate, useNavigate, useParams } from "react-router";
-import { FaChevronDown } from "react-icons/fa";
 import Backdrop from "../../materials/Backdrop/Backdrop";
 import Progress from "../../materials/Progress/Progress";
 import "./GlobalInfos.scss";
@@ -13,7 +12,7 @@ import UserCard from "./UserCard/UserCard";
 import AddContributorsModal from "./AddContributorsModal";
 import { FiMoreHorizontal } from "react-icons/fi";
 import Button from "../../materials/Button/Button";
-import { Menu, MenuItem } from "@mui/material";
+import { CircularProgress, Menu, MenuItem } from "@mui/material";
 import { toast } from "react-toastify";
 import ModifTextArea from "./ModifTextArea/ModifTextArea";
 import DatePicker from "./DatePicker/DatePicker";
@@ -25,6 +24,9 @@ import axios from "axios";
 import getBase64 from "../../assets/functions/base64";
 import { BiImport } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
+import Cards from "./EventCards/Cards";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
 const status = [
   {
     name: "conforme",
@@ -73,6 +75,7 @@ const GlobalInfos = () => {
       setCurrentProject(data?.findProjectByProjectId);
     },
   });
+
   const [anchorElName, setAnchorElName] = React.useState(null);
   const [anchorElGlobal, setAnchorElGlobal] = React.useState(null);
   const [anchorElPlanning, setAnchorElPlanning] = React.useState(null);
@@ -250,7 +253,7 @@ const GlobalInfos = () => {
       });
     }
   };
-  if (!dataProject.data && !dataProject.loading) {
+  if (!dataProject && !dataProject.loading) {
     return <Navigate to="/404" />;
   }
   if (!currentProject)
@@ -268,7 +271,25 @@ const GlobalInfos = () => {
       ) : (
         <div className="global__infos__container">
           <div style={{ margin: "30px", overflowX: "hidden" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="level__two__header">
+              <h2 className="title__global__big">
+                {currentProject?.name}{" "}
+                {currentProject.logoUrl !== "" && (
+                  <img
+                    alt=""
+                    className={"project__logo"}
+                    src={currentProject.logoUrl}
+                  />
+                )}
+                <div className={"title__buttons__container"}>
+                  <button
+                    className="title__modif__button"
+                    onClick={handleClickName}
+                  >
+                    <FiMoreHorizontal />
+                  </button>
+                </div>
+              </h2>
               <Button
                 onClick={() => setOpenUploadModal(true)}
                 style={{ gap: "8px" }}
@@ -276,24 +297,6 @@ const GlobalInfos = () => {
                 Importer <BiImport fontSize="1.2rem" />
               </Button>
             </div>
-            <h2 className="title__global__big">
-              {currentProject?.name}{" "}
-              {currentProject.logoUrl !== "" && (
-                <img
-                  alt=""
-                  className={"project__logo"}
-                  src={currentProject.logoUrl}
-                />
-              )}
-              <div className={"title__buttons__container"}>
-                <button
-                  className="title__modif__button"
-                  onClick={handleClickName}
-                >
-                  <FiMoreHorizontal />
-                </button>
-              </div>
-            </h2>
             {currentProject?.creator && (
               <span className={"date__creator__span"}>
                 Créé par {currentProject.creator.firstname} (
@@ -309,29 +312,42 @@ const GlobalInfos = () => {
             </h4>
             <DatePicker type={"Go live"} dataProject={dataProject} />
             <DatePicker type={"Go copy"} dataProject={dataProject} />
+            <Cards />
             <h1
               style={{
                 marginTop: "30px",
                 marginBottom: "15px",
                 display: "flex",
                 alignItems: "center",
-                flex: "none",
+                gap: "2px",
               }}
             >
               Status global{" "}
-              <span
+              <Button
+                onClick={handleClickGlobal}
                 className={`status__span ${
                   currentProject.globalStatus
                     ? currentProject.globalStatus.replace(/ /g, "__")
                     : "conforme"
                 }__span`}
-                onClick={handleClickGlobal}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "14px",
+                  justifyContent: "space-between",
+                  padding: "4px 8px",
+                  color: "white",
+                }}
               >
                 {currentProject.globalStatus
                   ? currentProject.globalStatus
-                  : "conforme"}{" "}
-                {<FaChevronDown />}
-              </span>
+                  : "conforme"}
+                {!dataProject.loading || !modifyProjectInfos.loading ? (
+                  <KeyboardArrowDownIcon />
+                ) : (
+                  <CircularProgress style={{ color: "white" }} size={20} />
+                )}
+              </Button>
             </h1>
             <ModifTextArea type={"global"} dataProject={dataProject} />
             <h3
@@ -340,23 +356,35 @@ const GlobalInfos = () => {
                 marginBottom: "15px",
                 display: "flex",
                 alignItems: "center",
-                position: "relative",
+                gap: "2px",
               }}
             >
               Status planning{" "}
-              <span
+              <Button
+                onClick={handleClickPlanning}
                 className={`status__span ${
                   currentProject.planningStatus
                     ? currentProject.planningStatus.replace(/ /g, "__")
                     : "conforme"
                 }__span`}
-                onClick={handleClickPlanning}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "14px",
+                  justifyContent: "space-between",
+                  padding: "4px 8px",
+                  color: "white",
+                }}
               >
                 {currentProject.planningStatus
                   ? currentProject.planningStatus
-                  : "conforme"}{" "}
-                {<FaChevronDown />}
-              </span>
+                  : "conforme"}
+                {!dataProject.loading || !modifyProjectInfos.loading ? (
+                  <KeyboardArrowDownIcon />
+                ) : (
+                  <CircularProgress style={{ color: "white" }} size={20} />
+                )}
+              </Button>
             </h3>
             <ModifTextArea type={"planning"} dataProject={dataProject} />
             <h3
@@ -365,22 +393,35 @@ const GlobalInfos = () => {
                 marginBottom: "15px",
                 display: "flex",
                 alignItems: "center",
+                gap: "2px",
               }}
             >
               Status périmètre{" "}
-              <span
+              <Button
+                onClick={handleClickPerimeter}
                 className={`status__span ${
                   currentProject.perimeterStatus
                     ? currentProject.perimeterStatus.replace(/ /g, "__")
                     : "conforme"
                 }__span`}
-                onClick={handleClickPerimeter}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "14px",
+                  justifyContent: "space-between",
+                  padding: "4px 8px",
+                  color: "white",
+                }}
               >
                 {currentProject.perimeterStatus
                   ? currentProject.perimeterStatus
-                  : "conforme"}{" "}
-                {<FaChevronDown />}
-              </span>
+                  : "conforme"}
+                {!dataProject.loading || !modifyProjectInfos.loading ? (
+                  <KeyboardArrowDownIcon />
+                ) : (
+                  <CircularProgress style={{ color: "white" }} size={20} />
+                )}
+              </Button>
             </h3>
             <ModifTextArea type={"perimètre"} dataProject={dataProject} />
             <div

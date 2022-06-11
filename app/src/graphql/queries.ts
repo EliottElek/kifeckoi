@@ -20,11 +20,18 @@ query getUserById($userId: String!){
       firstname
       lastname
       email
+      comments{
+        id
+      }
       avatarUrl
       username
       projects{
         id
         name
+        creation
+      }
+      events{
+        id
       }
     } 
   }
@@ -121,8 +128,8 @@ query findProjectsByClientId($clientId: String! $userId : String!){
 }
 `
 export const GET_ALL_PROJECTS = gql`
-query{
-    getAllProjects{
+query getAllProjects($id :String!){
+  getAllProjects(id : $id){
       logoUrl
       name
       id
@@ -163,8 +170,8 @@ query getAllEventsAllTypes($id :String!){
   }
 `
 export const GET_LATEST_EVENTS = gql`
-query getLatestEvents($id: String! $type : String!){
-  getLatestEvents(id : $id type : $type){
+query getLatestEvents($id: String!){
+  getLatestEvents(id : $id){
     type
     id
     creation

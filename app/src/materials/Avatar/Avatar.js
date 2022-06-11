@@ -22,34 +22,32 @@ const Avatar = ({ src, mini, name, large, style }) => {
 
   if (large)
     return (
-      <>
+      <div className="avatar__outer" style={style}>
         <img
           data-tip
           data-for={`AvatarTip${name}`}
           className={"avatar_large"}
           src={isOnline ? src : defaultAvatar}
-          style={style}
           alt=""
         />
         <ReactTooltip delayShow={500} id={`AvatarTip${name}`} effect="solid">
           <span>{name}</span>
         </ReactTooltip>
-      </>
+      </div>
     );
   return (
-    <>
+    <div className="avatar__outer" style={style}>
       <img
         data-tip
         data-for={`AvatarTip${name}`}
         className={mini ? "avatar_mini" : "avatar"}
         src={isOnline ? src : defaultAvatar}
         alt=""
-        style={style}
       />
       <ReactTooltip delayShow={500} id={`AvatarTip${name}`} effect="solid">
         <span>{name}</span>
       </ReactTooltip>
-    </>
+    </div>
   );
 };
 

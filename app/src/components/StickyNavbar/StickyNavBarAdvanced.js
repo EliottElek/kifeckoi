@@ -4,17 +4,17 @@ import { Context } from "../Context/Context";
 import Switch from "../../materials/Switch/Switch";
 import Avatar from "../../materials/Avatar/Avatar";
 import StickyNavbar from "./StickyNavbar";
-import { Menu } from "@mui/material";
+import { Menu, Typography } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import "./StickyNavbar.scss";
 import getPeriod from "../../assets/functions/getPeriod";
-import ReactTooltip from "react-tooltip";
 import ToggleButtonActions from "./ToggleButtonsActions";
 import { IconButton } from "@mui/material";
-import AppsIcon from "@mui/icons-material/Apps";
-const StickyNavAdvanced = () => {
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchBar from "./SearchBar";
+import NotifPanel from "./NotifPanel";
+const StickyNavAdvanced = ({ advanced }) => {
   const {
-    currentProject,
     user,
     toggleTheme,
     dark,
@@ -25,6 +25,7 @@ const StickyNavAdvanced = () => {
     setAddCard,
     setOpenDrawer,
     openDrawer,
+    currentProject,
   } = useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -35,39 +36,40 @@ const StickyNavAdvanced = () => {
     setAnchorEl(null);
   };
   const navigate = useNavigate();
-  let urlElement = window.location.href.split("/")[5];
-
   let period = getPeriod();
+
   return (
     <StickyNavbar>
       <div style={{ display: "flex", alignItems: "center" }}>
         <IconButton
           sx={{
-            display: { xs: "flex", md: "none" },
+            display: { xs: "flex", sm: "none" },
             color: "var(--font-color)",
           }}
           onClick={() => setOpenDrawer(!openDrawer)}
         >
-          <AppsIcon sx={{ fontSize: "2rem" }} />
+          <MenuIcon sx={{ fontSize: "2rem" }} />
         </IconButton>
         <div className="name__container">
-          <h2
-            className="name__container__title"
-            onClick={() => navigate(`/project/${currentProject?.id}/global`)}
-          >
-            {currentProject?.name}
-            {urlElement && ` - ${urlElement} `}
-          </h2>
-          <span className="period__span" data-tip data-for="weekTooltip">
-            {period}
-          </span>
-          <ToggleButtonActions
-            setListStyle={setListStyle}
-            setAddCard={setAddCard}
-          />
+          <span className="period__span">{period}</span>
+          {advanced && (
+            <ToggleButtonActions
+              setListStyle={setListStyle}
+              setAddCard={setAddCard}
+            />
+          )}
         </div>
       </div>
       <div className="events__container">
+        {currentProject && <SearchBar />}
+        <NotifPanel />
+        <span className="events__container__divider" />
+        <Typography
+          variant="paragraph"
+          sx={{ display: { xs: "none", md: "flex" } }}
+        >
+          {user?.firstname} {user?.lastname}
+        </Typography>
         <button className="settings__button" onClick={handleClick}>
           <Avatar src={user?.avatarUrl} name={user?.firstname} />
         </button>
@@ -119,9 +121,6 @@ const StickyNavAdvanced = () => {
           />
         </MenuItem>
       </Menu>
-      <ReactTooltip delayShow={500} id="weekTooltip" effect="solid">
-        <span>Semaine actuelle</span>
-      </ReactTooltip>
     </StickyNavbar>
   );
 };

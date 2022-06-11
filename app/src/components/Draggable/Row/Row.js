@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import "../Card/card.scss";
 import "./Row.scss";
 import "../kanban.scss";
-import "../../Client/RecentEvents/RecentEvents.css";
 import "../../GlobalInfos/GlobalInfos.scss";
 import { BiTime } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";

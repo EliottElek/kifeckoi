@@ -1,20 +1,21 @@
-import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import faker from "faker";
-
+import "../Home.scss";
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend
@@ -29,29 +30,41 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Chart.js Bar Chart",
+      text: "Évènements créés par semaine",
     },
   },
 };
-
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
-
+const labels = ["Y22W21", "Y22W22", "Y22W23", "Y22W24"];
+const dataset = {
+  labels: labels,
+  data: labels.map(() => faker.datatype.number({ min: 0, max: 70 })),
+};
 export const data = {
-  labels,
+  labels: dataset.labels,
   datasets: [
     {
-      label: "Dataset 1",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
+      label: "Évènements créés",
+      data: dataset.data,
+      borderColor: "#3750ff",
+      backgroundColor: "#3750ff",
     },
   ],
 };
 
-export default function Chart() {
-  return <Bar options={options} data={data} width={400} />;
+export function Chart() {
+  return (
+    <div className="chart__container__dashboard">
+      <div className="chart__container__dashboard__chart">
+        <Line options={options} data={data} width={300} />
+      </div>
+      <div className="chart__container__dashboard__data">
+        {data.labels.map((label, i) => (
+          <div key={label} className="chart__container__dashboard__data__item">
+            <p>{label}</p>
+            <h2>{dataset.data[i]}</h2>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

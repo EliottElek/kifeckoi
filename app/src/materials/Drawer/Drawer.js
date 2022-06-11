@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
 import StickyNavAdvanced from "../../components/StickyNavbar/StickyNavBarAdvanced";
-import StickyNavDefault from "../../components/StickyNavbar/StickyNavBarDefault";
 import { Context } from "../../components/Context/Context";
 import { useNavigate } from "react-router";
 import logo from "../../assets/images/logo.png";
@@ -40,7 +39,7 @@ function ResponsiveDrawer(props) {
           background: "transparent",
         }}
       >
-        {props.advanced ? <StickyNavAdvanced /> : <StickyNavDefault />}
+        <StickyNavAdvanced advanced={props.advanced} />
       </AppBar>
       <Box
         component="nav"
@@ -61,7 +60,7 @@ function ResponsiveDrawer(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              bgcolor: "var(--color-background-2)",
+              bgcolor: "var(--panel-background)",
             },
           }}
         >
@@ -69,7 +68,7 @@ function ResponsiveDrawer(props) {
             style={{
               display: "flex",
               alignItems: "center",
-              height: "55px",
+              height: "60px",
             }}
           >
             <img
@@ -80,10 +79,28 @@ function ResponsiveDrawer(props) {
               }}
               src={logo}
               alt=""
+              style={{ margin: "30px" }}
               className="logo__kifekoi"
             />
           </div>
           {props.secondaryContent}
+          <div
+            style={{
+              backgroundColor: "var(--panel-background)",
+              textAlign: "center",
+            }}
+          >
+            <span
+              style={{
+                color: "white",
+                opacity: "0.7",
+                fontSize: "0.7rem",
+                fontStyle: "italic",
+              }}
+            >
+              Kifekoi 2022. All rights reserved.
+            </span>
+          </div>
         </Drawer>
         <Drawer
           variant="permanent"
@@ -92,7 +109,7 @@ function ResponsiveDrawer(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              bgcolor: "var(--color-background-2)",
+              bgcolor: "var(--panel-background)",
             },
           }}
           open
@@ -112,10 +129,28 @@ function ResponsiveDrawer(props) {
               }}
               src={logo}
               alt=""
+              style={{ marginTop: "20px", marginLeft: "20px", height: "42px" }}
               className="logo__kifekoi"
             />
           </div>
           {props.secondaryContent}
+          <div
+            style={{
+              backgroundColor: "var(--panel-background)",
+              textAlign: "center",
+            }}
+          >
+            <span
+              style={{
+                color: "white",
+                opacity: "0.7",
+                fontSize: "0.7rem",
+                fontStyle: "italic",
+              }}
+            >
+              Kifekoi 2022. All rights reserved.
+            </span>
+          </div>
         </Drawer>
       </Box>
       <Box
@@ -129,7 +164,7 @@ function ResponsiveDrawer(props) {
           overflowX: "hidden",
         }}
       >
-        <Toolbar sx={{ minHeight: "55px!important" }} />
+        <Toolbar sx={{ minHeight: "65px!important" }} />
         {props.mainContent}
       </Box>
     </Box>

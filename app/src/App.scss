@@ -1,35 +1,50 @@
+html {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+body {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
 :root {
   --font-color: #212b36;
-  --color-background-1: rgb(238, 238, 238);
-  --color-background-2: whitesmoke;
+  --color-background-1: #eff1fa;
+  --color-background-2: #e6e8f0;
+  --panel-background: #363740;
   --card-background: #fffefe;
-  --main-color: #0079bf;
+  --main-color: #3750ff;
   --main-color2: #e620e6af;
   --shadow-color: #d8e1e8;
   --warning-color: #dfba19df;
   --check-color: #339516df;
   --check-background: #34951652;
   --border-color: rgba(206, 194, 194, 0.397);
-  --background1: whitesmoke;
+  --background1: #e7e8f0;
   --progress-color: white;
   --toggle-background: rgb(238, 238, 238);
+  --nav-color: #e7e8f073;
 }
 
 /* 2 */
 [data-theme="dark"] {
   --font-color: rgb(224, 224, 224);
-  --color-background-1: #212b36;
-  --color-background-2: #212b36;
-  --card-background: #2c3a3f;
-  --main-color: #01ffff80;
+  --color-background-1: #7b95b1;
+  --color-background-2: #363740;
+  --card-background: #404c5e;
+  --main-color: #2cd9db;
   --main-color2: #e620e6af;
   --shadow-color: #191a1b;
   --warning-color: #dfba19df;
   --check-color: #a6c59fdf;
   --border-color: rgba(188, 188, 197, 0.199);
-  --background1: #212b36;
+  --background1: #363740;
+  --panel-background: #363740;
   --progress-color: #01ffff80;
   --toggle-background: #2c3a3f;
+  --nav-color: #363740a2;
 }
 html,
 .App {
@@ -144,9 +159,6 @@ html,
   .toggle__drawer__button {
     display: flex;
   }
-  [data-theme="dark"] {
-    --background1: #212b36;
-  }
   html,
   .App {
     height: -webkit-fill-available;
@@ -170,4 +182,10 @@ html,
 .modif__textarea__paragraph__modal:hover,
 .modif__textarea__paragraph:hover {
   border-color: rgba(128, 128, 128, 0.13);
+}
+.level__two__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.6rem;
 }

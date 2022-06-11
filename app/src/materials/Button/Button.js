@@ -7,6 +7,7 @@ const Button = ({
   disabled,
   type,
   props,
+  className,
 }) => {
   return (
     <button
@@ -15,11 +16,10 @@ const Button = ({
       disabled={disabled}
       onClick={onClick}
       style={style}
-      className={
-        reversed
-          ? `button__reversed`
-          : `button__versed`
-      }
+      className={[
+        className,
+        reversed ? `button__reversed` : `button__versed`,
+      ].join(" ")}
     >
       {children}
     </button>

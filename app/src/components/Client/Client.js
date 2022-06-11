@@ -106,12 +106,14 @@ const Client = () => {
     );
   return (
     <div className="client">
-      <h1 className={"client__projects__container__title"}>
-        {currentClient?.name} - Projets
-      </h1>
-      <Button onClick={() => setOpen(true)} style={{ marginTop: "10px" }}>
-        Créer un nouveau projet
-      </Button>
+      <div className="level__two__header">
+        <h1 className={"client__projects__container__title"}>
+          {currentClient?.name} - Projets
+        </h1>
+        <Button onClick={() => setOpen(true)} style={{ marginTop: "10px" }}>
+          Créer un nouveau projet
+        </Button>
+      </div>
       <Grid>
         {data?.findProjectsByClientId?.length === 0 && (
           <h4 className={"client__projects__container__title"}>

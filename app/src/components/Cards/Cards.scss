@@ -1,0 +1,32 @@
+.cards__container__dashboard {
+  display: grid;
+  margin-top: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  width: 100%;
+  gap: 20px;
+}
+.cards__container__dashboard__card {
+  height: 160px;
+  background-color: var(--card-background);
+  border: solid 1px var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--font-color);
+  transition: 0.15s ease;
+  &__title {
+    font-size: 1.2rem;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+  &__number {
+    font-size: 3.4rem;
+  }
+}
+.cards__container__dashboard__card:hover {
+  color: var(--main-color);
+  transition: 0.15s ease;
+}

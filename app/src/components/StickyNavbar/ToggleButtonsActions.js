@@ -9,6 +9,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { Menu } from "@mui/material";
 import { MenuItem } from "@mui/material";
+import { Box } from "@mui/system";
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
     margin: theme.spacing(0.5),
@@ -52,7 +53,7 @@ export default function CustomizedDividers(props) {
     setAnchorElFilter(null);
   };
   return (
-    <div style={{ display: "flex" }}>
+    <Box sx={{ display: { xs: "none", md: "flex" } }}>
       <StyledToggleButtonGroup
         size="small"
         value={alignment}
@@ -103,6 +104,6 @@ export default function CustomizedDividers(props) {
           Afficher les évènements en status vérifier
         </MenuItem>
       </Menu>
-    </div>
+    </Box>
   );
 }
