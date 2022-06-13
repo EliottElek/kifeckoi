@@ -2,25 +2,22 @@ import "./Projects.scss";
 import GridItem from "../Grid/GridItem";
 import logo from "../../assets/images/logo.png";
 import formatDate from "../../assets/functions/formatDate";
-import AvatarFromLetter from "../../utils/AvatarFromLetter";
+import Avatars from "../Draggable/Card/Avatars";
 const ProjectItem = ({ project }) => {
   return (
-    <GridItem to={`/project/${project.id}`} className={"project__item"}>
-      <div className={"project__card__header"}>
-        <img src={project.avatarUrl ? project.avatarUrl : logo} alt="" />
+    <GridItem to={`/project/${project?.id}/global`} className={"project__item"}>
+      <div className={"client__card__header"}>
+        <img src={project.logoUrl ? project.logoUrl : logo} alt="" />
       </div>
       <div className="middle__image">
-        {project.avatarUrl ? (
-          <img alt="" src={project.avatarUrl} />
-        ) : (
-          <AvatarFromLetter text={project.name} />
-        )}
+        <img alt="" src={project.logoUrl ? project.logoUrl : logo} />
       </div>
-      <div className="project__card__avatars__container">
-        <div className="project__card__avatars__container__title">
+      <div className="client__card__avatars__container">
+        <div className="client__card__avatars__container__title">
           <h3>{project.name}</h3>
           <p>{formatDate(project.creation, true)}</p>
         </div>
+        <Avatars users={project?.contributors} />
       </div>
     </GridItem>
   );

@@ -23,9 +23,14 @@
   justify-content: space-between;
   box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px,
     rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
+  & img {
+    max-width: 100%;
+    object-fit: contain;
+  }
 }
 .add__card > * {
-  box-shadow: 0 2px 4px var(--shadow-color);
+  box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px,
+    rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
 }
 .card__content ul > li {
   list-style: disc;

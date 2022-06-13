@@ -249,3 +249,23 @@ query getAllCommentsByEventId($eventId: String!){
     }
   }
 `
+export const GET_NOTIFICATIONS_BY_USER_ID = gql`
+  subscription getNotificationsByUserId($userId : String!){
+  getNotificationsByUserId(userId : $userId){
+      id
+      user{
+        id
+        firstname
+        lastname
+        avatarUrl
+      }
+      project{
+        id
+        name
+      }
+      redirect
+      content
+      message
+    }
+  }
+`

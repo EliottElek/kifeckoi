@@ -90,6 +90,10 @@ html,
   color: var(--font-color);
   border-radius: 4px;
   padding: 10px;
+  & img {
+    max-width: 100%;
+    object-fit: contain;
+  }
 }
 .close__modal__button {
   border: none;
