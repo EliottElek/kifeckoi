@@ -9,8 +9,21 @@ import {
   InMemoryCache,
   HttpLink,
 } from "apollo-boost";
-import { ApolloProvider } from "@apollo/client";
+import { ApolloProvider, split } from "@apollo/client";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
+import { getMainDefinition } from "@apollo/client/utilities";
 process.env["KIFEKOI_ENV"] = "dev";
+const token = localStorage.getItem("token");
+
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: "ws://localhost:3002/graphql",
+    connectionParams: {
+      authorization: `Bearer ${token}`,
+    },
+  })
+);
 const httpLink = new HttpLink({
   uri:
     process.env["KIFEKOI_ENV"] === "dev"
@@ -19,9 +32,6 @@ const httpLink = new HttpLink({
 });
 
 const authLink = new ApolloLink((operation, forward) => {
-  // Retrieve the authorization token from local storage.
-  const token = localStorage.getItem("token");
-
   // Use the setContext method to set the HTTP headers.
   operation.setContext({
     headers: {
@@ -31,8 +41,19 @@ const authLink = new ApolloLink((operation, forward) => {
   // Call the next link in the middleware chain.
   return forward(operation);
 });
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  httpLink
+);
 const client = new ApolloClient({
-  link: authLink.concat(httpLink), // Chain it with the HttpLink
+  link: authLink.concat(splitLink), // Chain it with the HttpLink
   cache: new InMemoryCache(),
 });
 ReactDOM.render(
