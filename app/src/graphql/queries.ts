@@ -33,6 +33,23 @@ query getUserById($userId: String!){
       events{
         id
       }
+      notifications{
+        id
+        seen
+        emitter{
+          id
+          firstname
+          lastname
+          avatarUrl
+        }
+        project{
+          id
+          name
+        }
+        redirect
+        content
+        message
+      }
     } 
   }
 `
@@ -249,23 +266,24 @@ query getAllCommentsByEventId($eventId: String!){
     }
   }
 `
-export const GET_NOTIFICATIONS_BY_USER_ID = gql`
-  subscription getNotificationsByUserId($userId : String!){
-  getNotificationsByUserId(userId : $userId){
-      id
-      user{
+export const RETURN_NOTIFICATIONS_BY_USER_ID = gql`
+query returnNotificationsByUserId ($userId : String!){
+  returnNotificationsByUserId (userId : $userId){
         id
-        firstname
-        lastname
-        avatarUrl
+        creation
+        seen
+        emitter{
+          id
+          firstname
+          lastname
+          avatarUrl
+        }
+        project{
+          id
+          name
+        }
+        redirect
+        content
+        message
       }
-      project{
-        id
-        name
-      }
-      redirect
-      content
-      message
-    }
-  }
-`
+    }`

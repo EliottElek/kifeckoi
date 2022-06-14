@@ -24,6 +24,7 @@ import {
   DELETE_EVENT,
   CREATE_EVENT,
   MENTION_USERS_IN_EVENTS,
+  CREATE_NOTIFICATION,
 } from "../../../graphql/mutations";
 import { Draggable } from "react-beautiful-dnd";
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
@@ -51,6 +52,7 @@ const Card = (props) => {
   const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
   const [mentionUsersInEvent] = useMutation(MENTION_USERS_IN_EVENTS);
+  const [createNotification] = useMutation(CREATE_NOTIFICATION);
 
   const [deleteEvent] = useMutation(DELETE_EVENT);
   const [createEvent] = useMutation(CREATE_EVENT);
@@ -94,6 +96,18 @@ const Card = (props) => {
             mentionContext: content,
           },
         });
+        await createNotification({
+          variables: {
+            message: `${user?.firstname} vous a mentionné dans ${currentProject.name}.`,
+            redirect: `/project/${
+              currentProject.id
+            }/${props.task.type.toLowerCase()}s`,
+            projectId: currentProject.id,
+            emitterId: user.id,
+            content: `"${content}"`,
+            receivers: mentionsIds,
+          },
+        });
       }
       await changeEventDescription({
         variables: {
@@ -104,6 +118,7 @@ const Card = (props) => {
       props.dataEvents.refetch();
       setModifMode(false);
     } catch (err) {
+      console.log(err);
       toast.error("Impossible de modifier la description.", {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
