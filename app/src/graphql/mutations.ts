@@ -176,3 +176,17 @@ mutation mentionUsersInEvents($eventId: String! $mentionContext: String! $userId
     } 
   }
 `
+export const CREATE_NOTIFICATION = gql`
+mutation createNotification($projectId: String! $content:String! $emitterId: String! $message: String! $redirect: String! $receivers:[String!]){
+    createNotification (projectId : $projectId content : $content emitterId : $emitterId redirect: $redirect message: $message receivers : $receivers){
+      message
+    }
+  }
+  `
+export const READ_NOTIFICATION = gql`
+  mutation readNotification($userId: String! $notificationId:String!){
+    readNotification (userId : $userId notificationId : $notificationId){
+        message
+      }
+    }
+    `

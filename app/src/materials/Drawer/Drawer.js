@@ -118,7 +118,7 @@ function ResponsiveDrawer(props) {
             style={{
               display: "flex",
               alignItems: "center",
-              height: "85px",
+              height: "55px",
             }}
           >
             <img
@@ -129,7 +129,7 @@ function ResponsiveDrawer(props) {
               }}
               src={logo}
               alt=""
-              style={{ paddingTop: "10px", paddingLeft: "20px", height: "42px" }}
+              style={{ pahddingTop: "10px", height: "42px" }}
               className="logo__kifekoi"
             />
           </div>
@@ -164,7 +164,9 @@ function ResponsiveDrawer(props) {
           overflowX: "hidden",
         }}
       >
-        <Toolbar sx={{ minHeight: "65px!important" }} />
+        <Toolbar
+          sx={{ minHeight: "65px!important", backgroundColor: "transparent" }}
+        />
         {props.mainContent}
       </Box>
     </Box>
