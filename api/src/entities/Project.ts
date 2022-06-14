@@ -2,7 +2,7 @@ import { BaseEntity, Entity, PrimaryColumn, Column, ManyToOne, OneToMany, ManyTo
 import { Event } from "./Event";
 import { Client } from "./Client";
 import { User } from "./User";
-
+import { Notification } from "./Notification";
 @Entity()
 export class Project extends BaseEntity {
     @PrimaryColumn()
@@ -37,4 +37,6 @@ export class Project extends BaseEntity {
     @ManyToMany(() => User, contributor => contributor.projects, { onDelete: 'CASCADE' })
     @JoinTable()
     contributors!: User[];
+    @OneToMany(() => Notification, notification => notification.project) notifications!: Notification[];
+
 }

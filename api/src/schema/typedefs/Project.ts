@@ -1,6 +1,7 @@
 import { GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql'
 import { ClientType } from './Client'
 import { EventType } from './Event'
+import { NotificationType } from './Notification'
 import { UserType } from './User'
 
 export const ProjectType: any = new GraphQLObjectType({

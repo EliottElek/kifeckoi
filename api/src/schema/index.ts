@@ -9,6 +9,9 @@ import { GET_ALL_EVENTS, GET_LATEST_EVENTS, FIND_EVENTS_BY_PROJECT_ID, GET_ALL_E
 import { CREATE_EVENT, CHANGE_EVENT_STATUS, CHANGE_EVENT_STATE, CHANGE_EVENT_DESCRIPTION, DELETE_EVENT, ADD_CONTRIBUTORS_TO_EVENT, DELETE_MULTIPLE_EVENTS, MENTION_USERS_IN_EVENTS } from "./mutations/Event";
 import { GET_ALL_COMMENTS_BY_EVENT_ID } from "./queries/Comment";
 import { CREATE_COMMENT, CHANGE_COMMENT__CONTENT, DELETE_COMMENT } from "./mutations/Comment";
+import { GET_NOTIFICATIONS_BY_USER_ID } from "./subscriptions/Notification";
+import { CREATE_NOTIFICATION, READ_NOTIFICATION } from "./mutations/Notification";
+import { RETURN_NOTIFICATIONS_BY_USER_ID } from "./queries/Notification";
 
 const RootQuery = new GraphQLObjectType({
     name: "RootQuery",
@@ -25,6 +28,7 @@ const RootQuery = new GraphQLObjectType({
         getLatestEvents: GET_LATEST_EVENTS,
         getAllCommentsByEventId: GET_ALL_COMMENTS_BY_EVENT_ID,
         getUserById: GET_USER_BY_ID,
+        returnNotificationsByUserId: RETURN_NOTIFICATIONS_BY_USER_ID,
     }
 })
 const Mutation = new GraphQLObjectType({
@@ -51,11 +55,20 @@ const Mutation = new GraphQLObjectType({
         modifyProjectGlobalInfos: MODIFY_PROJECT_GLOBAL_INFOS,
         modifyProjectName: MODIFY_PROJECT_NAME,
         login: LOGIN,
-        mentionUsersInEvents: MENTION_USERS_IN_EVENTS
+        mentionUsersInEvents: MENTION_USERS_IN_EVENTS,
+        createNotification: CREATE_NOTIFICATION,
+        readNotification: READ_NOTIFICATION
+
     }
 })
-
+const Subscription = new GraphQLObjectType({
+    name: "Subscription",
+    fields: {
+        getNotificationsByUserId: GET_NOTIFICATIONS_BY_USER_ID
+    }
+})
 export const schema = new GraphQLSchema({
     query: RootQuery,
     mutation: Mutation,
+    subscription: Subscription
 })
