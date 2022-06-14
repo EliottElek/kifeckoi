@@ -21,7 +21,7 @@ const wsLink = new GraphQLWsLink(
     url:
       process.env["KIFEKOI_ENV"] === "dev"
         ? "ws://localhost:3002/graphql"
-        : "ws://kifekoi-api.herokuapp.com/graphql",
+        : "wss://kifekoi-api.herokuapp.com/graphql",
     connectionParams: {
       authorization: `Bearer ${token}`,
     },
