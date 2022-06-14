@@ -47,7 +47,7 @@ export const GET_LATEST_EVENTS = {
         if (!context.user) throw new Error("You must be authenticated.")
 
         const { id } = args
-        const user = await User.findOne({ id: id }, { relations: ["projects"] })
+        const user = await User.findOne({ id: id })
         if (!user) throw new Error("Canot find user.")
         const events = await Event.find({ relations: ["creator", "project"] })
         const eventsOfUser = events.filter((event) => event?.creator?.id === user.id)

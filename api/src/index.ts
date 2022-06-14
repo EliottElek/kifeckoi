@@ -9,9 +9,17 @@ import { Event } from './entities/Event'
 import { Comment } from './entities/Comment'
 import { ApolloServer } from "apollo-server-express"
 import jwt from 'jsonwebtoken'
-import { createServer } from "http"
+import { Notification } from './entities/Notification'
+import { createServer } from 'http';
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { WebSocketServer } from 'ws';
+import { useServer } from 'graphql-ws/lib/use/ws';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubsub = new PubSub();
+
 const SECRET_KEY = 'secret!'
-process.env["KIFEKOI_ENV"] = 'dev';
+process.env["KIFEKOI_ENV"] = 'prod';
 
 const config = {
     PORT: process.env.PORT || 3002, host: process.env["KIFEKOI_ENV"] === "dev" ? "localhost" : "eu-cdbr-west-02.cleardb.net",
@@ -34,7 +42,7 @@ const main = async () => {
         password: config.password,
         logging: true,
         synchronize: true,
-        entities: [User, Client, Project, Event, Comment]
+        entities: [User, Client, Project, Event, Comment, Notification]
     })
     const app = express()
     app.use(cors())
@@ -52,18 +60,61 @@ const main = async () => {
             }
         } return false;
     };
+
+    const httpServer = createServer(app);
+
+
     const server = new ApolloServer({
-        schema, context: async ({ req }) => {
+        schema, plugins: [
+            // Proper shutdown for the HTTP server.
+            ApolloServerPluginDrainHttpServer({ httpServer }),
+
+            // Proper shutdown for the WebSocket server.
+            {
+                async serverWillStart() {
+                    return {
+                        async drainServer() {
+                            await serverCleanup.dispose();
+                        },
+                    };
+                },
+            },
+        ], context: async ({ req }) => {
             var auth = req.headers.authorization || "";
             var parts = auth.split(" ");
             var token = parts[1];
             const user = await getUser(token);
-            return { user };
-        }
+            return { user, pubsub };
+        },
+
     });
+    const wsServer = new WebSocketServer({
+        server: httpServer,
+        path: '/graphql',
+    });
+    const getDynamicContext = async (ctx: any, msg: any, args: any) => {
+        // ctx is the graphql-ws Context where connectionParams live
+        console.log(ctx.connectionParams)
+
+        if (ctx.connectionParams.authorization) {
+            console.log(ctx.connectionParams.authorization)
+            var parts = ctx.connectionParams.authorization.split(" ");
+            var token = parts[1];
+
+            const user = await getUser(token);
+            return { user, pubsub };
+        }
+        // Otherwise let our resolvers know we don't have a current user
+        return { user: null, pubsub };
+    };
+    const serverCleanup = useServer({
+        schema, context: (ctx, msg, args) => {
+            return getDynamicContext(ctx, msg, args);
+        }
+    }, wsServer);
     await server.start()
     server.applyMiddleware({ app });
-    const httpServer = createServer(app);
+
 
     httpServer.listen(config.PORT, () => {
         console.log(`API running correctly on http://${config.host}:${config.PORT}`)
