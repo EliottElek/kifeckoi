@@ -93,7 +93,7 @@ const Card = (props) => {
           variables: {
             eventId: props.task.id,
             userIds: mentionsIds,
-            mentionContext: content,
+            mentionContext: content.root.innerHTML,
           },
         });
         await createNotification({
@@ -104,7 +104,7 @@ const Card = (props) => {
             }/${props.task.type.toLowerCase()}s`,
             projectId: currentProject.id,
             emitterId: user.id,
-            content: `"${content}"`,
+            content: content.getText().toString(),
             receivers: mentionsIds,
           },
         });
@@ -112,7 +112,7 @@ const Card = (props) => {
       await changeEventDescription({
         variables: {
           eventId: props.task.id,
-          newDescription: content,
+          newDescription: content.root.innerHTML,
         },
       });
       props.dataEvents.refetch();

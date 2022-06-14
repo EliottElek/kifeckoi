@@ -4,8 +4,9 @@ import MenuItem from "@mui/material/MenuItem";
 import {
   Avatar,
   Badge,
-  ListItemButton,
+  List,
   ListItemAvatar,
+  ListItemButton,
   ListItemText,
   ListItem,
   CircularProgress,
@@ -18,44 +19,28 @@ import { useQuery, useSubscription, useMutation } from "@apollo/client";
 import { GET_NOTIFICATIONS_BY_USER_ID } from "../../graphql/subscriptions";
 import { Context } from "../Context/Context";
 import { toast } from "react-toastify";
-import RenderHtml from "../../assets/RenderHtml";
 import { RETURN_NOTIFICATIONS_BY_USER_ID } from "../../graphql/queries";
 import { READ_NOTIFICATION } from "../../graphql/mutations";
+import shortString from "../../assets/functions/shortString";
+import formatDate from "../../assets/functions/formatDate";
 const NotifItem = ({ notif, onClick }) => {
   return (
-    <ListItemButton
-      alignItems="flex-start"
-      component={Link}
-      onClick={() => onClick(notif)}
-      to={notif?.redirect}
-    >
-      <ListItemAvatar sx={{ height: "24px", width: "24px" }}>
-        <Avatar alt={notif.emitter?.firstname} src={notif.emitter?.avatarUrl} />
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <Typography
-            sx={{
-              fontSize: "0.9rem",
-              fontWeight: notif.seen ? "normal" : "bold",
-            }}
-          >
-            {notif?.message}
-          </Typography>
-        }
-        secondary={
-          <Typography
-            sx={{
-              fontSize: "0.8rem",
-              fontWeight: notif.seen ? "normal" : "bold",
-            }}
-            noWrap
-          >
-            <RenderHtml>{notif?.content}</RenderHtml>
-          </Typography>
-        }
-      />
-    </ListItemButton>
+    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+      <ListItemButton component={Link} to={notif.redirect} onClick={onClick}>
+        <ListItemAvatar>
+          <Avatar src={notif.emitter.avatarUrl}></Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          primary={<Typography noWrap>{notif.message}</Typography>}
+          secondary={
+            <Typography sx={{ fontSize: "0.8rem", opacity: 0.5 }} noWrap>
+              {formatDate(notif.creation, true)}
+            </Typography>
+          }
+          noWrap
+        />
+      </ListItemButton>
+    </List>
   );
 };
 const NotifToast = ({ notif }) => {
@@ -69,8 +54,8 @@ const NotifToast = ({ notif }) => {
           <Typography sx={{ fontSize: "0.9rem" }}>{notif?.message}</Typography>
         }
         secondary={
-          <Typography sx={{ fontSize: "0.8rem" }} noWrap>
-            <RenderHtml>{notif?.content}</RenderHtml>
+          <Typography sx={{ fontSize: "0.8rem", display: "flex" }} noWrap>
+            "{shortString(notif?.content, 120)}"
           </Typography>
         }
       />

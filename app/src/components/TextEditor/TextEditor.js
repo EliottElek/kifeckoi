@@ -104,7 +104,7 @@ export default function TextEditor({
         </Button>
         <Button
           onClick={(e) => {
-            handleModifyDescription(e, quill.root.innerHTML, mentions);
+            handleModifyDescription(e, quill, mentions);
             setModifMode(false);
           }}
           style={{
