@@ -15,14 +15,14 @@ import { toast } from "react-toastify";
 import ModifAreaCard from "./ModifAreaCard/ModifAreaCard";
 import Avatar from "../../../materials/Avatar/Avatar";
 import { Navigate, useNavigate, useParams } from "react-router";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { FIND_EVENT_BY_EVENT_ID } from "../../../graphql/queries";
 import {
-  CREATE_NOTIFICATION,
-  MENTION_USERS_IN_EVENTS,
-  CHANGE_EVENT_DESCRIPTION,
-  DELETE_EVENT,
-} from "../../../graphql/mutations";
+  useCreateNotification,
+  useMentionUsersInEvent,
+  useChangeEventDescription,
+  useDeleteEvent,
+} from "../../../hooks/mutations/event";
 import { CircularProgress } from "@mui/material";
 import { useContext } from "react";
 import { Context } from "../../Context/Context";
@@ -34,10 +34,10 @@ const CardModal = () => {
   const [comments, setComments] = React.useState([]);
   const [modifMode, setModifMode] = React.useState(false);
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-  const [mentionUsersInEvent] = useMutation(MENTION_USERS_IN_EVENTS);
-  const [createNotification] = useMutation(CREATE_NOTIFICATION);
-  const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
-  const [deleteEvent] = useMutation(DELETE_EVENT);
+  const mentionUsersInEvent = useMentionUsersInEvent();
+  const createNotification = useCreateNotification();
+  const changeEventDescription = useChangeEventDescription();
+  const deleteEvent = useDeleteEvent();
 
   const [setOpenAddContributorModal] = React.useState(false);
   const [description, setDescription] = React.useState(null);
@@ -60,14 +60,14 @@ const CardModal = () => {
         //We get the ids of people mentionned
         const mentionsIds = mentions.map((m) => m.id);
         //we send an email to them, saying that the user mentionned them in an event
-        await mentionUsersInEvent({
+        mentionUsersInEvent({
           variables: {
             eventId: event.id,
             userIds: mentionsIds,
             mentionContext: content.root.innerHTML,
           },
         });
-        await createNotification({
+        createNotification({
           variables: {
             message: `${user?.firstname} vous a mentionné dans ${currentProject.name}.`,
             redirect: `/project/${
@@ -80,7 +80,7 @@ const CardModal = () => {
           },
         });
       }
-      await changeEventDescription({
+      changeEventDescription({
         variables: {
           eventId: event.id,
           newDescription: content.root.innerHTML,
@@ -99,7 +99,7 @@ const CardModal = () => {
   const handledeleteEvent = async (e) => {
     e.stopPropagation();
     try {
-      await deleteEvent({
+      deleteEvent({
         variables: {
           eventId: event.id,
         },
