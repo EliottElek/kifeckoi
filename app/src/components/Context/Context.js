@@ -88,7 +88,7 @@ export const ContextProvider = ({ children }) => {
   const [user, setUser] = React.useState(null);
   const [addCard, setAddCard] = React.useState(false);
   const [eventsData, setEventsData] = React.useState([]);
-
+  const [dataEvents, setDataEvents] = React.useState(null);
   const SECRET_KEY = "secret!";
 
   const token = localStorage.getItem("token");
@@ -197,6 +197,8 @@ export const ContextProvider = ({ children }) => {
         channels: channels,
         setChannel: setChannel,
         setChannels: setChannels,
+        dataEvents: dataEvents,
+        setDataEvents: setDataEvents,
       }}
     >
       {children}

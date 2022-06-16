@@ -8,12 +8,10 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-  ListItem,
   CircularProgress,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { IconButton, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { useQuery, useSubscription, useMutation } from "@apollo/client";
 import { GET_NOTIFICATIONS_BY_USER_ID } from "../../graphql/subscriptions";
@@ -21,45 +19,84 @@ import { Context } from "../Context/Context";
 import { toast } from "react-toastify";
 import { RETURN_NOTIFICATIONS_BY_USER_ID } from "../../graphql/queries";
 import { READ_NOTIFICATION } from "../../graphql/mutations";
-import shortString from "../../assets/functions/shortString";
 import formatDate from "../../assets/functions/formatDate";
 const NotifItem = ({ notif, onClick }) => {
   return (
-    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-      <ListItemButton component={Link} to={notif.redirect} onClick={onClick}>
-        <ListItemAvatar>
-          <Avatar src={notif.emitter.avatarUrl}></Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={<Typography noWrap>{notif.message}</Typography>}
-          secondary={
-            <Typography sx={{ fontSize: "0.8rem", opacity: 0.5 }} noWrap>
-              {formatDate(notif.creation, true)}
-            </Typography>
-          }
-          noWrap
-        />
+    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "transparent" }}>
+      <ListItemButton onClick={onClick}>
+        <a
+          href={notif.redirect}
+          style={{ textDecoration: "none", display: "flex" }}
+        >
+          <ListItemAvatar>
+            {notif.seen ? (
+              <Avatar src={notif.emitter.avatarUrl}></Avatar>
+            ) : (
+              <Badge
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                sx={{
+                  "& .MuiBadge-badge": {
+                    color: "white",
+                    height: "12px",
+                    width: "12px",
+                    top: "24px",
+                    left: "24px",
+                    borderRadius: "50%",
+                    backgroundColor: "var(--main-color)",
+                  },
+                }}
+                variant="dot"
+              >
+                <Avatar src={notif.emitter.avatarUrl}></Avatar>
+              </Badge>
+            )}
+          </ListItemAvatar>
+          <ListItemText
+            primary={
+              <Typography
+                noWrap
+                sx={{ fontWeight: notif.seen ? "normal" : "bold" }}
+              >
+                {notif.message}
+              </Typography>
+            }
+            secondary={
+              <Typography
+                sx={{
+                  fontSize: "0.8rem",
+                  opacity: notif.seen ? 0.5 : "0.8",
+                  fontWeight: notif.seen ? "normal" : "bold",
+                }}
+                noWrap
+              >
+                {formatDate(notif.creation, true)}
+              </Typography>
+            }
+            noWrap
+          />
+        </a>
       </ListItemButton>
     </List>
   );
 };
 const NotifToast = ({ notif }) => {
   return (
-    <ListItem>
-      <ListItemAvatar sx={{ height: "24px", width: "24px" }}>
-        <Avatar alt={notif.emitter?.firstname} src={notif.emitter?.avatarUrl} />
+    <div style={{ maxWidth: "100%", display: "flex" }}>
+      <ListItemAvatar>
+        <Avatar src={notif.emitter.avatarUrl}></Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={
-          <Typography sx={{ fontSize: "0.9rem" }}>{notif?.message}</Typography>
-        }
-        secondary={
-          <Typography sx={{ fontSize: "0.8rem", display: "flex" }} noWrap>
-            "{shortString(notif?.content, 120)}"
+          <Typography noWrap>
+            Nouvelle notification de {notif.emitter.firstname}
           </Typography>
         }
+        noWrap
       />
-    </ListItem>
+    </div>
   );
 };
 export default function NotifPanel() {
@@ -73,12 +110,14 @@ export default function NotifPanel() {
       userId: user?.id,
     },
     onCompleted: (data) => {
-      let sorted = data.returnNotificationsByUserId.sort(
+      const sorted = data.returnNotificationsByUserId;
+      let copy = [...sorted];
+      copy = copy.sort(
         (a, b) => Date.parse(a.creation) - Date.parse(b.creation)
       );
-      sorted = sorted.reverse().slice(0, 4);
-      setNotifications(sorted);
-      const seenNotifications = sorted.filter((d) => d.seen === false);
+      copy = copy.reverse().slice(0, 4);
+      setNotifications(copy);
+      const seenNotifications = copy.filter((d) => d.seen === false);
       console.log(seenNotifications);
       setSeen(seenNotifications.length);
     },
@@ -105,7 +144,7 @@ export default function NotifPanel() {
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: false,
           progress: undefined,
           icon: false,

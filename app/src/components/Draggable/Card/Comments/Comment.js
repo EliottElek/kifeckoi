@@ -13,8 +13,8 @@ import formatDate from "../../../../assets/functions/formatDate";
 import { Context } from "../../../Context/Context";
 import RenderHtml from "../../../../assets/RenderHtml";
 import TextEditor from "../../../TextEditor/TextEditor";
-const Comment = ({ comment, commentsData }) => {
-  const { user } = React.useContext(Context);
+const Comment = ({ comment, refetch }) => {
+  const { user, dataEvents } = React.useContext(Context);
   const [changeCommentContent] = useMutation(CHANGE_COMMENT__CONTENT);
   const [deleteComment] = useMutation(DELETE_COMMENT);
   const [editMode, setEditMode] = React.useState(false);
@@ -34,7 +34,8 @@ const Comment = ({ comment, commentsData }) => {
           newContent: cont,
         },
       });
-      commentsData.refetch();
+      dataEvents.refetch();
+      refetch();
       toast.success("Commentaire modifié avec succès.", {
         position: "bottom-left",
         autoClose: 5000,
@@ -63,7 +64,8 @@ const Comment = ({ comment, commentsData }) => {
           commentId: comment.id,
         },
       });
-      commentsData.refetch();
+      dataEvents.refetch();
+      refetch();
       toast.success("Commentaire supprimé avec succès.", {
         position: "bottom-left",
         autoClose: 5000,
@@ -112,7 +114,7 @@ const Comment = ({ comment, commentsData }) => {
         </div>
         <RenderHtml>{comment?.content}</RenderHtml>
       </div>
-      {user.id === comment.author.id && (
+      {user?.id === comment?.author?.id && (
         <>
           <button
             className="more__button__comment"

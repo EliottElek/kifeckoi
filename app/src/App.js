@@ -12,8 +12,8 @@ import Backdrop from "./materials/Backdrop/Backdrop";
 import Progress from "./materials/Progress/Progress";
 import NoInternetConnection from "./components/NoInternetConnectionWrapper/NoInternetConnectionWrapper";
 import StickyNavAdvanced from "./components/StickyNavbar/StickyNavBarAdvanced";
-import Chat from "./components/Chat/Chat";
 import Projects from "./components/Projects/Projects";
+import CardModal from "./components/Draggable/Card/CardModal";
 const SidePanel = lazy(() => import("./components/DashBoard/SidePanel"));
 const ErrorPage = lazy(() => import("./components/ErrorPage/ErrorPage"));
 const Client = lazy(() => import("./components/Client/Client"));
@@ -160,13 +160,17 @@ const MainContent = () => {
         />
         <Route
           exact
-          path="/clients"
+          path="/project/:id/actions/:eventId"
           element={
             <Drawer
+              advanced
               mainContent={
                 <SecureRoute margin>
                   <Suspense fallback={renderLoader()}>
-                    <Clients />
+                    <>
+                      <ActionsWide type="Action" />
+                      <CardModal />
+                    </>
                   </Suspense>
                 </SecureRoute>
               }
@@ -180,78 +184,6 @@ const MainContent = () => {
             />
           }
         />
-        <Route
-          exact
-          path="/projects"
-          element={
-            <Drawer
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <Projects />
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/chat"
-          element={
-            <Drawer
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <Chat />
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          path="/chat/:id"
-          element={
-            <Drawer
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <Chat />
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id"
-          element={<Navigate to="/project/:id/global" />}
-        />
-        <Route exact path="/project" element={<Navigate to="/" />} />
-        <Route exact path="/client" element={<Navigate to="/" />} />
         <Route
           exact
           path="/project/:id/infos"
@@ -262,6 +194,32 @@ const MainContent = () => {
                 <SecureRoute margin>
                   <Suspense fallback={renderLoader()}>
                     <ActionsWide type="Info" />
+                  </Suspense>
+                </SecureRoute>
+              }
+              secondaryContent={
+                <Suspense fallback={renderLoader()}>
+                  <SecondaryContent />
+                </Suspense>
+              }
+              drawerWidth={240}
+              breakPoint={800}
+            />
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/infos/:eventId"
+          element={
+            <Drawer
+              advanced
+              mainContent={
+                <SecureRoute margin>
+                  <Suspense fallback={renderLoader()}>
+                    <>
+                      <ActionsWide type="Info" />
+                      <CardModal />
+                    </>
                   </Suspense>
                 </SecureRoute>
               }
@@ -300,6 +258,32 @@ const MainContent = () => {
         />
         <Route
           exact
+          path="/project/:id/decisions/:eventId"
+          element={
+            <Drawer
+              advanced
+              mainContent={
+                <SecureRoute margin>
+                  <Suspense fallback={renderLoader()}>
+                    <>
+                      <ActionsWide type="Decision" />
+                      <CardModal />
+                    </>
+                  </Suspense>
+                </SecureRoute>
+              }
+              secondaryContent={
+                <Suspense fallback={renderLoader()}>
+                  <SecondaryContent />
+                </Suspense>
+              }
+              drawerWidth={240}
+              breakPoint={800}
+            />
+          }
+        />
+        <Route
+          exact
           path="/project/:id/risks"
           element={
             <Drawer
@@ -323,6 +307,32 @@ const MainContent = () => {
         />
         <Route
           exact
+          path="/project/:id/risks/:eventId"
+          element={
+            <Drawer
+              advanced
+              mainContent={
+                <SecureRoute margin>
+                  <Suspense fallback={renderLoader()}>
+                    <>
+                      <ActionsWide type="Risk" />
+                      <CardModal />
+                    </>
+                  </Suspense>
+                </SecureRoute>
+              }
+              secondaryContent={
+                <Suspense fallback={renderLoader()}>
+                  <SecondaryContent />
+                </Suspense>
+              }
+              drawerWidth={240}
+              breakPoint={800}
+            />
+          }
+        />
+        <Route
+          exact
           path="/project/:id/problems"
           element={
             <Drawer
@@ -330,7 +340,33 @@ const MainContent = () => {
               mainContent={
                 <SecureRoute margin>
                   <Suspense fallback={renderLoader()}>
-                    <ActionsWide type="Problems" />
+                    <ActionsWide type="Problem" />
+                  </Suspense>
+                </SecureRoute>
+              }
+              secondaryContent={
+                <Suspense fallback={renderLoader()}>
+                  <SecondaryContent />
+                </Suspense>
+              }
+              drawerWidth={240}
+              breakPoint={800}
+            />
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/problems/:eventId"
+          element={
+            <Drawer
+              advanced
+              mainContent={
+                <SecureRoute margin>
+                  <Suspense fallback={renderLoader()}>
+                    <>
+                      <ActionsWide type="Problem" />
+                      <CardModal />
+                    </>
                   </Suspense>
                 </SecureRoute>
               }
@@ -353,7 +389,33 @@ const MainContent = () => {
               mainContent={
                 <SecureRoute margin>
                   <Suspense fallback={renderLoader()}>
-                    <ActionsWide type="Deliverables" />
+                    <ActionsWide type="Deliverable" />
+                  </Suspense>
+                </SecureRoute>
+              }
+              secondaryContent={
+                <Suspense fallback={renderLoader()}>
+                  <SecondaryContent />
+                </Suspense>
+              }
+              drawerWidth={240}
+              breakPoint={800}
+            />
+          }
+        />
+        <Route
+          exact
+          path="/project/:id/deliverables/:eventId"
+          element={
+            <Drawer
+              advanced
+              mainContent={
+                <SecureRoute margin>
+                  <Suspense fallback={renderLoader()}>
+                    <>
+                      <ActionsWide type="Deliverable" />
+                      <CardModal />
+                    </>
                   </Suspense>
                 </SecureRoute>
               }
@@ -401,6 +463,57 @@ const MainContent = () => {
             </SecureRoute>
           }
         />
+        <Route
+          exact
+          path="/clients"
+          element={
+            <Drawer
+              mainContent={
+                <SecureRoute margin>
+                  <Suspense fallback={renderLoader()}>
+                    <Clients />
+                  </Suspense>
+                </SecureRoute>
+              }
+              secondaryContent={
+                <Suspense fallback={renderLoader()}>
+                  <SecondaryContent />
+                </Suspense>
+              }
+              drawerWidth={240}
+              breakPoint={800}
+            />
+          }
+        />
+        <Route
+          exact
+          path="/projects"
+          element={
+            <Drawer
+              mainContent={
+                <SecureRoute margin>
+                  <Suspense fallback={renderLoader()}>
+                    <Projects />
+                  </Suspense>
+                </SecureRoute>
+              }
+              secondaryContent={
+                <Suspense fallback={renderLoader()}>
+                  <SecondaryContent />
+                </Suspense>
+              }
+              drawerWidth={240}
+              breakPoint={800}
+            />
+          }
+        />
+        <Route
+          exact
+          path="/project/:id"
+          element={<Navigate to="/project/:id/global" />}
+        />
+        <Route exact path="/project" element={<Navigate to="/" />} />
+        <Route exact path="/client" element={<Navigate to="/" />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
       <ToastContainer theme={!dark ? "dark" : "light"} />

@@ -18,9 +18,10 @@ const DndWide = ({ type }) => {
     }
   }, [currentProject?.name, currentProject, type]);
 
+
   return (
     <Suspense fallback={renderLoader()}>
-        <EventKanban type={type} />
+      <EventKanban type={type} />
     </Suspense>
   );
 };

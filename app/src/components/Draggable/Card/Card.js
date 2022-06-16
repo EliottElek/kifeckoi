@@ -27,26 +27,23 @@ import {
   CREATE_NOTIFICATION,
 } from "../../../graphql/mutations";
 import { Draggable } from "react-beautiful-dnd";
-import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
 import { Context } from "../../Context/Context";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { MenuItem } from "@mui/material";
 import { Menu } from "@mui/material";
 import AutoTextArea from "../../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import Button from "../../../materials/Button/Button";
 import getPeriod from "../../../assets/functions/getPeriod";
 import RenderHtml from "../../../assets/RenderHtml";
-import CardModal from "./CardModal";
+import { NavLink } from "react-router-dom";
 const Card = (props) => {
-  const { setEvents, events, currentProject, setCurrentProject, user } =
-    useContext(Context);
-  const [openModal, setOpenModal] = useState(false);
+  const { events, currentProject, user, dataEvents } = useContext(Context);
+  const navigate = useNavigate();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
   const [modifMode, setModifMode] = useState(false);
-  const [comments, setComments] = useState([]);
   const [submitOnEnterMode, setSubmitOnEnterMode] = useState(false);
   const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
   const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
@@ -56,10 +53,9 @@ const Card = (props) => {
 
   const [deleteEvent] = useMutation(DELETE_EVENT);
   const [createEvent] = useMutation(CREATE_EVENT);
-  const [description, setDescription] = useState(props.task.description);
+  const [description, setDescription] = useState(props.task?.description);
 
   const { id } = useParams();
-  //open the menu
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openPopUp = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -76,12 +72,6 @@ const Card = (props) => {
   const handleClose2 = () => {
     setAnchorEl2(null);
   };
-  const commentsData = useQuery(GET_ALL_COMMENTS_BY_EVENT_ID, {
-    variables: { eventId: props.task.id },
-    onCompleted: (data) => {
-      setComments(data?.getAllCommentsByEventId);
-    },
-  });
   const handleModifyDescription = async (e, content, mentions) => {
     e.stopPropagation();
     try {
@@ -101,7 +91,7 @@ const Card = (props) => {
             message: `${user?.firstname} vous a mentionné dans ${currentProject.name}.`,
             redirect: `/project/${
               currentProject.id
-            }/${props.task.type.toLowerCase()}s`,
+            }/${props.task.type.toLowerCase()}s/${props.task.id}`,
             projectId: currentProject.id,
             emitterId: user.id,
             content: content.getText().toString(),
@@ -115,7 +105,7 @@ const Card = (props) => {
           newDescription: content.root.innerHTML,
         },
       });
-      props.dataEvents.refetch();
+      dataEvents.refetch();
       setModifMode(false);
     } catch (err) {
       console.log(err);
@@ -124,10 +114,6 @@ const Card = (props) => {
         pauseOnHover: false,
       });
     }
-  };
-  const handleCloseModal = () => {
-    setModifMode(false);
-    setOpenModal(false);
   };
   const handleMoveTo = async (category) => {
     try {
@@ -153,9 +139,10 @@ const Card = (props) => {
         variables: {
           eventId: props.task.id,
           newStatus: category?.title,
+          index: destinationTask.length,
         },
       });
-      props.dataEvents.refetch();
+      dataEvents.refetch();
 
       toast(
         <Msg>
@@ -173,14 +160,12 @@ const Card = (props) => {
       );
       setAnchorEl(null);
     } catch (err) {
+      console.log(err);
       toast.error("Impossible de déplacer l'évènement.", {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
       });
     }
-    setEvents([...events]);
-    currentProject.events = [...events];
-    setCurrentProject(currentProject);
   };
   const handleChangeState = async (newState) => {
     if (props.task.state === newState) return;
@@ -191,7 +176,7 @@ const Card = (props) => {
           newState: newState,
         },
       });
-      props.dataEvents.refetch();
+      dataEvents.refetch();
     } catch {
       toast.error("Impossible de changer l'état de cette cart.", {
         position: "bottom-left",
@@ -212,9 +197,7 @@ const Card = (props) => {
           eventId: props.task.id,
         },
       });
-      setModifMode(false);
-      props.dataEvents.refetch();
-
+      dataEvents.refetch();
       toast(`${props.type} archivé(e) avec succès.`, {
         position: "bottom-left",
         autoClose: 5000,
@@ -235,6 +218,7 @@ const Card = (props) => {
         progress: undefined,
       });
     }
+    navigate(`/project/${currentProject.id}/${props.type.toLowerCase()}s`);
   };
   const duplicate = async (e) => {
     e.stopPropagation();
@@ -259,7 +243,7 @@ const Card = (props) => {
         ...newEvent?.data?.createEvent,
         new: true,
       });
-      props.dataEvents.refetch();
+      dataEvents.refetch();
 
       props.setLength && props.setLength(props.length + 1);
       toast(
@@ -305,10 +289,15 @@ const Card = (props) => {
   const Msg = ({ children }) => <div>{children}</div>;
   return (
     <div
+      style={{ textDecoration: "none" }}
       className={"card"}
-      onClick={() => {
-        setOpenModal(true);
-      }}
+      onClick={() =>
+        navigate(
+          `/project/${currentProject.id}/${props.task.type.toLowerCase()}s/${
+            props.task.id
+          }`
+        )
+      }
     >
       <Draggable
         key={props?.task?.id}
@@ -365,7 +354,7 @@ const Card = (props) => {
                 </button>
                 <span className="kanban__section__content__name__container__comments__indicator">
                   <span className="kanban__section__content__name__container__comments__indicator__number">
-                    {comments?.length}
+                    {props.task.comments?.length}
                   </span>
                   <FaRegComments />
                 </span>
@@ -480,22 +469,6 @@ const Card = (props) => {
           </div>
         )}
       </Draggable>
-      <CardModal
-        commentsData={commentsData}
-        comments={comments}
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        task={props.task}
-        handleModifyDescription={handleModifyDescription}
-        description={description}
-        setDescription={setDescription}
-        dataEvents={props.dataEvents}
-        handleCloseModal={handleCloseModal}
-        modifMode={modifMode}
-        setModifMode={setModifMode}
-        setOpenDeleteModal={setOpenDeleteModal}
-        setOpenAddContributorModal={setOpenAddContributorModal}
-      />
       {true && (
         <>
           <ReactTooltip delayShow={500} id="duplicateTooltip" effect="solid">
@@ -525,7 +498,7 @@ const Card = (props) => {
         event={props.task}
         dataEvents={props.dataEvents}
         dataProject={props.dataProject}
-        alreadyExistingContributors={props.task.contributors}
+        alreadyExistingContributors={props.task?.contributors}
         open={openAddContributorModal}
         setOpen={setOpenAddContributorModal}
       />
@@ -554,7 +527,6 @@ const Card = (props) => {
               reversed
               onClick={() => {
                 setOpenDeleteModal(false);
-                setOpenModal(false);
               }}
             >
               Annuler
@@ -606,9 +578,12 @@ const Card = (props) => {
         </MenuItem>
         <Divider />
         <MenuItem
+          component={NavLink}
+          to={`/project/${
+            currentProject.id
+          }/${props.task?.type.toLowerCase()}s/${props.task?.id}`}
           style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
-            setOpenModal(true);
             setAnchorEl(null);
           }}
         >
@@ -639,7 +614,7 @@ const Card = (props) => {
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
-            setOpenModal(true);
+            navigate();
             setModifMode(true);
           }}
         >
@@ -658,7 +633,7 @@ const Card = (props) => {
         </MenuItem>
         <span className={"divider"} />
         {events.map((category) => {
-          if (category.title !== props.task.status)
+          if (category.title !== props.task?.status)
             return (
               <MenuItem
                 style={{ fontSize: "0.9rem" }}

@@ -20,6 +20,7 @@ import {
   CHANGE_EVENT_STATUS,
   CHANGE_EVENT_STATE,
   DELETE_MULTIPLE_EVENTS,
+  CAPTURE_EVENTS_POSITIONS,
 } from "../../graphql/mutations";
 import { toast } from "react-toastify";
 import rawEvents from "../../rawEvents";
@@ -46,15 +47,19 @@ const EventKanban = ({ type, setLength, length }) => {
     selectedEvents,
     eventsData,
     setEventsData,
+    setDataEvents,
+    dataEvents,
   } = React.useContext(Context);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedAcountables, setSelectedcontributors] = useState([]);
   const [eventSelected, setEventSelected] = useState();
   const [input, setInput] = useState("");
   const [createEvent] = useMutation(CREATE_EVENT);
-  const [changeEventDescription] = useMutation(CHANGE_EVENT_STATUS);
+  const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
   const [deleteMultipleEvents] = useMutation(DELETE_MULTIPLE_EVENTS);
+  const [captureEventsPositions] = useMutation(CAPTURE_EVENTS_POSITIONS);
+
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { id } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -71,20 +76,22 @@ const EventKanban = ({ type, setLength, length }) => {
       setCurrentProject(data?.findProjectByProjectId);
     },
   });
-  const dataEvents = useQuery(FIND_EVENTS_BY_PROJECT_ID, {
+  const dataEventsQuery = useQuery(FIND_EVENTS_BY_PROJECT_ID, {
     variables: { id: id, type: type },
     onCompleted: (data) => {
-      setEventsData(data.findEventsByProjectId);
+      setEventsData([...data.findEventsByProjectId]);
     },
   });
-
+  React.useEffect(() => {
+    if (dataEventsQuery) setDataEvents(dataEventsQuery);
+  }, [dataEventsQuery, setDataEvents]);
   React.useEffect(() => {
     rawEvents.forEach((item) => (item.tasks = []));
     const eventsFinal = [...rawEvents];
     const eventsDataF = [...eventsData];
     eventsDataF?.forEach((event) => {
       const index = eventsFinal.findIndex((ev) => ev.title === event.status);
-      if (index !== -1) eventsFinal[index].tasks.push(event);
+      if (index !== -1) eventsFinal[index].tasks[event.index] = event;
     });
     setEvents(eventsFinal);
   }, [eventsData, setEvents]);
@@ -166,24 +173,56 @@ const EventKanban = ({ type, setLength, length }) => {
       const removedCopy = { ...removed };
       removedCopy.status = destinationCol?.title;
       destinationTask.splice(destination.index, 0, removedCopy);
-      events[sourceColIndex].tasks = sourceTask;
-      events[destinationColIndex].tasks = destinationTask;
+      events[sourceColIndex].tasks = [...sourceTask];
+      events[destinationColIndex].tasks = [...destinationTask];
+
+      setEvents(events);
       try {
-        await changeEventDescription({
+        await changeEventStatus({
           variables: {
             eventId: result?.draggableId,
             newStatus: destinationCol?.title,
+            index: destination.index,
           },
         });
-      } catch (err) {}
-      dataEvents.refetch();
+        try {
+          await captureEventsPositions({
+            variables: {
+              events: events[sourceColIndex].tasks.map((e) => e.id),
+              indexes: events[sourceColIndex].tasks.map((e, i) => i),
+            },
+          });
+          await captureEventsPositions({
+            variables: {
+              events: events[destinationColIndex].tasks.map((e) => e.id),
+              indexes: events[destinationColIndex].tasks.map((e, i) => i),
+            },
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       const index = events.findIndex((e) => e.id === source.droppableId);
       const items = Array.from(events[index].tasks);
       const [reorderedItem] = items.splice(source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
-      dataEvents.refetch();
+      events[index].tasks = [...items];
+      setEvents(events);
+      try {
+        await captureEventsPositions({
+          variables: {
+            events: items.map((e) => e.id),
+            indexes: items.map((e, i) => i),
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
+    setTimeout(() => dataEvents.refetch(), 500);
   };
   const handleDeleteSelectedEvents = async (e) => {
     try {
@@ -225,9 +264,11 @@ const EventKanban = ({ type, setLength, length }) => {
     e.preventDefault();
     const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
     try {
+      const index = eventSelected.tasks.length;
       await createEvent({
         variables: {
           type: type,
+          index: index,
           projectId: id,
           creatorId: user.id,
           description: input,

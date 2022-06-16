@@ -39,8 +39,8 @@ mutation createProject($name: String! $clientId: String! $contributors : [String
 }
 `
 export const CREATE_EVENT = gql`
-mutation createEvent($type: String! $projectId: String! $description : String! $contributors : [String!] $status : String! $creatorId: String! $period: String!){
-    createEvent(type: $type  projectId: $projectId description : $description contributors : $contributors status : $status creatorId : $creatorId period : $period){
+mutation createEvent($type: String! $projectId: String! $description : String! $contributors : [String!] $status : String! $creatorId: String! $period: String! $index: Int!){
+    createEvent(type: $type  projectId: $projectId description : $description contributors : $contributors status : $status creatorId : $creatorId period : $period index:$index){
         type
         id
         description
@@ -75,8 +75,8 @@ mutation changeEventState($eventId: String! $newState: String!){
 `
 
 export const CHANGE_EVENT_STATUS = gql`
-mutation changeEventStatus($eventId: String! $newStatus: String!){
-    changeEventStatus(eventId: $eventId  newStatus: $newStatus){
+mutation changeEventStatus($eventId: String! $newStatus: String! $index: Int!){
+    changeEventStatus(eventId: $eventId  newStatus: $newStatus index:$index){
         message
     }
 }
@@ -186,6 +186,14 @@ mutation createNotification($projectId: String! $content:String! $emitterId: Str
 export const READ_NOTIFICATION = gql`
   mutation readNotification($userId: String! $notificationId:String!){
     readNotification (userId : $userId notificationId : $notificationId){
+        message
+      }
+    }
+    `
+
+export const CAPTURE_EVENTS_POSITIONS = gql`
+  mutation captureEventsPositions($events: [String!] $indexes: [Int!]){
+    captureEventsPositions (events : $events indexes:$indexes){
         message
       }
     }

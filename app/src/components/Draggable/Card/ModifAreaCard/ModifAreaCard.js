@@ -27,7 +27,7 @@ const ModifAreaCard = ({ event, handleModifyDescription, large }) => {
         className="modif__textarea__paragraph"
         style={{ fontSize: large ? "1.8rem" : "1rem" }}
       >
-        <RenderHtml>{event.description}</RenderHtml>
+        <RenderHtml>{event?.description}</RenderHtml>
       </div>
     );
 };

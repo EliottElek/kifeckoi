@@ -9,21 +9,17 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { FiMoreHorizontal } from "react-icons/fi";
 import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
-import AddContributorsEvent from "../Card/AddContributorsEvent";
-import CardModal from "../Card/CardModal";
 import { Divider } from "@mui/material";
 import {
-  CHANGE_EVENT_DESCRIPTION,
   CHANGE_EVENT_STATUS,
   CHANGE_EVENT_STATE,
   DELETE_EVENT,
   CREATE_EVENT,
 } from "../../../graphql/mutations";
-import { GET_ALL_COMMENTS_BY_EVENT_ID } from "../../../graphql/queries";
 import { Context } from "../../Context/Context";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { MenuItem } from "@mui/material";
 import { Menu } from "@mui/material";
 import Button from "../../../materials/Button/Button";
@@ -40,19 +36,15 @@ const Row = (props) => {
     user,
     selectedEvents,
     setSelectedEvents,
+    dataEvents,
   } = useContext(Context);
-  const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
-  const [modifMode, setModifMode] = useState(false);
-  const [comments, setComments] = useState([]);
   const [checked, setChecked] = useState(false);
-  const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
   const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
   const [deleteEvent] = useMutation(DELETE_EVENT);
   const [createEvent] = useMutation(CREATE_EVENT);
-  const [description, setDescription] = useState(props.task.description);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openPopUp = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -70,36 +62,6 @@ const Row = (props) => {
     }
   }, [selectedEvents, props.task.id, setChecked]);
   const { id } = useParams();
-  const commentsData = useQuery(GET_ALL_COMMENTS_BY_EVENT_ID, {
-    variables: { eventId: props.task.id },
-  });
-  useEffect(() => {
-    if (commentsData?.data) {
-      setComments(commentsData?.data?.getAllCommentsByEventId);
-    }
-  }, [setComments, commentsData?.data]);
-  const handleModifyDescription = async (e) => {
-    e.stopPropagation();
-    try {
-      await changeEventDescription({
-        variables: {
-          eventId: props.task.id,
-          newDescription: description,
-        },
-      });
-      props.dataEvents.refetch();
-      setModifMode(false);
-    } catch (err) {
-      toast.error("Impossible de modifier la description.", {
-        position: toast.POSITION.BOTTOM_LEFT,
-        pauseOnHover: false,
-      });
-    }
-  };
-  const handleCloseModal = () => {
-    setModifMode(false);
-    setOpenModal(false);
-  };
   const handleSelect = () => {
     if (!checked) {
       setSelectedEvents((prev) => [...prev, { id: props.task.id }]);
@@ -136,7 +98,7 @@ const Row = (props) => {
           newStatus: category?.title,
         },
       });
-      props.dataEvents.refetch();
+      dataEvents.refetch();
 
       toast(
         <Msg>
@@ -171,7 +133,7 @@ const Row = (props) => {
           newState: newState,
         },
       });
-      props.dataEvents.refetch();
+      dataEvents.refetch();
     } catch {
       toast.error("Impossible de changer l'état de cette cart.", {
         position: "bottom-left",
@@ -192,8 +154,7 @@ const Row = (props) => {
           eventId: props.task.id,
         },
       });
-      setModifMode(false);
-      props.dataEvents.refetch();
+      dataEvents.refetch();
 
       toast(`${props.type} archivé(e) avec succès.`, {
         position: "bottom-left",
@@ -239,7 +200,7 @@ const Row = (props) => {
         ...newEvent?.data?.createEvent,
         new: true,
       });
-      props.dataEvents.refetch();
+      dataEvents.refetch();
 
       props.setLength && props.setLength(props.length + 1);
       toast(
@@ -277,7 +238,11 @@ const Row = (props) => {
     <tr
       className={"event__row"}
       onClick={() => {
-        setOpenModal(true);
+        navigate(
+          `/project/${currentProject.id}/${props.task.type.toLowerCase()}s/${
+            props.task.id
+          }`
+        );
       }}
     >
       <td>
@@ -344,22 +309,6 @@ const Row = (props) => {
           <FiMoreHorizontal />
         </button>
       </td>
-      <CardModal
-        commentsData={commentsData}
-        comments={comments}
-        openModal={openModal}
-        setOpenModal={setOpenModal}
-        task={props.task}
-        handleModifyDescription={handleModifyDescription}
-        description={description}
-        setDescription={setDescription}
-        dataEvents={props.dataEvents}
-        handleCloseModal={handleCloseModal}
-        modifMode={modifMode}
-        setModifMode={setModifMode}
-        setOpenDeleteModal={setOpenDeleteModal}
-        setOpenAddContributorModal={setOpenAddContributorModal}
-      />
       {true && (
         <>
           <ReactTooltip delayShow={500} id="duplicateTooltip" effect="solid">
@@ -385,14 +334,6 @@ const Row = (props) => {
           </ReactTooltip>
         </>
       )}
-      <AddContributorsEvent
-        event={props.task}
-        dataEvents={props.dataEvents}
-        dataProject={props.dataProject}
-        alreadyExistingContributors={props.task.contributors}
-        open={openAddContributorModal}
-        setOpen={setOpenAddContributorModal}
-      />
       <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
         <div
           className="modal__content__container space__between"
@@ -419,7 +360,11 @@ const Row = (props) => {
               onClick={(e) => {
                 e.stopPropagation();
                 setOpenDeleteModal(false);
-                setOpenModal(false);
+                navigate(
+                  `/project/${
+                    currentProject.id
+                  }/${props.task.type.toLowerCase()}s`
+                );
               }}
             >
               Annuler
@@ -463,7 +408,11 @@ const Row = (props) => {
         <MenuItem
           style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
-            setOpenModal(true);
+            navigate(
+              `/project/${
+                currentProject.id
+              }/${props.task.type.toLowerCase()}s/${props.task.id}`
+            );
             setAnchorEl(null);
           }}
         >
@@ -479,38 +428,6 @@ const Row = (props) => {
           Dupliquer...
         </MenuItem>
         <Divider />
-        <MenuItem
-          style={{ fontSize: "0.9rem" }}
-          onClick={(e) => {
-            e.stopPropagation();
-            setModifMode(true);
-            setAnchorEl(null);
-          }}
-        >
-          Édition rapide...
-        </MenuItem>
-        <MenuItem
-          style={{ fontSize: "0.9rem" }}
-          onClick={(e) => {
-            e.stopPropagation();
-            setAnchorEl(null);
-            setOpenModal(true);
-            setModifMode(true);
-          }}
-        >
-          Édition avancée...
-        </MenuItem>
-        <Divider />
-        <MenuItem
-          style={{ fontSize: "0.9rem" }}
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpenAddContributorModal(true);
-            setAnchorEl(null);
-          }}
-        >
-          <p>Gérer les contributeurs...</p>
-        </MenuItem>
         <span className={"divider"} />
         {events.map((category) => {
           if (category.title !== props.task.status)

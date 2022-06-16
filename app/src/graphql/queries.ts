@@ -223,12 +223,45 @@ export const FIND_EVENTS_BY_PROJECT_ID = gql`
 query findEventsByProjectId($id: String! $type : String!){
   findEventsByProjectId(id : $id type : $type){
     type
+    index
     id
     period
     description
     status
     state
+    contributors{
+      avatarUrl
+    }
+    comments{
+      id
+    }
+  }
+}
+`
+export const FIND_EVENT_BY_EVENT_ID = gql`
+query findEventByEventId($id: String!){
+  findEventByEventId(id : $id){
+    type
+    id
+    index
+    period
+    description
+    status
+    state
     creation
+    comments{
+    id
+    content
+    creation
+    author {
+      id
+      username
+      avatarUrl
+      firstname
+      lastname
+      email
+    }
+    }
     contributors{
       id
       firstname
@@ -249,23 +282,6 @@ query findEventsByProjectId($id: String! $type : String!){
 }
 `
 
-export const GET_ALL_COMMENTS_BY_EVENT_ID = gql`
-query getAllCommentsByEventId($eventId: String!){
-  getAllCommentsByEventId(eventId : $eventId){
-    id
-    content
-    creation
-    author {
-      id
-      username
-      avatarUrl
-      firstname
-      lastname
-      email
-    }
-    }
-  }
-`
 export const RETURN_NOTIFICATIONS_BY_USER_ID = gql`
 query returnNotificationsByUserId ($userId : String!){
   returnNotificationsByUserId (userId : $userId){

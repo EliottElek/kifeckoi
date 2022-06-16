@@ -4,11 +4,12 @@ import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ContextProvider } from "./components/Context/Context";
 import {
-  ApolloClient,
   ApolloLink,
   InMemoryCache,
   HttpLink,
-} from "apollo-boost";
+  ApolloClient,
+} from "@apollo/client";
+// import { ApolloClient } from "@apollo/client";
 import { ApolloProvider, split } from "@apollo/client";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";

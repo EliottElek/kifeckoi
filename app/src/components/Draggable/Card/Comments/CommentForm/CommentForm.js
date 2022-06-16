@@ -7,10 +7,10 @@ import { Context } from "../../../../Context/Context";
 import Avatar from "../../../../../materials/Avatar/Avatar";
 import Progress from "../../../../../materials/Progress/Progress";
 import TextEditor from "../../../../TextEditor/TextEditor";
-const CommentForm = ({ commentsData, dataEvents, event }) => {
+const CommentForm = ({ event, refetch }) => {
   const [modifMode, setModifMode] = React.useState(false);
   const [createComment, { loading }] = useMutation(CREATE_COMMENT);
-  const { user } = React.useContext(Context);
+  const { user, dataEvents } = React.useContext(Context);
 
   const onSumbitComment = async (e, content) => {
     e.stopPropagation();
@@ -20,11 +20,12 @@ const CommentForm = ({ commentsData, dataEvents, event }) => {
         variables: {
           eventId: event.id,
           authorId: user.id,
-          content: content,
+          content: content.root.innerHTML,
         },
       });
       setModifMode(false);
-      commentsData.refetch();
+      refetch();
+      dataEvents.refetch();
     } catch (e) {
       toast.error("Impossible de créer le commentaire.", {
         position: toast.POSITION.BOTTOM_LEFT,
@@ -36,18 +37,6 @@ const CommentForm = ({ commentsData, dataEvents, event }) => {
     return (
       <span style={{ display: "flex", alignItems: "center" }}>
         <Progress size="small" /> Envoi...
-      </span>
-    );
-  } else if (commentsData.loading) {
-    return (
-      <span style={{ display: "flex", alignItems: "center" }}>
-        <Progress size="small" /> Réception...
-      </span>
-    );
-  } else if (dataEvents.loading) {
-    return (
-      <span style={{ display: "flex", alignItems: "center" }}>
-        <Progress size="small" /> Réception...
       </span>
     );
   }
@@ -74,11 +63,11 @@ const CommentForm = ({ commentsData, dataEvents, event }) => {
         <Avatar
           style={{ margin: "12px" }}
           name="Vous"
-          src={user.avatarUrl}
+          src={user?.avatarUrl}
           mini
         />
         <span className="comment__cta__span">
-          {user.firstname}, un commentaire ?...{" "}
+          {user?.firstname}, un commentaire ?...{" "}
         </span>
       </div>
     );

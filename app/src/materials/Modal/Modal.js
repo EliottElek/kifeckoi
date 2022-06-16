@@ -3,8 +3,7 @@ import Modal from "@mui/material/Modal";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
-export default function BasicModal({ children, open, setOpen }) {
-  const handleClose = () => setOpen(false);
+export default function BasicModal({ children, open, handleClose }) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
