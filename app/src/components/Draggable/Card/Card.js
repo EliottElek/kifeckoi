@@ -55,7 +55,6 @@ const Card = (props) => {
 
   const [description, setDescription] = useState(props.task?.description);
 
-
   const { id } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openPopUp = Boolean(anchorEl);
@@ -144,22 +143,6 @@ const Card = (props) => {
           index: destinationTask.length - 1,
         },
       });
-      try {
-        await captureEventsPositions({
-          variables: {
-            events: events[sourceColIndex].tasks.map((e) => e.id),
-            indexes: events[sourceColIndex].tasks.map((e, i) => i),
-          },
-        });
-        await captureEventsPositions({
-          variables: {
-            events: events[destinationColIndex].tasks.map((e) => e.id),
-            indexes: events[destinationColIndex].tasks.map((e, i) => i),
-          },
-        });
-      } catch (err) {
-        console.log(err);
-      }
       dataEvents.refetch();
 
       toast(
@@ -258,7 +241,7 @@ const Card = (props) => {
       const newEvent = createEvent({
         variables: {
           type: props.type,
-          index: events[index].tasks.length,
+          index: 0,
           projectId: id,
           description: props?.task?.description,
           contributors: ArrayOfIds,

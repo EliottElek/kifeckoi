@@ -5,3 +5,5 @@ export { default as useCreateEvent } from "./useCreateEvent";
 export { default as useCreateNotification } from "./useCreateNotification";
 export { default as useDeleteEvent } from "./useDeleteEvent";
 export { default as useMentionUsersInEvent } from "./useMentionUsersInEvent";
+export { default as useDeleteMultipleEvents } from "./useDeleteMultipleEvents";
+export { default as useCaptureEventsPositions } from "./useCaptureEventsPositions";
