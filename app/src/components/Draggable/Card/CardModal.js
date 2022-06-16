@@ -132,13 +132,23 @@ const CardModal = () => {
     <>
       <Modal open={true} onClose={onClose}>
         {loading ? (
-          <div>
+          <div
+            style={{
+              minHeight: "500px",
+              minWidth: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <CircularProgress sx={{ color: "var(--main-color)" }} />
           </div>
         ) : (
           <>
             <span className="id__span">{event?.id?.split("-")[0]}</span>
-            <span>{event?.index}</span>
+            <span className="id__span" style={{ top: "22px" }}>
+              position: {event?.index}
+            </span>
             <div className="modal__content__container">
               <ModifAreaCard
                 large

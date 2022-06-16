@@ -91,7 +91,11 @@ const EventKanban = ({ type, setLength, length }) => {
     const eventsDataF = [...eventsData];
     eventsDataF?.forEach((event) => {
       const index = eventsFinal.findIndex((ev) => ev.title === event.status);
-      if (index !== -1) eventsFinal[index].tasks[event.index] = event;
+      if (index !== -1) {
+        if (eventsFinal[index].tasks[event.index] === undefined)
+          eventsFinal[index].tasks[event.index] = event;
+        else eventsFinal[index].tasks.push(event);
+      }
     });
     setEvents(eventsFinal);
   }, [eventsData, setEvents]);
@@ -152,77 +156,89 @@ const EventKanban = ({ type, setLength, length }) => {
   };
 
   const onDragEnd = async (result) => {
-    if (!result.destination) return;
-    const { source, destination } = result;
+    try {
+      if (!result.destination) return;
+      const { source, destination } = result;
 
-    if (source.droppableId !== destination.droppableId) {
-      const sourceColIndex = events.findIndex(
-        (e) => e.id === source.droppableId
-      );
-      const destinationColIndex = events.findIndex(
-        (e) => e.id === destination.droppableId
-      );
+      if (source.droppableId !== destination.droppableId) {
+        const sourceColIndex = events.findIndex(
+          (e) => e.id === source.droppableId
+        );
+        const destinationColIndex = events.findIndex(
+          (e) => e.id === destination.droppableId
+        );
 
-      const sourceCol = events[sourceColIndex];
-      const destinationCol = events[destinationColIndex];
+        const sourceCol = events[sourceColIndex];
+        const destinationCol = events[destinationColIndex];
 
-      const sourceTask = [...sourceCol.tasks];
-      const destinationTask = [...destinationCol.tasks];
+        const sourceTask = [...sourceCol.tasks];
+        const destinationTask = [...destinationCol.tasks];
 
-      const [removed] = sourceTask.splice(source.index, 1);
-      const removedCopy = { ...removed };
-      removedCopy.status = destinationCol?.title;
-      destinationTask.splice(destination.index, 0, removedCopy);
-      events[sourceColIndex].tasks = [...sourceTask];
-      events[destinationColIndex].tasks = [...destinationTask];
-
-      setEvents(events);
-      try {
-        await changeEventStatus({
-          variables: {
-            eventId: result?.draggableId,
-            newStatus: destinationCol?.title,
-            index: destination.index,
-          },
-        });
+        const [removed] = sourceTask.splice(source.index, 1);
+        const removedCopy = { ...removed };
+        removedCopy.status = destinationCol?.title;
+        destinationTask.splice(destination.index, 0, removedCopy);
+        events[sourceColIndex].tasks = [...sourceTask];
+        events[destinationColIndex].tasks = [...destinationTask];
+        setEvents(events);
+        try {
+          await changeEventStatus({
+            variables: {
+              eventId: result?.draggableId,
+              newStatus: destinationCol?.title,
+              index: destination.index,
+            },
+          });
+          try {
+            await captureEventsPositions({
+              variables: {
+                events: events[sourceColIndex].tasks.map((e) => e.id),
+                indexes: events[sourceColIndex].tasks.map((e, i) => i),
+              },
+            });
+            await captureEventsPositions({
+              variables: {
+                events: events[destinationColIndex].tasks.map((e) => e.id),
+                indexes: events[destinationColIndex].tasks.map((e, i) => i),
+              },
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        const index = events.findIndex((e) => e.id === source.droppableId);
+        const items = Array.from(events[index].tasks);
+        const [reorderedItem] = items.splice(source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        events[index].tasks = [...items];
+        // setEvents(events);
         try {
           await captureEventsPositions({
             variables: {
-              events: events[sourceColIndex].tasks.map((e) => e.id),
-              indexes: events[sourceColIndex].tasks.map((e, i) => i),
-            },
-          });
-          await captureEventsPositions({
-            variables: {
-              events: events[destinationColIndex].tasks.map((e) => e.id),
-              indexes: events[destinationColIndex].tasks.map((e, i) => i),
+              events: items.map((e) => e.id),
+              indexes: items.map((e, i) => i),
             },
           });
         } catch (err) {
           console.log(err);
         }
-      } catch (err) {
-        console.log(err);
       }
-    } else {
-      const index = events.findIndex((e) => e.id === source.droppableId);
-      const items = Array.from(events[index].tasks);
-      const [reorderedItem] = items.splice(source.index, 1);
-      items.splice(result.destination.index, 0, reorderedItem);
-      events[index].tasks = [...items];
-      setEvents(events);
-      try {
-        await captureEventsPositions({
-          variables: {
-            events: items.map((e) => e.id),
-            indexes: items.map((e, i) => i),
-          },
-        });
-      } catch (err) {
-        console.log(err);
-      }
+      setTimeout(() => dataEvents.refetch(), 0);
+    } catch (err) {
+      console.log(err);
+      toast.error("Impossible de déplacer l'évènement.", {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+      });
     }
-    setTimeout(() => dataEvents.refetch(), 500);
   };
   const handleDeleteSelectedEvents = async (e) => {
     try {
@@ -265,7 +281,7 @@ const EventKanban = ({ type, setLength, length }) => {
     const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
     try {
       const index = eventSelected.tasks.length;
-      await createEvent({
+      const { data } = await createEvent({
         variables: {
           type: type,
           index: index,
@@ -278,7 +294,11 @@ const EventKanban = ({ type, setLength, length }) => {
         },
       });
       setInput("");
-      dataEvents.refetch();
+      eventSelected.tasks.push(data.createEvent);
+      const i = events.findIndex((e) => e.id === eventSelected.id);
+      events[i] = { ...eventSelected };
+      setEvents(events);
+      setTimeout(() => dataEvents.refetch(), 500);
       setLength && setLength(length + 1);
       setSelectedcontributors([]);
     } catch (err) {

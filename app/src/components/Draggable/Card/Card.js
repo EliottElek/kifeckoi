@@ -25,6 +25,7 @@ import {
   CREATE_EVENT,
   MENTION_USERS_IN_EVENTS,
   CREATE_NOTIFICATION,
+  CAPTURE_EVENTS_POSITIONS,
 } from "../../../graphql/mutations";
 import { Draggable } from "react-beautiful-dnd";
 import { Context } from "../../Context/Context";
@@ -39,7 +40,8 @@ import getPeriod from "../../../assets/functions/getPeriod";
 import RenderHtml from "../../../assets/RenderHtml";
 import { NavLink } from "react-router-dom";
 const Card = (props) => {
-  const { events, currentProject, user, dataEvents } = useContext(Context);
+  const { events, currentProject, user, dataEvents, setEvents } =
+    useContext(Context);
   const navigate = useNavigate();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
@@ -50,10 +52,11 @@ const Card = (props) => {
   const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
   const [mentionUsersInEvent] = useMutation(MENTION_USERS_IN_EVENTS);
   const [createNotification] = useMutation(CREATE_NOTIFICATION);
+  const [captureEventsPositions] = useMutation(CAPTURE_EVENTS_POSITIONS);
 
   const [deleteEvent] = useMutation(DELETE_EVENT);
   const [createEvent] = useMutation(CREATE_EVENT);
-  const [description, setDescription] = useState(props.task?.description);
+  const [description, setDescription] = useState(props?.task?.description);
 
   const { id } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -81,7 +84,7 @@ const Card = (props) => {
         //we send an email to them, saying that the user mentionned them in an event
         await mentionUsersInEvent({
           variables: {
-            eventId: props.task.id,
+            eventId: props?.task?.id,
             userIds: mentionsIds,
             mentionContext: content.root.innerHTML,
           },
@@ -91,7 +94,7 @@ const Card = (props) => {
             message: `${user?.firstname} vous a mentionné dans ${currentProject.name}.`,
             redirect: `/project/${
               currentProject.id
-            }/${props.task.type.toLowerCase()}s/${props.task.id}`,
+            }/${props?.task?.type.toLowerCase()}s/${props?.task?.id}`,
             projectId: currentProject.id,
             emitterId: user.id,
             content: content.getText().toString(),
@@ -101,7 +104,7 @@ const Card = (props) => {
       }
       await changeEventDescription({
         variables: {
-          eventId: props.task.id,
+          eventId: props?.task?.id,
           newDescription: content.root.innerHTML,
         },
       });
@@ -118,35 +121,52 @@ const Card = (props) => {
   const handleMoveTo = async (category) => {
     try {
       const sourceColIndex = events.findIndex(
-        (e) => e.title === props.task.status
+        (e) => e.title === props?.task?.status
       );
       const destinationColIndex = events.findIndex((e) => e.id === category.id);
       const sourceCol = events[sourceColIndex];
       const destinationCol = events[destinationColIndex];
       const sourceTask = [...sourceCol.tasks];
       const destinationTask = [...destinationCol.tasks];
-      const index = sourceTask.findIndex((task) => task.id === props.task.id);
+      const index = sourceTask.findIndex((task) => task.id === props?.task?.id);
       const [removed] = sourceTask.splice(index, 1);
       const removedCopy = { ...removed };
       removedCopy.status = destinationCol?.title;
       events[sourceColIndex].tasks = sourceTask;
       events[destinationColIndex].tasks = destinationTask;
       destinationTask.splice(0, 0, removedCopy);
+      events[sourceColIndex].tasks = [...sourceTask];
+      events[destinationColIndex].tasks = [...destinationTask];
 
-      events[sourceColIndex].tasks = sourceTask;
-      events[destinationColIndex].tasks = destinationTask;
+      setEvents(events);
       await changeEventStatus({
         variables: {
-          eventId: props.task.id,
+          eventId: props?.task?.id,
           newStatus: category?.title,
-          index: destinationTask.length,
+          index: destinationTask.length - 1,
         },
       });
+      try {
+        await captureEventsPositions({
+          variables: {
+            events: events[sourceColIndex].tasks.map((e) => e.id),
+            indexes: events[sourceColIndex].tasks.map((e, i) => i),
+          },
+        });
+        await captureEventsPositions({
+          variables: {
+            events: events[destinationColIndex].tasks.map((e) => e.id),
+            indexes: events[destinationColIndex].tasks.map((e, i) => i),
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
       dataEvents.refetch();
 
       toast(
         <Msg>
-          {props.task.name} déplacée dans {category?.title}
+          {props?.task?.name} déplacée dans {category?.title}
         </Msg>,
         {
           position: "bottom-left",
@@ -168,11 +188,11 @@ const Card = (props) => {
     }
   };
   const handleChangeState = async (newState) => {
-    if (props.task.state === newState) return;
+    if (props?.task?.state === newState) return;
     try {
       await changeEventState({
         variables: {
-          eventId: props.task.id,
+          eventId: props?.task?.id,
           newState: newState,
         },
       });
@@ -191,10 +211,27 @@ const Card = (props) => {
   };
   const handledeleteEvent = async (e) => {
     e.stopPropagation();
+    const sourceColIndex = events.findIndex(
+      (e) => e.title === props?.task?.status
+    );
+    const sourceCol = events[sourceColIndex];
+    const sourceTask = [...sourceCol.tasks];
+    const index = sourceTask.findIndex((task) => task.id === props?.task?.id);
+    sourceTask.splice(index, 1);
+    events[sourceColIndex].tasks = sourceTask;
+    events[sourceColIndex].tasks = [...sourceTask];
+
+    setEvents(events);
     try {
+      await captureEventsPositions({
+        variables: {
+          events: events[sourceColIndex].tasks.map((e) => e.id),
+          indexes: events[sourceColIndex].tasks.map((e, i) => i),
+        },
+      });
       await deleteEvent({
         variables: {
-          eventId: props.task.id,
+          eventId: props?.task?.id,
         },
       });
       dataEvents.refetch();
@@ -224,25 +261,22 @@ const Card = (props) => {
     e.stopPropagation();
     try {
       const ArrayOfIds = props?.task?.contributors?.map((acc) => acc.id);
-
+      const index = events.findIndex(
+        (event) => event.title === props?.task?.status
+      );
       const newEvent = await createEvent({
         variables: {
           type: props.type,
+          index: events[index].tasks.length,
           projectId: id,
-          description: props.task.description,
+          description: props?.task?.description,
           contributors: ArrayOfIds,
           creatorId: user.id,
           period: getPeriod(),
-          status: props.task.status,
+          status: props?.task?.status,
         },
       });
-      const index = events.findIndex(
-        (event) => event.title === props.task.status
-      );
-      events[index].tasks.splice(events[index] + 1, 0, {
-        ...newEvent?.data?.createEvent,
-        new: true,
-      });
+
       dataEvents.refetch();
 
       props.setLength && props.setLength(props.length + 1);
@@ -293,8 +327,8 @@ const Card = (props) => {
       className={"card"}
       onClick={() =>
         navigate(
-          `/project/${currentProject.id}/${props.task.type.toLowerCase()}s/${
-            props.task.id
+          `/project/${currentProject.id}/${props?.task?.type.toLowerCase()}s/${
+            props?.task?.id
           }`
         )
       }
@@ -318,10 +352,10 @@ const Card = (props) => {
                 snapshot.isDragging ? "card__content dragging" : "card__content"
               }
             >
-              {props.task.state === "Vérifié" && (
+              {props?.task?.state === "Vérifié" && (
                 <div className={`status__indicator__verified`} />
               )}
-              {props.task.state === "À vérifier" && (
+              {props?.task?.state === "À vérifier" && (
                 <div className={`status__indicator__to-verify`} />
               )}
               <div className="card__content__events__container">
@@ -354,7 +388,7 @@ const Card = (props) => {
                 </button>
                 <span className="kanban__section__content__name__container__comments__indicator">
                   <span className="kanban__section__content__name__container__comments__indicator__number">
-                    {props.task.comments?.length}
+                    {props?.task?.comments?.length}
                   </span>
                   <FaRegComments />
                 </span>
@@ -411,30 +445,30 @@ const Card = (props) => {
                 data-tip
                 data-for="periodTooltip"
                 className={`card__icon ${
-                  props.task.period === getPeriod()
+                  props?.task?.period === getPeriod()
                     ? "current__period"
                     : "previous__period"
                 }`}
               >
-                {props.task.period}
+                {props?.task?.period}
               </span>
-              {props.task.state === "Vérifié" && !modifMode && (
+              {props?.task?.state === "Vérifié" && !modifMode && (
                 <span
                   data-tip
                   data-for="periodTooltip"
                   className={`card__status__verified`}
                 >
-                  {props.task.state}
+                  {props?.task?.state}
                   <AiOutlineCheck color="var(--check-color)" />
                 </span>
               )}
-              {props.task.state === "À vérifier" && !modifMode && (
+              {props?.task?.state === "À vérifier" && !modifMode && (
                 <span
                   data-tip
                   data-for="periodTooltip"
                   className={`card__status__to__verify`}
                 >
-                  {props.task.state} <BiTime color="var(--warning-color)" />
+                  {props?.task?.state} <BiTime color="var(--warning-color)" />
                 </span>
               )}
               {modifMode ? (
@@ -454,13 +488,13 @@ const Card = (props) => {
               ) : (
                 <div className="card__description">
                   <RenderHtml>
-                    {/* {shortString(props.task.description, 80)} */}
-                    {props.task.description}
+                    {/* {shortString(props?.task?.description, 80)} */}
+                    {props?.task?.description}
                   </RenderHtml>
                 </div>
               )}
-              <Avatars users={props.task.contributors} />
-              {props.task.status === "Réalisé" && (
+              <Avatars users={props?.task?.contributors} />
+              {props?.task?.status === "Réalisé" && (
                 <span className="card__done__span">
                   <DoneIcon style={{ height: "1rem" }} />
                 </span>
@@ -495,10 +529,10 @@ const Card = (props) => {
         </>
       )}
       <AddContributorsEvent
-        event={props.task}
+        event={props?.task}
         dataEvents={props.dataEvents}
         dataProject={props.dataProject}
-        alreadyExistingContributors={props.task?.contributors}
+        alreadyExistingContributors={props?.task?.contributors}
         open={openAddContributorModal}
         setOpen={setOpenAddContributorModal}
       />
@@ -581,7 +615,7 @@ const Card = (props) => {
           component={NavLink}
           to={`/project/${
             currentProject.id
-          }/${props.task?.type.toLowerCase()}s/${props.task?.id}`}
+          }/${props?.task?.type.toLowerCase()}s/${props?.task?.id}`}
           style={{ fontSize: "0.9rem" }}
           onClick={(e) => {
             setAnchorEl(null);
@@ -633,7 +667,7 @@ const Card = (props) => {
         </MenuItem>
         <span className={"divider"} />
         {events.map((category) => {
-          if (category.title !== props.task?.status)
+          if (category.title !== props?.task?.status)
             return (
               <MenuItem
                 style={{ fontSize: "0.9rem" }}
