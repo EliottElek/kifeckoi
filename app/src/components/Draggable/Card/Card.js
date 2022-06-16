@@ -18,17 +18,16 @@ import Avatars from "./Avatars";
 import "../../TextEditor/TextEditor.scss";
 import AddContributorsEvent from "./AddContributorsEvent";
 import {
-  CHANGE_EVENT_DESCRIPTION,
-  CHANGE_EVENT_STATUS,
-  CHANGE_EVENT_STATE,
-  DELETE_EVENT,
-  CREATE_EVENT,
-  MENTION_USERS_IN_EVENTS,
-  CREATE_NOTIFICATION,
-} from "../../../graphql/mutations";
+  useChangeEventDescription,
+  useChangeEventStatus,
+  useChangeEventState,
+  useDeleteEvent,
+  useCreateEvent,
+  useCreateNotification,
+  useMentionUsersInEvent,
+} from "../../../hooks/mutations/event";
 import { Draggable } from "react-beautiful-dnd";
 import { Context } from "../../Context/Context";
-import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router";
 import { MenuItem } from "@mui/material";
@@ -45,14 +44,14 @@ const Card = (props) => {
   const [openAddContributorModal, setOpenAddContributorModal] = useState(false);
   const [modifMode, setModifMode] = useState(false);
   const [submitOnEnterMode, setSubmitOnEnterMode] = useState(false);
-  const [changeEventDescription] = useMutation(CHANGE_EVENT_DESCRIPTION);
-  const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
-  const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
-  const [mentionUsersInEvent] = useMutation(MENTION_USERS_IN_EVENTS);
-  const [createNotification] = useMutation(CREATE_NOTIFICATION);
+  const modifyDescription = useChangeEventDescription();
+  const changeEventStatus = useChangeEventStatus();
+  const changeEventState = useChangeEventState();
+  const deleteEvent = useDeleteEvent();
+  const createEvent = useCreateEvent();
+  const createNotification = useCreateNotification();
+  const mentionUsersInEvent = useMentionUsersInEvent();
 
-  const [deleteEvent] = useMutation(DELETE_EVENT);
-  const [createEvent] = useMutation(CREATE_EVENT);
   const [description, setDescription] = useState(props.task?.description);
 
   const { id } = useParams();
@@ -79,14 +78,14 @@ const Card = (props) => {
         //We get the ids of people mentionned
         const mentionsIds = mentions.map((m) => m.id);
         //we send an email to them, saying that the user mentionned them in an event
-        await mentionUsersInEvent({
+        mentionUsersInEvent({
           variables: {
             eventId: props.task.id,
             userIds: mentionsIds,
             mentionContext: content.root.innerHTML,
           },
         });
-        await createNotification({
+        createNotification({
           variables: {
             message: `${user?.firstname} vous a mentionné dans ${currentProject.name}.`,
             redirect: `/project/${
@@ -99,11 +98,9 @@ const Card = (props) => {
           },
         });
       }
-      await changeEventDescription({
-        variables: {
-          eventId: props.task.id,
-          newDescription: content.root.innerHTML,
-        },
+      modifyDescription({
+        eventId: props.task.id,
+        newDescription: content.root.innerHTML,
       });
       dataEvents.refetch();
       setModifMode(false);
@@ -135,7 +132,7 @@ const Card = (props) => {
 
       events[sourceColIndex].tasks = sourceTask;
       events[destinationColIndex].tasks = destinationTask;
-      await changeEventStatus({
+      changeEventStatus({
         variables: {
           eventId: props.task.id,
           newStatus: category?.title,
@@ -170,7 +167,7 @@ const Card = (props) => {
   const handleChangeState = async (newState) => {
     if (props.task.state === newState) return;
     try {
-      await changeEventState({
+      changeEventState({
         variables: {
           eventId: props.task.id,
           newState: newState,
@@ -192,7 +189,7 @@ const Card = (props) => {
   const handledeleteEvent = async (e) => {
     e.stopPropagation();
     try {
-      await deleteEvent({
+      deleteEvent({
         variables: {
           eventId: props.task.id,
         },
@@ -225,7 +222,7 @@ const Card = (props) => {
     try {
       const ArrayOfIds = props?.task?.contributors?.map((acc) => acc.id);
 
-      const newEvent = await createEvent({
+      const newEvent = createEvent({
         variables: {
           type: props.type,
           projectId: id,
