@@ -11,19 +11,16 @@ import { MdOutlineClear } from "react-icons/md";
 import { useQuery } from "@apollo/client";
 import { FaChevronDown } from "react-icons/fa";
 import Modal from "../../materials/Modal/Modal";
-import {
-  FIND_EVENTS_BY_PROJECT_ID,
-  FIND_PROJECT_BY_PROJECT_ID,
-} from "../../graphql/queries";
+import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import {
   useCreateEvent,
   useChangeEventStatus,
   useChangeEventState,
   useDeleteMultipleEvents,
 } from "../../hooks/mutations/event";
-
+import { useGetEventsByStatus } from "../../hooks/queries/event";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import rawEvents from "../../rawEvents";
 import { Navigate, useParams } from "react-router";
 import { Flip } from "react-toastify";
 import Column from "./Column";
@@ -46,10 +43,11 @@ const EventKanban = ({ type, setLength, length }) => {
     setSelectedEvents,
     selectedEvents,
     eventsData,
-    setEventsData,
     setDataEvents,
     dataEvents,
   } = React.useContext(Context);
+  const location = useLocation();
+
   const [selectAll, setSelectAll] = useState(false);
   const [selectedAcountables, setSelectedcontributors] = useState([]);
   const [eventSelected, setEventSelected] = useState();
@@ -58,7 +56,6 @@ const EventKanban = ({ type, setLength, length }) => {
   const changeEventStatus = useChangeEventStatus();
   const changeEventState = useChangeEventState();
   const deleteMultipleEvents = useDeleteMultipleEvents();
-
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { id } = useParams();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -75,26 +72,23 @@ const EventKanban = ({ type, setLength, length }) => {
       setCurrentProject(data?.findProjectByProjectId);
     },
   });
-  const dataEventsQuery = useQuery(FIND_EVENTS_BY_PROJECT_ID, {
-    variables: { id: id, type: type },
+  const dataEventsQuery = useGetEventsByStatus({
+    variables: { projectId: id, type: type },
     onCompleted: (data) => {
-      setEventsData([...data.findEventsByProjectId]);
+      const clonedArray = data.getEventsByStatus.map((a) => {
+        return { ...a };
+      });
+      setEvents(clonedArray);
     },
   });
   React.useEffect(() => {
+    if (dataEvents) {
+      dataEvents.refetch();
+    }
+  }, [location, dataEvents]);
+  React.useEffect(() => {
     if (dataEventsQuery) setDataEvents(dataEventsQuery);
   }, [dataEventsQuery, setDataEvents]);
-
-  React.useEffect(() => {
-    rawEvents.forEach((item) => (item.tasks = []));
-    const eventsFinal = [...rawEvents];
-    const eventsDataF = [...eventsData];
-    eventsDataF?.forEach((event) => {
-      const index = eventsFinal.findIndex((ev) => ev.title === event.status);
-      if (index !== -1) eventsFinal[index].tasks.push(event);
-    });
-    setEvents(eventsFinal);
-  }, [eventsData, setEvents]);
 
   const changeStateSelectedEvents = async (newState) => {
     try {
@@ -251,7 +245,7 @@ const EventKanban = ({ type, setLength, length }) => {
     const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
     try {
       const index = eventSelected.tasks.length;
-      const { data } = await createEvent({
+      await createEvent({
         variables: {
           type: type,
           index: index,
@@ -264,12 +258,7 @@ const EventKanban = ({ type, setLength, length }) => {
         },
       });
       setInput("");
-      console.log(data);
-      eventSelected.tasks.push(data.createEvent);
-      const i = events.findIndex((e) => e.id === eventSelected.id);
-      events[i] = { ...eventSelected };
-      setEvents(events);
-      setTimeout(() => dataEvents.refetch(), 500);
+      dataEvents.refetch();
       setLength && setLength(length + 1);
       setSelectedcontributors([]);
     } catch (err) {
