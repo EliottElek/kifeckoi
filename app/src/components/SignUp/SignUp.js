@@ -51,7 +51,7 @@ const SignUp = () => {
         progress: undefined,
       });
     try {
-      const response = createUser({
+      const response = await createUser({
         variables: {
           email: email,
           password: password,

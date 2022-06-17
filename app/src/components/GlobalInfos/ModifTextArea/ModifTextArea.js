@@ -38,11 +38,17 @@ const ModifTextArea = ({ type, dataProject }) => {
           goCopyDate: currentProject.goCopyDate,
           logoUrl: currentProject.logoUrl,
           globalDescription:
-            type === "global" ? input : currentProject.globalDescription,
+            type === "global"
+              ? input.root.innerHTML
+              : currentProject.globalDescription,
           perimeterDescription:
-            type === "perimètre" ? input : currentProject.perimeterDescription,
+            type === "perimètre"
+              ? input.root.innerHTML
+              : currentProject.perimeterDescription,
           planningDescription:
-            type === "planning" ? input : currentProject.planningDescription,
+            type === "planning"
+              ? input.root.innerHTML
+              : currentProject.planningDescription,
         },
       });
       dataProject.refetch();

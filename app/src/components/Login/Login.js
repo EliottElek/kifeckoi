@@ -41,7 +41,7 @@ const Login = () => {
         progress: undefined,
       });
     try {
-      const response = login({
+      const response = await login({
         variables: { email: email, password: password },
       });
       if (response.data.login.successful) {
