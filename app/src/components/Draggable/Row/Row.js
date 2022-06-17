@@ -11,13 +11,12 @@ import Modal from "../../../materials/Modal/Modal";
 import ReactTooltip from "react-tooltip";
 import { Divider } from "@mui/material";
 import {
-  CHANGE_EVENT_STATUS,
-  CHANGE_EVENT_STATE,
-  DELETE_EVENT,
-  CREATE_EVENT,
-} from "../../../graphql/mutations";
+  useChangeEventStatus,
+  useChangeEventState,
+  useDeleteEvent,
+  useCreateEvent,
+} from "../../../hooks/mutations/event";
 import { Context } from "../../Context/Context";
-import { useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router";
 import { MenuItem } from "@mui/material";
@@ -41,10 +40,10 @@ const Row = (props) => {
   const navigate = useNavigate();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [changeEventStatus] = useMutation(CHANGE_EVENT_STATUS);
-  const [changeEventState] = useMutation(CHANGE_EVENT_STATE);
-  const [deleteEvent] = useMutation(DELETE_EVENT);
-  const [createEvent] = useMutation(CREATE_EVENT);
+  const changeEventStatus = useChangeEventStatus();
+  const changeEventState = useChangeEventState();
+  const deleteEvent = useDeleteEvent();
+  const createEvent = useCreateEvent();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openPopUp = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -92,7 +91,7 @@ const Row = (props) => {
 
       events[sourceColIndex].tasks = sourceTask;
       events[destinationColIndex].tasks = destinationTask;
-      await changeEventStatus({
+      changeEventStatus({
         variables: {
           eventId: props.task.id,
           newStatus: category?.title,
@@ -127,7 +126,7 @@ const Row = (props) => {
   const handleChangeState = async (newState) => {
     if (props.task.state === newState) return;
     try {
-      await changeEventState({
+      changeEventState({
         variables: {
           eventId: props.task.id,
           newState: newState,
@@ -149,7 +148,7 @@ const Row = (props) => {
   const handledeleteEvent = async (e) => {
     e.stopPropagation();
     try {
-      await deleteEvent({
+      deleteEvent({
         variables: {
           eventId: props.task.id,
         },
@@ -182,7 +181,7 @@ const Row = (props) => {
     try {
       const ArrayOfIds = props.task.contributors.map((acc) => acc.id);
 
-      const newEvent = await createEvent({
+      const newEvent = createEvent({
         variables: {
           type: props.type,
           projectId: id,

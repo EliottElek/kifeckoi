@@ -1,14 +1,11 @@
 import "./Home.scss";
 
-import { useNavigate } from "react-router";
 import GridItem from "../Grid/GridItem";
 import Avatars from "../Draggable/Card/Avatars";
 import logo from "../../assets/images/logo.png";
 import formatDate from "../../assets/functions/formatDate";
 import AvatarFromLetter from "../../utils/AvatarFromLetter";
 const ClientItem = ({ client }) => {
-  const navigate = useNavigate();
-
   return (
     <GridItem to={`/client/${client.id}`} className={"client__item"}>
       <div className={"client__card__header"}>

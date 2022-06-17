@@ -1,4 +1,3 @@
-import React from "react";
 import { AvatarGroup, Avatar } from "@mui/material";
 const Avatars = ({ users }) => {
   return (

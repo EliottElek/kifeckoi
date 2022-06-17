@@ -1,8 +1,7 @@
-import { useMutation } from "@apollo/client";
 import React from "react";
 import { Navigate, useNavigate } from "react-router";
 import icon from "../../assets/images/icon.png";
-import { CREATE_USER } from "../../graphql/mutations";
+import { useCreateUser } from "../../hooks/mutations/user";
 import Button from "../../materials/Button/Button";
 import InputText from "../../materials/InputText/InputText";
 import { Context } from "../Context/Context";
@@ -18,7 +17,7 @@ const SignUp = () => {
   const [lastname, setLastname] = React.useState("");
   const [username, setUsername] = React.useState("");
 
-  const [createUser] = useMutation(CREATE_USER);
+  const createUser = useCreateUser();
   if (auth) return <Navigate to={-1} />;
 
   const handleLogin = async (e) => {
@@ -52,7 +51,7 @@ const SignUp = () => {
         progress: undefined,
       });
     try {
-      const response = await createUser({
+      const response = createUser({
         variables: {
           email: email,
           password: password,

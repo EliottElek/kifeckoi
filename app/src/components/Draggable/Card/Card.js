@@ -79,14 +79,14 @@ const Card = (props) => {
         //We get the ids of people mentionned
         const mentionsIds = mentions.map((m) => m.id);
         //we send an email to them, saying that the user mentionned them in an event
-        mentionUsersInEvent({
+        await mentionUsersInEvent({
           variables: {
             eventId: props?.task?.id,
             userIds: mentionsIds,
             mentionContext: content.root.innerHTML,
           },
         });
-        createNotification({
+        await createNotification({
           variables: {
             message: `${user?.firstname} vous a mentionné dans ${currentProject.name}.`,
             redirect: `/project/${
@@ -99,11 +99,11 @@ const Card = (props) => {
           },
         });
       }
-      modifyDescription({
+      await modifyDescription({
         eventId: props.task.id,
         newDescription: content.root.innerHTML,
       });
-      dataEvents.refetch();
+      setTimeout(() => dataEvents.refetch(), 200);
       setModifMode(false);
     } catch (err) {
       console.log(err);
@@ -136,14 +136,13 @@ const Card = (props) => {
       events[sourceColIndex].tasks = sourceTask;
       events[destinationColIndex].tasks = destinationTask;
       setEvents(events);
-      changeEventStatus({
+      await changeEventStatus({
         variables: {
           eventId: props?.task?.id,
           newStatus: category?.title,
           index: destinationTask.length - 1,
         },
       });
-      dataEvents.refetch();
 
       toast(
         <Msg>
@@ -171,7 +170,7 @@ const Card = (props) => {
   const handleChangeState = async (newState) => {
     if (props?.task?.state === newState) return;
     try {
-      changeEventState({
+      await changeEventState({
         variables: {
           eventId: props?.task?.id,
           newState: newState,
@@ -201,13 +200,10 @@ const Card = (props) => {
     sourceTask.splice(index, 1);
     events[sourceColIndex].tasks = sourceTask;
     events[sourceColIndex].tasks = [...sourceTask];
-
-    setEvents(events);
     try {
-      deleteEvent({
+      await deleteEvent({
         variables: {
-          events: events[sourceColIndex].tasks.map((e) => e.id),
-          indexes: events[sourceColIndex].tasks.map((e, i) => i),
+          eventId: props.task.id,
         },
       });
       dataEvents.refetch();
@@ -221,6 +217,7 @@ const Card = (props) => {
         progress: undefined,
       });
     } catch (err) {
+      console.log(err);
       toast.error("Impossible de supprimer cette carte. Réessayez plus tard.", {
         position: "bottom-left",
         autoClose: 5000,
@@ -238,7 +235,7 @@ const Card = (props) => {
     try {
       const ArrayOfIds = props?.task?.contributors?.map((acc) => acc.id);
 
-      const newEvent = createEvent({
+      const newEvent = await createEvent({
         variables: {
           type: props.type,
           index: 0,
@@ -250,9 +247,6 @@ const Card = (props) => {
           status: props?.task?.status,
         },
       });
-
-      dataEvents.refetch();
-
       props.setLength && props.setLength(props.length + 1);
       toast(
         `${

@@ -15,8 +15,7 @@ import { toast } from "react-toastify";
 import ModifAreaCard from "./ModifAreaCard/ModifAreaCard";
 import Avatar from "../../../materials/Avatar/Avatar";
 import { Navigate, useNavigate, useParams } from "react-router";
-import { useQuery } from "@apollo/client";
-import { FIND_EVENT_BY_EVENT_ID } from "../../../graphql/queries";
+import { useFindEventByEventId } from "../../../hooks/queries/event";
 import {
   useCreateNotification,
   useMentionUsersInEvent,
@@ -42,7 +41,7 @@ const CardModal = () => {
   const [setOpenAddContributorModal] = React.useState(false);
   const [description, setDescription] = React.useState(null);
 
-  const { data, loading, refetch } = useQuery(FIND_EVENT_BY_EVENT_ID, {
+  const { data, loading, refetch } = useFindEventByEventId({
     variables: { id: eventId },
     onCompleted: (data) => {
       setEvent(data.findEventByEventId);
@@ -60,14 +59,14 @@ const CardModal = () => {
         //We get the ids of people mentionned
         const mentionsIds = mentions.map((m) => m.id);
         //we send an email to them, saying that the user mentionned them in an event
-        mentionUsersInEvent({
+        await mentionUsersInEvent({
           variables: {
             eventId: event.id,
             userIds: mentionsIds,
             mentionContext: content.root.innerHTML,
           },
         });
-        createNotification({
+        await createNotification({
           variables: {
             message: `${user?.firstname} vous a mentionné dans ${currentProject.name}.`,
             redirect: `/project/${
@@ -80,7 +79,7 @@ const CardModal = () => {
           },
         });
       }
-      changeEventDescription({
+      await changeEventDescription({
         variables: {
           eventId: event.id,
           newDescription: content.root.innerHTML,
@@ -99,7 +98,7 @@ const CardModal = () => {
   const handledeleteEvent = async (e) => {
     e.stopPropagation();
     try {
-      deleteEvent({
+      await deleteEvent({
         variables: {
           eventId: event.id,
         },
@@ -130,11 +129,11 @@ const CardModal = () => {
   if (!data && !loading) return <Navigate to="/404" />;
   return (
     <>
-      <Modal open={true} onClose={onClose}>
+      <Modal open={true} handleClose={onClose}>
         {loading ? (
           <div
             style={{
-              minHeight: "500px",
+              minHeight: "600px",
               minWidth: "50%",
               display: "flex",
               alignItems: "center",

@@ -1,8 +1,7 @@
-import { useMutation } from "@apollo/client";
 import React from "react";
 import { Navigate, useNavigate } from "react-router";
 import logo from "../../assets/images/logo.png";
-import { LOGIN } from "../../graphql/mutations";
+import { useLogin } from "../../hooks/mutations/user";
 import Button from "../../materials/Button/Button";
 import InputText from "../../materials/InputText/InputText";
 import { Context } from "../Context/Context";
@@ -15,7 +14,7 @@ const Login = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const [login] = useMutation(LOGIN);
+  const login = useLogin();
   if (auth) return <Navigate to={-1} />;
 
   const handleLogin = async (e) => {
@@ -42,7 +41,7 @@ const Login = () => {
         progress: undefined,
       });
     try {
-      const response = await login({
+      const response = login({
         variables: { email: email, password: password },
       });
       if (response.data.login.successful) {

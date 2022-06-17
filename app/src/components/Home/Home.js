@@ -1,8 +1,7 @@
 import { useContext } from "react";
 import { Context } from "../Context/Context";
 import "./Home.scss";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_CLIENTS } from "../../graphql/queries";
+import { useGetAllClients } from "../../hooks/queries/client";
 import Progress from "../../materials/Progress/Progress";
 import Backdrop from "../../materials/Backdrop/Backdrop";
 import Cards from "../Cards/Cards";
@@ -10,7 +9,7 @@ import { Chart } from "./Chart/Chart";
 import LatestEvents from "./LatestEvents/LatestEvents";
 const Home = () => {
   const { user } = useContext(Context);
-  const { data, loading } = useQuery(GET_ALL_CLIENTS, {
+  const { data, loading } = useGetAllClients({
     variables: { userId: user?.id },
   });
   const title = document.getElementById("title");

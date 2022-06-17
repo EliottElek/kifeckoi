@@ -58,7 +58,10 @@ const NotifItem = ({ notif, onClick }) => {
             primary={
               <Typography
                 noWrap
-                sx={{ fontWeight: notif.seen ? "normal" : "bold" }}
+                sx={{
+                  maxWidth: notif.seen ? "90%" : "85%",
+                  fontWeight: notif.seen ? "normal" : "bold",
+                }}
               >
                 {notif.message}
               </Typography>

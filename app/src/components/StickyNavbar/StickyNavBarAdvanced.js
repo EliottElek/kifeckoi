@@ -4,7 +4,7 @@ import { Context } from "../Context/Context";
 import Switch from "../../materials/Switch/Switch";
 import Avatar from "../../materials/Avatar/Avatar";
 import StickyNavbar from "./StickyNavbar";
-import { Menu, Typography } from "@mui/material";
+import { Menu, Typography, Divider } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import "./StickyNavbar.scss";
 import getPeriod from "../../assets/functions/getPeriod";
@@ -63,7 +63,7 @@ const StickyNavAdvanced = ({ advanced }) => {
       <div className="events__container">
         {currentProject && <SearchBar />}
         <NotifPanel />
-        <span className="events__container__divider" />
+        <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
         <Typography
           variant="paragraph"
           sx={{ display: { xs: "none", md: "flex" } }}
