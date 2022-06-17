@@ -303,3 +303,27 @@ query returnNotificationsByUserId ($userId : String!){
         message
       }
     }`
+
+export const GET_EVENTS_BY_STATUS = gql`
+query getEventsByStatus($projectId: String! $type : String!){
+  getEventsByStatus(projectId : $projectId type : $type){
+    id
+    title
+    tasks{
+    type
+    index
+    id
+    period
+    description
+    status
+    state
+    contributors{
+      avatarUrl
+    }
+    comments{
+      id
+    }
+  }
+  }
+}
+`

@@ -20,9 +20,9 @@ const token = localStorage.getItem("token");
 const wsLink = new GraphQLWsLink(
   createClient({
     url:
-      process.env["KIFEKOI_ENV"] === "dev"
-        ? "ws://localhost:3002/graphql"
-        : "wss://kifekoi-api.herokuapp.com/graphql",
+      // process.env["KIFEKOI_ENV"] === "dev"
+      "ws://localhost:3002/graphql",
+    // : "wss://kifekoi-api.herokuapp.com/graphql",
     connectionParams: {
       authorization: `Bearer ${token}`,
     },
@@ -30,9 +30,9 @@ const wsLink = new GraphQLWsLink(
 );
 const httpLink = new HttpLink({
   uri:
-    process.env["KIFEKOI_ENV"] === "dev"
-      ? "http://localhost:3002/graphql"
-      : "https://kifekoi-api.herokuapp.com/graphql",
+    // process.env["KIFEKOI_ENV"] === "dev"
+    "http://localhost:3002/graphql",
+  // : "https://kifekoi-api.herokuapp.com/graphql",
 });
 
 const authLink = new ApolloLink((operation, forward) => {
