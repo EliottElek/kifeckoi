@@ -101,7 +101,7 @@ export default function CustomizedDividers(props) {
           Afficher les évènements en status à vérifier
         </MenuItem>
         <MenuItem style={{ fontSize: "0.9rem" }}>
-          Afficher les évènements en status vérifier
+          Afficher les évènements en status vérifié
         </MenuItem>
       </Menu>
     </Box>

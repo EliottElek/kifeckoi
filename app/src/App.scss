@@ -26,6 +26,7 @@ body {
   --progress-color: white;
   --toggle-background: rgb(238, 238, 238);
   --nav-color: #e7e8f073;
+  --col-background: #dcdde3;
 }
 
 /* 2 */
@@ -45,6 +46,7 @@ body {
   --progress-color: #01ffff80;
   --toggle-background: #2c3a3f;
   --nav-color: #363740a2;
+  --col-background: #3e3f46;
 }
 html,
 .App {
@@ -60,7 +62,7 @@ html,
   width: auto;
 }
 *::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
   height: 5px;
 }
 
@@ -192,4 +194,7 @@ html,
   align-items: center;
   justify-content: space-between;
   margin-top: 1.6rem;
+}
+* {
+  scroll-behavior: unset !important;
 }
