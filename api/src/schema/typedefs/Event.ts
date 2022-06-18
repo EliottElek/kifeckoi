@@ -1,4 +1,4 @@
-import { GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql'
+import { GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql'
 import { CommentType } from './Comment'
 import { ProjectType } from './Project'
 import { UserType } from './User'
@@ -7,6 +7,7 @@ export const EventType: any = new GraphQLObjectType({
     name: "Event",
     fields: () => ({
         id: { type: GraphQLString },
+        index: { type: GraphQLInt },
         type: { type: GraphQLString },
         period: { type: GraphQLString },
         description: { type: GraphQLString },

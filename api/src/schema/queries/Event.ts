@@ -2,8 +2,8 @@ import { GraphQLList, GraphQLString } from "graphql"
 import { EventType } from "../typedefs/Event"
 import { Event } from "../../entities/Event"
 import { User } from "../../entities/User"
-import { Project } from "../../entities/Project"
-
+import { rawEvents } from '../../utils/rawEvents'
+import { ColumnType } from "../typedefs/Column"
 export const GET_ALL_EVENTS = {
     type: new GraphQLList(EventType),
     args: {
@@ -74,6 +74,51 @@ export const FIND_EVENTS_BY_PROJECT_ID = {
             where: { projectId: id, type: type }, relations: ["project", "comments", "creator", "contributors"],
         })
         if (!events) throw new Error("Cannot find project.")
-        return events
+        const sortedByIndex = events.sort((a, b) => a.index - b.index);
+        return sortedByIndex
+    }
+}
+export const FIND_EVENT_BY_EVENT_ID = {
+    type: EventType,
+    args: {
+        id: { type: GraphQLString },
+    },
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
+        const { id, } = args
+        const event = await Event.findOne({
+            where: { id: id }, relations: ["project", "comments", "comments.author", "creator", "contributors"],
+        })
+        if (!event) throw new Error("Cannot find event.")
+        return event
+    }
+}
+
+
+export const GET_EVENTS_BY_STATUS = {
+    type: new GraphQLList(ColumnType),
+    args: {
+        type: { type: GraphQLString },
+        projectId: { type: GraphQLString },
+    },
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
+        const { type, projectId } = args
+
+        let eventsData = await Event.find({
+            where: { type: type, projectId: projectId }, relations: ["project", "comments", "creator", "contributors"],
+        });
+
+        rawEvents.forEach((item) => (item.tasks = []));
+        const eventsFinal = [...rawEvents];
+        eventsData?.forEach((event) => {
+            const index = eventsFinal.findIndex((ev) => ev.title === event.status);
+            if (index !== -1) eventsFinal[index].tasks.push(event); else {
+                eventsFinal.push({ title: event.status, id: eventsData.length.toString(), tasks: [event] })
+            }
+        });
+        return eventsFinal
     }
 }

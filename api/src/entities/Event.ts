@@ -9,6 +9,8 @@ export class Event extends BaseEntity {
     id!: string;
     @Column()
     type!: string;
+    @Column()
+    index!: number;
     @Column("longtext")
     description!: string;
     @Column()

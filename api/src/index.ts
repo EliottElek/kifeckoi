@@ -19,7 +19,7 @@ import { PubSub } from 'graphql-subscriptions';
 const pubsub = new PubSub();
 
 const SECRET_KEY = 'secret!'
-process.env["KIFEKOI_ENV"] = 'prod';
+process.env["KIFEKOI_ENV"] = 'dev';
 
 const config = {
     PORT: process.env.PORT || 3002, host: process.env["KIFEKOI_ENV"] === "dev" ? "localhost" : "eu-cdbr-west-02.cleardb.net",

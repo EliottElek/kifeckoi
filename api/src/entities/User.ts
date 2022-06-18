@@ -26,5 +26,4 @@ export class User extends BaseEntity {
     @OneToMany(() => Comment, comment => comment.author) comments!: Comment[];
     @OneToMany(() => Event, event => event.creator) createdEvents!: Event[];
     @OneToMany(() => Notification, notification => notification.emitter) notificationsEmitted!: Notification[];
-    
 }

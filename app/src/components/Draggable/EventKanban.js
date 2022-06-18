@@ -75,6 +75,7 @@ const EventKanban = ({ type, setLength, length }) => {
   const dataEventsQuery = useGetEventsByStatus({
     variables: { projectId: id, type: type },
     onCompleted: (data) => {
+      console.log(data.getEventsByStatus);
       const clonedArray = data.getEventsByStatus.map((a) => {
         return { ...a };
       });
@@ -247,7 +248,7 @@ const EventKanban = ({ type, setLength, length }) => {
       const index = eventSelected.tasks.length;
       await createEvent({
         variables: {
-          type: type,
+          type: "Séjour",
           index: index,
           projectId: id,
           creatorId: user.id,

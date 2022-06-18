@@ -1,5 +1,5 @@
 const { v4: uuid } = require("uuid");
-import { GraphQLList, GraphQLString } from "graphql";
+import { GraphQLInt, GraphQLList, GraphQLString } from "graphql";
 import { Project } from '../../entities/Project'
 import { Event } from '../../entities/Event'
 import { User } from '../../entities/User'
@@ -17,12 +17,13 @@ export const CREATE_EVENT = {
         contributors: { type: new GraphQLList(GraphQLString) },
         status: { type: GraphQLString },
         period: { type: GraphQLString },
+        index: { type: GraphQLInt },
 
     },
     async resolve(parent: any, args: any, context: any) {
         if (!context.user) throw new Error("You must be authenticated.")
 
-        const { type, projectId, description, contributors, status, creatorId, period } = args
+        const { type, projectId, description, contributors, status, creatorId, period, index } = args
         if (context.user.id !== creatorId) throw new Error("The user who made the request is not the same as the one in the context.");
 
         const newuuid = uuid()
@@ -34,7 +35,7 @@ export const CREATE_EVENT = {
         if (!project) {
             throw new Error("Cannot find project.")
         } else {
-            const newEvent = Event.create({ type: type, id: newuuid, projectId: projectId, contributors: [], project: project, description: description, status: status, creation: creationDate.toString(), period: period, state: "" })
+            const newEvent = Event.create({ type: type, index: index, id: newuuid, projectId: projectId, contributors: [], project: project, description: description, status: status, creation: creationDate.toString(), period: period, state: "" })
             await Event.save(newEvent)
             if (!creatorFound) {
                 throw new Error("Cannot find project.")
@@ -58,15 +59,17 @@ export const CHANGE_EVENT_STATUS = {
     type: MessageType,
     args: {
         eventId: { type: GraphQLString },
-        newStatus: { type: GraphQLString }
+        newStatus: { type: GraphQLString },
+        index: { type: GraphQLInt }
     },
     async resolve(parent: any, args: any, context: any) {
         if (!context.user) throw new Error("You must be authenticated.")
 
-        const { eventId, newStatus } = args
+        let { eventId, newStatus, index } = args
         const event = await Event.findOne({ id: eventId })
         if (!event) throw new Error("Cannot find event.")
-        await Event.update({ id: eventId }, { status: newStatus })
+        if (newStatus === "") newStatus = event.status
+        await Event.update({ id: eventId }, { status: newStatus, index: index })
         return { successful: true, message: "Event's status was successfully updated." }
     }
 }
@@ -180,5 +183,27 @@ export const MENTION_USERS_IN_EVENTS = {
             })
         }
         return { successfull: true, message: "All mentionned users have been alerted." }
+    }
+}
+
+export const CAPTURE_EVENTS_POSITIONS = {
+    type: MessageType,
+    args: {
+        events: { type: new GraphQLList(GraphQLString) },
+        indexes: { type: new GraphQLList(GraphQLInt) }
+    },
+    async resolve(parent: any, args: any, context: any) {
+        if (!context.user) throw new Error("You must be authenticated.")
+
+        const { events, indexes } = args
+        events.forEach(async (e: any, i: string | number) => {
+            let event = await Event.findOne({ id: e });
+            if (event) {
+                event.index = indexes[i]
+            }
+        })
+        Event.save(events)
+
+        return { message: "Event indexes are updated." }
     }
 }
