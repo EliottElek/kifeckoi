@@ -39,15 +39,6 @@ const styles = {
     },
   },
 };
-const navElements = [
-  { id: "global", name: "Overview", icon: <TimelineIcon /> },
-  { id: "actions", name: "Actions", icon: <ViewKanbanIcon /> },
-  { id: "infos", name: "Infos", icon: <ViewKanbanIcon /> },
-  { id: "decisions", name: "Décisions", icon: <ViewKanbanIcon /> },
-  { id: "risks", name: "Risques", icon: <ViewKanbanIcon /> },
-  { id: "problems", name: "Problèmes", icon: <ViewKanbanIcon /> },
-  { id: "deliverables", name: "Livrables", icon: <ViewKanbanIcon /> },
-];
 export default function TreeViewEvents() {
   const navigate = useNavigate();
   const { currentProject, setOpenDrawer } = React.useContext(Context);
@@ -60,26 +51,48 @@ export default function TreeViewEvents() {
       sx={{ overflow: "hidden" }}
     >
       <TreeItem nodeId="1" label="Évènements" sx={styles.treeItem}>
-        {navElements.map((nav) => (
+        <TreeItem
+          onClick={() => {
+            setOpenDrawer(false);
+            navigate(`/project/${currentProject?.id}/global`);
+          }}
+          nodeId={"global"}
+          label={
+            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <TimelineIcon />
+              Global
+            </span>
+          }
+          sx={
+            window?.location?.href.split("/")[
+              window?.location?.href.split("/").length - 1
+            ] === "global"
+              ? styles.treeItemActive
+              : styles.treeItem
+          }
+        />
+        {currentProject?.eventsSchema?.map((nav) => (
           <TreeItem
             key={nav.id}
             onClick={() => {
               setOpenDrawer(false);
-              navigate(`/project/${currentProject?.id}/${nav?.id}`);
+              navigate(
+                `/project/${currentProject?.id}/${nav?.title.toLowerCase()}`
+              );
             }}
             nodeId={nav?.id}
             label={
               <span
                 style={{ display: "flex", alignItems: "center", gap: "8px" }}
               >
-                {nav.icon}
-                {nav.name}
+                <ViewKanbanIcon />
+                {nav.title}
               </span>
             }
             sx={
               window?.location?.href.split("/")[
                 window?.location?.href.split("/").length - 1
-              ] === nav.id
+              ] === nav.title.toLowerCase()
                 ? styles.treeItemActive
                 : styles.treeItem
             }

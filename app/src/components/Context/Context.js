@@ -20,6 +20,7 @@ export const ContextProvider = ({ children }) => {
   const [addCard, setAddCard] = React.useState(false);
   const [eventsData, setEventsData] = React.useState([]);
   const [dataEvents, setDataEvents] = React.useState(null);
+  const [dataProject, setDataProject] = React.useState(null);
   const SECRET_KEY = "secret!";
 
   const token = localStorage.getItem("token");
@@ -126,6 +127,8 @@ export const ContextProvider = ({ children }) => {
         addCard: addCard,
         dataEvents: dataEvents,
         setDataEvents: setDataEvents,
+        dataProject: dataProject,
+        setDataProject: setDataProject,
       }}
     >
       {children}

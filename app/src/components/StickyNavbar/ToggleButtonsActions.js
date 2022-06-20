@@ -7,6 +7,7 @@ import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { useSearchParams } from "react-router-dom";
 import { Menu } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import { Box } from "@mui/system";
@@ -36,13 +37,11 @@ const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
 }));
 
 export default function CustomizedDividers(props) {
-  const [alignment, setAlignment] = React.useState("grid");
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const alignment = searchParams.get("display");
   const handleAlignment = (event, newAlignment) => {
     props.setAddCard(false);
-    if (newAlignment === "list") props.setListStyle(true);
-    else props.setListStyle(false);
-    setAlignment(newAlignment);
+    setSearchParams("display=" + newAlignment);
   };
   const [anchorElFilter, setAnchorElFilter] = React.useState(null);
   const openFilter = Boolean(anchorElFilter);
@@ -64,7 +63,7 @@ export default function CustomizedDividers(props) {
         <StyledToggleButton value="list">
           <FormatListBulletedIcon style={{ color: "var(--font-color)" }} />
         </StyledToggleButton>
-        <StyledToggleButton value="grid">
+        <StyledToggleButton value="kanban">
           <GridViewIcon style={{ color: "var(--font-color)" }} />
         </StyledToggleButton>
       </StyledToggleButtonGroup>

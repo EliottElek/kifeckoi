@@ -17,6 +17,7 @@ import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
 import "../../TextEditor/TextEditor.scss";
 import AddContributorsEvent from "./AddContributorsEvent";
+import { useSearchParams } from "react-router-dom";
 import {
   useChangeEventDescription,
   useChangeEventStatus,
@@ -52,7 +53,8 @@ const Card = (props) => {
   const createEvent = useCreateEvent();
   const createNotification = useCreateNotification();
   const mentionUsersInEvent = useMentionUsersInEvent();
-
+  const [searchParams] = useSearchParams();
+  const display = searchParams.get("display");
   const [description, setDescription] = useState(props.task?.description);
 
   const { id } = useParams();
@@ -228,7 +230,7 @@ const Card = (props) => {
         progress: undefined,
       });
     }
-    navigate(`/project/${currentProject.id}/${props.type.toLowerCase()}s`);
+    navigate(`/project/${currentProject.id}/${props.type.toLowerCase()}`);
   };
   const duplicate = async (e) => {
     e.stopPropagation();
@@ -248,6 +250,7 @@ const Card = (props) => {
         },
       });
       props.setLength && props.setLength(props.length + 1);
+      dataEvents.refetch();
       toast(
         `${
           newEvent?.data?.createEvent
@@ -295,9 +298,9 @@ const Card = (props) => {
       className={"card"}
       onClick={() =>
         navigate(
-          `/project/${currentProject.id}/${props?.task?.type.toLowerCase()}s/${
+          `/project/${currentProject.id}/${props?.task?.type.toLowerCase()}/${
             props?.task?.id
-          }`
+          }?display=${display}`
         )
       }
     >
@@ -616,7 +619,6 @@ const Card = (props) => {
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
-            navigate();
             setModifMode(true);
           }}
         >

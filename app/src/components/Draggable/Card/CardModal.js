@@ -25,6 +25,7 @@ import {
 import { CircularProgress } from "@mui/material";
 import { useContext } from "react";
 import { Context } from "../../Context/Context";
+import { useSearchParams } from "react-router-dom";
 const CardModal = () => {
   const { currentProject, user, dataEvents } = useContext(Context);
   const navigate = useNavigate();
@@ -37,7 +38,8 @@ const CardModal = () => {
   const createNotification = useCreateNotification();
   const changeEventDescription = useChangeEventDescription();
   const deleteEvent = useDeleteEvent();
-
+  const [searchParams] = useSearchParams();
+  const display = searchParams.get("display");
   const [setOpenAddContributorModal] = React.useState(false);
   const [description, setDescription] = React.useState(null);
 
@@ -50,7 +52,11 @@ const CardModal = () => {
     },
   });
   const onClose = () => {
-    navigate(`/project/${currentProject.id}/${event.type.toLowerCase()}s`);
+    navigate(
+      `/project/${
+        currentProject.id
+      }/${event.type.toLowerCase()}?display=${display}`
+    );
   };
   const handleModifyDescription = async (e, content, mentions) => {
     e.stopPropagation();

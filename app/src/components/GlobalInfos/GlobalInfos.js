@@ -62,20 +62,29 @@ const status = [
 const GlobalInfos = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentProject, setCurrentProject, user } = useContext(Context);
+  const {
+    currentProject,
+    setCurrentProject,
+    user,
+    setDataProject,
+    dataProject,
+  } = useContext(Context);
   const [openModal, setOpenModal] = useState(false);
   const [openUploadModal, setOpenUploadModal] = useState(false);
   const [openLogoModal, setOpenLogoModal] = useState(false);
   const [openNameModal, setOpenNameModal] = useState(false);
   const [uploadLoading, setUploadLoading] = React.useState(false);
   const [modifyProjectInfos] = useMutation(MODIFY_PROJECT_GLOBAL_INFOS);
-  const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
+  const dataProjectQuery = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
     variables: { id: id, userId: user?.id },
     onCompleted: (data) => {
       setCurrentProject(data?.findProjectByProjectId);
     },
   });
 
+  React.useEffect(() => {
+    if (dataProjectQuery) setDataProject(dataProjectQuery);
+  }, [dataProjectQuery, setDataProject]);
   const [anchorElName, setAnchorElName] = React.useState(null);
   const [anchorElGlobal, setAnchorElGlobal] = React.useState(null);
   const [anchorElPlanning, setAnchorElPlanning] = React.useState(null);
@@ -253,7 +262,7 @@ const GlobalInfos = () => {
       });
     }
   };
-  if (!dataProject && !dataProject.loading) {
+  if (!dataProject && !dataProjectQuery.loading) {
     return <Navigate to="/404" />;
   }
   if (!currentProject)

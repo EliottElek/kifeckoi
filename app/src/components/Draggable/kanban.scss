@@ -107,7 +107,8 @@
 @media screen and (max-width: 600px) {
   .kanban {
     scroll-snap-type: inline mandatory;
-    &__section {
+    &__section,
+    .kanban__section__add__col {
       min-width: 98vw;
       max-height: 70vh;
       scroll-snap-align: center;
@@ -230,6 +231,7 @@ td {
   background: transparent;
 }
 .kanban__section__add__col {
+  scroll-snap-align: center;
   min-width: 200px;
   width: 280px;
   padding: 4px;

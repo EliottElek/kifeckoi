@@ -198,3 +198,18 @@ export const CAPTURE_EVENTS_POSITIONS = gql`
       }
     }
     `
+
+export const CREATE_NEW_EVENTS_SCHEMA = gql`
+  mutation createNewEventsSchema($projectId: String! $title: String! $userId: String!){
+    createNewEventsSchema (projectId : $projectId title:$title userId:$userId){
+        message
+      }
+    }
+    `
+export const CREATE_NEW_EVENTS_STATUS = gql`
+    mutation createNewEventsStatus($projectId: String! $title: String! $schemaId: String! $userId: String!){
+        createNewEventsStatus(projectId : $projectId title:$title schemaId:$schemaId userId:$userId){
+          message
+        }
+      }
+      `

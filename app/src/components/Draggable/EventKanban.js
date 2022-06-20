@@ -2,24 +2,18 @@ import "./kanban.scss";
 import "./Card/card.scss";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
-import { Menu } from "@mui/material";
-import { MenuItem } from "@mui/material";
 import Card from "./Card/Card";
 import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
 import { MdOutlineClear } from "react-icons/md";
 import { useQuery } from "@apollo/client";
-import { FaChevronDown } from "react-icons/fa";
-import Modal from "../../materials/Modal/Modal";
 import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import {
   useCreateEvent,
   useChangeEventStatus,
-  useChangeEventState,
-  useDeleteMultipleEvents,
 } from "../../hooks/mutations/event";
 import { useGetEventsByStatus } from "../../hooks/queries/event";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Navigate, useParams } from "react-router";
 import { Flip } from "react-toastify";
@@ -28,9 +22,8 @@ import AutoTextArea from "../../materials/AutoSizeTextArea/AutoSizeTextArea";
 import Progress from "../../materials/Progress/Progress";
 import Backdrop from "../../materials/Backdrop/Backdrop";
 import getPeriod from "../../assets/functions/getPeriod";
-import Row from "./Row/Row";
-import CheckBox from "../../materials/CheckBox/CheckBox";
 import AddColumn from "./AddColumn";
+import { ListEvents } from "../ListEvents/ListEvents";
 const EventKanban = ({ type, setLength, length }) => {
   const {
     events,
@@ -38,35 +31,20 @@ const EventKanban = ({ type, setLength, length }) => {
     setEvents,
     user,
     currentProject,
-    listStyle,
     addCard,
     setAddCard,
-    setSelectedEvents,
-    selectedEvents,
-    eventsData,
     setDataEvents,
     dataEvents,
   } = React.useContext(Context);
   const location = useLocation();
-
-  const [selectAll, setSelectAll] = useState(false);
+  const [searchParams] = useSearchParams();
+  const display = searchParams.get("display");
   const [selectedAcountables, setSelectedcontributors] = useState([]);
   const [eventSelected, setEventSelected] = useState();
   const [input, setInput] = useState("");
   const createEvent = useCreateEvent();
   const changeEventStatus = useChangeEventStatus();
-  const changeEventState = useChangeEventState();
-  const deleteMultipleEvents = useDeleteMultipleEvents();
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { id } = useParams();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const openPopUp = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
     variables: { id: id, userId: user?.id },
     onCompleted: (data) => {
@@ -77,10 +55,10 @@ const EventKanban = ({ type, setLength, length }) => {
     variables: { projectId: id, type: type },
     onCompleted: (data) => {
       console.log(data.getEventsByStatus);
-      const clonedArray = data.getEventsByStatus.map((a) => {
+      const clonedArray = data.getEventsByStatus?.map((a) => {
         return { ...a };
       });
-      setEvents(clonedArray);
+      setEvents(clonedArray ? clonedArray : []);
     },
   });
   React.useEffect(() => {
@@ -91,61 +69,6 @@ const EventKanban = ({ type, setLength, length }) => {
   React.useEffect(() => {
     if (dataEventsQuery) setDataEvents(dataEventsQuery);
   }, [dataEventsQuery, setDataEvents]);
-
-  const changeStateSelectedEvents = async (newState) => {
-    try {
-      selectedEvents.forEach(
-        async (event) =>
-          await changeEventState({
-            variables: {
-              eventId: event.id,
-              newState: newState,
-            },
-          })
-      );
-      toast.success(
-        `${selectedEvents.length} évènements passés en "${newState}".`,
-        {
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          transition: Flip,
-        }
-      );
-      setSelectedEvents([]);
-    } catch (err) {
-      toast.warning(`Une erreur est surevenue.`, {
-        position: "bottom-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        transition: Flip,
-      });
-      console.log(err);
-    }
-    dataEvents.refetch();
-  };
-  const selectAllEvents = () => {
-    if (!selectAll) {
-      setSelectedEvents([]);
-      setSelectedEvents(
-        eventsData.map((e) => {
-          return { id: e.id };
-        })
-      );
-      setSelectAll(false);
-    } else {
-      setSelectedEvents([]);
-    }
-    console.log(selectedEvents);
-  };
 
   const onDragEnd = async (result) => {
     if (result.type === "column") {
@@ -213,41 +136,6 @@ const EventKanban = ({ type, setLength, length }) => {
           progress: undefined,
         });
       }
-  };
-  const handleDeleteSelectedEvents = async (e) => {
-    try {
-      const ids = selectedEvents.map((e) => e.id);
-      const response = await deleteMultipleEvents({
-        variables: {
-          eventIds: ids,
-        },
-      });
-      setSelectedEvents([]);
-      toast(`${response.data.deleteMultipleEvents.message}`, {
-        position: "bottom-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-      });
-    } catch (err) {
-      toast.error(
-        "Impossible de supprimer ces évènements. Réessayez plus tard.",
-        {
-          position: "bottom-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-        }
-      );
-    }
-    dataEvents.refetch();
-    setOpenDeleteModal(false);
   };
   const add = async (e) => {
     if (input === "") return;
@@ -318,214 +206,8 @@ const EventKanban = ({ type, setLength, length }) => {
         <Progress size="medium" reversed />
       </div>
     );
-  if (listStyle) {
-    return (
-      <div className={"events__rows"}>
-        <table className={"events__rows__container"}>
-          <tr className={"events__rows__container__head"}>
-            <th
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                height: "100%",
-              }}
-            >
-              <CheckBox
-                onClick={selectAllEvents}
-                checked={selectAll}
-                setChecked={setSelectAll}
-              />
-              <span
-                style={{
-                  fontWeight: "normal",
-                  fontSize: "0.8rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  cursor: "pointer",
-                }}
-                onClick={(e) => {
-                  selectedEvents.length > 0 && handleClick(e);
-                }}
-              >
-                <FaChevronDown fontSize="0.6rem" />
-              </span>
-            </th>
-            <th>Période</th>
-            <th>Contributeurs</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>État</th>
-            <th></th>
-          </tr>
-          {eventsData.map((e, i) => (
-            <Row
-              key={i}
-              type={type}
-              task={e}
-              setLength={setLength}
-              length={length}
-              dataEvents={dataEvents}
-              dataProject={dataProject}
-            />
-          ))}
-          {addCard && (
-            <tr className={"event__row"}>
-              <td></td>
-              <td
-                style={{ fontSize: "0.9rem" }}
-                className={"current__period__row"}
-              >
-                {getPeriod()}
-              </td>
-
-              <td></td>
-              <td>
-                <form onSubmit={add}>
-                  <AutoTextArea
-                    onKeyPress={commentEnterSubmit}
-                    placeholder={"Titre de l'évènement..."}
-                    onChange={(e) => setInput(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    value={input}
-                    autoFocus
-                    className="modif__description__textarea__row"
-                  ></AutoTextArea>
-                </form>
-              </td>
-              <td style={{ fontSize: "0.9rem" }}>Nouveau</td>
-              <td>
-                <Button style={{ height: "30px" }} onClick={add}>
-                  Créer
-                </Button>
-              </td>
-              <td style={{ padding: "4px" }}>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setAddCard(false);
-                  }}
-                  className="clear__button"
-                >
-                  <MdOutlineClear />
-                </button>
-              </td>
-            </tr>
-          )}
-        </table>
-        {!addCard && (
-          <Button
-            onClick={() => setAddCard(true)}
-            style={{
-              position: "sticky",
-              bottom: "10px",
-              margin: "10px",
-              zIndex: 1,
-            }}
-          >
-            Ajouter un évènement +
-          </Button>
-        )}
-        <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
-          <div
-            className="modal__content__container space__between"
-            style={{ width: "95%" }}
-          >
-            <button
-              data-tip
-              data-for="closeTooltip"
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenDeleteModal(false);
-              }}
-              className="close__modal__button"
-            >
-              <MdOutlineClear />
-            </button>
-            <div>
-              <h3>
-                Êtes-vous sûr(e) de vouloir supprimer {selectedEvents.length}{" "}
-                évènement(s) ?
-              </h3>
-              {selectedEvents.length === 1 ? (
-                <p>L'évènement suivant sera supprimé :</p>
-              ) : (
-                <p>
-                  Les {selectedEvents.length} évènement(s) suivants seront
-                  supprimés :
-                </p>
-              )}
-              <ul
-                style={{
-                  margin: "20px",
-                }}
-              >
-                {selectedEvents.map((eve) => (
-                  <li
-                    style={{
-                      listStyle: "inside",
-                    }}
-                    key={eve.id}
-                  >
-                    id : {eve.id}
-                  </li>
-                ))}
-              </ul>
-              <p>La suppression sera définitive. </p>
-            </div>
-            <div
-              className={"delete__actions__container"}
-              style={{ position: "sticky", bottom: "12px" }}
-            >
-              <Button
-                reversed
-                onClick={() => {
-                  setOpenDeleteModal(false);
-                }}
-              >
-                Annuler
-              </Button>
-              <Button onClick={handleDeleteSelectedEvents}>Supprimer</Button>
-            </div>
-          </div>
-        </Modal>
-        <Menu
-          anchorEl={anchorEl}
-          open={openPopUp}
-          onClose={handleClose}
-          sx={{
-            "& .MuiPaper-root": {
-              color: "var(--font-color)",
-              bgcolor: "var(--card-background)",
-            },
-          }}
-        >
-          <MenuItem
-            onClick={() => {
-              changeStateSelectedEvents("Vérifié");
-            }}
-          >
-            <span>Passer en "Vérifié"</span>
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              changeStateSelectedEvents("À vérifier");
-            }}
-          >
-            <span>Passer en "À vérifier"</span>
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-              setOpenDeleteModal(true);
-            }}
-          >
-            <span>Supprimer {selectedEvents?.length} évènement(s)</span>
-          </MenuItem>
-        </Menu>
-      </div>
-    );
+  if (display === "list") {
+    return <ListEvents type={type} setLength={setLength} length={length} />;
   }
   if (!events)
     return (
