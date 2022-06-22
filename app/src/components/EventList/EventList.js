@@ -15,10 +15,11 @@ import {
   useCreateEvent,
 } from "../../hooks/mutations/event";
 import Row from "./Row/Row";
+import "./EventList.scss";
 import CheckBox from "../../materials/CheckBox/CheckBox";
 import { useFindEventsByProjectId } from "../../hooks/queries/event";
 import { useParams, useLocation } from "react-router";
-export const ListEvents = ({ type, setLength, length }) => {
+const EventList = ({ type }) => {
   const {
     addCard,
     setAddCard,
@@ -133,7 +134,6 @@ export const ListEvents = ({ type, setLength, length }) => {
       });
       setInput("");
       findEventsByProjectId.refetch();
-      setLength && setLength(length + 1);
       setSelectedcontributors([]);
     } catch (err) {
       toast.warning(`Impossible de créer l'évènement.`, {
@@ -228,8 +228,6 @@ export const ListEvents = ({ type, setLength, length }) => {
             key={i}
             type={type}
             task={e}
-            setLength={setLength}
-            length={length}
             findEventsByProjectId={findEventsByProjectId}
           />
         ))}
@@ -390,3 +388,4 @@ export const ListEvents = ({ type, setLength, length }) => {
     </div>
   );
 };
+export default EventList;

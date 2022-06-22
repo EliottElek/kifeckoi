@@ -16,7 +16,9 @@ const LatestEvents = () => {
       <div className={"latest__events__container__list"}>
         {data?.getLatestEvents?.slice(0, 5).map((event, i) => (
           <Link
-            to={`/project/${event.project.id}/${event.type.toLowerCase()}/${event.id}`}
+            to={`/project/${event.project.id}/${event.type.toLowerCase()}/${
+              event.id
+            }?display=kanban`}
             className={"latest__events__container__list__item"}
             key={i}
             event={event}

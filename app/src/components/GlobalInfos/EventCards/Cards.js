@@ -48,12 +48,12 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-const Card = ({ children, onClick, pointer }) => {
+const Card = ({ children, onClick, pointer, bg }) => {
   return (
     <div
       onClick={onClick}
       className="cards__container__global__card"
-      style={{ cursor: pointer ? "pointer" : "default" }}
+      style={{ cursor: pointer ? "pointer" : "default", background: bg }}
     >
       {children}
     </div>
@@ -73,7 +73,7 @@ const Cards = () => {
     const [add, setAdd] = React.useState(false);
     const [title, setTitle] = React.useState("");
     const { id } = useParams();
-    const { dataProject, user } = React.useContext(Context);
+    const { dataProject, user, currentProject } = React.useContext(Context);
     const createNewEventsSchema = useCreateNewEventsSchema();
     const onNewSchemaSubmit = async (e) => {
       e.preventDefault();
@@ -85,6 +85,8 @@ const Cards = () => {
             title: title,
           },
         });
+        console.log(currentProject);
+
         refetch();
         dataProject.refetch();
         toast.success("Nouveau type ajouté avec succès.", {
@@ -137,6 +139,7 @@ const Cards = () => {
         <Card
           onClick={() => navigate(`/project/${id}/${type.title.toLowerCase()}`)}
           pointer
+          bg={type.backgroundUrl}
         >
           <span className="cards__container__global__card__title">
             {type.title}

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Context } from "../Context/Context";
 import Switch from "../../materials/Switch/Switch";
 import Avatar from "../../materials/Avatar/Avatar";
@@ -13,6 +13,11 @@ import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchBar from "./SearchBar";
 import NotifPanel from "./NotifPanel";
+
+const capitalizeFirst = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 const StickyNavAdvanced = ({ advanced }) => {
   const {
     user,
@@ -28,6 +33,7 @@ const StickyNavAdvanced = ({ advanced }) => {
     currentProject,
   } = useContext(Context);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { schema } = useParams();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -53,10 +59,16 @@ const StickyNavAdvanced = ({ advanced }) => {
         <div className="name__container">
           <span className="period__span">{period}</span>
           {advanced && (
-            <ToggleButtonActions
-              setListStyle={setListStyle}
-              setAddCard={setAddCard}
-            />
+            <>
+              <h2 style={{ color: "var(--font-color)" }}>
+                {capitalizeFirst(schema)}
+              </h2>
+
+              <ToggleButtonActions
+                setListStyle={setListStyle}
+                setAddCard={setAddCard}
+              />
+            </>
           )}
         </div>
       </div>

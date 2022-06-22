@@ -213,3 +213,11 @@ export const CREATE_NEW_EVENTS_STATUS = gql`
         }
       }
       `
+
+export const UPDATE_EVENTS_SCHEMA_BG = gql`
+mutation updateEventsSchemaBg($userId: String! $schemaId: String! $backgroundUrl: String! ){
+    updateEventsSchemaBg(userId:$userId schemaId:$schemaId backgroundUrl:$backgroundUrl){
+        message
+    }
+}
+`

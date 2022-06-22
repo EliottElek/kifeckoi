@@ -69,7 +69,6 @@ const AddColumn = () => {
         },
       });
       setValue("");
-      setAdd(false);
       dataEvents.refetch();
       toast.success(`Une colonne "${value}" vient d'être ajoutée à ${schema}`, {
         position: toast.POSITION.BOTTOM_LEFT,

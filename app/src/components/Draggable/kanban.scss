@@ -7,13 +7,17 @@
   overflow-y: hidden;
   flex: 1;
   background: transparent;
+  background-size: cover;
+  height: 100%;
   &__section {
+    margin-top: 10px;
     min-width: 200px;
     width: 280px;
     padding: 4px;
     height: auto;
     border-radius: 2px;
     padding-top: 50px;
+    padding-bottom: 16px;
     position: relative;
     background-color: var(--col-background);
     height: min-content;
@@ -25,10 +29,10 @@
       padding: 4px;
     }
     &__title {
+      top: 10px;
       position: absolute;
       font-size: 1.1rem;
       font-weight: 700;
-      transform: translateY(-40px);
       display: flex;
       align-items: center;
       width: 100%;
@@ -107,10 +111,8 @@
 @media screen and (max-width: 600px) {
   .kanban {
     scroll-snap-type: inline mandatory;
-    &__section,
-    .kanban__section__add__col {
+    &__section {
       min-width: 98vw;
-      max-height: 70vh;
       scroll-snap-align: center;
     }
   }
@@ -212,7 +214,7 @@ td {
   overflow: hidden;
 }
 .kanban__section__overflow {
-  max-height: calc(100vh - 180px);
+  max-height: calc(100vh - 200px);
   overflow-y: auto;
 }
 @media (hover: hover) {
@@ -234,11 +236,12 @@ td {
   scroll-snap-align: center;
   min-width: 200px;
   width: 280px;
-  padding: 4px;
+  padding: 6px;
   height: auto;
   border-radius: 2px;
   position: relative;
-  background-color: rgba(128, 128, 128, 0.11);
+  background-color: var(--col-background);
   height: min-content;
   margin-left: 10px;
+  margin-top: 10px;
 }

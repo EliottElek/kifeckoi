@@ -48,8 +48,6 @@
 }
 .middle__image > img {
   object-fit: cover;
-  opacity: 0.5;
-  filter: brightness(0.5);
   height: 100px;
 }
 
@@ -84,4 +82,7 @@
   margin-bottom: 10px;
   margin: 0;
   border: solid 1px var(--border-color);
+}
+.client__projects__container__title {
+  color: var(--font-color);
 }

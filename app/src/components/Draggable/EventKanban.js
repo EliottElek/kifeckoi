@@ -6,14 +6,12 @@ import Card from "./Card/Card";
 import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
 import { MdOutlineClear } from "react-icons/md";
-import { useQuery } from "@apollo/client";
-import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import {
   useCreateEvent,
   useChangeEventStatus,
 } from "../../hooks/mutations/event";
 import { useGetEventsByStatus } from "../../hooks/queries/event";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Navigate, useParams } from "react-router";
 import { Flip } from "react-toastify";
@@ -23,11 +21,9 @@ import Progress from "../../materials/Progress/Progress";
 import Backdrop from "../../materials/Backdrop/Backdrop";
 import getPeriod from "../../assets/functions/getPeriod";
 import AddColumn from "./AddColumn";
-import { ListEvents } from "../ListEvents/ListEvents";
-const EventKanban = ({ type, setLength, length }) => {
+const EventKanban = ({ type }) => {
   const {
     events,
-    setCurrentProject,
     setEvents,
     user,
     currentProject,
@@ -35,22 +31,15 @@ const EventKanban = ({ type, setLength, length }) => {
     setAddCard,
     setDataEvents,
     dataEvents,
+    dataProject,
   } = React.useContext(Context);
   const location = useLocation();
-  const [searchParams] = useSearchParams();
-  const display = searchParams.get("display");
   const [selectedAcountables, setSelectedcontributors] = useState([]);
   const [eventSelected, setEventSelected] = useState();
   const [input, setInput] = useState("");
   const createEvent = useCreateEvent();
   const changeEventStatus = useChangeEventStatus();
   const { id } = useParams();
-  const dataProject = useQuery(FIND_PROJECT_BY_PROJECT_ID, {
-    variables: { id: id, userId: user?.id },
-    onCompleted: (data) => {
-      setCurrentProject(data?.findProjectByProjectId);
-    },
-  });
   const dataEventsQuery = useGetEventsByStatus({
     variables: { projectId: id, type: type },
     onCompleted: (data) => {
@@ -72,6 +61,8 @@ const EventKanban = ({ type, setLength, length }) => {
 
   const onDragEnd = async (result) => {
     if (result.type === "column") {
+      if (!result.destination) return;
+
       let newEvents = [...events];
       const col = newEvents.splice(result.source.index, 1);
       newEvents.splice(result.destination.index, 0, col[0]);
@@ -157,7 +148,6 @@ const EventKanban = ({ type, setLength, length }) => {
       });
       setInput("");
       dataEvents.refetch();
-      setLength && setLength(length + 1);
       setSelectedcontributors([]);
     } catch (err) {
       toast.warning(`Impossible de créer l'évènement.`, {
@@ -206,9 +196,6 @@ const EventKanban = ({ type, setLength, length }) => {
         <Progress size="medium" reversed />
       </div>
     );
-  if (display === "list") {
-    return <ListEvents type={type} setLength={setLength} length={length} />;
-  }
   if (!events)
     return (
       <div
@@ -259,8 +246,6 @@ const EventKanban = ({ type, setLength, length }) => {
                             index={index}
                             type={type}
                             task={task}
-                            setLength={setLength}
-                            length={length}
                             dataEvents={dataEvents}
                             dataProject={dataProject}
                             className={`card card__${i + 1}`}

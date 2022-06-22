@@ -1,11 +1,21 @@
 import { useState, useEffect, useRef } from "react";
-
+const onEscape = function (action) {
+  window &&
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        action();
+      }
+    });
+};
 const AutoTextArea = (props) => {
   const textAreaRef = useRef(null);
   const [text, setText] = useState("");
   const [textAreaHeight, setTextAreaHeight] = useState("auto");
   const [parentHeight, setParentHeight] = useState("auto");
 
+  onEscape(() => {
+    textAreaRef?.current?.blur();
+  });
   useEffect(() => {
     if (textAreaRef) setParentHeight(`${textAreaRef.current.scrollHeight}px`);
     setTextAreaHeight(`${textAreaRef.current.scrollHeight}px`);

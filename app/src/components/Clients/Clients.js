@@ -26,6 +26,7 @@ const Clients = () => {
   const title = document.getElementById("title");
   title.innerHTML = `Clients | Kifekoi`;
   const submit = async (e) => {
+    e.preventDefault();
     if (nameInput === "") {
       return toast.warning(`Le client doit avoir un nom.`, {
         position: "bottom-left",
@@ -95,8 +96,13 @@ const Clients = () => {
             <ClientItem key={i} client={client} />
           ))}
       </Grid>
-      <Modal open={open} setOpen={setOpen}>
-        <div className="modal__add">
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        onClose={() => setOpen(false)}
+        onSubmit={submit}
+      >
+        <form className="modal__add" onSubmit={submit}>
           <input
             autoFocus
             className="name__input"
@@ -116,11 +122,11 @@ const Clients = () => {
             >
               Annuler
             </Button>
-            <Button style={{ height: "30px" }} onClick={submit}>
+            <Button style={{ height: "30px" }} onClick={submit} type="submit">
               Valider
             </Button>
           </div>
-        </div>
+        </form>
       </Modal>
     </div>
   );

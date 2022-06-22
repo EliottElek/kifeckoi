@@ -29,6 +29,7 @@ query getUserById($userId: String!){
         id
         name
         creation
+        logoUrl
         contributors{
           avatarUrl
         }
@@ -100,6 +101,7 @@ query findProjectByProjectId($id: String! $userId : String!){
         goCopyDate
         logoUrl
         eventsSchema{
+          backgroundUrl
           title
           id
           eventsStatus{
@@ -128,14 +130,6 @@ query findProjectByProjectId($id: String! $userId : String!){
           email
           firstname
           lastname
-        }
-        events{
-          id
-          type
-          description
-          contributors{
-            id
-          }
         }
     }
 }
@@ -344,6 +338,7 @@ query getEventsTypesCount($projectId: String!){
   getEventsTypesCount(projectId : $projectId){
     title
     count
+    backgroundUrl
   }
 }
 `

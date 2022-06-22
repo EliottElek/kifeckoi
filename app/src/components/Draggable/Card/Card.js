@@ -145,7 +145,7 @@ const Card = (props) => {
           index: destinationTask.length - 1,
         },
       });
-
+      dataEvents.refetch();
       toast(
         <Msg>
           {props?.task?.name} déplacée dans {category?.title}

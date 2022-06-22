@@ -331,7 +331,7 @@ const GlobalInfos = () => {
                 gap: "2px",
                 flexGrow: 1,
                 justifyContent: "space-between",
-                maxWidth: "340px",
+                maxWidth: "400px",
               }}
             >
               Status global{" "}
@@ -362,7 +362,7 @@ const GlobalInfos = () => {
               </Button>
             </h1>
             <ModifTextArea type={"global"} dataProject={dataProject} />
-            <h3
+            <h1
               style={{
                 marginTop: "30px",
                 marginBottom: "15px",
@@ -371,7 +371,7 @@ const GlobalInfos = () => {
                 gap: "2px",
                 flexGrow: 1,
                 justifyContent: "space-between",
-                maxWidth: "340px",
+                maxWidth: "400px",
               }}
             >
               Status planning{" "}
@@ -400,9 +400,9 @@ const GlobalInfos = () => {
                   <CircularProgress style={{ color: "white" }} size={20} />
                 )}
               </Button>
-            </h3>
+            </h1>
             <ModifTextArea type={"planning"} dataProject={dataProject} />
-            <h3
+            <h1
               style={{
                 marginTop: "30px",
                 marginBottom: "15px",
@@ -411,7 +411,7 @@ const GlobalInfos = () => {
                 gap: "2px",
                 flexGrow: 1,
                 justifyContent: "space-between",
-                maxWidth: "340px",
+                maxWidth: "400px",
               }}
             >
               Status périmètre{" "}
@@ -440,7 +440,7 @@ const GlobalInfos = () => {
                   <CircularProgress style={{ color: "white" }} size={20} />
                 )}
               </Button>
-            </h3>
+            </h1>
             <ModifTextArea type={"perimètre"} dataProject={dataProject} />
             <div
               style={{

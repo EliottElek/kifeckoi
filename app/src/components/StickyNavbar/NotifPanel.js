@@ -25,7 +25,7 @@ const NotifItem = ({ notif, onClick }) => {
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "transparent" }}>
       <ListItemButton onClick={onClick}>
         <a
-          href={notif.redirect}
+          href={`${notif.redirect}?display=kanban`}
           style={{ textDecoration: "none", display: "flex" }}
         >
           <ListItemAvatar>
