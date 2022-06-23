@@ -1,14 +1,14 @@
-html {
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-body {
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
-}
+// html {
+//   height: 100%;
+//   overflow: hidden;
+//   position: relative;
+// }
+// body {
+//   height: 100%;
+//   overflow-y: auto;
+//   overflow-x: hidden;
+//   position: relative;
+// }
 :root {
   --font-color: #212b36;
   --color-background-1: #eff1fa;
@@ -86,7 +86,6 @@ html,
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 1px;
