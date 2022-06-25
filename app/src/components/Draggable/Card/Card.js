@@ -319,7 +319,8 @@ const Card = (props) => {
                 snapshot.isDragging
                   ? "card__content dragging"
                   : `card__content`,
-                props?.task?.status === "Réalisé" && "done__animation",
+                props?.task?.status === "Réalisé" ||
+                  (props?.task?.status === "Réalisé ✅" && "done__animation"),
               ].join(" ")}
             >
               {props?.task?.state === "Vérifié" && (
@@ -464,11 +465,12 @@ const Card = (props) => {
                 </div>
               )}
               <Avatars users={props?.task?.contributors} />
-              {props?.task?.status === "Réalisé" && (
-                <span className="card__done__span">
-                  <DoneIcon style={{ height: "1rem" }} />
-                </span>
-              )}
+              {props?.task?.status === "Réalisé" ||
+                (props?.task?.status === "Réalisé ✅" && (
+                  <span className="card__done__span">
+                    <DoneIcon style={{ height: "1rem" }} />
+                  </span>
+                ))}
             </div>
           </div>
         )}

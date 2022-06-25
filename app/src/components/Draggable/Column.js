@@ -15,6 +15,8 @@ import {
 } from "../../hooks/mutations/project/eventsStatus";
 import { toast } from "react-toastify";
 import { Context } from "../Context/Context";
+import { capitalizeFirst } from "../../utils/capitalizeFirst";
+import { useParams } from "react-router";
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
     borderRadius: 4,
@@ -63,11 +65,13 @@ const Column = ({
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { dataEvents } = React.useContext(Context);
   const openPopUp = Boolean(anchorEl);
+  const { schema } = useParams();
   const [newTitle, setNewTitle] = React.useState("");
   const [editMode, setEditMode] = React.useState(false);
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
   const renameEventsStatus = useRenameEventsStatus();
   const deleteEventsStatus = useDeleteEventsStatus();
+  const type = capitalizeFirst(schema);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -80,6 +84,7 @@ const Column = ({
       await deleteEventsStatus({
         variables: {
           id: droppableId,
+          type: type,
         },
       });
       dataEvents.refetch();
@@ -98,6 +103,7 @@ const Column = ({
         variables: {
           id: section.id,
           title: newTitle,
+          type: type,
         },
       });
       setEditMode(false);

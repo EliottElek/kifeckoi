@@ -222,15 +222,15 @@ mutation updateEventsSchemaBg($userId: String! $schemaId: String! $backgroundUrl
 }
 `
 export const DELETE_EVENTS_STATUS = gql`
-mutation deleteEventsStatus($id:String! ){
-    deleteEventsStatus(id : $id){
+mutation deleteEventsStatus($id:String! $type: String!){
+    deleteEventsStatus(id : $id type: $type){
         message
     }
 }
 `
 export const RENAME_EVENTS_STATUS = gql`
-mutation renameEventsStatus($id: String! $title: String!){
-    renameEventsStatus(id:$id title: $title){
+mutation renameEventsStatus($id: String! $title: String! $type: String!){
+    renameEventsStatus(id:$id title: $title type: $type){
         message
     }
 }
