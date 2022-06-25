@@ -9,6 +9,7 @@ import { MdOutlineClear } from "react-icons/md";
 import {
   useCreateEvent,
   useChangeEventStatus,
+  useCreateNotification,
 } from "../../hooks/mutations/event";
 import { useGetEventsByStatus } from "../../hooks/queries/event";
 import { useLocation } from "react-router-dom";
@@ -40,10 +41,10 @@ const EventKanban = ({ type }) => {
   const createEvent = useCreateEvent();
   const changeEventStatus = useChangeEventStatus();
   const { id } = useParams();
+  const createNotification = useCreateNotification();
   const dataEventsQuery = useGetEventsByStatus({
     variables: { projectId: id, type: type },
     onCompleted: (data) => {
-      console.log(data.getEventsByStatus);
       const clonedArray = data.getEventsByStatus?.map((a) => {
         return { ...a };
       });
@@ -66,7 +67,6 @@ const EventKanban = ({ type }) => {
       let newEvents = [...events];
       const col = newEvents.splice(result.source.index, 1);
       newEvents.splice(result.destination.index, 0, col[0]);
-      console.log(newEvents);
       setEvents(newEvents);
       return;
     } else
@@ -103,9 +103,7 @@ const EventKanban = ({ type }) => {
                 index: destination.index,
               },
             });
-          } catch (err) {
-            console.log(err);
-          }
+          } catch (err) {}
           dataEvents.refetch();
         } else {
           const index = events.findIndex((e) => e.id === source.droppableId);
@@ -116,7 +114,6 @@ const EventKanban = ({ type }) => {
           setEvents(events);
         }
       } catch (err) {
-        console.log(err);
         toast.error("Impossible de déplacer l'évènement.", {
           position: "bottom-left",
           autoClose: 5000,
@@ -134,7 +131,7 @@ const EventKanban = ({ type }) => {
     const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
     try {
       const index = eventSelected.tasks.length;
-      await createEvent({
+      const { data } = await createEvent({
         variables: {
           type: type,
           index: index,
@@ -144,6 +141,18 @@ const EventKanban = ({ type }) => {
           contributors: ArrayOfIds,
           status: eventSelected ? eventSelected.title : "Nouveau",
           period: getPeriod(),
+        },
+      });
+      await createNotification({
+        variables: {
+          message: `${user?.firstname} a créé un nouvel evènement dans ${currentProject.name}.`,
+          redirect: `/project/${currentProject.id}/${type.toLowerCase()}/${
+            data.createEvent.id
+          }`,
+          projectId: currentProject.id,
+          emitterId: user.id,
+          content: input,
+          receivers: currentProject.contributors.map((contrib) => contrib.id),
         },
       });
       setInput("");
@@ -160,7 +169,6 @@ const EventKanban = ({ type }) => {
         progress: undefined,
         transition: Flip,
       });
-      console.log(err);
     }
   };
   const commentEnterSubmit = (e) => {
@@ -235,9 +243,6 @@ const EventKanban = ({ type }) => {
                 >
                   {(provided) => (
                     <div {...provided.droppableProps} ref={provided.innerRef}>
-                      <h2 className={`kanban__section__title`}>
-                        {section?.title} ({section?.tasks?.length})
-                      </h2>
                       <div className="kanban__section__content">
                         {section?.tasks?.map((task, index) => (
                           <Card
@@ -255,7 +260,7 @@ const EventKanban = ({ type }) => {
                           <Card add type={type} task={""} className={`card`}>
                             <form className="add__card__form" onSubmit={add}>
                               <AutoTextArea
-                                onBlur={() => setAddCard(false)}
+                                onBlur={() => input === "" && setAddCard(false)}
                                 onKeyPress={commentEnterSubmit}
                                 placeholder={"Titre de l'évènement..."}
                                 onChange={(e) => setInput(e.target.value)}

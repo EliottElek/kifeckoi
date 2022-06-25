@@ -4,9 +4,9 @@ import { GET_LATEST_EVENTS } from "../../../graphql/queries";
 import "./LatestEvents.scss";
 import { Context } from "../../Context/Context";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import shortString from "../../../assets/functions/shortString";
-import RenderHtml from "../../../assets/RenderHtml";
+import { Avatar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import RenderHtml from "../../../assets/RenderHtml";
 const LatestEvents = () => {
   const { user } = React.useContext(Context);
   const { data } = useQuery(GET_LATEST_EVENTS, { variables: { id: user.id } });
@@ -23,13 +23,31 @@ const LatestEvents = () => {
             key={i}
             event={event}
           >
-            <span>
+            <span
+              style={{
+                display: "flex",
+                gap: "16px",
+                alignItems: "center",
+                width: "80%",
+              }}
+            >
+              <Avatar src={event.creator.avatarUrl} />
               <span
-                className={"latest__events__container__list__item__project"}
+                className={
+                  "latest__events__container__list__item__project__container"
+                }
               >
-                {event?.project?.name}
+                <span
+                  className={"latest__events__container__list__item__project"}
+                >
+                  <Typography noWrap>{event.project.name}</Typography>
+                </span>
+                <Typography noWrap sx={{ maxWidth: "100%" }}>
+                  <RenderHtml style={{ display: "flex" }}>
+                    {event.description}
+                  </RenderHtml>
+                </Typography>
               </span>
-              <RenderHtml>{shortString(event.description, 50)}</RenderHtml>
             </span>
             <span className={"latest__events__container__list__item__chevron"}>
               {event?.type}

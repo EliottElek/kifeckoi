@@ -65,15 +65,12 @@ const Cards = () => {
   const { id } = useParams();
   const { data, refetch } = useGetEventsTypesCount({
     variables: { projectId: id },
-    onCompleted: (data) => {
-      console.log(data);
-    },
   });
   const AddCard = () => {
     const [add, setAdd] = React.useState(false);
     const [title, setTitle] = React.useState("");
     const { id } = useParams();
-    const { dataProject, user, currentProject } = React.useContext(Context);
+    const { dataProject, user } = React.useContext(Context);
     const createNewEventsSchema = useCreateNewEventsSchema();
     const onNewSchemaSubmit = async (e) => {
       e.preventDefault();
@@ -85,7 +82,6 @@ const Cards = () => {
             title: title,
           },
         });
-        console.log(currentProject);
 
         refetch();
         dataProject.refetch();
@@ -94,7 +90,6 @@ const Cards = () => {
           pauseOnHover: false,
         });
       } catch (err) {
-        console.log(err);
         toast.error("Imposible d'ajouter le type.", {
           position: toast.POSITION.BOTTOM_LEFT,
           pauseOnHover: false,

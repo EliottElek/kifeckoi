@@ -108,7 +108,6 @@ const Card = (props) => {
       setTimeout(() => dataEvents.refetch(), 200);
       setModifMode(false);
     } catch (err) {
-      console.log(err);
       toast.error("Impossible de modifier la description.", {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
@@ -162,7 +161,6 @@ const Card = (props) => {
       );
       setAnchorEl(null);
     } catch (err) {
-      console.log(err);
       toast.error("Impossible de déplacer l'évènement.", {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
@@ -219,7 +217,6 @@ const Card = (props) => {
         progress: undefined,
       });
     } catch (err) {
-      console.log(err);
       toast.error("Impossible de supprimer cette carte. Réessayez plus tard.", {
         position: "bottom-left",
         autoClose: 5000,
@@ -268,7 +265,6 @@ const Card = (props) => {
         }
       );
     } catch (err) {
-      console.log(err);
       toast.error(`Impossible de créer l'évènement.`, {
         position: "bottom-left",
         autoClose: 5000,
@@ -319,9 +315,12 @@ const Card = (props) => {
             }}
           >
             <div
-              className={
-                snapshot.isDragging ? "card__content dragging" : "card__content"
-              }
+              className={[
+                snapshot.isDragging
+                  ? "card__content dragging"
+                  : `card__content`,
+                props?.task?.status === "Réalisé" && "done__animation",
+              ].join(" ")}
             >
               {props?.task?.state === "Vérifié" && (
                 <div className={`status__indicator__verified`} />

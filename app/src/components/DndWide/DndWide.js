@@ -41,13 +41,11 @@ const DndWide = () => {
     }
   }, [currentProject?.name, currentProject, type?.title]);
   if (!type && currentProject) return <Navigate to="/404" />;
-  console.log(type);
   if (display === "list" && type)
     return (
       <div
         style={{
           height: "100%",
-          background: type?.backgroundUrl,
         }}
         id="custom__bg"
       >

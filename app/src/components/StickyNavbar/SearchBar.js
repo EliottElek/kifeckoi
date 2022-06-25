@@ -77,7 +77,7 @@ const SearchBar = () => {
     return (
       <ListItemButton
         component={NavLink}
-        to={`/project/${id}/${item.status.toLowerCase()}/${
+        to={`/project/${id}/${item.type.toLowerCase()}/${
           item.id
         }?display=kanban`}
         sx={{

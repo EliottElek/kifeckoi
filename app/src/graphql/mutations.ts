@@ -221,3 +221,17 @@ mutation updateEventsSchemaBg($userId: String! $schemaId: String! $backgroundUrl
     }
 }
 `
+export const DELETE_EVENTS_STATUS = gql`
+mutation deleteEventsStatus($id:String! ){
+    deleteEventsStatus(id : $id){
+        message
+    }
+}
+`
+export const RENAME_EVENTS_STATUS = gql`
+mutation renameEventsStatus($id: String! $title: String!){
+    renameEventsStatus(id:$id title: $title){
+        message
+    }
+}
+`

@@ -22,7 +22,6 @@ export default function BasicModal({ children, open, onClose, card }) {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "var(--background1)",
   };
 

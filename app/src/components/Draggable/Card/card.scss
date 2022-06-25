@@ -363,3 +363,29 @@
   left: 10px;
   color: var(--font-color);
 }
+.done__animation::before {
+  position: absolute;
+  content: "";
+  border-radius: inherit;
+  border: solid 2px transparent;
+  animation-name: success;
+  animation-duration: 0.4s;
+}
+@keyframes success {
+  from {
+    border-color: green;
+    border-width: 2px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  to {
+    border-color: rgba(0, 128, 0, 0);
+    border-width: 8px;
+    top: -4px;
+    left: -4px;
+    bottom: -4px;
+    right: -4px;
+  }
+}

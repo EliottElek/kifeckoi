@@ -13,10 +13,7 @@ import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchBar from "./SearchBar";
 import NotifPanel from "./NotifPanel";
-
-const capitalizeFirst = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
+import { capitalizeFirst } from "../../utils/capitalizeFirst";
 
 const StickyNavAdvanced = ({ advanced }) => {
   const {

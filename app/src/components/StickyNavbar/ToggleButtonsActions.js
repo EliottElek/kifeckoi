@@ -112,7 +112,6 @@ export default function CustomizedDividers(props) {
       dataProject.refetch();
       setOpenModalCustom(false);
     } catch (err) {
-      console.log(err);
       toast.error("Impossibe de changer le fond.", {
         position: "bottom-left",
         autoClose: 5000,

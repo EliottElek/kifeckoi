@@ -35,7 +35,6 @@ const EventList = ({ type }) => {
     variables: { id: id, type: type },
     onCompleted: (data) => {
       setEventsData(data.findEventsByProjectId);
-      console.log(data);
     },
   });
   const [selectedAcountables, setSelectedcontributors] = useState([]);
@@ -92,7 +91,6 @@ const EventList = ({ type }) => {
         draggable: false,
         progress: undefined,
       });
-      console.log(err);
     }
     findEventsByProjectId.refetch();
   };
@@ -108,7 +106,6 @@ const EventList = ({ type }) => {
     } else {
       setSelectedEvents([]);
     }
-    console.log(selectedEvents);
   };
   const commentEnterSubmit = (e) => {
     if (e.key === "Enter" && e.shiftKey === false && input !== "") {
@@ -145,7 +142,6 @@ const EventList = ({ type }) => {
         draggable: false,
         progress: undefined,
       });
-      console.log(err);
     }
   };
   const handleDeleteSelectedEvents = async (e) => {

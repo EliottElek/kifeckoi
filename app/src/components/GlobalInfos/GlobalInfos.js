@@ -110,7 +110,6 @@ const GlobalInfos = () => {
             `https://kifekoi-api.herokuapp.com/import/${currentProject.id}`,
             result
           );
-          console.log(resp);
           if (resp.error)
             return toast.error(resp.message, {
               position: "bottom-left",
@@ -135,13 +134,11 @@ const GlobalInfos = () => {
           setOpenRspModal(true);
         })
         .catch((e) => {
-          console.log(e);
         })
         .finally(() => {
           setUploadLoading(false);
         });
     } catch (err) {
-      console.log(err);
       toast.error(`Impossible d'uploader le fichier.`, {
         position: "bottom-left",
         autoClose: 5000,

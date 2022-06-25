@@ -2,9 +2,10 @@ import React from "react";
 import { BiPlus } from "react-icons/bi";
 import "./kanban.scss";
 import { alpha, styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
+import { InputBase, IconButton } from "@mui/material";
 import Button from "../../materials/Button/Button";
 import { Context } from "../Context/Context";
+import { MdOutlineClear } from "react-icons/md";
 import { useParams } from "react-router";
 import { useCreateNewEventsStatus } from "../../hooks/mutations/project";
 import { toast } from "react-toastify";
@@ -43,7 +44,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     ].join(","),
     "&:focus": {
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
+      borderColor: "var(--main-color)",
     },
   },
 }));
@@ -55,8 +56,10 @@ const AddColumn = () => {
   const { currentProject, user, dataEvents } = React.useContext(Context);
   const createNewEventsStatus = useCreateNewEventsStatus();
   const onSubmit = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (value === "") return;
     try {
-      e.preventDefault();
       const schemaFound = currentProject.eventsSchema.find(
         (e) => e.title.toLowerCase() === schema
       );
@@ -75,7 +78,6 @@ const AddColumn = () => {
         pauseOnHover: false,
       });
     } catch (err) {
-      console.log(err);
       toast.error(`Impossible de créer la nouvelle colonne.`, {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
@@ -90,10 +92,15 @@ const AddColumn = () => {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder="New column..."
-            onBlur={() => setAdd(false)}
+            onBlur={() => value === "" && setAdd(false)}
             autoFocus
           />
-          <Button onClick={onSubmit}>Add</Button>
+          <Button onClick={onSubmit} type={"submit"}>
+            Add
+          </Button>
+          <IconButton onClick={() => setAdd(false)}>
+            <MdOutlineClear color="var(--font-color)" />
+          </IconButton>
         </div>
       ) : (
         <button

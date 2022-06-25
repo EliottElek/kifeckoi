@@ -78,7 +78,7 @@ export default function TreeViewEvents() {
             onClick={() => {
               setOpenDrawer(false);
               navigate(
-                `/project/${currentProject?.id}/${nav?.title.toLowerCase()}`
+                `/project/${currentProject?.id}/${nav?.title.toLowerCase()}?display=kanban`
               );
             }}
             nodeId={nav?.id}

@@ -100,6 +100,7 @@
 }
 .kanban__section__title {
   width: auto;
+  font-size: 1.2rem;
   margin-left: 10px;
   color: var(--font-color);
 }
@@ -216,6 +217,7 @@ td {
 .kanban__section__overflow {
   max-height: calc(100vh - 200px);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 @media (hover: hover) {
   .kanban__section__title__more__button {

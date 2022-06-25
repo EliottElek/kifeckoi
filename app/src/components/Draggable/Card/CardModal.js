@@ -94,7 +94,6 @@ const CardModal = () => {
       dataEvents.refetch();
       setModifMode(false);
     } catch (err) {
-      console.log(err);
       toast.error("Impossible de modifier la description.", {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
