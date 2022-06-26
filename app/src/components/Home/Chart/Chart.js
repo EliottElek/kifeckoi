@@ -27,6 +27,7 @@ export const options = {
   plugins: {
     legend: {
       position: "top",
+      color : 'var(--font-color)'
     },
     title: {
       display: true,
@@ -38,6 +39,7 @@ const labels = ["Y22W21", "Y22W22", "Y22W23", "Y22W24"];
 const dataset = {
   labels: labels,
   data: labels.map(() => faker.datatype.number({ min: 0, max: 70 })),
+  color : "red"
 };
 export const data = {
   labels: dataset.labels,

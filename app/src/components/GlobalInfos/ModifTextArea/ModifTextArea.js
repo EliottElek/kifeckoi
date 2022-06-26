@@ -26,7 +26,6 @@ const ModifTextArea = ({ type, dataProject }) => {
 
   const handleModifyDescription = async (e, input) => {
     e.stopPropagation();
-    console.log(input);
     try {
       await modifyProjectInfos({
         variables: {

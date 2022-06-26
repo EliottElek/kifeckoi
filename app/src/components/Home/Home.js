@@ -7,6 +7,7 @@ import Backdrop from "../../materials/Backdrop/Backdrop";
 import Cards from "../Cards/Cards";
 import { Chart } from "./Chart/Chart";
 import LatestEvents from "./LatestEvents/LatestEvents";
+import LatestNotifications from "./LatestNotifications/LatestNotifications";
 const Home = () => {
   const { user } = useContext(Context);
   const { data, loading } = useGetAllClients({
@@ -32,7 +33,7 @@ const Home = () => {
       <Chart />
       <div className="two__items__grid">
         <LatestEvents />
-        <LatestEvents />
+        <LatestNotifications />
       </div>
     </div>
   );

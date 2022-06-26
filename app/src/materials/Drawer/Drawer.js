@@ -2,7 +2,6 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import Toolbar from "@mui/material/Toolbar";
 import StickyNavAdvanced from "../../components/StickyNavbar/StickyNavBarAdvanced";
 import { Context } from "../../components/Context/Context";
 import { useNavigate } from "react-router";
@@ -162,11 +161,11 @@ function ResponsiveDrawer(props) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           background: "var(--background1)",
           overflowX: "hidden",
+          "& > div ": {
+            paddingTop: "55px",
+          },
         }}
       >
-        <Toolbar
-          sx={{ minHeight: "65px!important", backgroundColor: "transparent" }}
-        />
         {props.mainContent}
       </Box>
     </Box>

@@ -1,6 +1,5 @@
 import React, { useContext, lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Project from "./components/Project/Project";
 import Home from "./components/Home/Home";
 import Clients from "./components/Clients/Clients";
 import { Context } from "./components/Context/Context";
@@ -99,7 +98,7 @@ const MainContent = () => {
               mainContent={
                 <SecureRoute margin>
                   <Suspense fallback={renderLoader()}>
-                    <Project />
+                    <GlobalInfos />
                   </Suspense>
                 </SecureRoute>
               }
@@ -137,14 +136,14 @@ const MainContent = () => {
         />
         <Route
           exact
-          path="/project/:id/actions"
+          path="/project/:id/:schema"
           element={
             <Drawer
               advanced
               mainContent={
                 <SecureRoute margin>
                   <Suspense fallback={renderLoader()}>
-                    <ActionsWide type="Action" />
+                    <ActionsWide />
                   </Suspense>
                 </SecureRoute>
               }
@@ -160,7 +159,7 @@ const MainContent = () => {
         />
         <Route
           exact
-          path="/project/:id/actions/:eventId"
+          path="/project/:id/:schema/:eventId"
           element={
             <Drawer
               advanced
@@ -168,252 +167,7 @@ const MainContent = () => {
                 <SecureRoute margin>
                   <Suspense fallback={renderLoader()}>
                     <>
-                      <ActionsWide type="Action" />
-                      <CardModal />
-                    </>
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/infos"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <ActionsWide type="Info" />
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/infos/:eventId"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <>
-                      <ActionsWide type="Info" />
-                      <CardModal />
-                    </>
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/decisions"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <ActionsWide type="Decision" />
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/decisions/:eventId"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <>
-                      <ActionsWide type="Decision" />
-                      <CardModal />
-                    </>
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/risks"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <ActionsWide type="Risk" />
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/risks/:eventId"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <>
-                      <ActionsWide type="Risk" />
-                      <CardModal />
-                    </>
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/problems"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <ActionsWide type="Problem" />
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/problems/:eventId"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <>
-                      <ActionsWide type="Problem" />
-                      <CardModal />
-                    </>
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/deliverables"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <ActionsWide type="Deliverable" />
-                  </Suspense>
-                </SecureRoute>
-              }
-              secondaryContent={
-                <Suspense fallback={renderLoader()}>
-                  <SecondaryContent />
-                </Suspense>
-              }
-              drawerWidth={240}
-              breakPoint={800}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/project/:id/deliverables/:eventId"
-          element={
-            <Drawer
-              advanced
-              mainContent={
-                <SecureRoute margin>
-                  <Suspense fallback={renderLoader()}>
-                    <>
-                      <ActionsWide type="Deliverable" />
+                      <ActionsWide />
                       <CardModal />
                     </>
                   </Suspense>

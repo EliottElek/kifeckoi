@@ -3,7 +3,7 @@ import Modal from "../../../materials/Modal/Modal";
 import formatDate from "../../../assets/functions/formatDate";
 import getPeriod from "../../../assets/functions/getPeriod";
 import { ImWarning } from "react-icons/im";
-import { AiOutlineCheckCircle, AiFillInfoCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 import { AiOutlineCheck } from "react-icons/ai";
 import { BiTime } from "react-icons/bi";
 import { MdOutlineClear, MdOutlineDeleteOutline } from "react-icons/md";
@@ -25,6 +25,7 @@ import {
 import { CircularProgress } from "@mui/material";
 import { useContext } from "react";
 import { Context } from "../../Context/Context";
+import { useSearchParams } from "react-router-dom";
 const CardModal = () => {
   const { currentProject, user, dataEvents } = useContext(Context);
   const navigate = useNavigate();
@@ -37,7 +38,8 @@ const CardModal = () => {
   const createNotification = useCreateNotification();
   const changeEventDescription = useChangeEventDescription();
   const deleteEvent = useDeleteEvent();
-
+  const [searchParams] = useSearchParams();
+  const display = searchParams.get("display");
   const [setOpenAddContributorModal] = React.useState(false);
   const [description, setDescription] = React.useState(null);
 
@@ -50,7 +52,11 @@ const CardModal = () => {
     },
   });
   const onClose = () => {
-    navigate(`/project/${currentProject.id}/${event.type.toLowerCase()}s`);
+    navigate(
+      `/project/${
+        currentProject.id
+      }/${event.type.toLowerCase()}?display=${display}`
+    );
   };
   const handleModifyDescription = async (e, content, mentions) => {
     e.stopPropagation();
@@ -71,7 +77,7 @@ const CardModal = () => {
             message: `${user?.firstname} vous a mentionné dans ${currentProject.name}.`,
             redirect: `/project/${
               currentProject.id
-            }/${event.type.toLowerCase()}s/${event.id}`,
+            }/${event.type.toLowerCase()}/${event.id}`,
             projectId: currentProject.id,
             emitterId: user.id,
             content: content.getText().toString(),
@@ -88,7 +94,6 @@ const CardModal = () => {
       dataEvents.refetch();
       setModifMode(false);
     } catch (err) {
-      console.log(err);
       toast.error("Impossible de modifier la description.", {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
@@ -129,7 +134,7 @@ const CardModal = () => {
   if (!data && !loading) return <Navigate to="/404" />;
   return (
     <>
-      <Modal open={true} handleClose={onClose}>
+      <Modal open={true} onClose={onClose} card>
         {loading ? (
           <div
             style={{
@@ -145,10 +150,7 @@ const CardModal = () => {
         ) : (
           <>
             <span className="id__span">{event?.id?.split("-")[0]}</span>
-            <span className="id__span" style={{ top: "22px" }}>
-              position: {event?.index}
-            </span>
-            <div className="modal__content__container">
+            <div className="modal__content__container" style={{ width: "95%" }}>
               <ModifAreaCard
                 large
                 event={event}
@@ -282,15 +284,6 @@ const CardModal = () => {
                   Supprimer <MdOutlineDeleteOutline fontSize={"1.2rem"} />
                 </Button>
               </div>
-              <h3 style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <AiFillInfoCircle /> Informations
-              </h3>
-              <p style={{ fontStyle: "italic" }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                convallis nibh non lorem vulputate egestas. Sed leo odio,
-                dignissim ac sollicitudin eget, vehicula nec dui. Praesent in
-                lorem ut augue lobortis suscipit.
-              </p>
             </div>
           </>
         )}

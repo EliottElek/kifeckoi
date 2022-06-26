@@ -198,3 +198,40 @@ export const CAPTURE_EVENTS_POSITIONS = gql`
       }
     }
     `
+
+export const CREATE_NEW_EVENTS_SCHEMA = gql`
+  mutation createNewEventsSchema($projectId: String! $title: String! $userId: String!){
+    createNewEventsSchema (projectId : $projectId title:$title userId:$userId){
+        message
+      }
+    }
+    `
+export const CREATE_NEW_EVENTS_STATUS = gql`
+    mutation createNewEventsStatus($projectId: String! $title: String! $schemaId: String! $userId: String!){
+        createNewEventsStatus(projectId : $projectId title:$title schemaId:$schemaId userId:$userId){
+          message
+        }
+      }
+      `
+
+export const UPDATE_EVENTS_SCHEMA_BG = gql`
+mutation updateEventsSchemaBg($userId: String! $schemaId: String! $backgroundUrl: String! ){
+    updateEventsSchemaBg(userId:$userId schemaId:$schemaId backgroundUrl:$backgroundUrl){
+        message
+    }
+}
+`
+export const DELETE_EVENTS_STATUS = gql`
+mutation deleteEventsStatus($id:String! $type: String!){
+    deleteEventsStatus(id : $id type: $type){
+        message
+    }
+}
+`
+export const RENAME_EVENTS_STATUS = gql`
+mutation renameEventsStatus($id: String! $title: String! $type: String!){
+    renameEventsStatus(id:$id title: $title type: $type){
+        message
+    }
+}
+`

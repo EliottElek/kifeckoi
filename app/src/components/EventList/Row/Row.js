@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
-import "../Card/card.scss";
+import "../../Draggable/Card/card.scss";
 import "./Row.scss";
-import "../kanban.scss";
+import "../../Draggable/kanban.scss";
 import "../../GlobalInfos/GlobalInfos.scss";
 import { BiTime } from "react-icons/bi";
 import { MdOutlineClear } from "react-icons/md";
@@ -19,6 +19,7 @@ import {
 import { Context } from "../../Context/Context";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import { MenuItem } from "@mui/material";
 import { Menu } from "@mui/material";
 import Button from "../../../materials/Button/Button";
@@ -35,7 +36,6 @@ const Row = (props) => {
     user,
     selectedEvents,
     setSelectedEvents,
-    dataEvents,
   } = useContext(Context);
   const navigate = useNavigate();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -46,6 +46,8 @@ const Row = (props) => {
   const createEvent = useCreateEvent();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openPopUp = Boolean(anchorEl);
+  const [searchParams] = useSearchParams();
+  const display = searchParams.get("display");
   const handleClick = (event) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
@@ -97,7 +99,7 @@ const Row = (props) => {
           newStatus: category?.title,
         },
       });
-      dataEvents.refetch();
+      props.findEventsByProjectId.refetch();
 
       toast(
         <Msg>
@@ -132,7 +134,7 @@ const Row = (props) => {
           newState: newState,
         },
       });
-      dataEvents.refetch();
+      props.findEventsByProjectId.refetch();
     } catch {
       toast.error("Impossible de changer l'état de cette cart.", {
         position: "bottom-left",
@@ -148,12 +150,12 @@ const Row = (props) => {
   const handledeleteEvent = async (e) => {
     e.stopPropagation();
     try {
-      deleteEvent({
+      await deleteEvent({
         variables: {
           eventId: props.task.id,
         },
       });
-      dataEvents.refetch();
+      props.findEventsByProjectId.refetch();
 
       toast(`${props.type} archivé(e) avec succès.`, {
         position: "bottom-left",
@@ -181,7 +183,7 @@ const Row = (props) => {
     try {
       const ArrayOfIds = props.task.contributors.map((acc) => acc.id);
 
-      const newEvent = createEvent({
+      const newEvent = await createEvent({
         variables: {
           type: props.type,
           projectId: id,
@@ -192,15 +194,7 @@ const Row = (props) => {
           status: props.task.status,
         },
       });
-      const index = events.findIndex(
-        (event) => event.title === props.task.status
-      );
-      events[index].tasks.splice(events[index] + 1, 0, {
-        ...newEvent?.data?.createEvent,
-        new: true,
-      });
-      dataEvents.refetch();
-
+      props.findEventsByProjectId.refetch();
       props.setLength && props.setLength(props.length + 1);
       toast(
         `${
@@ -238,9 +232,9 @@ const Row = (props) => {
       className={"event__row"}
       onClick={() => {
         navigate(
-          `/project/${currentProject.id}/${props.task.type.toLowerCase()}s/${
+          `/project/${currentProject.id}/${props.task.type.toLowerCase()}/${
             props.task.id
-          }`
+          }?display=${display}`
         );
       }}
     >

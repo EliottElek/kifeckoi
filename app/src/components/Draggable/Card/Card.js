@@ -17,6 +17,7 @@ import ReactTooltip from "react-tooltip";
 import Avatars from "./Avatars";
 import "../../TextEditor/TextEditor.scss";
 import AddContributorsEvent from "./AddContributorsEvent";
+import { useSearchParams } from "react-router-dom";
 import {
   useChangeEventDescription,
   useChangeEventStatus,
@@ -52,7 +53,8 @@ const Card = (props) => {
   const createEvent = useCreateEvent();
   const createNotification = useCreateNotification();
   const mentionUsersInEvent = useMentionUsersInEvent();
-
+  const [searchParams] = useSearchParams();
+  const display = searchParams.get("display");
   const [description, setDescription] = useState(props.task?.description);
 
   const { id } = useParams();
@@ -106,7 +108,6 @@ const Card = (props) => {
       setTimeout(() => dataEvents.refetch(), 200);
       setModifMode(false);
     } catch (err) {
-      console.log(err);
       toast.error("Impossible de modifier la description.", {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
@@ -143,7 +144,7 @@ const Card = (props) => {
           index: destinationTask.length - 1,
         },
       });
-
+      dataEvents.refetch();
       toast(
         <Msg>
           {props?.task?.name} déplacée dans {category?.title}
@@ -160,7 +161,6 @@ const Card = (props) => {
       );
       setAnchorEl(null);
     } catch (err) {
-      console.log(err);
       toast.error("Impossible de déplacer l'évènement.", {
         position: toast.POSITION.BOTTOM_LEFT,
         pauseOnHover: false,
@@ -217,7 +217,6 @@ const Card = (props) => {
         progress: undefined,
       });
     } catch (err) {
-      console.log(err);
       toast.error("Impossible de supprimer cette carte. Réessayez plus tard.", {
         position: "bottom-left",
         autoClose: 5000,
@@ -228,7 +227,7 @@ const Card = (props) => {
         progress: undefined,
       });
     }
-    navigate(`/project/${currentProject.id}/${props.type.toLowerCase()}s`);
+    navigate(`/project/${currentProject.id}/${props.type.toLowerCase()}`);
   };
   const duplicate = async (e) => {
     e.stopPropagation();
@@ -248,6 +247,7 @@ const Card = (props) => {
         },
       });
       props.setLength && props.setLength(props.length + 1);
+      dataEvents.refetch();
       toast(
         `${
           newEvent?.data?.createEvent
@@ -265,7 +265,6 @@ const Card = (props) => {
         }
       );
     } catch (err) {
-      console.log(err);
       toast.error(`Impossible de créer l'évènement.`, {
         position: "bottom-left",
         autoClose: 5000,
@@ -295,9 +294,9 @@ const Card = (props) => {
       className={"card"}
       onClick={() =>
         navigate(
-          `/project/${currentProject.id}/${props?.task?.type.toLowerCase()}s/${
+          `/project/${currentProject.id}/${props?.task?.type.toLowerCase()}/${
             props?.task?.id
-          }`
+          }?display=${display}`
         )
       }
     >
@@ -316,9 +315,13 @@ const Card = (props) => {
             }}
           >
             <div
-              className={
-                snapshot.isDragging ? "card__content dragging" : "card__content"
-              }
+              className={[
+                snapshot.isDragging
+                  ? "card__content dragging"
+                  : `card__content`,
+                props?.task?.status === "Réalisé" ||
+                  (props?.task?.status === "Réalisé ✅" && "done__animation"),
+              ].join(" ")}
             >
               {props?.task?.state === "Vérifié" && (
                 <div className={`status__indicator__verified`} />
@@ -462,11 +465,12 @@ const Card = (props) => {
                 </div>
               )}
               <Avatars users={props?.task?.contributors} />
-              {props?.task?.status === "Réalisé" && (
-                <span className="card__done__span">
-                  <DoneIcon style={{ height: "1rem" }} />
-                </span>
-              )}
+              {props?.task?.status === "Réalisé" ||
+                (props?.task?.status === "Réalisé ✅" && (
+                  <span className="card__done__span">
+                    <DoneIcon style={{ height: "1rem" }} />
+                  </span>
+                ))}
             </div>
           </div>
         )}
@@ -616,7 +620,6 @@ const Card = (props) => {
           onClick={(e) => {
             e.stopPropagation();
             setAnchorEl(null);
-            navigate();
             setModifMode(true);
           }}
         >
