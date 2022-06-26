@@ -5,6 +5,8 @@ import { Project } from '../../entities/Project'
 import { Client } from '../../entities/Client'
 import { User } from '../../entities/User'
 import sendMail from '../../utils/mail'
+import { EventsStatus } from "../../entities/EventsStatus";
+import { EventsSchema } from "../../entities/EventsSchema";
 export const CREATE_PROJECT = {
     type: ProjectType,
     args: {
@@ -26,7 +28,7 @@ export const CREATE_PROJECT = {
             const user = User.findOne({ id: context.user.id })
             if (!user) throw new Error("Cannot find creator user.")
             const newProject = Project.create({
-                name: name, id: newid, client: client, clientId: clientId, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "<p><br></p>", perimeterDescription: "<p><br></p>", planningDescription: "<p><br></p>", goCopyDate: "", goLiveDate: "", logoUrl: "", creation: new Date().toString()
+                name: name, id: newid, client: client, clientId: clientId, contributors: [], globalStatus: "", perimeterStatus: "", planningStatus: "", globalDescription: "<p><br></p>", perimeterDescription: "<p><br></p>", planningDescription: "<p><br></p>", goCopyDate: "", goLiveDate: "", logoUrl: "", creation: new Date().toString(), eventsSchema: []
             })
             const creatorFound = await User.findOne({ id: context.user.id })
 
@@ -43,6 +45,14 @@ export const CREATE_PROJECT = {
                 }
             })
             await Project.save(newProject)
+
+            const eventsStatus = EventsStatus.create({ id: uuid(), title: "Nouveau", index: 0 })
+            const actions = EventsSchema.create({ id: uuid(), eventsStatus: [eventsStatus], title: "Action", project: newProject, backgroundUrl: "" })
+            await EventsStatus.save(eventsStatus)
+            await EventsSchema.save(actions)
+            newProject.eventsSchema = [actions]
+            await Project.save(newProject)
+
             await Client.save(client)
 
         }
@@ -101,7 +111,6 @@ export const REMOVE_CONTRIBUTORS = {
             contributors.map(async (contributor: any) => {
                 const acc = await User.findOne({ id: contributor })
                 if (acc) {
-                    console.log(project)
                     if (acc.id === project.creator.id) throw new Error("Your cannot remove the person who created the project from the collaborators.")
                     project.contributors = project.contributors.filter((c) => c.id !== acc.id)
                     sendMail(context.user, project, acc, 'remove-contributor', "Fin de collaboration", "").catch(console.error);

@@ -15,6 +15,8 @@ import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { PubSub } from 'graphql-subscriptions';
+import { EventsSchema } from './entities/EventsSchema'
+import { EventsStatus } from './entities/EventsStatus'
 
 const pubsub = new PubSub();
 
@@ -42,7 +44,7 @@ const main = async () => {
         password: config.password,
         logging: true,
         synchronize: true,
-        entities: [User, Client, Project, Event, Comment, Notification]
+        entities: [User, Client, Project, Event, Comment, Notification, EventsSchema, EventsStatus]
     })
     const app = express()
     app.use(cors())
@@ -94,10 +96,8 @@ const main = async () => {
     });
     const getDynamicContext = async (ctx: any, msg: any, args: any) => {
         // ctx is the graphql-ws Context where connectionParams live
-        console.log(ctx.connectionParams)
 
         if (ctx.connectionParams.authorization) {
-            console.log(ctx.connectionParams.authorization)
             var parts = ctx.connectionParams.authorization.split(" ");
             var token = parts[1];
 
@@ -117,9 +117,9 @@ const main = async () => {
 
 
     httpServer.listen(config.PORT, () => {
-        console.log(`API running correctly on http://${config.host}:${config.PORT}`)
+        console.info(`API running correctly on http://${config.host}:${config.PORT}`)
     })
 }
 main().catch((err) => {
-    console.log(err)
+    console.error(err)
 })

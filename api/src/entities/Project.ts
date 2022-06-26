@@ -1,8 +1,9 @@
-import { BaseEntity, Entity, PrimaryColumn, Column, ManyToOne, OneToMany, ManyToMany, JoinTable } from "typeorm";
+import { BaseEntity, Entity, PrimaryColumn, Column, ManyToOne, OneToMany, ManyToMany, JoinTable, OneToOne, JoinColumn } from "typeorm";
 import { Event } from "./Event";
 import { Client } from "./Client";
 import { User } from "./User";
 import { Notification } from "./Notification";
+import { EventsSchema } from "./EventsSchema";
 @Entity()
 export class Project extends BaseEntity {
     @PrimaryColumn()
@@ -38,5 +39,6 @@ export class Project extends BaseEntity {
     @JoinTable()
     contributors!: User[];
     @OneToMany(() => Notification, notification => notification.project) notifications!: Notification[];
+    @OneToMany(() => EventsSchema, (eventsSchema) => eventsSchema.project, { onDelete: 'CASCADE' }) eventsSchema!: EventsSchema[];
 
 }

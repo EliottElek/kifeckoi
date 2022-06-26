@@ -18,7 +18,7 @@ export const GET_USER_BY_ID = {
     async resolve(parent: any, args: any, context: any) {
         if (!context.user) throw new Error("You must be authenticated.")
         const { userId } = args
-        const user = await User.findOne({ relations: ["events", "comments", "projects", "notifications", "notifications.emitter", "notificationsEmitted"], where: { id: userId } });
+        const user = await User.findOne({ relations: ["events", "comments", "projects", "projects.contributors", "notifications", "notifications.emitter", "notificationsEmitted"], where: { id: userId } });
         if (!user) {
             return { successful: false, message: "Cannot find user." }
         }

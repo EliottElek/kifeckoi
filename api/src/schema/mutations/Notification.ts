@@ -34,6 +34,7 @@ export const CREATE_NOTIFICATION = {
             const user = await User.findOne({ where: { id: receiver }, relations: ["notifications"] })
             if (user) {
                 user.notifications.push(notification)
+                if (user.notifications.length >= 5) user.notifications.slice(0, 1)
                 context.pubsub.publish(user.id, { notification });
                 await User.save(user)
             }

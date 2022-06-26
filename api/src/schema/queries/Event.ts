@@ -2,8 +2,8 @@ import { GraphQLList, GraphQLString } from "graphql"
 import { EventType } from "../typedefs/Event"
 import { Event } from "../../entities/Event"
 import { User } from "../../entities/User"
-import { rawEvents } from '../../utils/rawEvents'
 import { ColumnType } from "../typedefs/Column"
+import { Project } from "../../entities/Project"
 export const GET_ALL_EVENTS = {
     type: new GraphQLList(EventType),
     args: {
@@ -91,6 +91,11 @@ export const FIND_EVENT_BY_EVENT_ID = {
             where: { id: id }, relations: ["project", "comments", "comments.author", "creator", "contributors"],
         })
         if (!event) throw new Error("Cannot find event.")
+        var sorted_comments = event.comments.sort((a, b) => {
+            return new Date(a.creation).getTime() -
+                new Date(b.creation).getTime()
+        });
+        event.comments = [...sorted_comments]
         return event
     }
 }
@@ -107,11 +112,15 @@ export const GET_EVENTS_BY_STATUS = {
 
         const { type, projectId } = args
 
+        const project = await Project.findOne({ where: { id: projectId }, relations: ["eventsSchema", "eventsSchema.eventsStatus"] })
         let eventsData = await Event.find({
             where: { type: type, projectId: projectId }, relations: ["project", "comments", "creator", "contributors"],
         });
-
-        rawEvents.forEach((item) => (item.tasks = []));
+        const typeSchema = project?.eventsSchema.find((e) => e.title === type)
+        if (!typeSchema) throw new Error(`Cannot find schema "${type}".`)
+        const rawEvents: typeof ColumnType = typeSchema?.eventsStatus.map((a) => {
+            return { ...a, tasks: [] };
+        })
         const eventsFinal = [...rawEvents];
         eventsData?.forEach((event) => {
             const index = eventsFinal.findIndex((ev) => ev.title === event.status);
@@ -119,6 +128,7 @@ export const GET_EVENTS_BY_STATUS = {
                 eventsFinal.push({ title: event.status, id: eventsFinal.length.toString(), tasks: [event] })
             }
         });
-        return eventsFinal
+
+        return eventsFinal ? eventsFinal : []
     }
 }
