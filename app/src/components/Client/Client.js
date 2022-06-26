@@ -126,7 +126,12 @@ const Client = () => {
           ))}
       </Grid>
 
-      <Modal open={open} setOpen={setOpen} onSubmit={submit}>
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        onSubmit={submit}
+        onClose={() => setOpen(false)}
+      >
         <form className="modal__add">
           <input
             autoFocus

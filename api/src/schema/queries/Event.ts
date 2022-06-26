@@ -116,7 +116,7 @@ export const GET_EVENTS_BY_STATUS = {
         eventsData?.forEach((event) => {
             const index = eventsFinal.findIndex((ev) => ev.title === event.status);
             if (index !== -1) eventsFinal[index].tasks.push(event); else {
-                eventsFinal.push({ title: event.status, id: eventsData.length.toString(), tasks: [event] })
+                eventsFinal.push({ title: event.status, id: eventsFinal.length.toString(), tasks: [event] })
             }
         });
         return eventsFinal

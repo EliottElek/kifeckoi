@@ -63,7 +63,11 @@ const DatePicker = ({ type, dataProject }) => {
         >
           Ajouter une date de Go live
         </Button>
-        <Modal open={modifMode} setOpen={setModifMode}>
+        <Modal
+          open={modifMode}
+          setOpen={setModifMode}
+          onClose={() => setModifMode(false)}
+        >
           <div className="date__picker__form">
             <DayPicker
               locale={fr}
@@ -109,7 +113,11 @@ const DatePicker = ({ type, dataProject }) => {
         >
           Ajouter une date de Go copy
         </Button>
-        <Modal open={modifMode} setOpen={setModifMode}>
+        <Modal
+          open={modifMode}
+          setOpen={setModifMode}
+          onClose={() => setModifMode(false)}
+        >
           <div className="date__picker__form">
             <DayPicker
               locale={fr}
@@ -158,7 +166,11 @@ const DatePicker = ({ type, dataProject }) => {
           <FiEdit2 />
         </span>
       </h4>
-      <Modal open={modifMode} setOpen={setModifMode}>
+      <Modal
+        open={modifMode}
+        setOpen={setModifMode}
+        onClose={() => setModifMode(false)}
+      >
         <div
           className="date__picker__form"
           onClick={(e) => e.stopPropagation()}

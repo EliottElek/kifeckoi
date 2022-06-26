@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 .latest__events__container__title {
   padding: 12px;
@@ -15,15 +16,18 @@
 .latest__events__container__list {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 .latest__events__container__list__item {
   padding: 12px;
   cursor: pointer;
+  position: relative;
   transition: 0.15s all;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   text-decoration: none;
+  justify-content: flex-start;
+  gap: 20px;
 }
 .latest__events__container__list__item:hover {
   background-color: rgba(128, 128, 128, 0.068);
@@ -33,11 +37,24 @@
   border-bottom: solid 1px var(--border-color);
 }
 .latest__events__container__list__item__chevron {
-  opacity: 0.6;
   font-size: 0.8rem;
   display: flex;
   align-items: center;
+  justify-self: flex-end;
+  position: absolute;
+  right: 8px;
+  height : 100%;
 }
 .latest__events__container__list__item__project {
   opacity: 0.6;
+}
+.latest__events__container__list__item__unseen {
+  color: var(--main-color);
+  background-color: rgba(0, 204, 255, 0.15);
+  padding: 2px 6px;
+  border-radius: 14px;
+  font-weight: 600;
+}
+.latest__events__container__list__item__project__container {
+  width: 70%;
 }

@@ -12,14 +12,14 @@ import {
 import "./DashBoard.scss";
 import { NavLink } from "react-router-dom";
 import TreeViewEvents from "./TreeViewEvents";
-import TreeViewProjects from "./TreeEventsProjects";
+// import TreeViewProjects from "./TreeEventsProjects";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 const SidePanel = () => {
   const {
     currentProject,
     setClients,
-    projects,
+    // projects,
     setProjects,
     currentClient,
     user,
@@ -91,7 +91,7 @@ const SidePanel = () => {
       </ul>
       <div>
         {currentProject && <TreeViewEvents />}
-        <TreeViewProjects projects={projects} />
+        {/* <TreeViewProjects projects={projects} /> */}
       </div>
     </div>
   );

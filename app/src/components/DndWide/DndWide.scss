@@ -19,3 +19,8 @@
   border: none;
   cursor: pointer;
 }
+@media screen and (max-width: 600px) {
+  #custom__bg {
+    height: calc(100vh - 60px)!important;
+  }
+}

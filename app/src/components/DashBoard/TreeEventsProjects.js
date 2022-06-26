@@ -12,7 +12,7 @@ const styles = {
       height: "40px",
       minWidth: "none",
       color: "white",
-      borderRight: "solid 3px transparent",
+      borderRight: "solid 4px transparent",
     },
     "& .MuiTreeItem-group": {
       marginLeft: "0px",

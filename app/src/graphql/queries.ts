@@ -29,6 +29,10 @@ query getUserById($userId: String!){
         id
         name
         creation
+        logoUrl
+        contributors{
+          avatarUrl
+        }
       }
       events{
         id
@@ -96,6 +100,16 @@ query findProjectByProjectId($id: String! $userId : String!){
         goLiveDate
         goCopyDate
         logoUrl
+        eventsSchema{
+          backgroundUrl
+          title
+          id
+          eventsStatus{
+            title
+            id
+            index
+          }
+        }
         creation
         creator{
           id
@@ -116,14 +130,6 @@ query findProjectByProjectId($id: String! $userId : String!){
           email
           firstname
           lastname
-        }
-        events{
-          id
-          type
-          description
-          contributors{
-            id
-          }
         }
     }
 }
@@ -324,6 +330,15 @@ query getEventsByStatus($projectId: String! $type : String!){
       id
     }
   }
+  }
+}
+`
+export const GET_EVENTS_TYPES_COUNT = gql`
+query getEventsTypesCount($projectId: String!){
+  getEventsTypesCount(projectId : $projectId){
+    title
+    count
+    backgroundUrl
   }
 }
 `

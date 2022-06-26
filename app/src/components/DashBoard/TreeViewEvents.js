@@ -4,7 +4,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 import { Context } from "../Context/Context";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
 import TimelineIcon from "@mui/icons-material/Timeline";
 const styles = {
@@ -13,7 +13,7 @@ const styles = {
       height: "40px",
       minWidth: "none",
       color: "white",
-      borderRight: "solid 3px transparent",
+      borderRight: "solid 4px transparent",
     },
     "& .MuiTreeItem-group": {
       marginLeft: "0px",
@@ -39,17 +39,9 @@ const styles = {
     },
   },
 };
-const navElements = [
-  { id: "global", name: "Overview", icon: <TimelineIcon /> },
-  { id: "actions", name: "Actions", icon: <ViewKanbanIcon /> },
-  { id: "infos", name: "Infos", icon: <ViewKanbanIcon /> },
-  { id: "decisions", name: "Décisions", icon: <ViewKanbanIcon /> },
-  { id: "risks", name: "Risques", icon: <ViewKanbanIcon /> },
-  { id: "problems", name: "Problèmes", icon: <ViewKanbanIcon /> },
-  { id: "deliverables", name: "Livrables", icon: <ViewKanbanIcon /> },
-];
 export default function TreeViewEvents() {
   const navigate = useNavigate();
+  const { schema } = useParams();
   const { currentProject, setOpenDrawer } = React.useContext(Context);
   return (
     <TreeView
@@ -59,27 +51,53 @@ export default function TreeViewEvents() {
       defaultExpandIcon={<ChevronRightIcon />}
       sx={{ overflow: "hidden" }}
     >
-      <TreeItem nodeId="1" label="Évènements" sx={styles.treeItem}>
-        {navElements.map((nav) => (
+      <TreeItem nodeId="1" label="Tableaux" sx={styles.treeItem}>
+        <TreeItem
+          onClick={() => {
+            setOpenDrawer(false);
+            navigate(`/project/${currentProject?.id}/global`);
+          }}
+          nodeId={"global"}
+          label={
+            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <TimelineIcon />
+              Global
+            </span>
+          }
+          sx={
+            window?.location?.href.split("/")[
+              window?.location?.href.split("/").length - 1
+            ] === "global"
+              ? styles.treeItemActive
+              : styles.treeItem
+          }
+        />
+        {currentProject?.eventsSchema?.map((nav) => (
           <TreeItem
             key={nav.id}
             onClick={() => {
               setOpenDrawer(false);
-              navigate(`/project/${currentProject?.id}/${nav?.id}`);
+              navigate(
+                `/project/${currentProject?.id}/${nav?.title.toLowerCase()}?display=kanban`
+              );
             }}
             nodeId={nav?.id}
             label={
               <span
                 style={{ display: "flex", alignItems: "center", gap: "8px" }}
               >
-                {nav.icon}
-                {nav.name}
+                <ViewKanbanIcon
+                  sx={{
+                    background: nav.backgroundUrl,
+                    padding: "1px",
+                    borderRadius: "3px",
+                  }}
+                />
+                {nav.title}
               </span>
             }
             sx={
-              window?.location?.href.split("/")[
-                window?.location?.href.split("/").length - 1
-              ] === nav.id
+              schema === nav.title.toLowerCase()
                 ? styles.treeItemActive
                 : styles.treeItem
             }
