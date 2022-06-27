@@ -128,7 +128,9 @@ const EventKanban = ({ type }) => {
   const add = async (e) => {
     if (input === "") return;
     e.preventDefault();
-    const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
+    const ArrayOfIds = selectedAcountables
+      .filter((acc) => acc.id !== user.id)
+      .map((acc) => acc.id);
     try {
       const index = eventSelected.tasks.length;
       const { data } = await createEvent({
@@ -152,7 +154,9 @@ const EventKanban = ({ type }) => {
           projectId: currentProject.id,
           emitterId: user.id,
           content: input,
-          receivers: currentProject.contributors.map((contrib) => contrib.id),
+          receivers: currentProject.contributors
+            .filter((acc) => acc.id !== user.id)
+            .map((acc) => acc.id),
         },
       });
       setInput("");

@@ -4,9 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import {
   Avatar,
   Badge,
-  List,
   ListItemAvatar,
-  ListItemButton,
   ListItemText,
   CircularProgress,
 } from "@mui/material";
@@ -20,79 +18,78 @@ import { READ_NOTIFICATION } from "../../graphql/mutations";
 import { NavLink } from "react-router-dom";
 const NotifItem = ({ notif, onClick }) => {
   return (
-    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "transparent" }}>
-      <ListItemButton
-        onClick={onClick}
-        component={NavLink}
-        to={notif?.redirect}
-        style={{ textDecoration: "none", display: "flex" }}
-      >
-        <ListItemAvatar>
-          {notif.seen ? (
+    <MenuItem
+      disableRipple
+      onClick={onClick}
+      component={NavLink}
+      to={notif?.redirect}
+      style={{ textDecoration: "none", display: "flex" }}
+    >
+      <ListItemAvatar>
+        {notif.seen ? (
+          <Avatar src={notif.emitter.avatarUrl}></Avatar>
+        ) : (
+          <Badge
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            sx={{
+              "& .MuiBadge-badge": {
+                color: "white",
+                height: "12px",
+                width: "12px",
+                top: "24px",
+                left: "24px",
+                borderRadius: "50%",
+                backgroundColor: "var(--main-color)",
+              },
+            }}
+            variant="dot"
+          >
             <Avatar src={notif.emitter.avatarUrl}></Avatar>
-          ) : (
-            <Badge
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              sx={{
-                "& .MuiBadge-badge": {
-                  color: "white",
-                  height: "12px",
-                  width: "12px",
-                  top: "24px",
-                  left: "24px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--main-color)",
-                },
-              }}
-              variant="dot"
-            >
-              <Avatar src={notif.emitter.avatarUrl}></Avatar>
-            </Badge>
-          )}
-        </ListItemAvatar>
-        <ListItemText
-          primary={
-            <Typography
-              noWrap
-              sx={{
-                maxWidth: notif.seen ? "90%" : "85%",
-                fontWeight: notif.seen ? "normal" : "bold",
-              }}
-            >
-              {notif.message}
-            </Typography>
-          }
-          secondary={
-            <Typography
-              sx={{
-                fontSize: "0.8rem",
-                opacity: notif.seen ? 0.5 : "0.8",
-                fontWeight: notif.seen ? "normal" : "bold",
-              }}
-              noWrap
-            >
-              {
-                <Typography
-                  noWrap
-                  sx={{
-                    maxWidth: notif.seen ? "90%" : "85%",
-                    fontWeight: notif.seen ? "normal" : "bold",
-                    fontStyle: "italic",
-                    fontSize: "0.8rem",
-                  }}
-                >
-                  "{notif.content}"
-                </Typography>
-              }
-            </Typography>
-          }
-          noWrap
-        />
-      </ListItemButton>
-    </List>
+          </Badge>
+        )}
+      </ListItemAvatar>
+      <ListItemText
+        primary={
+          <Typography
+            noWrap
+            sx={{
+              maxWidth: notif.seen ? "90%" : "85%",
+              fontWeight: notif.seen ? "normal" : "bold",
+            }}
+          >
+            {notif.message}
+          </Typography>
+        }
+        secondary={
+          <Typography
+            sx={{
+              fontSize: "0.8rem",
+              opacity: notif.seen ? 0.5 : "0.8",
+              fontWeight: notif.seen ? "normal" : "bold",
+            }}
+            noWrap
+          >
+            {
+              <Typography
+                noWrap
+                sx={{
+                  maxWidth: notif.seen ? "90%" : "85%",
+                  fontWeight: notif.seen ? "normal" : "bold",
+                  fontStyle: "italic",
+                  fontSize: "0.8rem",
+                }}
+              >
+                "{notif.content}"
+              </Typography>
+            }
+          </Typography>
+        }
+        noWrap
+      />
+    </MenuItem>
   );
 };
 export default function NotifPanel() {
@@ -156,7 +153,7 @@ export default function NotifPanel() {
   };
   return (
     <div>
-      <IconButton onClick={handleClick}>
+      <IconButton onClick={handleClick} disableRipple>
         <Badge
           sx={{
             "& .MuiBadge-badge": {
@@ -178,15 +175,11 @@ export default function NotifPanel() {
         open={open}
         onClose={handleClose}
         sx={{
-          padding: "0px!important",
           maxHeight: "400px",
           "& .MuiPaper-root": {
             color: "var(--font-color)",
             bgcolor: "var(--card-background)",
             width: { xs: "100%", sm: "360px" },
-            "& .MuiList-root": {
-              paddingTop: "0px",
-            },
           },
         }}
         MenuListProps={{
@@ -195,9 +188,9 @@ export default function NotifPanel() {
       >
         {notifQuery?.loading && <CircularProgress />}
         {!notifQuery?.loading && notifications.length === 0 ? (
-          <MenuItem style={{ padding: "4px", textAlign: "center" }}>
+          <Typography style={{ padding: "4px", textAlign: "center" }}>
             Aucune notification.
-          </MenuItem>
+          </Typography>
         ) : (
           !notifQuery?.loading &&
           notifications.slice(0, 5).map((notif) => (

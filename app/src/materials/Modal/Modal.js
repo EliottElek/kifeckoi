@@ -26,7 +26,12 @@ export default function BasicModal({ children, open, onClose, card }) {
   };
 
   return (
-    <Modal open={open} onClose={onClose} disableAutoFocus={true}>
+    <Modal
+      open={open}
+      onClose={onClose}
+      disableAutoFocus={true}
+      onClick={(e) => e.stopPropagation()}
+    >
       <Box sx={style}>{children}</Box>
     </Modal>
   );

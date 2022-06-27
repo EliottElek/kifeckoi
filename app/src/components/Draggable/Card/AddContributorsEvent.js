@@ -10,10 +10,10 @@ import { toast } from "react-toastify";
 const AddContributorsEvevent = ({
   event,
   open,
-  setOpen,
   dataEvents,
   dataProject,
   alreadyExistingContributors,
+  setOpenAddContributorModal,
 }) => {
   const [selectedContributors, setSelectedContributors] = React.useState([]);
 
@@ -49,15 +49,22 @@ const AddContributorsEvevent = ({
         pauseOnHover: false,
       });
     }
-    setOpen(false);
+    setOpenAddContributorModal(false);
   };
   return (
-    <Modal open={open}>
+    <Modal
+      style={{ PointerEvents: "none" }}
+      open={open}
+      onClose={(e) => {
+        e.stopPropagation();
+        setOpenAddContributorModal(false);
+      }}
+    >
       <div className="modal__content__container" style={{ width: "95%" }}>
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setOpen(false);
+            setOpenAddContributorModal(false);
           }}
           className="close__modal__button"
         >
@@ -96,7 +103,7 @@ const AddContributorsEvevent = ({
           ))}
         </div>
         <div className="add__contributors__actions__container">
-          <Button reversed onClick={() => setOpen(false)}>
+          <Button reversed onClick={() => setOpenAddContributorModal(false)}>
             Annuler
           </Button>
           <Button onClick={handleAddContributors}>Ajouter</Button>

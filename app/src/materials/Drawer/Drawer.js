@@ -117,7 +117,6 @@ function ResponsiveDrawer(props) {
             style={{
               display: "flex",
               alignItems: "center",
-              height: "55px",
             }}
           >
             <img
@@ -128,7 +127,11 @@ function ResponsiveDrawer(props) {
               }}
               src={logo}
               alt=""
-              style={{ pahddingTop: "10px", height: "42px" }}
+              style={{
+                paddingTop: "20px",
+                paddingBottom: "18px",
+                height: "42px",
+              }}
               className="logo__kifekoi"
             />
           </div>

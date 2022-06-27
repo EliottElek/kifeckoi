@@ -70,6 +70,8 @@ const AutoCompleteUsers = ({
   }, [alreadyExistingContributors, data?.getAllUsers, setContributors, users]);
   return (
     <Select
+      onFocus={(e) => e.stopPropagation()}
+      onCLick={(e) => e.stopPropagation()}
       closeMenuOnSelect={false}
       isMulti={multi ? true : false}
       placeholder={placeholder}

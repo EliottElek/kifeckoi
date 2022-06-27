@@ -132,22 +132,30 @@ export default function CustomizedDividers(props) {
         onChange={handleAlignment}
         aria-label="text alignment"
       >
-        <StyledToggleButton value="list">
+        <StyledToggleButton value="list" disableRipple>
           <FormatListBulletedIcon style={{ color: "var(--font-color)" }} />
         </StyledToggleButton>
-        <StyledToggleButton value="kanban">
+        <StyledToggleButton value="kanban" disableRipple>
           <GridViewIcon style={{ color: "var(--font-color)" }} />
         </StyledToggleButton>
       </StyledToggleButtonGroup>
       <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
-      <Button onClick={handleClickFilter} style={{ border: "none" }}>
+      <Button
+        onClick={handleClickFilter}
+        style={{ border: "none" }}
+        disableRipple
+      >
         <FilterAltIcon style={{ color: "var(--font-color)" }} />
         <p style={{ fontSize: "0.6rem", color: "var(--font-color)" }}>
           Filtrer
         </p>
         <ArrowDropDownIcon style={{ color: "var(--font-color)" }} />
       </Button>
-      <IconButton onClick={handleClickSettings} sx={{ height: "40px" }}>
+      <IconButton
+        onClick={handleClickSettings}
+        sx={{ height: "40px" }}
+        disableRipple
+      >
         <SettingsIcon style={{ color: "var(--font-color)" }} />
       </IconButton>
       <Menu
@@ -162,16 +170,24 @@ export default function CustomizedDividers(props) {
           },
         }}
       >
-        <MenuItem style={{ fontSize: "0.9rem" }} onClick={(e) => {}}>
+        <MenuItem
+          disableRipple
+          style={{ fontSize: "0.9rem" }}
+          onClick={(e) => {}}
+        >
           Afficher les évènements créés cette semaine
         </MenuItem>
-        <MenuItem style={{ fontSize: "0.9rem" }} onClick={() => {}}>
+        <MenuItem
+          disableRipple
+          style={{ fontSize: "0.9rem" }}
+          onClick={() => {}}
+        >
           Afficher les évènements créés la semaine dernière
         </MenuItem>
-        <MenuItem style={{ fontSize: "0.9rem" }}>
+        <MenuItem disableRipple style={{ fontSize: "0.9rem" }}>
           Afficher les évènements en status à vérifier
         </MenuItem>
-        <MenuItem style={{ fontSize: "0.9rem" }}>
+        <MenuItem disableRipple style={{ fontSize: "0.9rem" }}>
           Afficher les évènements en status vérifié
         </MenuItem>
       </Menu>
@@ -188,6 +204,7 @@ export default function CustomizedDividers(props) {
         }}
       >
         <MenuItem
+          disableRipple
           style={{ fontSize: "0.9rem" }}
           onClick={() => {
             handleCloseSettings();

@@ -10,7 +10,6 @@ import Drawer from "./materials/Drawer/Drawer";
 import Backdrop from "./materials/Backdrop/Backdrop";
 import Progress from "./materials/Progress/Progress";
 import NoInternetConnection from "./components/NoInternetConnectionWrapper/NoInternetConnectionWrapper";
-import StickyNavAdvanced from "./components/StickyNavbar/StickyNavBarAdvanced";
 import Projects from "./components/Projects/Projects";
 import CardModal from "./components/Draggable/Card/CardModal";
 const SidePanel = lazy(() => import("./components/DashBoard/SidePanel"));
@@ -211,8 +210,22 @@ const MainContent = () => {
           element={
             <SecureRoute margin>
               <Suspense fallback={renderLoader()}>
-                <StickyNavAdvanced account />
-                <AccountPage />
+                <Drawer
+                  mainContent={
+                    <SecureRoute margin>
+                      <Suspense fallback={renderLoader()}>
+                        <AccountPage />
+                      </Suspense>
+                    </SecureRoute>
+                  }
+                  secondaryContent={
+                    <Suspense fallback={renderLoader()}>
+                      <SecondaryContent />
+                    </Suspense>
+                  }
+                  drawerWidth={240}
+                  breakPoint={800}
+                />
               </Suspense>
             </SecureRoute>
           }
