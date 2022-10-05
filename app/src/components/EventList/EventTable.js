@@ -15,7 +15,6 @@ import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
@@ -26,6 +25,9 @@ import { Context } from "../Context/Context";
 import RenderHtml from "../../assets/RenderHtml";
 import { MenuItem, Menu, CircularProgress } from "@mui/material";
 import getPeriod from "../../assets/functions/getPeriod";
+import Collapse from "@mui/material/Collapse";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import "./EventTable.scss";
 import {
   useDeleteMultipleEvents,
@@ -35,8 +37,7 @@ import Button from "../../materials/Button/Button";
 import { toast } from "react-toastify";
 import Modal from "../../materials/Modal/Modal";
 import { MdOutlineClear } from "react-icons/md";
-import StyledSwitch from "./StyledSwitch";
-
+import HistoryRow from "./HistoryRow/HistoryRow";
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -103,7 +104,147 @@ const headCells = [
     label: "État",
   },
 ];
-
+function Row(props) {
+  const { row } = props;
+  const [open, setOpen] = React.useState(false);
+  const { currentProject } = React.useContext(Context);
+  return (
+    <React.Fragment>
+      <TableRow
+        hover
+        role="checkbox"
+        aria-checked={props.isItemSelected}
+        tabIndex={-1}
+        key={row.id}
+        selected={props.isItemSelected}
+        style={styles.row}
+      >
+        <TableCell
+          padding="checkbox"
+          onClick={(event) =>
+            props.selectMode && props.handleClick(event, row.id)
+          }
+          sx={{
+            color: "var(--font-color)",
+            borderColor: "var(--border-color)",
+          }}
+        >
+          {props.selectMode ? (
+            <Checkbox
+              disableRipple
+              color="primary"
+              sx={{
+                color: "var(--main-color)",
+                "&.Mui-checked": {
+                  color: "var(--main-color)",
+                },
+              }}
+              checked={props.isItemSelected}
+            />
+          ) : (
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              sx={{ color: "var(--font-color)" }}
+              disableRipple
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          )}
+        </TableCell>
+        <TableCell
+          component={NavLink}
+          style={styles.row}
+          to={`/project/${currentProject.id}/${row.type.toLowerCase()}/${
+            row.id
+          }?display=list`}
+          id={row.id}
+          scope="row"
+          padding="none"
+          align="left"
+        >
+          <span
+            className={`card__icon__table ${
+              row.period === getPeriod()
+                ? "current__period__table"
+                : "previous__period__table"
+            }`}
+          >
+            {row.period}
+          </span>
+        </TableCell>
+        <TableCell
+          component={NavLink}
+          style={styles.row}
+          to={`/project/${currentProject.id}/${row.type.toLowerCase()}/${
+            row.id
+          }?display=list`}
+          align="left"
+        >
+          <RenderHtml>{row.description}</RenderHtml>
+        </TableCell>
+        <TableCell
+          component={NavLink}
+          style={styles.row}
+          to={`/project/${currentProject.id}/${row.type.toLowerCase()}/${
+            row.id
+          }?display=list`}
+          align="center"
+        >
+          {"none"}
+        </TableCell>
+        <TableCell
+          component={NavLink}
+          style={styles.row}
+          to={`/project/${currentProject.id}/${row.type.toLowerCase()}/${
+            row.id
+          }?display=list`}
+          align="right"
+        >
+          {row.status}
+        </TableCell>
+        <TableCell
+          component={NavLink}
+          style={styles.row}
+          to={`/project/${currentProject.id}/${row.type.toLowerCase()}/${
+            row.id
+          }?display=list`}
+          align="right"
+        >
+          {row.state === "" ? (
+            <span style={{ fontStyle: "italic" }}>Neutre</span>
+          ) : (
+            row.state
+          )}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box sx={{ margin: 1 }}>
+              <Typography
+                variant="h6"
+                gutterBottom
+                component="div"
+                sx={{ color: "var(--font-color)", fontSize: "1.1rem" }}
+              >
+                Historique
+              </Typography>
+              <Table size="small" aria-label="history">
+                <TableBody>
+                  {row.comments.map((comment) => (
+                    <HistoryRow comment={comment} row={row} />
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+}
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -163,7 +304,7 @@ function EnhancedTableHead(props) {
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
+            sortDirection={orderBy === headCell ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -253,22 +394,6 @@ const EnhancedTableToolbar = (props) => {
           Évènements
         </Typography>
       )}
-      <Typography
-        sx={{ color: "var(--font-color)" }}
-        variant="caption"
-        id="tableTitle"
-        component="div"
-      >
-        dense
-      </Typography>
-      <FormControlLabel
-        control={
-          <StyledSwitch
-            checked={props.dense}
-            onChange={props.handleChangeDense}
-          />
-        }
-      />
       {numSelected === 0 && (
         <Tooltip title="Filter list">
           <IconButton disableRipple sx={{ color: "var(--font-color)" }}>
@@ -326,15 +451,13 @@ export default function EnhancedTable({ type }) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const location = useLocation();
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const deleteMultipleEvents = useDeleteMultipleEvents();
   const changeEventState = useChangeEventState();
   const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
 
   const { id } = useParams();
-  const { currentProject, eventsData, setEventsData } =
-    React.useContext(Context);
+  const { eventsData, setEventsData } = React.useContext(Context);
   const findEventsByProjectId = useFindEventsByProjectId({
     variables: { id: id, type: type },
     onCompleted: (data) => {
@@ -461,10 +584,6 @@ export default function EnhancedTable({ type }) {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -486,9 +605,7 @@ export default function EnhancedTable({ type }) {
       >
         <EnhancedTableToolbar
           numSelected={selected.length}
-          dense={dense}
           changeStateSelectedEvents={changeStateSelectedEvents}
-          handleChangeDense={handleChangeDense}
           setOpenDeleteModal={setOpenDeleteModal}
         />
         <TableContainer>
@@ -496,7 +613,7 @@ export default function EnhancedTable({ type }) {
             stickyHeader
             sx={{ backgroundColor: "var(--background1)" }}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
+            size={"small"}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -514,109 +631,19 @@ export default function EnhancedTable({ type }) {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
+                    <Row
+                      handleClick={handleClick}
                       key={row.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell
-                        padding="checkbox"
-                        onClick={(event) => handleClick(event, row.id)}
-                        sx={{
-                          color: "var(--font-color)",
-                          borderColor: "var(--border-color)",
-                        }}
-                      >
-                        <Checkbox
-                          disableRipple
-                          color="primary"
-                          sx={{
-                            color: "var(--main-color)",
-                            "&.Mui-checked": {
-                              color: "var(--main-color)",
-                            },
-                          }}
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component={NavLink}
-                        style={styles.row}
-                        to={`/project/${
-                          currentProject.id
-                        }/${row.type.toLowerCase()}/${row.id}?display=list`}
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        align="left"
-                      >
-                        <span
-                          className={`card__icon__table ${
-                            row.period === getPeriod()
-                              ? "current__period__table"
-                              : "previous__period__table"
-                          }`}
-                        >
-                          {row.period}
-                        </span>
-                      </TableCell>
-                      <TableCell
-                        component={NavLink}
-                        style={styles.row}
-                        to={`/project/${
-                          currentProject.id
-                        }/${row.type.toLowerCase()}/${row.id}?display=list`}
-                        align="left"
-                      >
-                        <RenderHtml>{row.description}</RenderHtml>
-                      </TableCell>
-                      <TableCell
-                        component={NavLink}
-                        style={styles.row}
-                        to={`/project/${
-                          currentProject.id
-                        }/${row.type.toLowerCase()}/${row.id}?display=list`}
-                        align="center"
-                      >
-                        {"none"}
-                      </TableCell>
-                      <TableCell
-                        component={NavLink}
-                        style={styles.row}
-                        to={`/project/${
-                          currentProject.id
-                        }/${row.type.toLowerCase()}/${row.id}?display=list`}
-                        align="right"
-                      >
-                        {row.status}
-                      </TableCell>
-                      <TableCell
-                        component={NavLink}
-                        style={styles.row}
-                        to={`/project/${
-                          currentProject.id
-                        }/${row.type.toLowerCase()}/${row.id}?display=list`}
-                        align="right"
-                      >
-                        {row.state === "" ? (
-                          <span style={{ fontStyle: "italic" }}>Neutre</span>
-                        ) : (
-                          row.state
-                        )}
-                      </TableCell>
-                    </TableRow>
+                      row={row}
+                      isItemSelected={isItemSelected}
+                      labelId={labelId}
+                    />
                   );
                 })}
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: 33 * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />

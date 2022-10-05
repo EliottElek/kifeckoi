@@ -235,11 +235,20 @@ query findEventsByProjectId($id: String! $type : String!){
     description
     status
     state
+    creation
     contributors{
       avatarUrl
     }
     comments{
       id
+      content
+      creation
+      author{
+        id
+        avatarUrl
+        firstname
+        lastname
+      }
     }
   }
 }

@@ -17,3 +17,21 @@
 .css-5mh942-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active {
   color: var(--font-color);
 }
+.css-1ex1afd-MuiTableCell-root {
+  border-bottom: solid 1px var(--border-color);
+}
+.history__row__area {
+  border: solid 1px transparent;
+  display: block;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.history__row__area:hover {
+  border: solid 1px var(--border-color);
+}
+.history__row__editor {
+  background-color: white;
+  padding: 4px;
+  border-radius: 4px;
+}

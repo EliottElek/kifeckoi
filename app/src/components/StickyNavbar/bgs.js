@@ -42,4 +42,8 @@ export const backgrounds = [
     type: "image",
     url: "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2400x1600/e675d0b443799d33e60fb517288e6fe1/photo-1573515597366-bff9d26b59fe.jpg",
   },
+  {
+    type: "image",
+    url: "https://trello-backgrounds.s3.amazonaws.com/60d58bee40b9183073c9cceb/2048x2048/2fe4663a09a70a528f61ce4f06cc339e/Fond_triangle_2.jpg",
+  },
 ];

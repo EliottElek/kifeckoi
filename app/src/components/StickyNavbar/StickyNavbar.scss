@@ -13,12 +13,12 @@
   background: var(--nav-color);
 }
 
-@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-  .stickynavbar__container {
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-  }
-}
+// @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+//   .stickynavbar__container {
+//     -webkit-backdrop-filter: blur(10px);
+//     backdrop-filter: blur(10px);
+//   }
+// }
 .settings__button {
   width: 40px;
   height: 40px;

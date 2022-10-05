@@ -12,7 +12,7 @@ const styles = {
     "& .MuiTreeItem-content": {
       height: "40px",
       minWidth: "none",
-      color: "white",
+      color: "var(--font-color)",
       borderRight: "solid 4px transparent",
     },
     "& .MuiTreeItem-group": {
@@ -26,7 +26,7 @@ const styles = {
   treeItemActive: {
     "& .MuiTreeItem-content": {
       height: "40px",
-      color: "white",
+      color: "var(--font-color)",
       borderColor: "var(--main-color)",
       backgroundColor: "rgba(25, 118, 210, 0.08)",
     },
@@ -78,7 +78,9 @@ export default function TreeViewEvents() {
             onClick={() => {
               setOpenDrawer(false);
               navigate(
-                `/project/${currentProject?.id}/${nav?.title.toLowerCase()}?display=kanban`
+                `/project/${
+                  currentProject?.id
+                }/${nav?.title.toLowerCase()}?display=kanban`
               );
             }}
             nodeId={nav?.id}
@@ -88,6 +90,7 @@ export default function TreeViewEvents() {
               >
                 <ViewKanbanIcon
                   sx={{
+                    color: "white",
                     background: nav.backgroundUrl,
                     padding: "1px",
                     borderRadius: "3px",
