@@ -38,7 +38,7 @@ const HistoryRow = ({ row, comment }) => {
         {formatDate(comment.creation)}
       </TableCell>
       <TableCell sx={styles.row} align="right">
-        <Avatar sx={{ width: 22, height: 22 }} src={comment.author.avatarUrl} />
+        <Avatar sx={{ width: 22, height: 22 }} src={comment?.author?.avatarUrl} />
       </TableCell>
     </TableRow>
   );
