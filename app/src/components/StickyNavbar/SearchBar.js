@@ -10,6 +10,7 @@ import {
   Box,
   List,
   ListItemButton,
+  Typography,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -48,7 +49,7 @@ const SearchBar = () => {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: "var(--color-background-1)",
+    background: "var(--card-background)",
   };
   const [filteredData, setFilteredData] = React.useState([]);
   const [wordEntered, setWordEntered] = React.useState("");
@@ -76,11 +77,15 @@ const SearchBar = () => {
   const ResultItem = ({ item }) => {
     return (
       <ListItemButton
+        disableRipple
         component={NavLink}
         to={`/project/${id}/${item.type.toLowerCase()}/${
           item.id
         }?display=kanban`}
         sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
           "& img ": {
             height: "60px",
             width: "80px",
@@ -89,6 +94,7 @@ const SearchBar = () => {
         }}
       >
         <RenderHtml>{item.description}</RenderHtml>
+        <Typography variant="caption">{item.project.name}</Typography>
       </ListItemButton>
     );
   };

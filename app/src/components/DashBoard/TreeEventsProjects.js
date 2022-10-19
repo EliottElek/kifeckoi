@@ -11,7 +11,7 @@ const styles = {
     "& .MuiTreeItem-content": {
       height: "40px",
       minWidth: "none",
-      color: "white",
+      color: "var(--font-color)",
       borderRight: "solid 4px transparent",
     },
     "& .MuiTreeItem-group": {
@@ -25,7 +25,7 @@ const styles = {
   treeItemActive: {
     "& .MuiTreeItem-content": {
       height: "40px",
-      color: "white",
+      color: "var(--font-color)",
       borderColor: "var(--main-color)",
       backgroundColor: "rgba(25, 118, 210, 0.08)",
     },
@@ -60,7 +60,7 @@ export default function TreeViewProjects() {
           nodeId={"all"}
           label={
             <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <FilterNoneIcon style={{ height: "1rem" }} />
+              <FilterNoneIcon style={{ height: "1rem", color: "white" }} />
               View all
             </span>
           }

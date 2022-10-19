@@ -5,7 +5,10 @@ import React, { useState } from "react";
 import Card from "./Card/Card";
 import { Context } from "../Context/Context";
 import Button from "../../materials/Button/Button";
+import Skeleton from "@mui/material/Skeleton";
 import { MdOutlineClear } from "react-icons/md";
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
 import {
   useCreateEvent,
   useChangeEventStatus,
@@ -18,8 +21,6 @@ import { Navigate, useParams } from "react-router";
 import { Flip } from "react-toastify";
 import Column from "./Column";
 import AutoTextArea from "../../materials/AutoSizeTextArea/AutoSizeTextArea";
-import Progress from "../../materials/Progress/Progress";
-import Backdrop from "../../materials/Backdrop/Backdrop";
 import getPeriod from "../../assets/functions/getPeriod";
 import AddColumn from "./AddColumn";
 const EventKanban = ({ type }) => {
@@ -128,7 +129,9 @@ const EventKanban = ({ type }) => {
   const add = async (e) => {
     if (input === "") return;
     e.preventDefault();
-    const ArrayOfIds = selectedAcountables.map((acc) => acc.id);
+    const ArrayOfIds = selectedAcountables
+      .filter((acc) => acc.id !== user.id)
+      .map((acc) => acc.id);
     try {
       const index = eventSelected.tasks.length;
       const { data } = await createEvent({
@@ -152,7 +155,9 @@ const EventKanban = ({ type }) => {
           projectId: currentProject.id,
           emitterId: user.id,
           content: input,
-          receivers: currentProject.contributors.map((contrib) => contrib.id),
+          receivers: currentProject.contributors
+            .filter((acc) => acc.id !== user.id)
+            .map((acc) => acc.id),
         },
       });
       setInput("");
@@ -184,38 +189,55 @@ const EventKanban = ({ type }) => {
   if (!dataProject && !dataProject.loading) {
     return <Navigate to={"/404"} />;
   }
-  if (!currentProject)
-    return (
-      <Backdrop>
-        <Progress size="medium" reversed />
-      </Backdrop>
-    );
-  if (!dataEvents?.data || dataEvents.loading || !events)
-    return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+  const Loader = () => (
+    <>
+      <LinearProgress sx={{ p: 0, m: 0 }} />
+      <Box
+        sx={{
           width: "100%",
-          height: "100%",
-        }}
-      >
-        <Progress size="medium" reversed />
-      </div>
-    );
-  if (!events)
-    return (
-      <div
-        style={{
+          p: "10px",
+          pl: "20px",
+          height: "45%",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          gap: "10px",
         }}
       >
-        <Progress size="medium" reversed />
-      </div>
-    );
+        {[1, 2, 3].map((i) => (
+          <Box
+            sx={{
+              width: "270px",
+              height: "100%",
+              bgcolor: "var(--col-background)",
+              p: "12px",
+              opacity: "0.5",
+            }}
+          >
+            <Skeleton
+              variant="rounded"
+              style={{ borderRadius: "4px", margin: "10px" }}
+              width={"50%"}
+              height={30}
+            />
+            <Skeleton
+              variant="rectangular"
+              width={"100%"}
+              height={i === 2 ? `300px` : `200px`}
+            />
+            <Skeleton
+              style={{ borderRadius: "4px", marginTop: "10px" }}
+              variant="rectangular"
+              width={"100%"}
+              height={"30px"}
+            />
+          </Box>
+        ))}
+      </Box>
+    </>
+  );
+  if (!currentProject) return <Loader />;
+  if (!dataEvents?.data || dataEvents.loading || !events) return <Loader />;
+
+  if (!events) return <Loader />;
 
   return (
     <div className="kanban">

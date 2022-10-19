@@ -21,9 +21,8 @@
     position: relative;
     background-color: var(--col-background);
     height: min-content;
-    & ~ & {
-      margin-left: 10px;
-    }
+    margin: 10px 5px;
+
     &__spacer {
       background-color: transparent;
       padding: 4px;
@@ -184,23 +183,6 @@
 .clear__button:hover {
   background-color: rgba(128, 128, 128, 0.246);
 }
-table {
-  border-collapse: collapse;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-th,
-td {
-  padding: 8px;
-  text-align: left;
-}
-.events__rows__container__head {
-  width: 100%;
-  z-index: 1;
-  background-color: var(--color-background-2);
-  outline: 1px solid var(--border-color);
-}
 .modif__description__textarea__row {
   width: 97% !important;
   font-size: 1rem;
@@ -244,6 +226,12 @@ td {
   position: relative;
   background-color: var(--col-background);
   height: min-content;
-  margin-left: 10px;
+  margin-left: 5px;
   margin-top: 10px;
+}
+.kanban__section__title__counter {
+  color: var(--main-color);
+  margin-left: 6px;
+  font-weight: 400;
+  font-size: 1rem;
 }

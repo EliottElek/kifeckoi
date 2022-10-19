@@ -63,7 +63,8 @@ const Card = (props) => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (e) => {
+    e.stopPropagation();
     setAnchorEl(null);
   };
   const [anchorEl2, setAnchorEl2] = React.useState(null);
@@ -71,7 +72,8 @@ const Card = (props) => {
   const handleClick2 = (event) => {
     setAnchorEl2(event.currentTarget);
   };
-  const handleClose2 = () => {
+  const handleClose2 = (e) => {
+    e.stopPropagation();
     setAnchorEl2(null);
   };
   const handleModifyDescription = async (e, content, mentions) => {
@@ -319,8 +321,9 @@ const Card = (props) => {
                 snapshot.isDragging
                   ? "card__content dragging"
                   : `card__content`,
-                props?.task?.status === "Réalisé" ||
-                  (props?.task?.status === "Réalisé ✅" && "done__animation"),
+                (props?.task?.status === "Réalisé" ||
+                  props?.task?.status === "Réalisé ✅") &&
+                  "done__animation",
               ].join(" ")}
             >
               {props?.task?.state === "Vérifié" && (
@@ -465,12 +468,12 @@ const Card = (props) => {
                 </div>
               )}
               <Avatars users={props?.task?.contributors} />
-              {props?.task?.status === "Réalisé" ||
-                (props?.task?.status === "Réalisé ✅" && (
-                  <span className="card__done__span">
-                    <DoneIcon style={{ height: "1rem" }} />
-                  </span>
-                ))}
+              {(props?.task?.status === "Réalisé" ||
+                props?.task?.status === "Réalisé ✅") && (
+                <span className="card__done__span">
+                  <DoneIcon style={{ height: "1rem" }} />
+                </span>
+              )}
             </div>
           </div>
         )}
@@ -506,7 +509,7 @@ const Card = (props) => {
         dataProject={props.dataProject}
         alreadyExistingContributors={props?.task?.contributors}
         open={openAddContributorModal}
-        setOpen={setOpenAddContributorModal}
+        setOpenAddContributorModal={setOpenAddContributorModal}
       />
       <Modal open={openDeleteModal} setOpen={setOpenDeleteModal}>
         <div

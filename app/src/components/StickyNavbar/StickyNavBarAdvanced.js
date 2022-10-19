@@ -45,6 +45,7 @@ const StickyNavAdvanced = ({ advanced }) => {
     <StickyNavbar>
       <div style={{ display: "flex", alignItems: "center" }}>
         <IconButton
+          disableRipple
           sx={{
             display: { xs: "flex", sm: "none" },
             color: "var(--font-color)",

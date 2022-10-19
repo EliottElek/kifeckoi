@@ -16,6 +16,7 @@ import ModifAreaCard from "./ModifAreaCard/ModifAreaCard";
 import Avatar from "../../../materials/Avatar/Avatar";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { useFindEventByEventId } from "../../../hooks/queries/event";
+import AddContributorsEvent from "./AddContributorsEvent";
 import {
   useCreateNotification,
   useMentionUsersInEvent,
@@ -40,7 +41,8 @@ const CardModal = () => {
   const deleteEvent = useDeleteEvent();
   const [searchParams] = useSearchParams();
   const display = searchParams.get("display");
-  const [setOpenAddContributorModal] = React.useState(false);
+  const [openAddContributorModal, setOpenAddContributorModal] =
+    React.useState(false);
   const [description, setDescription] = React.useState(null);
 
   const { data, loading, refetch } = useFindEventByEventId({
@@ -321,6 +323,13 @@ const CardModal = () => {
           </div>
         </div>
       </Modal>
+      <AddContributorsEvent
+        event={event}
+        dataEvents={dataEvents}
+        alreadyExistingContributors={event?.contributors}
+        open={openAddContributorModal}
+        setOpenAddContributorModal={setOpenAddContributorModal}
+      />
     </>
   );
 };

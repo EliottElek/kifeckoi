@@ -139,7 +139,7 @@ const Column = ({
               }}
               className={`kanban__section__title`}
             >
-              {section?.title} ({section?.tasks?.length})
+              {section?.title} <span className = "kanban__section__title__counter">{section?.tasks?.length}</span>
             </h2>
           )}
           <button

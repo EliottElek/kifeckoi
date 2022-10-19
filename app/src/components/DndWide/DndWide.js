@@ -8,7 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import { FIND_PROJECT_BY_PROJECT_ID } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
 const EventKanban = lazy(() => import("../Draggable/EventKanban"));
-const EventList = lazy(() => import("../EventList/EventList"));
+const EventList = lazy(() => import("../EventList/EventTable"));
 
 const renderLoader = () => (
   <Backdrop>
