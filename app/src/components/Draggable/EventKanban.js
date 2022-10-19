@@ -218,7 +218,11 @@ const EventKanban = ({ type }) => {
               width={"50%"}
               height={30}
             />
-            <Skeleton variant="rectangular" width={"100%"} height={"200px"} />
+            <Skeleton
+              variant="rectangular"
+              width={"100%"}
+              height={i === 2 ? `300px` : `200px`}
+            />
             <Skeleton
               style={{ borderRadius: "4px", marginTop: "10px" }}
               variant="rectangular"

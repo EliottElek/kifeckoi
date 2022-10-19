@@ -9,6 +9,9 @@ body {
   overflow-x: hidden;
   position: relative;
 }
+* {
+  word-break: break-word;
+}
 :root {
   --font-color: #182a4d;
   --color-background-1: #eff1fa;

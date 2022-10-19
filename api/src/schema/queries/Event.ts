@@ -71,7 +71,7 @@ export const FIND_EVENTS_BY_PROJECT_ID = {
 
         const { id, type } = args
         const events = await Event.find({
-            where: { projectId: id, type: type }, relations: ["project", "comments", "creator", "contributors"],
+            where: { projectId: id, type: type }, relations: ["project", "comments", "comments.author", "creator", "contributors"],
         })
         if (!events) throw new Error("Cannot find project.")
         const sortedByIndex = events.sort((a, b) => a.index - b.index);
